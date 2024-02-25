@@ -1,15 +1,15 @@
 # Site settings
 
-author: Yourname
-email: example@email.com
-twitter_username: twitter
-github_username:  github
-googleplus_username: google
+author: Lucas
+email: lucas04@foxmail.com
+twitter_username: __Lucas04__
+github_username:  Lucas04-nhr
+googleplus_username: Lucas.
 
-head-title: Your blog
-title: Your blog
+head-title: Lucas04's Blog
+title: Lucas04's Blog
 
-baseurl: "/materialize-jekyll"    # the subpath of your site, "/blog"
+baseurl: "/index"    # the subpath of your site, "/blog"
 url: ""
 
 # footer 

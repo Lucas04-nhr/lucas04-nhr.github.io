@@ -33,7 +33,7 @@ $(document).ready(function(){
   });
 });
 
-// scrollspy
+// Scrollpy
 $(document).ready(function(){
   $('.scrollspy').scrollSpy({
     scrollOffset: 150,

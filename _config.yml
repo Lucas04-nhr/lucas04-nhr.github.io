@@ -8,7 +8,7 @@ github_username:  Lucas04-nhr
 head-title: Lucas04's Blog
 title: Lucas04's Blog
 
-baseurl: "/index"    # the subpath of your site, "/blog"
+baseurl: "/blog"    # the subpath of your site, "/blog"
 url: ""
 
 # footer 

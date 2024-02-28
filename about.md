@@ -4,8 +4,6 @@ title: About
 permalink: /about/
 ---
 
-# Hi there! 👋
-
 I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
 
 ---

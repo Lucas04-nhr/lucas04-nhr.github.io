@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Bioinformatics
+title: Bioinformatics-Chapter 01
 date: 20240228
 category: "Class Notes"
 tags: [Bioinformatics, Notes]

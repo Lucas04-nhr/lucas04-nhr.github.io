@@ -2,7 +2,7 @@
 layout: post
 title: Bioinformatics
 date: 20240228
-category: "No"
+category: "Yes"
 tags: [Bioinformatics, Notes]
 author: Lucas
 comment: false

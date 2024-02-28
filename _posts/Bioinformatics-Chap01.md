@@ -2,10 +2,12 @@
 layout: post
 title: Bioinformatics
 date: 20240228
-category: "readme"
-tags: [jekyll, material design]
+category: "No"
+tags: [Bioinformatics, Notes]
 author: Lucas
 comment: false
+mathjax: true
+published: true
 ---
 
 ## 生物信息学主要研究内容与方向

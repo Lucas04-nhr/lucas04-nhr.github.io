@@ -25,8 +25,8 @@ published: true
    - Link the extraction of polyphenols during fermentation to the color, taste, and mouthfeel of the final wine.
 
 4. **Sulfur Dioxide as a Preservative:**
-   - Introduce the use of sulfur dioxide ({SO}_2) in winemaking as an antioxidant and antimicrobial agent.
-   - Cite examples of how ({SO}_2) helps prevent oxidation and spoilage during different stages of wine production.
+   - Introduce the use of sulfur dioxide ($${SO}_2$$) in winemaking as an antioxidant and antimicrobial agent.
+   - Cite examples of how ($${SO}_2$$) helps prevent oxidation and spoilage during different stages of wine production.
 
 5. **Temperature Control:**
    - Discuss studies on the impact of temperature during fermentation on the production of specific aroma compounds.
@@ -75,7 +75,7 @@ B. Evolution of Fermentation Techniques Over Time
      - Introduce the use of glass bottles for wine storage.
 
    3. **Scientific Advances:**
-     - Discuss the {19}^{th}-century scientific discoveries that contributed to a better understanding of fermentation, including the role of yeast.
+     - Discuss the $${19}^{th}$$-century scientific discoveries that contributed to a better understanding of fermentation, including the role of yeast.
      - Mention the work of Louis Pasteur in debunking spontaneous generation and his contributions to modern winemaking.
 
 C. Cultural and Societal Impact of Wine Throughout History

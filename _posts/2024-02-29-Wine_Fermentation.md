@@ -25,7 +25,7 @@ published: true
    - Link the extraction of polyphenols during fermentation to the color, taste, and mouthfeel of the final wine.
 
 4. **Sulfur Dioxide as a Preservative:**
-   - Introduce the use of sulfur dioxide (<font size =1>$${SO}_2$$</font>) in winemaking as an antioxidant and antimicrobial agent.
+   - Introduce the use of sulfur dioxide ($${SO}_2$$) in winemaking as an antioxidant and antimicrobial agent.
    - Cite examples of how ($${SO}_2$$) helps prevent oxidation and spoilage during different stages of wine production.
 
 5. **Temperature Control:**

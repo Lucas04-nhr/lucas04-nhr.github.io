@@ -6,7 +6,7 @@ category: "Class Presentation"
 tags: [Biochemistry, Presentation]
 author: Lucas
 comment: false
-mathjax: false
+mathjax: true
 published: true
 ---
 

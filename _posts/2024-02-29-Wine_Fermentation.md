@@ -3,7 +3,7 @@ layout: post
 title: Wine Fermentation
 date: 20240229
 category: "Class Presentation"
-tags: [Bioinformatics, Presentation]
+tags: [Biochemistry, Presentation]
 author: Lucas
 comment: false
 mathjax: true

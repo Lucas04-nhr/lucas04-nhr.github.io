@@ -10,13 +10,11 @@ mathjax: true
 published: true
 ---
 
-# Review of the course “R for Data Science” Part 01(Talk 01~ 04)
-
 > Reference: [R for Data Science](https://r4ds.had.co.nz)
 >
 > The book updated to 2^nd^ ed. on July,2023, here’ s a [link](https://r4ds.hadley.nz) to the official website.
 
-# Multi-omics data analysis and visualisation, #1
+## Multi-omics data analysis and visualisation, #1
 
 > Talk 01
 >
@@ -28,7 +26,7 @@ This section has nothing to explain :)
 
 
 
-# R language basics, part 1
+## R language basics, part 1
 
 > Talk 02
 >
@@ -36,11 +34,11 @@ This section has nothing to explain :)
 >
 > View the original R markdown file of the slide through [this link](https://github.com/Lucas04-nhr/R-for-Data-Science/blob/main/talk02.Rmd).
 
-##  Fundamental Data Type
+###  Fundamental Data Type
 
 The most basic data types include **numbers**, **logical symbols** and **strings** and are the basic building blocks of the other data types.
 
-##  Simple Data Types
+###  Simple Data Types
 
 This includes vectors and matrices, both of which can contain multiple values of a certain basic data type, such as a **matrix** consisting of multiple numbers, a **vector** consisting of multiple strings, and so on. However, **they can only contain a single data type.**
 
@@ -52,7 +50,7 @@ c(TRUE, FALSE, TRUE, T, F) ## A logic vector
 
 As shown above, arrays are usually defined with the function `c()`. In addition, a `vector` containing consecutive integers can be defined using the `:` operator.
 
-##  Conversion between data types
+###  Conversion between data types
 
 1. Automatic Conversion
 
@@ -70,7 +68,7 @@ As shown above, arrays are usually defined with the function `c()`. In addition,
 	+ Checking of classes `is.type()`
 	+ Conversion of classes `as.type()`
 
-## Some special values in matrices
+### Some special values in matrices
 
 + `NA` (Not Available) missing values
 
@@ -88,7 +86,7 @@ Some functions to determine these special values:
 + `is.finite()`
 + `is.infinite()`
 
-## Vectors and Arrays
+### Vectors and Arrays
 
 Both are arrays. A `vector` is a one-dimensional array and a matrix is a two-dimensional array.
 
@@ -98,7 +96,7 @@ This means.
 - High-dimensional arrays, like `vector` and matrices, can contain only one basic data type.
 - Higher dimensional arrays can be defined by the `array()` function.
 
-### Vector maniulation
+#### Vector maniulation
 
 ```R
 dim(m);
@@ -175,7 +173,7 @@ Extra:
 
 - Transparent `t(m)`
 
-## The hierarchy of R’s vector types
+### The hierarchy of R’s vector types
 
 <img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/data-structures-overview.png" alt="The hierarchy of R’s vector types" style="zoom:24%;" />
 
@@ -196,7 +194,7 @@ is.vector();
 
 
 
-# R language basics, part 2
+## R language basics, part 2
 
 > Talk 03
 >
@@ -204,9 +202,9 @@ is.vector();
 >
 > View the original R markdown file of the slide through [this link](https://github.com/Lucas04-nhr/R-for-Data-Science/blob/main/talk03.Rmd).
 
-## `data.frame`
+### `data.frame`
 
-### **What is a `data.frame`?**
+#### **What is a `data.frame`?**
 
 ```R
 library(tidyverse);
@@ -219,12 +217,12 @@ Here’s the result:
 
 ![Introduction of df](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/Introduction%2520of%2520df.png)
 
-### **Usage of `head()` and `tail()`**
+#### **Usage of `head()` and `tail()`**
 
 - `head()` is a function to display the first rows of some data (vectors etc.)
 - `tail()` is a function to display the last rows of some data (vectors etc.)
 
-### Components of `data.frame` and common functions
+#### Components of `data.frame` and common functions
 
 **Components:**
 
@@ -240,7 +238,7 @@ ncol() # Show the number of columns
 dim()  # Show the dimension
 ```
 
-### Structure of `data.frame` & `tibble`
+#### Structure of `data.frame` & `tibble`
 
 `str(mpg)`
 
@@ -248,7 +246,7 @@ This command shows the structure of the tibble `mpg`:
 
 <img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/Structure%2520of%2520mpg.png" alt="Structure of mpg" style="zoom:67%;" />
 
-### Make a new `data.frame`
+#### Make a new `data.frame`
 
 You can use the function `data.frame()` to make a new `data.frame`
 
@@ -261,7 +259,7 @@ data2 =
   )
 ```
 
-### How to add row(s)/col(s) to an existing data.frame
+#### How to add row(s)/col(s) to an existing data.frame
 
 Create the "table header" first, then populate the `data.frame`
 
@@ -303,11 +301,11 @@ df2 =
 
 You can also use these functions to bind several data.frames.
 
-## `tibble`
+### `tibble`
 
 `tibble` is kind of similar to `data.frame`.
 
-### Make new `tibble`
+#### Make new `tibble`
 
 `tibble` related functionality is provided by the `tibble` or `tidiverse` packages.
 
@@ -346,11 +344,11 @@ tribble(
 - `add_row()`
 - `add_column()`
 
-### Manipulate the tibble
+#### Manipulate the tibble
 
 > See “Manipulate the `data.frame`”
 
-### `tibble` to `data.frame`
+#### `tibble` to `data.frame`
 
 - `as.data.frame()`
 - `as_tibble()`
@@ -372,7 +370,7 @@ tibble(x = 1:5, y = xˆ2); # You can do this with tibble
 data.frame(x = 1:5, y = x ˆ 2); # But data.frame doesn't work.
 ```
 
-### `data.frame` causes trouble when fetching `subset` operations
+#### `data.frame` causes trouble when fetching `subset` operations
 
 ```R
 df1 =
@@ -394,13 +392,13 @@ class(df2[, 1]) ## Tibble forever
 #> [1] "tbl_df" "tbl" "data.frame"
 ```
 
-###  `tibble` allows controlled data type conversion
+####  `tibble` allows controlled data type conversion
 
 > There’s no proper example here.
 >
 > :_(
 
-### Recycling
+#### Recycling
 
 ```R
 data.frame(a = 1:6, b = LETTERS[1:2]) # data.frame CAN!!!
@@ -435,7 +433,7 @@ tibble(a = 1:6, b = LETTERS[1:2]); ## But tibble CAN'T!!!
 
 <font color = red>**The recycling of `tibble` is limited to lengths of 1 or equal; `data.frame` is just divisible.**</font>
 
-### `data.frame` will do partial matching, while `tibble` will <font color = red><font size = 5>**NEVER**</font></font> do it.
+#### `data.frame` will do partial matching, while `tibble` will <font color = red><font size = 5>**NEVER**</font></font> do it.
 
 ```R
 df = data.frame(abc = 1) 
@@ -452,7 +450,7 @@ df2$a; # Produce a warning and return NULL
 # NULL
 ```
 
-## Advanced tips for using `data.frame` and `tibble`
+### Advanced tips for using `data.frame` and `tibble`
 
 - `attach()`
 - `detach()`
@@ -463,7 +461,7 @@ df2$a; # Produce a warning and return NULL
 
 These functions—`attach()`, `detach()`, `with()`, and `within()`—are incredibly useful when working with data frames or tibbles in R, aiding in smoother workflows and code readability. Here's a breakdown of their functionality:
 
-### `attach()` and `detach()`
+#### `attach()` and `detach()`
 
 - **Purpose**: These functions allow you to temporarily attach a data frame to the search path, making its columns directly accessible by their names.
 - **Usage**:
@@ -483,7 +481,7 @@ These functions—`attach()`, `detach()`, `with()`, and `within()`—are incredi
   ```
 - **Note**: While convenient, using `attach()` can sometimes lead to confusion or unintended consequences, such as masking variables in your environment. It's often recommended to avoid using `attach()` due to potential side effects.
 
-### `with()`
+#### `with()`
 
 - **Purpose**: `with()` allows you to execute expressions in an environment where the data frame's columns can be referenced without using `$`.
 - **Usage**:
@@ -499,7 +497,7 @@ These functions—`attach()`, `detach()`, `with()`, and `within()`—are incredi
   ```
 - **Advantage**: It helps avoid repetitive use of the data frame name while working with its columns.
 
-### `within()`
+#### `within()`
 
 - **Purpose**: Similar to `with()`, `within()` allows modification of a data frame by evaluating expressions within it.
 - **Usage**:
@@ -569,9 +567,9 @@ head(modified_mtcars) # Checking the modified data frame
 # Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1     327.61       210
 ```
 
-## File IO
+### File IO
 
-### Read from files
+#### Read from files
 
 Using functions from the `readr` package
 
@@ -591,7 +589,7 @@ Some available functions:
 
 > Full documentation of the package is available through this [link](https://www.rdocumentation.org/packages/readr/versions/1.3.1).
 
-#### Usage
+##### Usage
 
 + Read with predifined column types
 
@@ -625,7 +623,7 @@ Some available functions:
 
 	- `rvest` - HTML (Web Scraping)
 
-### Write to files
+#### Write to files
 
 Use the following functions to write object(s) to external files:
 
@@ -720,7 +718,7 @@ Use the following functions to write object(s) to external files:
 	)
 	```
 
-# R language basics, part 3: factor
+## R language basics, part 3: factor
 
 > Talk 04
 >
@@ -728,7 +726,7 @@ Use the following functions to write object(s) to external files:
 >
 > View the original R markdown file of the slide through [this link](https://github.com/Lucas04-nhr/R-for-Data-Science/blob/main/talk04.Rmd).
 
-## IO and working enviroment management
+### IO and working enviroment management
 
 Each R session is a separate **work space** containing its own data, variables, and operation history.
 
@@ -756,7 +754,7 @@ For instruction how to get FREE Student Lisence of GitHub Pro, GitHub Copilot an
 
 	Because our email addresses ending with “@hust.edu.cn” are banned due to misuse, you should apply for an online verification report on [CHSI](chsi.com.cn) (press the link to visit the website), instructions [here](https://www.chsi.com.cn/xlcx/rhsq.jsp).
 
-### Start a new RStudio session by creating a new project
+#### Start a new RStudio session by creating a new project
 
 > To start a new session in PyCharm, simply press the bottom corner and select a new session.
 
@@ -772,7 +770,7 @@ For instruction how to get FREE Student Lisence of GitHub Pro, GitHub Copilot an
 
 	<img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/rstudio_create_new_project_3.png" alt="rstudio_create_new_project_3" style="zoom:50%;" />
 
-### Working Space
+#### Working Space
 
 Current workspace, including all loaded data, packets and homebrew functions.
 
@@ -784,13 +782,13 @@ rm(x) # Remove a variable
 rm(list = ls()) # Remove ALL variables in current workspace/session
 ```
 
-### Variables in working space in RStudio
+#### Variables in working space in RStudio
 
 The "Environment" window in the upper right corner of RStudio shows all the variables of the current workspace.
 
 <img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/rstudio_enviroment_window.png" alt="rstudio_enviroment_window" style="zoom:50%;" />
 
-### Save and restore work space
+#### Save and restore work space
 
 ```R
 # Save all loaded variables into an external .RData file
@@ -807,7 +805,7 @@ load(file = "prj_r_for_bioinformatics_aug3_2019.RData")
 
 - You may need to reload all the packages
 
-### Save selected variables
+#### Save selected variables
 
 Sometimes you need to transfer processed data to a collaborator ...
 
@@ -822,7 +820,7 @@ save(
 load("1.RData")
 ```
 
-### Close and (re)open a project
+#### Close and (re)open a project
 
 - To close a project
 
@@ -842,20 +840,20 @@ load("1.RData")
 - Load on opening 
 - When the data is large, the loading time may be too long ...
 
-### Open a project
+#### Open a project
 
 <img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/rstudio_open_a_project.png" alt="rstudio_open_a_project" style="zoom:80%;" />
 
 > When in PyCharm, simply drag the working directory to its main window, remember to trust the project.
 >
 
-## Factors
+### Factors
 
 Factor is a data structure used for fields that takes only predefined, finite number of values (categorical data).
 
 It will limit the selection of input data.
 
-### Play around with `levels()`
+#### Play around with `levels()`
 
 Here are instructions of modifying factor levels
 
@@ -895,7 +893,7 @@ Use this technique with care: if you group together categories that are truly di
 
 The order of the `levels` determines the sorting order.
 
-### Use factor to clean data
+#### Use factor to clean data
 
 > Usage of `fct_xxx()` functions.
 
@@ -944,7 +942,7 @@ fct_relabel(
 )
 ```
 
-### Usage of factors in drawing plots
+#### Usage of factors in drawing plots
 
 ```R
 library(ggplot2)
@@ -988,8 +986,6 @@ response_barplot2 =
   xlab("Response")
 ```
 
-<img src="./image/response_barplot2.png" alt="response_barplot2" style="zoom:24%;" />
-
 You can also use the parameter `ordered` to let others know that your `factor` is ordered properly.
 
 ```R
@@ -1002,7 +998,7 @@ responses =
 
 <img src="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20231202134409231.png" alt="image-20231202134409231" style="zoom:50%;" />
 
-### Using `factor` to vhange values
+#### Using `factor` to vhange values
 
 You can use `recode()` in `dplyr` package to change `value`
 
@@ -1125,7 +1121,7 @@ mouse_gene_plot03 =
 
 <img src="./image/mouse_gene_plot03.png" alt="mouse_gene_plot03" style="zoom:24%;" />
 
-### Advance usage
+#### Advance usage
 
 - Use `reorder()` function to reorder the level.
 

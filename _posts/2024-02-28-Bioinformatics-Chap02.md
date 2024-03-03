@@ -2,7 +2,7 @@
 layout: post
 title: Bioinformatics-Chapter 02
 date: 20240228
-category: "Class Notes"
+category: "Bioinformatics Class Notes"
 tags: [Bioinformatics, Notes]
 author: Lucas
 comment: false

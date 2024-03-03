@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Bioinformatics-Chapter 01
-date: 20240228
+date: 20240226
 category: "Class Notes"
 tags: [Bioinformatics, Notes]
 author: Lucas

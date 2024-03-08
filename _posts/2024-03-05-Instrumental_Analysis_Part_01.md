@@ -5,7 +5,7 @@ date: 20240304
 category: "Instrumental Analysis Class Notes"
 tags: [Instrumental Analysis, Notes]
 author: Lucas
-comment: false
+comment: true
 mathjax: true
 published: true
 ---

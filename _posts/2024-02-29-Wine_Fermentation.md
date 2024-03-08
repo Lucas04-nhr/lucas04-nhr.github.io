@@ -5,7 +5,7 @@ date: 20240229
 category: "Class Presentation"
 tags: [Biochemistry, Presentation]
 author: Lucas
-comment: false
+comment: true
 mathjax: true
 published: true
 ---

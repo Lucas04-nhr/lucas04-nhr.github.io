@@ -5,7 +5,7 @@ date: 20231102
 category: "R Class Notes"
 tags: [Data Analysis, Notes]
 author: Lucas
-comment: false
+comment: true
 mathjax: true
 published: true
 ---

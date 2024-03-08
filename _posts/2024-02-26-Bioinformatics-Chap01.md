@@ -5,7 +5,7 @@ date: 20240226
 category: "Bioinformatics Class Notes"
 tags: [Bioinformatics, Notes]
 author: Lucas
-comment: false
+comment: true
 mathjax: true
 published: true
 ---

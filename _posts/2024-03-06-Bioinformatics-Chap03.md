@@ -75,3 +75,12 @@ UniProt是一个由三个数据库组成的联合数据库，它包含了大量�
 - 废弃 (Obsolete): 术语被去除或重新定义
 - 基因本体的ID永不删除
 - 对每一个废弃的术语，需要说明为何该术语废弃
+
+## Human BIRC5
+
+- BIRC5: Baculoviral IAP Repeat Containing 5
+- 也被称为Survivin
+- 一个抑制凋亡的蛋白质
+- 在癌症中过表达
+- 在正常细胞中表达较低
+- 在有丝分裂中起重要作用

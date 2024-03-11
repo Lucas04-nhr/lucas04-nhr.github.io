@@ -130,9 +130,9 @@ published: true
 - 对数几率回归/逻辑回归(Logistic regression)
   - $f(x)=\frac{1}{1+e^{-ax-b}}$
 - 信息熵
-  - $ Ent(D)=-\sum_{k=1}^{ \left| y \right| } D\ log_{2} {p_k}$
+  - $ Ent(D)=-\sum_{k=1}^{ \mid y \mid } D\ log_{2} {p_k}$
 - 信息增益
-  - $ Gain(D,a) = Ent(D) - \sum_{v=1} ^ {V} \frac{\left| D^v \right| }{\left| D \right|}Ent(D^v)$
+  - $ Gain(D,a) = Ent(D) - \sum_{v=1} ^ {V} \frac{ D^v \mid }{\mid D \mid}Ent(D^v)$
 
 ### 神经网络 & 支持向量机
 
@@ -148,7 +148,7 @@ published: true
 
 ### 贝叶斯分类器 & 集成学习
 - 贝叶斯最优分类器
-  - $h^{*} = arg \max_{c \in Y}P(C|x)$
-  - $P(C|x) = \frac{P(x|C)P(C)}{P(x)}$
+  - $h^{*} = arg \max_{c \in Y}P(C\mid x)$
+  - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
 - 集成学习的错误率：
-  - $e \<= exp\{-\frac{1}{2} T {1 - 2\epsilon}^2 \}$
+  - $e \leq exp\{-\frac{1}{2} T {1 - 2\epsilon}^2 \}$

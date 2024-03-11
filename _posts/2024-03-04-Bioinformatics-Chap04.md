@@ -148,7 +148,7 @@ published: true
 
 ### 贝叶斯分类器 & 集成学习
 - 贝叶斯最优分类器
-  - $h^{*} = arg \max_{c \in Y}P(C | x)$
-  - $P(C | x) = \frac{P(x | C)P(C)}{P(x)}$
+  - $h^{*} = arg \max_{c \in Y}P(C|x)$
+  - $P(C|x) = \frac{P(x|C)P(C)}{P(x)}$
 - 集成学习的错误率：
-  - $e <= exp{-\frac{1}{2} T {1 - 2\epsilon}^2 }$
+  - $e \<= exp\{-\frac{1}{2} T {1 - 2\epsilon}^2 \}$

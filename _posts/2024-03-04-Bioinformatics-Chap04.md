@@ -151,4 +151,4 @@ published: true
   - $h^{*} = arg \max_{c \in Y}P(C\mid x)$
   - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
 - 集成学习的错误率：
-  - $e \leq exp\left{ -\frac{1}{2} T {1 - 2\epsilon}^2 \right}$
+  - $e \leq \exp{ -\frac{1}{2} T {1 - 2\epsilon}^2 }$

@@ -119,17 +119,36 @@ published: true
 - 对训练数据的微小改变对于预测性能影响过大
 - 预测工具过训练：只能很好的符合训练数据，而对新数据则性能很差
 
-## e.g. 如何评估算法的准确性？
+## 如何评估算法的准确性？
 
 ![Example](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/JvcJRh.png)
 
-## 线性模型 & 决策树
+### 线性模型 & 决策树
 
 - 线性回归 (Linear Regression)
   - $f(x)=ax+b$
 - 对数几率回归/逻辑回归(Logistic regression)
   - $f(x)=\frac{1}{1+e^{-ax-b}}$
 - 信息熵
-  - $Ent(D)=-\sum_{k=1}^{ |y| }D\log_{2}{p_k}$
+  - $ Ent(D) = - \sum_{k=1}^{ |y| } D\ log_{2} {p_k}$
 - 信息增益
-  - $Gain(D,a)=Ent(D)-\sum_{v=1}^{V}\frac{|D^v|}{|D|}Ent(D^v)$
+  - $ Gain(D,a) = Ent(D) - \sum_{v=1} ^ {V} \frac{|D^v|}{|D|}Ent(D^v)$
+
+### 神经网络 & 支持向量机
+
+- 单层 & 多层神经网络
+- 误差逆传播 (Back propagation, BP)
+  - ![误差逆传播1](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/8cJUIc.jpg)
+  - ![误差逆传播2](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/GFfwPd.jpg)
+- 划分超平面
+  - $f(x)=w^{T}x+b$
+- 核函数
+  - 将线性不可分样本映射到更高维空间，从而线性可分
+  - ![核函数](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/lUHEva.jpg)
+
+### 贝叶斯分类器 & 集成学习
+- 贝叶斯最优分类器
+  - $h^{*} = arg \max_{c \in Y}P(C | x)$
+  - $P(C | x) = \frac{P(x | C)P(C)}{P(x)}$
+- 集成学习的错误率：
+  - $e <= exp{-\frac{1}{2} T {1 - 2\epsilon}^2 }$

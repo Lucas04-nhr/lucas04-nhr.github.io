@@ -130,9 +130,9 @@ published: true
 - 对数几率回归/逻辑回归(Logistic regression)
   - $f(x)=\frac{1}{1+e^{-ax-b}}$
 - 信息熵
-  - $ Ent(D) = - \sum_{k=1}^{ |y| } D\ log_{2} {p_k}$
+  - $ Ent(D)=-\sum_{k=1}^{ \left| y \right| } D\ log_{2} {p_k}$
 - 信息增益
-  - $ Gain(D,a) = Ent(D) - \sum_{v=1} ^ {V} \frac{|D^v|}{|D|}Ent(D^v)$
+  - $ Gain(D,a) = Ent(D) - \sum_{v=1} ^ {V} \frac{\left| D^v \right| }{\left| D \right|}Ent(D^v)$
 
 ### 神经网络 & 支持向量机
 

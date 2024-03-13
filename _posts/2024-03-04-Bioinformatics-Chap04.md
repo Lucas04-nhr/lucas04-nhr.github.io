@@ -152,3 +152,13 @@ published: true
   - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
 - 集成学习的错误率：
   - $e \leq \exp \left( -\frac{1}{2} T {1 - 2\epsilon}^2 \right)$
+
+## 神经元、卷积层、池化层和输出层
+
+- 神经元激活函数
+  - $RELU(x)=\begin{cases} x, & \text{if } x>0 \\ 0, & \text{if } x\leq 0 \end{cases}$
+- 最大池化(Max pooling)
+- 卷积层
+- 输出
+  - $sigmoid(x)=\frac{1}{1+e^{-x}}$
+  

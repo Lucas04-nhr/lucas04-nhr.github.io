@@ -173,3 +173,33 @@ published: true
   - ![时间线](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/CxCtQj.jpg)
 - 人类反馈的强化学习算法
   - ![算法](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/6oaCHY.jpg)
+
+### AGI and its developments
+
+#### Generative adversarial network, GAN
+
+> 生成对抗网络
+
+![GAN](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/FzryZ8.jpg)
+
+#### Variational Autoencoder, VAE
+
+> 变分自编码器
+
+![VAE](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/h214At.png)
+
+#### Stable Diffusion, SD
+
+> 稳定扩散
+
+![SD](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/hzQTVO.png)
+
+#### Text Encoder, TE
+
+> 文本编码器
+
+![TE](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/fmqSGO.jpg)
+
+<center>
+  <bold>And more...</bold>
+</center>

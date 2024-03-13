@@ -200,6 +200,21 @@ published: true
 
 ![TE](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/fmqSGO.jpg)
 
-<center>
-  <bold>And more...</bold>
-</center>
+  **And more...**
+
+### 深度学习常用软件包
+
+- Keras
+  [Official Website](https://keras.io/)
+
+## 生物序列的概率模型
+
+### 概率模型
+
+一个能够通过不同的概率产生不同结果的模型。概率模型可以模拟或者仿真某一类型的所有事件，并且对每个事件赋予一个概率。
+
+### 色子模型
+
+一个色子存在6个概率值：$p_1, p_2, …, p_6$，其中掷出i的概率为$p_i (i=1, 2, …, 6)$。因此：
+
+$$p_i \geq 0, \sum_{i=1}^{6} p_i = 1$$

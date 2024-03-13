@@ -239,3 +239,4 @@ e.g. 一枚硬币掷10次，正面朝上的次数为$X$，硬币正面朝上的�
 See the original article at this [link](https://www.nature.com/articles/nature02424).
 
 > DOI: [10.1038/nature02424](https://doi.org/10.1038/nature02424)
+> Get a preview at this [link](https://rdcu.be/dA4L5).

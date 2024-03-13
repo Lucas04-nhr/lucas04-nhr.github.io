@@ -152,7 +152,7 @@ published: true
   - $h^{*} = arg \max_{c \in Y}P(C\mid x)$
   - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
 - 集成学习的错误率：
-  - $$e \leq \exp \{ -\frac{1}{2} T \times {1 - 2\epsilon}^2 \}$$
+  - $$e \leq \exp \{ -\frac{1}{2} T \cdot {1 - 2\epsilon}^2 \}$$
 
 ## 神经元、卷积层、池化层和输出层
 
@@ -218,3 +218,5 @@ published: true
 一个色子存在6个概率值：$p_1, p_2, …, p_6$，其中掷出i的概率为$p_i (i=1, 2, …, 6)$。因此：
 
 $$p_i \geq 0, \sum_{i=1}^{6} p_i = 1$$
+
+考虑三次连续的掷色子，结果为 $[1，6，3]$，则总概率为：$p_1 \cdot p_6 \cdot p_3$

@@ -147,6 +147,7 @@ published: true
   - ![核函数](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/lUHEva.jpg)
 
 ### 贝叶斯分类器 & 集成学习
+
 - 贝叶斯最优分类器
   - $h^{*} = arg \max_{c \in Y}P(C\mid x)$
   - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
@@ -161,3 +162,14 @@ published: true
 - 卷积层
 - 输出
   - $sigmoid(x)=\frac{1}{1+e^{-x}}$
+
+## Large Language Models
+
+> Reinforcement Learning from Human Feedback **(RLHF)**
+
+- 四代语言模型的演化过程
+  - ![演化过程](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/x7aRHb.jpg)
+- 大型语言模型研发的时间线
+  - ![时间线](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/CxCtQj.jpg)
+- 人类反馈的强化学习算法
+  - ![算法](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/6oaCHY.jpg)

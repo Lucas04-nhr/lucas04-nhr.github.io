@@ -205,7 +205,8 @@ published: true
 ### 深度学习常用软件包
 
 - Keras
-  [Official Website](https://keras.io/)
+
+> Click to visit it's [Official Website](https://keras.io/).
 
 ## 生物序列的概率模型
 
@@ -220,3 +221,16 @@ published: true
 $$p_i \geq 0, \sum_{i=1}^{6} p_i = 1$$
 
 考虑三次连续的掷色子，结果为 $[1，6，3]$，则总概率为：$p_1 \cdot p_6 \cdot p_3$
+
+### 二项分布
+
+- 二项分布是n次独立的伯努利试验的和
+- 伯努利试验：只有两种结果的随机试验
+- 二项分布的概率质量函数：
+  - $P(X=k) = C_n^k p^k (1-p)^{n-k}$
+  - $C_n^k = \frac{n!}{k!(n-k)!}$
+- 二项分布的期望值：$E(X) = np$
+- 二项分布的方差：$Var(X) = np(1-p)$
+
+e.g. 一枚硬币掷10次，正面朝上的次数为X，硬币正面朝上的概率为$p=0.5$，则X服从二项分布$B(10, 0.5)$，有k次正面朝上的概率为：$P(X=k) = C_{10}^k 0.5^k 0.5^{10-k}$。
+

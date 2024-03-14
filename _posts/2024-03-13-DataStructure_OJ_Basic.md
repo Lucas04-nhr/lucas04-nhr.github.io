@@ -12,6 +12,8 @@ published: true
 
 Some basic codes of linked list
 
+> 注：本文档中的代码均为基于C++23标准的代码，因此在编译时需要加上`-std=c++23`参数。另外，由于C++17标准开始对于空指针有新的定义，故所有文档中的代码均使用`nullptr`代替`NULL`来表示空指针，而其他类型的空值仍然使用`NULL`。
+
 ## The library you must use
 
 ```c++

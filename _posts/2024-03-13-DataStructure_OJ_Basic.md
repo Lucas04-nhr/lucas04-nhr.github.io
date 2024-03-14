@@ -15,9 +15,9 @@ Some basic codes of linked list
 ## The library you must use
 
 ```c++
-# include<cstdio>
-# include<iostream>
-# include<random>
+# include <cstdio>
+# include <iostream>
+# include <random>
 ```
 
 ## Define the structure of the node

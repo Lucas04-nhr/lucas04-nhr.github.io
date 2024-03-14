@@ -10,9 +10,9 @@ mathjax: true
 published: true
 ---
 
-## Some basic codes of linked list
+Some basic codes of linked list
 
-### The library you must use
+## The library you must use
 
 ```c++
 # include<cstdio>
@@ -20,7 +20,7 @@ published: true
 # include<random>
 ```
 
-### Define the structure of the node
+## Define the structure of the node
 
 ```c++
 typedef struct node {
@@ -31,7 +31,7 @@ typedef struct node {
 typedef node *LinkList;
 ```
 
-### Create a single linked list with n nodes from bottom to top use random numbers
+## Create a single linked list with n nodes from bottom to top use random numbers
 
 ```c++
 LinkList build_random_T(int n) {
@@ -51,7 +51,7 @@ LinkList build_random_T(int n) {
 }
 ```
 
-### Create a single linked list with n nodes from top to bottom use random numbers
+## Create a single linked list with n nodes from top to bottom use random numbers
 
 ```c++
 LinkList build_random_H(int n) {
@@ -73,7 +73,7 @@ LinkList build_random_H(int n) {
 }
 ```
 
-### Display the linked list
+## Display the linked list
 
 ```c++
 void display(LinkList L) {
@@ -87,7 +87,7 @@ void display(LinkList L) {
 }
 ```
 
-### Create a single linked list with n nodes from bottom to top use the array provided
+## Create a single linked list with n nodes from bottom to top use the array provided
 
 ```c++
 LinkList build_Ordered(int arr[], int n) {
@@ -104,7 +104,7 @@ LinkList build_Ordered(int arr[], int n) {
 }
 ```
 
-### Copy the linked list
+## Copy the linked list
 
 ```c++
 LinkList copyList(LinkList L) {
@@ -128,7 +128,7 @@ LinkList copyList(LinkList L) {
 }
 ```
 
-### Test `main()` function
+## Test `main()` function
 
 ```c++
 int main() {

@@ -11,18 +11,19 @@ function collapseAll() {
   $(".collapsible").collapsible({ accordion: true });
 }
 
-document.addEventListener('copy', function(event) {
-  var lang = navigator.language || navigator.userLanguage; // Get the language of the browser
-
-  // Get the forbidden text according to the language
-  var forbiddenText = '';
-
   // Prevent the default copy action
   var element = document.body;
   element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
   element.style.MozUserSelect = 'none'; // Firefox
   element.style.msUserSelect = 'none'; // IE 10+
   element.style.userSelect = 'none'; // Standard
+
+
+document.addEventListener('copy', function(event) {
+  var lang = navigator.language || navigator.userLanguage; // Get the language of the browser
+
+  // Get the forbidden text according to the language
+  var forbiddenText = '';
 
   // Set the forbidden text to the clipboard
   event.clipboardData.setData('text/plain', '');

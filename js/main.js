@@ -22,14 +22,8 @@ element.style.msUserSelect = 'none'; // IE 10+
 element.style.userSelect = 'none'; // Standard
 
 // Get the elements which can be selected
-var commentElement = document.getElementById('giscus_thread');
-var giscusElements = document.getElementsByClassName('giscus');
-
-// Allow selection for giscus_thread
-commentElement.style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
-commentElement.style.MozUserSelect = 'text'; // Firefox
-commentElement.style.msUserSelect = 'text'; // IE 10+
-commentElement.style.userSelect = 'text'; // Standard
+var giscusElements = document.getElementsByClassName('gsc-comment-box-main');
+var giscusCommentElements = document.getElementsByClassName('gsc-comment-box-write');
 
 // Allow selection for giscus elements
 for (var i = 0; i < giscusElements.length; i++) {
@@ -39,14 +33,22 @@ for (var i = 0; i < giscusElements.length; i++) {
   giscusElements[i].style.userSelect = 'text'; // Standard
 }
 
+// Allow selection for giscus comment elements
+for (var i = 0; i < giscusCommentElements.length; i++) {
+  giscusCommentElements[i].style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
+  giscusCommentElements[i].style.MozUserSelect = 'text'; // Firefox
+  giscusCommentElements[i].style.msUserSelect = 'text'; // IE 10+
+  giscusCommentElements[i].style.userSelect = 'text'; // Standard
+}
+
 // Add the copy event listener
 document.addEventListener('copy', function(event) {
   var selection = window.getSelection();
   var selectedText = selection.toString();
   var sourceElement = selection.anchorNode.parentNode;
 
-  // Check if the source element is giscus_thread, giscus or their child
-  if (sourceElement.id === 'giscus_thread' || sourceElement.closest('#giscus_thread') || sourceElement.classList.contains('giscus') || sourceElement.closest('.giscus')) {
+  // Check if the source element is gsc-comment-box-main, gsc-comment-box-write or their child
+  if (sourceElement.classList.contains('gsc-comment-box-main') || sourceElement.closest('.gsc-comment-box-main') || sourceElement.classList.contains('gsc-comment-box-write') || sourceElement.closest('.gsc-comment-box-write')) {
     // Allow the default copy action
     event.clipboardData.setData('text/plain', selectedText);
   } else {

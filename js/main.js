@@ -21,7 +21,7 @@ document.addEventListener('copy', function(event) {
   alert(forbiddenText);
 
   // Set the forbidden text to the clipboard
-  event.clipboardData.setData('text/plain', forbiddenText);
+  event.clipboardData.setData('text/plain', '');
 
   // Prevent the default copy action
   event.preventDefault();
@@ -40,3 +40,10 @@ function getForbiddenText(language) {
           return 'Copying is prohibited';
   }
 }
+
+// 禁止选择
+var element = document.body; // 或者其他你想要禁止选择的元素
+element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
+element.style.MozUserSelect = 'none'; // Firefox
+element.style.msUserSelect = 'none'; // IE 10+
+element.style.userSelect = 'none'; // Standard

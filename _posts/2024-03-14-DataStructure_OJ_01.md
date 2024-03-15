@@ -486,6 +486,33 @@ LinkList copyListWithAddress(LinkList L) {
 
     对于有序单链表删除所有重复节点的问题，我们可以使用两个指针来解决。一个指针用于遍历链表，另一个指针用于指向当前不重复的最后一个节点。当遍历的节点与当前不重复的最后一个节点相同时，我们就**删除**这个节点，否则，我们就更新当前不重复的最后一个节点。
 
+    ```c++
+    // Remove all duplicates from a sorted list
+    void removeAllDuplicates(LinkList L) {
+        if (L == nullptr || L->next == nullptr) {
+            return;
+        }
+
+        node* current = L->next;
+        node* prev = L;
+        while (current != nullptr && current->next != nullptr) {
+            if (current->data == current->next->data) {
+                while (current->next != nullptr && current->data == current->next->data) {
+                    node* temp = current;
+                    current = current->next;
+                    delete temp;
+                }
+                prev->next = current->next;
+                delete current;
+                current = prev->next;
+            } else {
+                prev = current;
+                current = current->next;
+            }
+        }
+    }
+    ```
+
 ### h. 约瑟夫问题(有损/无损)
 
 约瑟夫问题是一个著名的问题：N个人围成一圈，从第一个开始报数，每次报到M的人出列，然后下一个人继续从1开始报数，直到所有人都出列。

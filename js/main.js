@@ -15,10 +15,14 @@ document.addEventListener('copy', function(event) {
   var lang = navigator.language || navigator.userLanguage; // Get the language of the browser
 
   // Get the forbidden text according to the language
-  var forbiddenText = getForbiddenText(lang);
+  var forbiddenText = '';
 
-  // Alert the forbidden text
-  alert(forbiddenText);
+  // Prevent the default copy action
+  var element = document.body;
+  element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
+  element.style.MozUserSelect = 'none'; // Firefox
+  element.style.msUserSelect = 'none'; // IE 10+
+  element.style.userSelect = 'none'; // Standard
 
   // Set the forbidden text to the clipboard
   event.clipboardData.setData('text/plain', '');
@@ -27,23 +31,16 @@ document.addEventListener('copy', function(event) {
   event.preventDefault();
 });
 
-function getForbiddenText(language) {
-  // Return the forbidden text according to the language
-  switch (language) {
-      case 'zh-CN':
-          return '禁止复制';
-      case 'en-US':
-          return 'Copying is prohibited';
-      // Add more languages here
-      // ...
-      default:
-          return 'Copying is prohibited';
-  }
-}
-
-// 禁止选择
-var element = document.body; // 或者其他你想要禁止选择的元素
-element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
-element.style.MozUserSelect = 'none'; // Firefox
-element.style.msUserSelect = 'none'; // IE 10+
-element.style.userSelect = 'none'; // Standard
+// function getForbiddenText(language) {
+//   // Return the forbidden text according to the language
+//   switch (language) {
+//       case 'zh-CN':
+//           return '禁止复制';
+//       case 'en-US':
+//           return 'Copying is prohibited';
+//       // Add more languages here
+//       // ...
+//       default:
+//           return 'Copying is prohibited';
+//   }
+// }

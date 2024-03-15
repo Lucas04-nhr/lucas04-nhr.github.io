@@ -9,22 +9,22 @@
       <nav class="nav-extended {{ site.header-color }}">
         {% include navbar.html %}
 
-        <div class="nav-content">
+        <!-- <div class="nav-content">
           <ul class="tabs tabs-transparent">
             <li class="tab"><a class="active" href="#tab-main">main</a></li>
           {% for t in site.data.tabs %}
             <li class="tab {% if t.disabled %}disabled{% endif %}"><a href="#{{ t.id }}">{{ t.name }}</a></li>
           {% endfor %}
           </ul>
-        </div>
+        </div> -->
       </nav>
     </header>
 
-  {% for t in site.data.tabs %}
+  <!-- {% for t in site.data.tabs %}
     <div id="{{ t.id }}">
       {% include {{ t.fp }} %}
     </div>
-  {% endfor %}
+  {% endfor %} -->
 
     <div class="site-container" id="tab-main"> 
       <div class="wrapper">
@@ -33,6 +33,10 @@
     </div>
 
     {% include footer.html %}
+
+    {% include comments.html %}
+
+    {% include share.html %}
 
     <!-- scrolltop button -->
     <button class="material-scrolltop waves-effect waves-light hide-on-small-only" type="button"><i class="mdi mdi-arrow-up-bold small white-text"></i></button>

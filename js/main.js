@@ -19,6 +19,7 @@ var element = document.body;
 element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
 element.style.MozUserSelect = 'none'; // Firefox
 element.style.msUserSelect = 'none'; // IE 10+
+element.style['-ms-user-select'] = 'none'; // IE 10+
 element.style.userSelect = 'none'; // Standard
 
 // Get the elements which can be selected
@@ -30,6 +31,7 @@ for (var i = 0; i < giscusElements.length; i++) {
   giscusElements[i].style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
   giscusElements[i].style.MozUserSelect = 'text'; // Firefox
   giscusElements[i].style.msUserSelect = 'text'; // IE 10+
+  giscusCommentElements[i].style['-ms-user-select'] = 'text'; // IE 10+
   giscusElements[i].style.userSelect = 'text'; // Standard
 }
 
@@ -38,6 +40,7 @@ for (var i = 0; i < giscusCommentElements.length; i++) {
   giscusCommentElements[i].style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
   giscusCommentElements[i].style.MozUserSelect = 'text'; // Firefox
   giscusCommentElements[i].style.msUserSelect = 'text'; // IE 10+
+  giscusCommentElements[i].style['-ms-user-select'] = 'text'; // IE 10+
   giscusCommentElements[i].style.userSelect = 'text'; // Standard
 }
 

@@ -62,3 +62,42 @@ document.addEventListener('copy', function(event) {
     event.preventDefault();
   }
 });
+
+// Allow copy on my own comment
+var element = document.body;
+if (window.enableCopyPassword !== '041104') {
+  element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
+  element.style.MozUserSelect = 'none'; // Firefox
+  element.style.msUserSelect = 'none'; // IE 10+
+  element.style.userSelect = 'none'; // Standard
+  element.style['-ms-user-select'] = 'none'; // Edge
+} else {
+  element.style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
+  element.style.MozUserSelect = 'text'; // Firefox
+  element.style.msUserSelect = 'text'; // IE 10+
+  element.style.userSelect = 'text'; // Standard
+  element.style['-ms-user-select'] = 'text'; // Edge
+}
+
+// Listen to the copy event
+document.addEventListener('copy', function(event) {
+  // Check if the prompt has already been shown in this session
+  if (!sessionStorage.getItem('promptShown')) {
+    // Show a prompt for the user to enter the password
+    var password = prompt('Please enter the password to enable copying:');
+
+    // Check if the password is correct
+    if (password === '041104') {
+      // Enable copying
+      var element = document.body;
+      element.style.webkitUserSelect = 'text'; // Chrome, Safari, Opera
+      element.style.MozUserSelect = 'text'; // Firefox
+      element.style.msUserSelect = 'text'; // IE 10+
+      element.style.userSelect = 'text'; // Standard
+      element.style['-ms-user-select'] = 'text'; // Edge
+    }
+
+    // Set a flag in sessionStorage so the prompt won't show again in this session
+    sessionStorage.setItem('promptShown', 'true');
+  }
+});

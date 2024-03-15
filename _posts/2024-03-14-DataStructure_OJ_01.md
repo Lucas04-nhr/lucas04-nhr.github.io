@@ -453,3 +453,255 @@ LinkList copyListWithAddress(LinkList L) {
     return newHead;
 }
 ```
+
+### g. 对于有序单链表，删除重复节点(保留/不保留)
+
+1. 保留重复节点
+
+    对于有序单链表删除重复节点的问题，我们可以使用两个指针来解决。一个指针用于遍历链表，另一个指针用于指向当前不重复的最后一个节点。当遍历的节点与当前不重复的最后一个节点相同时，我们就**跳过**这个节点，否则，我们就更新当前不重复的最后一个节点。
+
+    ```c++
+    // Remove duplicates from a sorted list
+    void removeDuplicates(LinkList L) {
+        if (L == nullptr || L->next == nullptr) {
+            return;
+        }
+
+        node* current = L->next;
+        while (current != nullptr && current->next != nullptr) {
+            if (current->data == current->next->data) {
+                node* temp = current->next;
+                current->next = current->next->next;
+                delete temp;
+            } else {
+                current = current->next;
+            }
+        }
+    }
+    ```
+
+    在这段代码中，我们首先检查链表是否为空或只有一个节点。如果是，那么我们不需要做任何事情，直接返回。然后，我们使用一个指针`current`来遍历链表。如果`current`节点的数据与其下一个节点的数据相同，那么我们就删除**下一个**节点。否则，我们就将`current`移动到下一个节点。这样，我们就可以删除所有重复的节点，只保留一个。
+
+2. 不保留重复节点
+
+    对于有序单链表删除所有重复节点的问题，我们可以使用两个指针来解决。一个指针用于遍历链表，另一个指针用于指向当前不重复的最后一个节点。当遍历的节点与当前不重复的最后一个节点相同时，我们就**删除**这个节点，否则，我们就更新当前不重复的最后一个节点。
+
+### h. 约瑟夫问题(有损/无损)
+
+约瑟夫问题是一个著名的问题：N个人围成一圈，从第一个开始报数，每次报到M的人出列，然后下一个人继续从1开始报数，直到所有人都出列。
+
+1. 无损
+
+    对于无损实现的约瑟夫问题，我们可以创建一个新的链表来存储出列的顺序，而不是直接在原链表上进行删除操作。这样，我们就可以保留原链表中的所有数据。
+
+    ```c++
+    // Josephus problem without loss
+    LinkList josephus_no_loss(LinkList &L, int n, int m) {
+        // Create a circular linked list
+        node* p = L;
+        p->data = 1;  // Start from 1
+        for (int i = 2; i <= n; i++) {
+            p->next = new(node);
+            p->next->data = i;  // Assign data to the new node
+            p = p->next;
+        }
+        p->next = L;  // Make it circular
+
+        // Create a new linked list to store the order of out
+        LinkList outOrder = new(node);
+        node* outP = outOrder;
+
+        node* prev = p;
+        p = L;
+        while (p->next != p) {
+            // Skip m-1 nodes
+            for (int count = 1; count < m; count++) {
+                prev = p;
+                p = p->next;
+            }
+            // Add the m-th node to the new linked list
+            outP->next = new(node);
+            outP->next->data = p->data;
+            outP = outP->next;
+
+            // Move to the next node
+            prev->next = p->next;
+            p = prev->next;
+        }
+
+        // Add the last remaining node to the new linked list
+        outP->next = new(node);
+        outP->next->data = p->data;
+        outP = outP->next;
+        outP->next = nullptr;
+
+        // Add the last remaining node to the new linked list
+        outP->next = new(node);
+        outP->next->data = p->data;
+        outP = outP->next;
+        outP->next = nullptr;
+
+        // Output the last survivor
+        std::cout << "The last survivor is " << outP->data << std::endl;
+
+        return outOrder;
+    }
+    ```
+
+    在这段代码中，我们首先创建一个循环链表来表示围成一圈的人。然后，我们**创建一个新的链表**`outOrder`来存储出列的顺序。每次我们跳过m-1个节点，然后将第m个节点添加到新的链表中。我们继续这个过程，直到只剩下一个节点。最后剩下的节点也添加到新的链表中。这样，我们就得到了一个新的链表，它表示了出列的顺序，而原链表中的所有数据都被保留了。
+
+2. 有损
+
+    对于有损实现的约瑟夫问题，我们可以直接在原链表上进行删除操作。每次我们跳过m-1个节点，然后删除第m个节点。我们继续这个过程，直到只剩下一个节点。最后剩下的节点就是生存者。
+
+    ```c++
+    // Josephus problem with loss
+    void josephus(LinkList &L, int n, int m) {
+        // Create a circular linked list
+        node* p = L;
+        p->data = 1;  // Start from 1
+        for (int i = 2; i <= n; i++) {
+            p->next = new(node);
+            p->next->data = i;  // Assign data to the new node
+            p = p->next;
+        }
+        p->next = L;  // Make it circular
+
+        node* prev = p;
+        p = L;
+        while (p->next != p) {
+            // Skip m-1 nodes
+            for (int count = 1; count < m; count++) {
+                prev = p;
+                p = p->next;
+            }
+            // Remove the m-th node
+            prev->next = p->next;
+            delete p;
+            p = prev->next;
+        }
+
+        // The last remaining node is the survivor
+        std::cout << "The survivor is " << p->data << std::endl;
+        delete p;
+    }
+    ```
+
+    在这段代码中，我们首先创建一个循环链表来表示围成一圈的人。然后，我们使用两个指针`prev`和`p`来遍历链表。每次我们跳过m-1个节点，然后删除第m个节点。我们继续这个过程，直到只剩下一个节点。最后剩下的节点就是生存者。
+
+### i. 合并两个升序单链表(保留重复点)，合并后为升序
+
+为了合并两个升序单链表并保留重复的节点，我们可以使用一个新的链表来存储合并的结果。我们可以同时遍历两个链表，每次从两个链表的头部选择较小的节点添加到新链表中。如果两个节点的值相等，我们都添加到新链表中。我们继续这个过程，直到两个链表都被完全遍历。
+
+```c++
+// Merge two sorted lists and keep duplicates
+LinkList merge(LinkList L1, LinkList L2) {
+    // Create a new linked list to store the result
+    LinkList mergedList = new(node);
+    node* p = mergedList;
+
+    // Pointers to the heads of L1 and L2
+    node* p1 = L1->next;
+    node* p2 = L2->next;
+
+    // Merge L1 and L2
+    while (p1 != nullptr && p2 != nullptr) {
+        if (p1->data <= p2->data) {
+            // Add the node from L1 to the merged list
+            p->next = new(node);
+            p->next->data = p1->data;
+            p = p->next;
+            p1 = p1->next;
+        }
+        if (p1 != nullptr && p2->data <= p1->data) {
+            // Add the node from L2 to the merged list
+            p->next = new(node);
+            p->next->data = p2->data;
+            p = p->next;
+            p2 = p2->next;
+        }
+    }
+
+    // Add the remaining nodes from L1 or L2 to the merged list
+    while (p1 != nullptr) {
+        p->next = new(node);
+        p->next->data = p1->data;
+        p = p->next;
+        p1 = p1->next;
+    }
+    while (p2 != nullptr) {
+        p->next = new(node);
+        p->next->data = p2->data;
+        p = p->next;
+        p2 = p2->next;
+    }
+
+    p->next = nullptr;
+    return mergedList;
+}
+```
+
+在这段代码中，我们首先创建一个新的链表`mergedList`来存储合并的结果。然后，我们同时遍历`L1`和`L2`，每次从两个链表的头部选择较小的节点添加到新链表中。如果两个节点的值相等，我们都添加到新链表中。我们继续这个过程，直到两个链表都被完全遍历。最后，我们将`L1`或`L2`中剩余的节点添加到新链表中。
+
+### j. 合并两个升序单链表(保留重复点)，合并后为降序
+
+为了合并两个升序单链表并保留重复的节点，同时保证合并后的链表为降序，我们可以首先按照升序的方式合并两个链表，然后再对合并后的链表进行逆序操作。下面是逆序操作的函数代码：
+
+```c++
+// Reverse the linked list
+LinkList reverseList(LinkList L) {
+    node* prev = nullptr;
+    node* current = L->next;
+    node* next = nullptr;
+
+    while (current != nullptr) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    L->next = prev;
+    return L;
+}
+```
+
+### k. 判断一个单链表是否对称
+
+为了判断一个单链表是否对称，我们可以使用快慢指针法找到链表的中点，然后将链表的后半部分进行反转。然后我们可以同时从链表的头部和中点开始遍历，如果所有节点的值都相等，那么这个链表就是对称的。 
+
+```c++
+bool isSymmetric(LinkList L) {
+    // Find the middle of the linked list
+    node* slow = L->next;
+    node* fast = L->next;
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    // Reverse the second half of the linked list
+    node* prev = nullptr;
+    node* current = slow;
+    node* next = nullptr;
+    while (current != nullptr) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    // Compare the first half and the reversed second half
+    node* p1 = L->next;
+    node* p2 = prev;
+    while (p2 != nullptr) {
+        if (p1->data != p2->data) {
+            return false;
+        }
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+
+    return true;
+}
+```

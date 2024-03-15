@@ -42,13 +42,13 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
 
 ### GitHub Stats
 
-<p align="center" style="display: ruby"> 
+<p align="center"> 
     <a href="https://github.com/ryo-ma/github-profile-trophy">
-        <img align="center" src="https://github-profile-trophy.vercel.app/?username=lucas04-nhr" alt="lucas04-nhr" />
+        <img align="center" src="https://github-profile-trophy.vercel.app/?username=lucas04-nhr" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
     </a>
-    <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact" alt="lucas04-nhr" />
-    <img src="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en" alt="lucas04-nhr" />
-    <img src="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&" alt="lucas04-nhr" />
+    <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
+    <img src="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
 </p>
 
 ### Languages and Tools

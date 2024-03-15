@@ -60,7 +60,7 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
 You can contact me via email: <lucas04@hust.edu.cn>.
 
 Some of my other social accounts are:
-<p align="center" style="display: ruby-text">
+<p align="center" style="display: ruby">
 <a href="https://twitter.com/__lucas04__" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="__lucas04__" height="30" width="40" /></a>
 <a href="https://fb.com/lucas.04.n" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="lucas.04.n" height="30" width="40" /></a>
 <a href="https://instagram.com/lucas04_11" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="lucas04_11" height="30" width="40" /></a>

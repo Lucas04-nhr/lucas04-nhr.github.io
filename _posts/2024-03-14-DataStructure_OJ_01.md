@@ -10,7 +10,7 @@ mathjax: true
 published: true
 ---
 
-Ordered Linked List
+Linked List
 
 > 此文档仅供参考，所有代码均未包含主程序中的调用部分，请自行根据`Basic`章节中的模板函数生成实例调用。
 

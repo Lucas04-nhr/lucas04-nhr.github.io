@@ -563,12 +563,6 @@ LinkList josephus_no_loss(LinkList &L, int n, int m) {
     outP = outP->next;
     outP->next = nullptr;
 
-    // Add the last remaining node to the new linked list
-    outP->next = new(node);
-    outP->next->data = p->data;
-    outP = outP->next;
-    outP->next = nullptr;
-
     // Output the last survivor
     std::cout << "The last survivor is " << outP->data << std::endl;
 
@@ -577,6 +571,18 @@ LinkList josephus_no_loss(LinkList &L, int n, int m) {
 ```
 
 在这段代码中，我们首先创建一个循环链表来表示围成一圈的人。然后，我们**创建一个新的链表**`outOrder`来存储出列的顺序。每次我们跳过m-1个节点，然后将第m个节点添加到新的链表中。我们继续这个过程，直到只剩下一个节点。最后剩下的节点也添加到新的链表中。这样，我们就得到了一个新的链表，它表示了出列的顺序，而原链表中的所有数据都被保留了。
+
+---
+
+附：感谢<a href="https://github.com/lwstkhyl" target="blank">@lwstkhyl</a>提供的部分代码，上述函数的`Add the m-th node to the new Linked List`部分还可以更换成如下空间复杂度更低的代码：
+
+```c++
+// Add the m-th node to the new Linked List
+outP->next = p;
+outP = outP->next;
+```
+
+此种方法不需要再创建新的节点，直接将原链表中的节点添加到新链表中即可，避免了因重复开辟新的节点而导致的空间浪费。
 
 #### 有损
 

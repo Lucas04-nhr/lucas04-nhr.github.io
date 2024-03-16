@@ -2,7 +2,7 @@
 layout: post
 title: Data Structure-Homework Chapter 2
 date: 20240315
-category: "Data Structure OJ"
+category: "Data Structure Homework"
 tags: [Data Structure, Homework]
 author: Lucas
 comment: true

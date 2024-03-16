@@ -236,6 +236,6 @@ e.g. 一枚硬币掷10次，正面朝上的次数为$X$，硬币正面朝上的�
 
 ## 酵母的全基因组复制
 
-See the original article at this [link](https://www.nature.com/articles/nature02424).
+See the original article at this <a href="https://www.nature.com/articles/nature02424" target="_blank">link</a>.
 
-> DOI: [10.1038/nature02424](https://doi.org/10.1038/nature02424)
+> DOI: <a href="https://doi.org/10.1038/nature02424" target="_blank">10.1038/nature02424</a>

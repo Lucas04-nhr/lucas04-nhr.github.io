@@ -180,6 +180,8 @@ LinkList mergeAndReverse(LinkList &A, LinkList &B) {
 
 ### Solution
 
+#### 单链表方法
+
 1. 初始化一个新的链表D，用于存储最终的结果。
 2. 遍历链表A，对于每一个元素，检查它是否在链表B和链表C中都出现。如果没有，将其添加到链表D的尾部。
 3. 返回链表D。
@@ -263,6 +265,67 @@ LinkList removeDuplicatesOptimized(LinkList &A, LinkList &B, LinkList &C) {
 ```
 
 > 如果链表B和C也是有序的，我们可以使用两个指针同时遍历两个链表，这样可以在$O(n)$的时间复杂度内完成查找，其中n是链表的长度。这是因为对于有序链表，我们可以在遍历过程中直接比较两个链表当前节点的值，从而判断是否存在相同的元素。
+
+#### 顺序表方法
+
+> 需引用`vector`头文件。
+
+```c++
+// Delete the elements in A that are also in B and C
+// Using vectors
+bool isExist_vector(const std::vector<int>& vec, int data) {
+    return std::find(vec.begin(), vec.end(), data) != vec.end();
+}
+
+std::vector<int> removeDuplicates_vector(std::vector<int>& A, std::vector<int>& B, std::vector<int>& C) {
+    std::vector<int> D;
+
+    for (int data : A) {
+        if (!isExist_vector(B, data) || !isExist_vector(C, data)) {
+            D.push_back(data);
+        }
+    }
+
+    return D;
+}
+```
+
+这个函数接受三个向量A、B和C作为参数，并返回一个新的向量D，该向量是A中那些既不在B中也不在C中的元素。  关于时间复杂度的分析，对于向量A中的每一个元素，我们都需要在向量B和向量C中进行查找，所以时间复杂度是$O(n^2)$，其中n是向量的长度。这是一个比较高的时间复杂度，如果向量的长度很大，这个算法可能会很慢。
+
+如果向量B和C也是有序的，我们可以使用更高效的算法来进行查找，从而降低时间复杂度。
+
+```c++
+// Delete the elements in A that are also in B and C
+// Using vectors
+bool isExistInBoth_vector(const std::vector<int>& B, const std::vector<int>& C, int data) {
+    int i = 0, j = 0;
+    while (i < B.size() && j < C.size()) {
+        if (B[i] == data && C[j] == data) {
+            return true;
+        }
+        if (B[i] < data) {
+            i++;
+        } else if (C[j] < data) {
+            j++;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+std::vector<int> removeDuplicatesOptimized_vector(std::vector<int>& A, std::vector<int>& B, std::vector<int>& C) {
+    std::vector<int> D;
+
+    for (int data : A) {
+        if (!isExistInBoth_vector(B, C, data)) {
+            D.push_back(data);
+        }
+    }
+
+    return D;
+}
+```
 
 ## 30
 

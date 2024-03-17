@@ -274,7 +274,7 @@ LinkList removeDuplicatesOptimized(LinkList &A, LinkList &B, LinkList &C) {
 2. 遍历向量A，对于每一个元素，检查它是否在向量B和向量C中都出现。如果没有，将其添加到向量D的尾部。
 3. 返回向量D。
 
-> 经一位~~**不愿意透露姓名的**~~ 同学提醒，这里的向量可以使用`vector`来实现。
+> 经一位~~**不愿意透露姓名的**~~同学提醒，这里的向量可以使用`vector`来实现。
 
 ```c++
 // Delete the elements in A that are also in B and C

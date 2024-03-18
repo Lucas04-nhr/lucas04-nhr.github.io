@@ -32,6 +32,7 @@ kramdown:
   hard_wrap: false
   highlight: true
   auto_ids:  true
+  math_engine:  mathjax
 
 sass:
   style: compressed

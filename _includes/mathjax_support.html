@@ -2,9 +2,8 @@
 window.MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$']],
+    displayMath: [['$$', '$$'], ['<script type="math/tex; mode=display">', '</script>']], // Change this line
     processEscapes: true,
-    processEnvironments: true,
     equationNumbers: {
       autoNumber: "AMS"
     }

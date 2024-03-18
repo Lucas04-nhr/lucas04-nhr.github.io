@@ -152,12 +152,12 @@ published: true
   - $h^{*} = arg \max_{c \in Y}P(C\mid x)$
   - $P(C\mid x) = \frac{P(x\mid C)P(C)}{P(x)}$
 - 集成学习的错误率：
-  - $$e \leq \exp \{ -\frac{1}{2} T \cdot {1 - 2\epsilon}^2 \}$$
+  - $e \leq \exp \{ -\frac{1}{2} T \cdot {1 - 2\epsilon}^2 \}$
 
 ## 神经元、卷积层、池化层和输出层
 
 - 神经元激活函数
-  - $$RELU(x)=\begin{cases} x, & \text{if } x>0 \\ 0, & \text{if } x\leq 0 \end{cases}$$
+  - $RELU(x)=\begin{cases} x, & \text{if } x>0 \\ 0, & \text{if } x\leq 0 \end{cases}$
 - 最大池化(Max pooling)
 - 卷积层
 - 输出
@@ -218,7 +218,7 @@ published: true
 
 一个色子存在6个概率值：$p_1, p_2, …, p_6$，其中掷出i的概率为$p_i (i=1, 2, …, 6)$。因此：
 
-$$p_i \geq 0, \sum_{i=1}^{6} p_i = 1$$
+$p_i \geq 0, \sum_{i=1}^{6} p_i = 1$
 
 考虑三次连续的掷色子，结果为 $[1，6，3]$，则总概率为：$p_1 \cdot p_6 \cdot p_3$
 
@@ -244,7 +244,7 @@ See the original article at this <a href="https://www.nature.com/articles/nature
 
 稀有事件发生的概率：在一个连续的时间或空间中，稀有离散变量出现的概率
 
-$$P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+$P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$
 
 - $\lambda$：事件发生的平均次数
 - $k$：事件发生的次数
@@ -295,11 +295,11 @@ $$P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
 - 总共测序的序列数量：N
 - 总覆盖率 $C=Np$（每个点平均覆盖到的次数）
 
-$$N = \frac{200000 \times 10}{500} = 4000$$
+$N = \frac{200000 \times 10}{500} = 4000$
 
 点X被覆盖k次的概率：二项分布~泊松分布
 
-$$P(X=k) = C_n^k p^k (1-p)^{n-k} \approx \frac{C^k e^{-C}}{k!}$$
+$P(X=k) = C_n^k p^k (1-p)^{n-k} \approx \frac{C^k e^{-C}}{k!}$
 
 当点X一次都不被覆盖时，$k=0$; 此时的概率为：$P(X=0) = e^{-C}$。
 
@@ -342,7 +342,7 @@ $$P(X=k) = C_n^k p^k (1-p)^{n-k} \approx \frac{C^k e^{-C}}{k!}$$
 
 因此，问题转化：在26873个人的蛋白质中，抓出2264个蛋白质，其中至少有94个蛋白质具有功能结构域的概率是多少？
 
-$$p-value = P(m\slash \geq m) = 1 - P(m\slash < m-1) = 1 - \sum_{k=0}^{m-1} \frac{C_M^k C_{N-M}^{n-k}}{C_N^n}$$
+$p-value = P(m\slash \geq m) = 1 - P(m\slash < m-1) = 1 - \sum_{k=0}^{m-1} \frac{C_M^k C_{N-M}^{n-k}}{C_N^n}$
 
 #### 统计显著性
 

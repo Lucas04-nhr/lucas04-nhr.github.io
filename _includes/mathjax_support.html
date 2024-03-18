@@ -1,21 +1,28 @@
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    TeX: {
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$']],
+      processEscapes: true,
       equationNumbers: {
         autoNumber: "AMS"
       }
     },
-    tex2jax: {
-      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$','$$'] ],
-      processEscapes: true,
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
     },
-    "HTML-CSS": {
-      preferredFont: "TeX", // Change the font to TeX
-      scale: 100, // Change the scale here
+    startup: {
+      pageReady: () => {
+        return MathJax.startup.defaultPageReady().then(() => {
+          const {HTMLCSS} = MathJax._.output.html;
+          HTMLCSS.fontInUse = 'TeX'; // Set the font to TeX
+        });
+      }
     },
-  });
+    chtml: {
+      scale: 1, // Change the scale here
+    },
+  };
 </script>
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

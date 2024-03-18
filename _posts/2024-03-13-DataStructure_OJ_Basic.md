@@ -139,3 +139,47 @@ int main() {
     display(L1);
 }
 ```
+
+## Example program to create a stack and vector to store the linked list
+
+```c++
+#include <iostream>
+#include <stack>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    stack<int> s; // Create a stack of integers
+    vector<int> seq; // Create a vector of integers
+
+    // Push some elements into the stack
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    s.push(4);
+    s.push(5);
+
+    // Pop elements from the stack and push them into the vector
+    while (!s.empty()) {
+        seq.push_back(s.top());
+        s.pop();
+    }
+
+    // Display the elements in the vector
+    cout << "The elements in the vector: " << endl;
+    for (int i = 0; i < seq.size(); ++i) {
+        cout << seq[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+```
+
+### Output
+
+```bash
+The elements in the vector:
+5 4 3 2 1
+```

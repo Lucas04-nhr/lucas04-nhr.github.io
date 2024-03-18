@@ -244,7 +244,7 @@ See the original article at this <a href="https://www.nature.com/articles/nature
 
 稀有事件发生的概率：在一个连续的时间或空间中，稀有离散变量出现的概率
 
-$$P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+$P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$
 
 - $\lambda$：事件发生的平均次数
 - $k$：事件发生的次数

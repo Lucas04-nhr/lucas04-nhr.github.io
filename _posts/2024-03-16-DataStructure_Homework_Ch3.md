@@ -50,6 +50,45 @@ void test_without_recursion (int &sum) {
 
 这个函数将读取输入的整数，直到读取到 0 为止，然后输出所有输入的整数的和。
 
+## 19
+
+假设一个算术表达式中可以包含三种括号：圆括号“（”和“）”、方括号“［”和“］“和花括号“{”和”｝”，且这三种括号可按任意的次序嵌套使用。编写判别给定表达式中所含括号是否正确配对出现的算法（已知表达式已存入数据元素为字符的顺序表中）
+
+### Solution
+
+首先，我们需要一个栈来存储括号。我们从左到右遍历表达式，每当我们遇到一个开括号，我们就把它压入栈中。每当我们遇到一个闭括号，我们就检查栈顶的开括号是否与之匹配。如果匹配，我们就弹出栈顶的开括号。如果不匹配，或者栈已经为空（这意味着闭括号没有对应的开括号），我们就返回`false`。如果我们遍历完整个表达式后栈仍然不为空（这意味着有一些开括号没有对应的闭括号），我们也返回`false`。否则，我们返回`true`。
+
+```c++
+// Function to check if the brackets are balanced
+bool isValid(const std::string& s) {
+    std::stack<char> stack;
+    for (char c : s) {
+        switch (c) {
+            case '(':
+            case '[':
+            case '{':
+                stack.push(c);
+                break;
+            case ')':
+                if (stack.empty() || stack.top() != '(') return false;
+                stack.pop();
+                break;
+            case ']':
+                if (stack.empty() || stack.top() != '[') return false;
+                stack.pop();
+                break;
+            case '}':
+                if (stack.empty() || stack.top() != '{') return false;
+                stack.pop();
+                break;
+            default:
+                break;
+        }
+    }
+    return stack.empty();
+}
+```
+
 ## 20
 
 假设以二维数组 $g(1 \cdots m, 1 \cdots n)$ 表示一个图像区域，$g[i,j]$ 表示该区域中点$(i,j)$所具颜色，其值为 从 0 到 k 的整数。编写算法置换点$(i_0,j_0)$所在区域的颜色。约定和$(i_0,j_0)$同色的上、下、左、右的邻接点为同色区域的点。

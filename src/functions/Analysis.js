@@ -10,6 +10,10 @@ module.exports = async function (context, req) {
     const data = await response.json();
     context.res = {
         // status: 200, /* Defaults to 200 */
+        headers: {
+            'Access-Control-Allow-Origin': 'https://blog.lucas04.xyz',
+            'Content-Type': 'application/json'
+        },
         body: {
             dailyPageviews: data.result.timeseries[0].uniques.all,
             totalPageviews: data.result.totals.uniques.all

@@ -33,11 +33,17 @@ Based on Giscus and GitHub Discussions, I will add a comment section to this pag
 	- 在线网站 [Lightly](https://lightly.teamcode.com/)
 		<img width="1025" alt="image" src="https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/62dbb46f-401d-40ee-ab23-71c09157c14e">
 	- Microsoft Visual Studio 2019+
+
 		从2019版本开始代码补全才引入了软件当中，从2016版本开始每个大版本都有对应的**免费社区版**，不需要花钱，更早版本则需要自行寻找学习版
+
 	- Microsoft Visual Studio Code
+
 		**开源免费**，Mac平台也适用，但是配置稍显复杂，但是可以自行B站搜索“配置Visual Studio Code运行调试C++/Perl/Python/R语言”，按照教程更改对应JSON配置文件
+
 	- JetBrains IDE
+
 		不需要过多配置。和Microsoft Visual Studio功能相似的另一家公司开发的IDE，学习版由于律师函，能找到的版本都不是最新版，而且普遍都不稳定，但是该公司为在校学生**免费**提供专业版本的非商业使用许可证，仅需前往[官网](https://www.jetbrains.com/community/education/#students)申请即可，下附申请说明。~~每年可以省￥1000多~~
+
 	<img width="878" alt="image" src="https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/8e9cc667-08cc-4454-b273-0d260e95a372">
 
 ---
@@ -75,12 +81,19 @@ GitHub Student Developer Pack还提供包括但不限于Azure云服务每年$100
 这是一个基于GPT3.5-Turbo的AI代码生成平台，本人真实体验可以提高至少50%编程速度。
 
 - Visual Studio 
+
 本人暂无Windows设备，此部分咕咕
+
 - Visual Studio Code
+
 前往插件商店下载有关GitHub Copilot的插件，登录GitHub账号即可使用。
+
 <img width="380" alt="image" src="https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/888151f3-448b-4138-93c6-62c68bf56f9d">
+
 - JetBrains IDEs
+
 前往插件商店下载有关GitHub Copilot的插件，登录GitHub账号即可使用。
+
 <img width="982" alt="image" src="https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/b374d23e-4a9a-490f-9fe1-1d60cd1cab03">
 
 由于GitHub和~~巨硬~~Microsoft千丝万缕的联系，Copilot插件在微软系产品上的使用体验显著优于JetBrains系。

@@ -14,7 +14,7 @@ published: true
 
 这是一个Q&A页面，你可以在这里提问和分享你的知识。
 
-点击[此处]快速定位(#giscus-target)
+点击[此处](#giscus-target)快速定位
 
 ---
 Based on Giscus and GitHub Discussions, I will add a comment section to this page. You can ask questions and share your knowledge here. I will check and update the common questions of classmates in the comment section from time to time.

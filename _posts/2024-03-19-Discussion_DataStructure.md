@@ -51,8 +51,9 @@ Press [here](#giscus-target) to jump to the comment section
 	<img width="878" alt="image" src="https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/8e9cc667-08cc-4454-b273-0d260e95a372">
 
 ---
+
 ### JetBrains学生许可证申请说明（简要）
-		
+
 由于华科邮箱已经被JetBrains拉进邮箱验证的黑名单，所以我们无法通过简便方式即时获取许可证。
 
 你需要准备：学信网学籍验证报告
@@ -80,7 +81,8 @@ Press [here](#giscus-target) to jump to the comment section
 GitHub Student Developer Pack还提供包括但不限于Azure云服务每年$100的额度，可以自己搭建云服务器(包括但不限于创建QQ聊天机器人等)、配置SQL Server、namespace每年免费域名……
 
 ---
-### GitHub Copilot安装使用指南（使用需要魔法上网，请自行寻找方法，此处不提供相关链接）
+
+### GitHub Copilot安装使用指南
 
 这是一个基于GPT3.5-Turbo的AI代码生成平台，本人真实体验可以提高至少50%编程速度。
 

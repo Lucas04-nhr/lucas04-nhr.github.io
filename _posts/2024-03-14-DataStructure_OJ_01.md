@@ -146,47 +146,57 @@ void selectionSort(LinkList L) {
 
 ### c. 模式匹配问题
 
-> 此问题尚未得到有效解答，以下代码仅供参考
+串的模式匹配算法通常用于在一个主串中查找一个子串的位置。这在许多领域都有应用，例如文本编辑器的查找功能，或者网页浏览器的查找功能。
+
+一个常用的模式匹配算法是KMP算法。KMP算法的主要思想是当子串与目标字符串不匹配时，其已知这部分字符不需要再做比较，通过一个next数组，保存模式串中前后最长公共元素长度，可以将模式串向右滑动尽可能远的距离。
+
+> Based on GitHub Copilot.
 
 ```c++
-// I don't really know what the meaning of this challenge is, and whether it's about linked list.
-// I think it's about regex.
-
-# include <regex>
-# include <iostream>
-
-bool patternMatch(const std::string& str, const std::string& pattern) {
-    std::regex r(pattern);
-    return std::regex_match(str, r);
+// Get the next array for the KMP algorithm
+std::vector<int> getNext(const std::string& pattern) {
+    int m = pattern.size();
+    std::vector<int> next(m, 0);
+    next[0] = -1;
+    int j = -1;
+    for (int i = 1; i < m; i++) {
+        while (j > -1 && pattern[j + 1] != pattern[i]) {
+            j = next[j];
+        }
+        if (pattern[j + 1] == pattern[i]) {
+            j++;
+        }
+        next[i] = j;
+    }
+    return next;
 }
 
-int main() {
-    std::string email1 = "example@example.com";
-    std::string pattern = "^(\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+)$";
-
-    std::cout << "Email: " << email1 << std::endl;
-
-    if (patternMatch(email1, pattern)) {
-        std::cout << "Valid email address.\n";
+// KMP algorithm for pattern matching
+int KMP(const std::string& text, const std::string& pattern) {
+    int n = text.size();
+    int m = pattern.size();
+    if (m == 0) {
+        return 0;
     }
-    else {
-        std::cout << "Invalid email address.\n";
+    std::vector<int> next = getNext(pattern);
+    int j = -1;
+    for (int i = 0; i < n; i++) {
+        while (j > -1 && pattern[j + 1] != text[i]) {
+            j = next[j];
+        }
+        if (pattern[j + 1] == text[i]) {
+            j++;
+        }
+        if (j == m - 1) {
+            return i - m + 1;
+        }
     }
-    std::cout << std::endl;
-
-    std::string email2 = "example";
-    std::cout << "Email: " << email2 << std::endl;
-
-    if (patternMatch(email2, pattern)) {
-        std::cout << "Valid email address.\n";
-    }
-    else {
-        std::cout << "Invalid email address.\n";
-    }
-
-    return 0;
+    return -1;
 }
+
 ```
+
+在这个代码中，`getNext`函数用于计算`next`数组，KMP函数用于执行KMP算法。如果在文本中找到了模式，KMP函数会返回模式在文本中的开始位置，否则返回-1。
 
 ## 2. 单链表部分
 

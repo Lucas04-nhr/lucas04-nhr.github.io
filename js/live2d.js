@@ -7,8 +7,8 @@ L2Dwidget.init({
         "position": "left", //模型的表现位置
         "width": 150, //模型的宽度
         "height": 300, //模型的高度
-        "hOffset": 50,
-        "vOffset": -20
+        "hOffset": 80,
+        "vOffset": -40
     },
     "mobile": {
         "show": true,

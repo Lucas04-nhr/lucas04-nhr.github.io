@@ -14,6 +14,6 @@ function createtime(){
     snum = Math.round(seconds);
     if(String(snum).length ==1 ){snum = "0" + snum;}
     document.getElementById("timeDate").innerHTML = "This site has been running for "+dnum+" days ";
-    document.getElementById("times").innerHTML = hnum + " hour(s) " + mnum + " minute(s) " + snum + "second(s)";
+    document.getElementById("times").innerHTML = hnum + " hour(s) " + mnum + " minute(s) " + snum + "second(s).";
 }
 setInterval("createtime()",250); 

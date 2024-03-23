@@ -69,7 +69,6 @@ $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width 
 
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
-        "cursor",
         "base",
         "layout",
         "lib",

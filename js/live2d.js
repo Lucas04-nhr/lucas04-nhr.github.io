@@ -1,6 +1,6 @@
 L2Dwidget.init({
     "model": {
-        jsonPath: "https://unpkg.com/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json",
+        jsonPath: "https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json",
         "scale": 1
     },
     "display": {

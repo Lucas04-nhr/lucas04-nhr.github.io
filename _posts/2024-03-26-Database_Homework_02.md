@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Data Structure-Homework Chapter 3
-date: 20240315
-category: "Data Structure Homework"
-tags: [Data Structure, Homework]
+title: Database-Homework 02
+date: 20240326
+category: "Database Homework"
+tags: [Database, Homework]
 author: Lucas
 comment: true
 mathjax: true

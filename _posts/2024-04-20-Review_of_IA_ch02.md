@@ -10,7 +10,7 @@ mathjax: true
 published: true
 ---
 
-> 光谱分析及导论
+光谱分析及导论
 
 ## 名词解释
 

@@ -3,7 +3,7 @@ layout: post
 title: Instrumental Analysis Chapter 02
 date: 20240420
 category: "Instrumental Analysis Review"
-tags: [Instrumental Analysis, Notes, Review]
+tags: [Instrumental Analysis, Review]
 author: Lucas
 comment: true
 mathjax: true

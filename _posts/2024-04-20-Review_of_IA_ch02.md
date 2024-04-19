@@ -2,7 +2,7 @@
 layout: post
 title: Instrumental Analysis Chapter 02
 date: 20240420
-category: "Instrumental Analysis Review"
+category: "IA Review"
 tags: [Instrumental Analysis, Review]
 author: Lucas
 comment: true

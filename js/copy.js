@@ -1,10 +1,10 @@
 // Prevent the default copy action
 var element = document.body;
-element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
+element.style.userSelect = 'none'; // Standard
+// element.style.webkitUserSelect = 'none'; // Chrome, Safari, Opera
 element.style.MozUserSelect = 'none'; // Firefox
 element.style.msUserSelect = 'none'; // IE 10+
 element.style['-ms-user-select'] = 'none'; // IE 10+
-element.style.userSelect = 'none'; // Standard
 
 // Get the elements which can be selected
 var giscusElements = document.getElementsByClassName('gsc-comment-box-main');

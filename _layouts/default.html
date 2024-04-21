@@ -4,7 +4,8 @@
   {% include head.html %}
 
   <body>
-
+    <!-- 添加Lottie动画元素 -->
+    <lottie-player id="lottie-animation" src="https://lottie.host/6f4ee854-3625-4849-8985-e423a0752949/hZWZsrb0zk.json" background="transparent" autoplay loop></lottie-player>
     <header class="site-header">
       <nav class="nav-extended {{ site.header-color }}">
         {% include navbar.html %}
@@ -45,6 +46,7 @@
     <script src="{{ '/lib/material-scrolltop/material-scrolltop.js' | prepend: site.baseurl }}"></script>
     <!-- main -->
     <script src="{{ '/js/init.js' | prepend: site.baseurl }}"></script>
+    <script src="{{ '/js/lottie.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/js/main.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/js/copy.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/js/time.js' | prepend: site.baseurl }}"></script>

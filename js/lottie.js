@@ -15,5 +15,5 @@ window.addEventListener('load', function() {
             clearInterval(interval);
             lottieAnimation.style.display = 'none';
         }
-    }, 25); // 每25毫秒减小0.01的透明度，总共需要2.5秒完成淡出
+    }, 10); // 每10毫秒减小0.01的透明度，总共需要1秒完成淡出
 });

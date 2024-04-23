@@ -23,6 +23,7 @@ body {
     color: $text-color;
     background-color: $background-color;
     -webkit-text-size-adjust: 100%;
+    cursor: url(../lib/cursor/Arrow.cur), pointer;
 }
 
 
@@ -39,7 +40,7 @@ ul, ol, dl, figure,
 /* Text */
 
 strong {
-    //font-weight: bold;
+    font-weight: bold;
 }
 
 p {
@@ -229,4 +230,26 @@ pre {
 .footnote {
     font-size: 14px;
     padding: 0 5px;
+}
+
+/* Cursor */
+
+select {
+    cursor: url(../lib/cursor/Hand.cur), pointer;
+}
+
+button, a:hover {
+    cursor: url(../lib/cursor/Hand2.cur), pointer;
+}
+
+input {
+    cursor: url(../lib/cursor/Help.cur), pointer;
+}
+
+textarea,input:focus{
+	cursor:url(../lib/cursor/IBeam.cur), text;	
+}
+
+code{
+	cursor: url(../lib/cursor/Handwriting.cur), default;	
 }

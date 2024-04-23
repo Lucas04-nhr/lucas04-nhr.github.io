@@ -234,20 +234,19 @@ pre {
 
 /* Cursor */
 
-.giscus {
+iframe .giscus {
     cursor: url(../lib/cursor/Arrow.cur), pointer;
 }
 
-.form-control input-contrast gsc-comment-box-textarea:hover {
+iframe .form-control input-contrast gsc-comment-box-textarea:hover {
     cursor: url(../lib/cursor/IBeam.cur), pointer;
 }
 
-.player {
+iframe #player {
     cursor: url(../lib/cursor/Arrow.cur), pointer;
-
 }
 
-.player:hover, .player:active {
+iframe #player:hover, iframe #player:active {
     cursor: url(../lib/cursor/Hand.cur), pointer;
 }
 

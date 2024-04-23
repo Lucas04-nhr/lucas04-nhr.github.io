@@ -230,34 +230,3 @@ pre {
     font-size: 14px;
     padding: 0 5px;
 }
-
-
-/* Context Menu */
-.context-menu {
-    display: none;
-    font-family: $base-font-family;
-    font-size: $base-font-size;
-    position: absolute;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    z-index: 1000;
-}
-
-.context-menu ul {
-    font-family: $base-font-family;
-    font-size: $base-font-size;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.context-menu li {
-    font-family: $base-font-family;
-    font-size: $base-font-size + 0.1rem;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.context-menu li:hover {
-    background-color: #f0f0f0;
-}

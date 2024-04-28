@@ -69,6 +69,7 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Clion/Clion.png?raw=true" alt="CLion" style="width: 160px; height: 90px; margin: 10px 10px;">
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Ubuntu/Ubuntu.png?raw=true" alt="Ubuntu" style="width: 160px; height: 90px; margin: 10px 10px;">
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/X/X.png?raw=true" alt="X" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/e15ad741aafac259e0a27a735a2f0f98563386d4/Html/HTML.png?raw=true" alt="HTML" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
 
 ## 📮 Contact Me

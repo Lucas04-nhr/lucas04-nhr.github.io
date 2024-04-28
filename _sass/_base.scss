@@ -26,6 +26,14 @@ body {
     cursor: url(../lib/cursor/Arrow.cur), default;
 }
 
+body * {
+    cursor: url(../lib/cursor/Arrow.cur), default;
+}
+
+body *:active {
+    cursor: url(../lib/cursor/Arrow.cur), default;
+}
+
 
 /* Set `margin-bottom` to maintain vertical rhythm */
 

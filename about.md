@@ -63,7 +63,7 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Ruby/Ruby.png?raw=true" alt="Ruby" style="width: 160px; height: 90px; margin: 10px 10px;">
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/C++/C++.png?raw=true" alt="C++" style="width: 160px; height: 90px; margin: 10px 10px;">
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Python/Python.png?raw=true" alt="Python" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Rstudio/RStudio.png?raw=true" alt="RStudio" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Rstudio/RStudio.png?raw=true" alt="RStudio" style="width: 206px; height: 90px; margin: 10px 10px;">
 </p>
 <p style="display: inline-flex;">
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Clion/Clion.png?raw=true" alt="CLion" style="width: 160px; height: 90px; margin: 10px 10px;">

@@ -132,7 +132,17 @@ alter pluggable database PDBDRUGDB open;
 ```bash
 插接式数据库已变更。
 ```
+You can see the status of the database by running the following command.
 
+```sql
+show pdbs
+```
+```bash
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDBDRUGDB                      READ WRITE NO
+```
 
 ## Change session
 

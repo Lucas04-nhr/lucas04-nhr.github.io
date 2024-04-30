@@ -27,6 +27,29 @@ Change the IP address to the current one.
 
 ## Start the listener
 
+You can see the listener status by running the following command.
+```bash
+lsnrctl status
+```
+```bash
+LSNRCTL for Linux: Version 21.0.0.0.0 - Production on 30-4月 -2024 19:55:30
+
+Copyright (c) 1991, 2021, Oracle.  All rights reserved.
+
+正在连接到 (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=210.42.105.18)(PORT=1521)))
+TNS-12541: TNS: 无监听程序
+ TNS-12560: TNS: 协议适配器错误
+  TNS-00511: 无监听程序
+   Linux Error: 111: Connection refused
+正在连接到 (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC1521)))
+TNS-12541: TNS: 无监听程序
+ TNS-12560: TNS: 协议适配器错误
+  TNS-00511: 无监听程序
+   Linux Error: 111: Connection refused
+```
+
+Then, you can start the listener by running the following command.
+
 ```bash
 lsnrctl start
 ```
@@ -35,6 +58,41 @@ lsnrctl start
 
 ```bash
 sqlplus / as sysdba
+```
+```bash
+LSNRCTL for Linux: Version 21.0.0.0.0 - Production on 30-4月 -2024 19:55:35
+
+Copyright (c) 1991, 2021, Oracle.  All rights reserved.
+
+启动/opt/app/admin/product/21.3.000/db_home//bin/tnslsnr: 请稍候...
+
+TNSLSNR for Linux: Version 21.0.0.0.0 - Production
+系统参数文件为/opt/app/admin/product/21.3.000/db_home//network/admin/listener.ora
+写入/opt/app/admin/diag/tnslsnr/A201-2-7/listener/alert/log.xml的日志信息
+监听: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=210.42.105.18)(PORT=1521)))
+监听: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+
+正在连接到 (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=210.42.105.18)(PORT=1521)))
+LISTENER 的 STATUS
+------------------------
+别名                      LISTENER
+版本                      TNSLSNR for Linux: Version 21.0.0.0.0 - Production
+启动日期                  30-4月 -2024 19:55:37
+正常运行时间              0 天 0 小时 0 分 0 秒
+跟踪级别                  off
+安全性                    ON: Local OS Authentication
+SNMP                      OFF
+监听程序参数文件          /opt/app/admin/product/21.3.000/db_home//network/admin/listener.ora
+监听程序日志文件          /opt/app/admin/diag/tnslsnr/A201-2-7/listener/alert/log.xml
+监听端点概要...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=210.42.105.18)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+服务摘要..
+服务 "drugdb" 包含 1 个实例。
+  实例 "drugdb", 状态 UNKNOWN, 包含此服务的 5 个处理程序...
+服务 "pdbdrugdb" 包含 1 个实例。
+  实例 "drugdb", 状态 UNKNOWN, 包含此服务的 5 个处理程序...
+命令执行成功
 ```
 
 In the database console, start the database.
@@ -65,6 +123,16 @@ show pdbs
          2 PDB$SEED                       READ ONLY  NO
          3 PDBDRUGDB                      MOUNTED
 ```
+
+## Open the purgeable database
+
+```sql
+alter pluggable database PDBDRUGDB open;
+```
+```bash
+插接式数据库已变更。
+```
+
 
 ## Change session
 

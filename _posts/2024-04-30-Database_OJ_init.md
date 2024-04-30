@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Database Online Job Initiation
-date: 20240424
+date: 20240430
 category: "Database"
 tags: [Database, OJ]
 author: Lucas

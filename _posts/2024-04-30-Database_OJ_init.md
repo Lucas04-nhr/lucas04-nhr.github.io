@@ -201,14 +201,14 @@ After that, you can run the following command to initialize the database in the 
 Then execute the following command in the database console.
 
 ```sql
-@/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql HR USERS TEMP wtsgyh2024 /opt/app/oracle/product/21.3.000/db_home/demo/schema/log/ PDBDURGDB
+@/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql wtsgyh2024 USERS TEMP wtsgyh2024 /opt/app/oracle/product/21.3.000/db_home/demo/schema/log/ PDBDURGDB
 ```
 
 > This command can prevent you from entering the parameters manually.
 
 ```bash
 specify password for HR as parameter 1:
-输入 1 的值:  HR
+输入 1 的值:  wtsgyh2024
 
 specify default tablespeace for HR as parameter 2:
 输入 2 的值:  USERS

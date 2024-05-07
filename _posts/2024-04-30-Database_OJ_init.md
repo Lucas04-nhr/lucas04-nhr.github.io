@@ -182,7 +182,7 @@ tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ### If you can't access github.com
 ```bash
 #! /bin/bash
-wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -P /opt/app
+wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -P /opt/app/db-sample-schemas-21.1.tar.gz
 tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ```
 

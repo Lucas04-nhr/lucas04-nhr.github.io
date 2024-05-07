@@ -198,9 +198,14 @@ After that, you can run the following command to initialize the database in the 
 > Due to the change of the properties of the database, you should reconnect to the database or the user 'SYS'.
 > You can quit the current database console by running the command `quit` and re-login to the database by running the command `sqlplus / as sysdba` or directly reconnect to the database by running the command `conn / as sysdba`
 
+Then execute the following command in the database console.
+
 ```sql
 @/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql HR USERS TEMP wtsgyh2024 /opt/app/oracle/product/21.3.000/db_home/demo/schema/log/ PDBDURGDB
 ```
+
+> This command can prevent you from entering the parameters manually.
+
 ```bash
 specify password for HR as parameter 1:
 输入 1 的值:  HR

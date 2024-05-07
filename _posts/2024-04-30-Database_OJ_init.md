@@ -232,3 +232,8 @@ Commit complete.
 
 PL/SQL procedure successfully completed.
 ```
+You may failed to connect to the database "pdbuserConnecttest" due to password error. You can change the password by running the following command in sqlplus.
+
+```sql
+alter user HR identified by wtsgyh2024;
+```

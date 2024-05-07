@@ -195,6 +195,9 @@ perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' *.sql */*.sql */*.dat
 
 After that, you can run the following command to initialize the database in the database console.
 
+> Due to the change of the properties of the database, you should reconnect to the database or the user 'SYS'.
+> You can quit the current database console by running the command `quit` and re-login to the database by running the command `sqlplus / as sysdba` or directly reconnect to the database by running the command `conn / as sysdba`
+
 ```sql
 @/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql
 ```
@@ -228,6 +231,4 @@ Commit complete.
 
 
 PL/SQL procedure successfully completed.
-
-not spooling currently
 ```

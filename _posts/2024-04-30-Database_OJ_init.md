@@ -170,7 +170,6 @@ Using perl to initialize the database outside the database console.
 
 You should go to the directory where the database initialization files 'db-sample-schemas-21.1' are located.
 In this article, the location is '/opt/app/db-sample-schemas-21.1'.
-Then, run the following command.
 
 You can download and unzip the database initialization files from the following script.
 
@@ -186,6 +185,8 @@ tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -P /opt/app
 tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ```
+
+Then, run the following command.
 
 ```bash
 perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' *.sql */*.sql */*.dat

@@ -54,11 +54,6 @@ Then, you can start the listener by running the following command.
 lsnrctl start
 ```
 
-## Start the database
-
-```bash
-sqlplus / as sysdba
-```
 ```bash
 LSNRCTL for Linux: Version 21.0.0.0.0 - Production on 30-4月 -2024 19:55:35
 
@@ -93,6 +88,12 @@ SNMP                      OFF
 服务 "pdbdrugdb" 包含 1 个实例。
   实例 "drugdb", 状态 UNKNOWN, 包含此服务的 5 个处理程序...
 命令执行成功
+```
+
+## Start the database
+
+```bash
+sqlplus / as sysdba
 ```
 
 In the database console, start the database.

@@ -172,6 +172,21 @@ You should go to the directory where the database initialization files 'db-sampl
 In this article, the location is '/opt/app/db-sample-schemas-21.1'.
 Then, run the following command.
 
+You can download and unzip the database initialization files from the following script.
+
+### If you can access github.com
+```bash
+wget -c https://raw.githubusercontent.com/Lucas04-nhr/database-instruction/main/db-sample-schemas-21.1.tar.gz -P /opt/app
+tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
+```
+
+### If you can't access github.com
+```bash
+#! /bin/bash
+wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -P /opt/app
+tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
+```
+
 ```bash
 perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' *.sql */*.sql */*.dat
 

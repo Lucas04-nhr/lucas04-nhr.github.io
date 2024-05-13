@@ -271,3 +271,39 @@ int Graph::getWeight(int src, int dest) {
 }
 ```
 
+### Task 03
+
+**（选做）** 拓扑排序
+
+在C++中，拓扑排序通常用于解决“在给定的有向无环图（DAG）中，需要按照顶点的先后顺序进行排序”的问题。这种排序的一个常见应用是确定任务的依赖关系。
+
+以下是一个简单的拓扑排序的实现：
+
+```cpp
+void Graph::topologicalSort() {
+    std::vector<int> in_degree(V, 0);
+
+    for (int u=0; u<V; u++) {
+        for(auto itr = adj[u].begin(); itr != adj[u].end(); itr++)
+             in_degree[*itr]++;
+    }
+
+    std::queue<int> q;
+    for (int i = 0; i < V; i++)
+        if (in_degree[i] == 0)
+            q.push(i);
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        std::cout << u << " ";
+
+        for(auto itr = adj[u].begin(); itr != adj[u].end(); itr++)
+            if (--in_degree[*itr] == 0)
+                q.push(*itr);
+    }
+}
+```
+
+在这个代码中，我们首先计算每个顶点的入度（即，有多少边指向该顶点）。然后，我们将所有入度为0的顶点添加到队列中。接着，我们开始从队列中取出顶点，并将其输出。每取出一个顶点，我们就将其所有邻接顶点的入度减1，如果邻接顶点的入度变为0，就将其加入队列。这个过程一直持续到队列为空为止。

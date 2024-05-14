@@ -173,6 +173,8 @@ In this article, the location is '/opt/app/db-sample-schemas-21.1'.
 
 You can download and unzip the database initialization files from the following script.
 
+Strongly recommend you to download the files right after you change the listener IP address.
+
 ### If you can access github.com
 ```bash
 wget -c https://raw.githubusercontent.com/Lucas04-nhr/database-instruction/main/db-sample-schemas-21.1.tar.gz -P /opt/app
@@ -182,7 +184,7 @@ tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ### If you can't access github.com
 ```bash
 #! /bin/bash
-wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -P /opt/app/db-sample-schemas-21.1.tar.gz
+wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fdatabase-instruction%2Fblob%2Fmain%2Fdb-sample-schemas-21.1.tar.gz -O /opt/app/db-sample-schemas-21.1.tar.gz
 tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ```
 
@@ -201,10 +203,8 @@ After that, you can run the following command to initialize the database in the 
 Then execute the following command in the database console.
 
 ```sql
-@/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql wtsgyh2024 USERS TEMP wtsgyh2024 /opt/app/oracle/product/21.3.000/db_home/demo/schema/log/ PDBDURGDB
+@/opt/app/db-sample-schemas-21.1/human_resources/hr_main.sql 
 ```
-
-> This command can prevent you from entering the parameters manually.
 
 ```bash
 specify password for HR as parameter 1:

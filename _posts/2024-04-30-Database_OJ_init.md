@@ -188,9 +188,10 @@ wget -c https://mirror.ghproxy.com/?q=https%3A%2F%2Fgithub.com%2FLucas04-nhr%2Fd
 tar -xvf /opt/app/db-sample-schemas-21.1.tar.gz -C /opt/app
 ```
 
-Then, run the following command.
+Then, run the following command in the `db-sample-schemas-21.1` directory.
 
 ```bash
+cd /opt/app/db-sample-schemas-21.1
 perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' *.sql */*.sql */*.dat
 
 ```

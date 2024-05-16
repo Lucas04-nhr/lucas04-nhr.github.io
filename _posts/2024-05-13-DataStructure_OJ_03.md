@@ -91,6 +91,8 @@ To shorten the code, I will not provide the main function in the following code.
 
 #### BFS
 
+##### 代码实现
+
 ```cpp
 void Graph::BFS(int s) {
     // Mark all the vertices as not visited
@@ -123,7 +125,15 @@ void Graph::BFS(int s) {
 }
 ```
 
+##### 输出结果
+    
+```
+0 1 2 3 4 5
+```
+
 #### DFS
+
+##### 代码实现
 
 ```cpp
 void Graph::DFS(int v, bool visited[]) {
@@ -140,6 +150,12 @@ void Graph::DFS(int v, bool visited[]) {
 ```
 
 这样，我们就可以创建一个图的实例，添加边，然后使用DFS或BFS进行遍历了。
+
+##### 输出结果
+    
+```
+0 1 2 3 4 5
+```
 
 ### Task 02
 

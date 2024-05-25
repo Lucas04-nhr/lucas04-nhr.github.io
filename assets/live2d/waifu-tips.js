@@ -31,8 +31,8 @@ live2d_settings['modelTexturesId']      = 53;           // 默认材质 ID，可
 // 工具栏设置
 live2d_settings['showToolMenu']         = true;         // 显示 工具栏          ，可选 true(真), false(假)
 live2d_settings['canCloseLive2d']       = true;         // 显示 关闭看板娘  按钮，可选 true(真), false(假)
-live2d_settings['canSwitchModel']       = false;         // 显示 模型切换    按钮，可选 true(真), false(假)
-live2d_settings['canSwitchTextures']    = false;         // 显示 材质切换    按钮，可选 true(真), false(假)
+live2d_settings['canSwitchModel']       = true;         // 显示 模型切换    按钮，可选 true(真), false(假)
+live2d_settings['canSwitchTextures']    = true;         // 显示 材质切换    按钮，可选 true(真), false(假)
 live2d_settings['canSwitchHitokoto']    = true;         // 显示 一言切换    按钮，可选 true(真), false(假)
 live2d_settings['canTakeScreenshot']    = true;         // 显示 看板娘截图  按钮，可选 true(真), false(假)
 live2d_settings['canTurnToHomePage']    = true;         // 显示 返回首页    按钮，可选 true(真), false(假)
@@ -46,7 +46,7 @@ live2d_settings['modelTexturesRandMode']= 'rand';       // 材质切换，可选
 // 提示消息选项
 live2d_settings['showHitokoto']         = true;         // 显示一言
 live2d_settings['showF12Status']        = true;         // 显示加载状态
-live2d_settings['showF12Message']       = false;        // 显示看板娘消息
+live2d_settings['showF12Message']       = true;        // 显示看板娘消息
 live2d_settings['showF12OpenMsg']       = true;         // 显示控制台打开提示
 live2d_settings['showCopyMessage']      = true;         // 显示 复制内容 提示
 live2d_settings['showWelcomeMessage']   = true;         // 显示进入面页欢迎词
@@ -65,9 +65,9 @@ live2d_settings['waifuDraggableRevert'] = false;         // 松开鼠标还原�
 
 // 其他杂项设置
 live2d_settings['l2dVersion']           = '1.4.2';        // 当前版本
-live2d_settings['l2dVerDate']           = '2018.11.12'; // 版本更新日期
+live2d_settings['l2dVerDate']           = '2024.05.25'; // 版本更新日期
 live2d_settings['homePageUrl']          = '';       // 主页地址，可选 'auto'(自动), '{URL 网址}'
-live2d_settings['aboutPageUrl']         = 'about.html';   // 关于页地址, '{URL 网址}'
+live2d_settings['aboutPageUrl']         = 'about';   // 关于页地址, '{URL 网址}'
 live2d_settings['screenshotCaptureName']= 'live2d.png'; // 看板娘截图文件名，例如 'live2d.png'
 
 /****************************************************************************************************/

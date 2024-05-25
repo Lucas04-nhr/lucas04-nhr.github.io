@@ -56,6 +56,32 @@
     <script src="{{ '/js/L2Dwidget.0.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/js/live2d.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/js/contextmenu.js' | prepend: site.baseurl }}"></script>
+
+<!-- New live2d -->
+    <div class="waifu">
+      <div class="waifu-tips"></div>
+      <canvas id="live2d" class="live2d"></canvas>
+      <div class="waifu-tool">
+          <span class="fui-home"></span>
+          <span class="fui-chat"></span>
+          <span class="fui-eye"></span>
+          <span class="fui-user"></span>
+          <span class="fui-photo"></span>
+          <span class="fui-info-circle"></span>
+          <span class="fui-cross"></span>
+      </div>
+    </div>
+
+    <script src="{{ '/assets/live2d/waifu-tips.js' | prepend: site.baseurl }}"></script>
+    <script src="{{ '/assets/live2d/live2d.js' | prepend: site.baseurl }}"></script>
+
+    <script type="text/javascript">
+      live2d_settings['modelId'] = 1;
+      live2d_settings['modelTexturesId'] = 87;
+    initModel("{{ '/assets/live2d/waifu-tips.json | prepend: site.baseurl }}")
+    </script>
+
+
   </body>
 
 </html>

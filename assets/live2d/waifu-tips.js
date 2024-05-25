@@ -29,7 +29,7 @@ live2d_settings['modelId']              = 1;            // 默认模型 ID，可
 live2d_settings['modelTexturesId']      = 53;           // 默认材质 ID，可在 F12 控制台找到
 
 // 工具栏设置
-live2d_settings['showToolMenu']         = false;         // 显示 工具栏          ，可选 true(真), false(假)
+live2d_settings['showToolMenu']         = true;         // 显示 工具栏          ，可选 true(真), false(假)
 live2d_settings['canCloseLive2d']       = true;         // 显示 关闭看板娘  按钮，可选 true(真), false(假)
 live2d_settings['canSwitchModel']       = false;         // 显示 模型切换    按钮，可选 true(真), false(假)
 live2d_settings['canSwitchTextures']    = false;         // 显示 材质切换    按钮，可选 true(真), false(假)

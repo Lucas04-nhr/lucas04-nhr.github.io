@@ -190,6 +190,68 @@ Process finished with exit code 0
 
 二分查找是一种非常高效的搜索算法，特别是在处理大数据集时。但是，它有一个前提条件，那就是数据集必须是有序的。如果数据集是无序的，那么在进行二分查找之前，你可能需要先对数据集进行排序，这将增加额外的时间复杂度。此外，二分查找不适合用于链表等线性数据结构，因为这些数据结构不支持快速的随机访问。
 
+## 堆排序
+
+堆排序是一种基于比较的排序算法，它使用了二叉堆的数据结构。 
+
+### 代码实现
+
+```c++
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        std::swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    for (int i = n - 1; i >= 0; i--) {
+        std::swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+```
+
+### 输出结果
+
+```
+Array before sorting: 
+12 34 54 2 3 
+Array after sorting: 
+2 3 12 34 54 
+```
+
+### 性能分析
+
+堆排序的性能分析如下：
+
+#### 时间复杂度
+
+堆排序的时间复杂度在所有情况下都是$O(n \log n)$。这是因为堆排序算法首先需要构建一个堆，这个过程的时间复杂度是$O(n)$，然后需要对$n$个元素进行堆调整，每次调整的时间复杂度是$O(\log n)$，所以总的时间复杂度是$O(n \log n)$。
+
+#### 空间复杂度
+
+堆排序的空间复杂度是$O(1)$。这是因为堆排序是原地排序算法，不需要额外的存储空间。
+
+#### 性能
+
+- 堆排序是一种非稳定的排序算法，即相等的元素可能会改变它们原有的相对顺序。
+- 堆排序不是最快的排序算法，比如快速排序在最好的情况下可以达到$O(n \log n)$的时间复杂度，但是堆排序的优点是最坏情况下的时间复杂度也是$O(n \log n)$，这使得堆排序在需要保证排序时间不会过长的情况下是一个很好的选择。
+- 堆排序的另一个优点是它只需要一个很小的、固定的额外空间，所以在空间敏感的情况下，堆排序是一个很好的选择。
+
 ## 构建二叉排序树及平衡二叉树
 
 **（选做）** 在C++中，我们可以创建一个类来表示二叉排序树（Binary Search Tree，BST）和平衡二叉树（Balanced Binary Tree，通常是AVL树）。以下是创建这两种树的基本代码。

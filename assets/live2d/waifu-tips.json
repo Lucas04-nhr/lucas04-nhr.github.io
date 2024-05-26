@@ -48,9 +48,11 @@
         { "selector": ".fui-info-circle", "text": ["这里有关于我的信息呢"] },
         { "selector": ".fui-cross", "text": ["你不喜欢我了吗..."] },
         { "selector": ".waifu #live2d", "text": ["干嘛呢你，快把手拿开", "鼠…鼠标放错地方了！"] },
-        { "selector": "img", "text": ["暂时还没做点击放大功能哦~"] },
+        { "selector": "img", "text": ["图片暂时还没做点击放大功能哦~"] },
         { "selector": "code", "text": ["这里是代码块，要不要来一起找bug呀~"] },
-        { "selector": "material-scrolltop waves-effect waves-light hide-on-small-only reveal", "text": ["点击这里可以返回顶部哦~"]}
+        { "selector": "material-scrolltop waves-effect waves-light hide-on-small-only reveal", "text": ["点击这里可以返回顶部哦~"]},
+        { "selector": "color-text-primary gsc-main", "text": ["这里是评论区，有什么想说的都可以填进来哦~"] },
+        { "selector": "player", "text": ["可以点击播放音乐哦~"]}
     ],
     "click": [
         {

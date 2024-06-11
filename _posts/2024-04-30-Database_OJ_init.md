@@ -221,7 +221,7 @@ specify password for SYS as parameter 4:
 输入 4 的值:  wtsgyh2024
 
 specify log path as parameter 5:
-输入 5 的值:  /opt/app/oracle/product/21.3.000/db_home/demo/schema/log/
+输入 5 的值:  /opt/app/admin/product/21.3.000/db_home/demo/schema/log/
 
 specify connect string as parameter 6:
 输入 6 的值:  PDBDURGDB

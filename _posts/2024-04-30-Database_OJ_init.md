@@ -224,7 +224,7 @@ specify log path as parameter 5:
 输入 5 的值:  /opt/app/admin/product/21.3.000/db_home/demo/schema/log/
 
 specify connect string as parameter 6:
-输入 6 的值:  PDBDURGDB
+输入 6 的值:  PDBDRUGDB
 ```
 
 After some time, the database will be initialized.

@@ -4,25 +4,27 @@ title: About
 permalink: /about/
 ---
 
-I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
+<p align="center">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&center=true&vCenter=true&random=true&width=435&lines=Ad+astra+abyssosque.;%E5%90%91%E7%9D%80%E6%98%9F%E8%BE%B0%E4%B8%8E%E6%B7%B1%E6%B8%8A%E3%80%82;%E6%98%9F%E3%81%A8%E6%B7%B1%E6%B7%B5%E3%82%92%E7%9B%AE%E6%8C%87%E3%81%97%E3%81%A6%E3%80%82" alt="Typing SVG" />
+</p>
 
----
-
-<p align="center" style="display: ruby-text;"> 
-    <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/lucas04-nhr/lucas04-nhr.github.io/.github%2Fworkflows%2Fdeploy_github_page.yml" style="margin-left: 10px;margin-right: 10px;">
-    <img src="https://komarev.com/ghpvc/?username=lucas04-nhr&label=Profile%20views&color=0e75b6&style=flat" alt="lucas04-nhr" style="margin-left: 10px;margin-right: 10px;"> 
-    <img alt="GitHub User's stars" src="https://img.shields.io/github/stars/Lucas04-nhr?style=flat" style="margin-left: 10px;margin-right: 10px;">
-    <img alt="GitHub followers" src="https://img.shields.io/github/followers/Lucas04-nhr?style=flat" style="margin-left: 10px;margin-right: 10px;">
+<p align="center"> 
+    <img src="https://komarev.com/ghpvc/?username=lucas04-nhr&label=Profile%20views&color=0e75b6&style=flat" alt="lucas04-nhr" /> 
+    <img alt="GitHub User's stars" src="https://img.shields.io/github/stars/Lucas04-nhr?style=flat">
+    <img alt="GitHub followers" src="https://img.shields.io/github/followers/Lucas04-nhr?style=flat">
 </p>
 
 ---
+# Hi there! 👋
+
+I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
 
 ## 🔍 About Me
 
 - 🎓 **Education:** Studying Bioinformatics at HUST.
 - 💻 **Programming Languages:** Proficient in Python and C++, and actively engaged in crafting interesting projects.
 - 📊 **Data Analysis:** Utilizing R for in-depth analysis and visualization of biological data.
-- 🌐 **Web Development:** Experienced in JavaScript and contributed to building Wiki web pages for <a href="https://2023.igem.wiki/hust-china" target="_blank">iGEM HUST-China</a>.
+- 🌐 **Web Development:** Experienced in JavaScript and contributed to building Wiki web pages for iGEM HUST-China [2023](https://2023.igem.wiki/hust-china) and [2024](https://2024.igem.wiki/hust-china), also be an advisor to build Wiki web pages for iGEM HUST-China 2025.
 
 ## 🚀 What I Do
 
@@ -31,6 +33,8 @@ I enjoy exploring the intersection of biology and technology, constantly seeking
 ## 🌱 Currently Exploring
 
 I am currently diving deeper into the realms of bioinformatics, exploring new tools and technologies to enhance my understanding and skills in the field. Additionally, I'm keen on expanding my knowledge in JavaScript and web development.
+
+By the time, I'm also learning about the basics of machine learning and artificial intelligence, as well as basic knowledge of computer science, mainly focusing on front-end development using `vue.js`. I hope to integrate these skills with my bioinformatics knowledge to create innovative solutions.
 
 In my GitHub repositories, you can find a range of interesting projects, covering everything from basic bioinformatics tools to complex data analysis projects. These projects reflect my efforts to integrate technology with biology.
 
@@ -42,70 +46,98 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
 
 ### GitHub Stats
 
-<p align="center"> 
-    <a href="https://github.com/ryo-ma/github-profile-trophy">
-        <img align="center" src="https://github-profile-trophy.vercel.app/?username=lucas04-nhr" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
-    </a>
-    <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
-    <img src="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
-    <img src="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&" alt="lucas04-nhr" style="margin-top: 10px;margin-bottom: 10px;">
+<p align="center">
+    <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="static/github-snake.svg" />
+    <img alt="github-snake" src="static/github-snake.svg" />
+    </picture>
+</p>
+
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=tokyonight" />
+        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=transparent" />
+        <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=transparent" alt="lucas04-nhr" />
+    </picture>
+</p>
+
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=tokyonight" />
+        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=transparent" />
+        <img src="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=transparent" alt="lucas04-nhr" />
+    </picture>
+</p>
+
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=tokyonight" />
+        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=transparent" />
+        <img src="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=transparent" alt="lucas04-nhr" />
+    </picture>
 </p>
 
 ### Languages and Tools
 
-<p style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/GitHub/GitHub.png?raw=true" alt="GitHub" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/GitLab/GitLab.png?raw=true" alt="GitLab" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Cloudflare/Cloudflare.png?raw=true" alt="Cloudflare" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/VisualStudioCode/VisualStudioCode.png?raw=true" alt="Visual Studio Code" style="width: 160px; height: 90px; margin: 10px 10px;">
+<p align="center" style="display: inline-flex;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/GitHub/GitHub.png?raw=true" alt="GitHub" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/GitLab/GitLab.png?raw=true" alt="GitLab" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/VisualStudioCode/VisualStudioCode.png?raw=true" alt="Visual Studio Code" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
-<p style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Ruby/Ruby.png?raw=true" alt="Ruby" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/C++/C++.png?raw=true" alt="C++" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Python/Python.png?raw=true" alt="Python" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Rstudio/RStudio.png?raw=true" alt="RStudio" style="width: 206px; height: 90px; margin: 10px 10px;">
+<p align="center" style="display: inline-flex;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Vue/Vue.png?raw=true" alt="Vue" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Node.js/Node.js.png?raw=true" alt="Node.js" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Python/Python.png?raw=true" alt="Python" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
-<p style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Clion/Clion.png?raw=true" alt="CLion" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/Ubuntu/Ubuntu.png?raw=true" alt="Ubuntu" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/1f1640e75992c9b15732fa348a65ae6a49b9c9f9/X/X.png?raw=true" alt="X" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/e15ad741aafac259e0a27a735a2f0f98563386d4/Html/HTML.png?raw=true" alt="HTML" style="width: 160px; height: 90px; margin: 10px 10px;">
+<p align="center" style="display: inline-flex;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Swift/Swift.png?raw=true" alt="Swift" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Html/HTML.png?raw=true" alt="HTML" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Ubuntu/Ubuntu.png?raw=true" alt="Ubuntu" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
 
 ## 📮 Contact Me
 
-You can contact me via email: <lucas04@lucas04.xyz>.
+You can contact me via email: <lucas04@foxmail.com>.
 
 Some of my other social accounts are:
-<p style="display: ruby">
 <a href="https://twitter.com/__lucas04__" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="__lucas04__" height="30" width="40" /></a>
 <a href="https://fb.com/lucas.04.n" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="lucas.04.n" height="30" width="40" /></a>
 <a href="https://instagram.com/lucas04_11" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="lucas04_11" height="30" width="40" /></a>
+
+<p align="center" style="display: inline-flex;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Discord/Discord.png?raw=true" alt="Discord" style="width: 160px; height: 90px; margin: 10px 10px;">
+    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Twitter/Twitter.png?raw=true" alt="Twitter" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
 
 ## ☕ Support Me
 
+You can use [Ko-Fi](https://ko-fi.com/lucas04) or **~~Buy Me a Coffee~~** to support me.
+
 <p align="center">
-    <a href="https://www.buymeacoffee.com/lucas04"> 
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="lucas04" style="margin-top: 10px;margin-bottom: 10px;">
+    <a href="https://ko-fi.com/lucas04" target='_blank'> 
+        <img height="50px" style='height:50px' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' alt='Buy Me a Coffee at ko-fi.com' />
     </a>
-    <a href="https://ko-fi.com/lucas04"> 
-        <img src="https://cdn.ko-fi.com/cdn/kofi3.png?v=3" height="50" width="210" alt="lucas04" style="margin-top: 10px;margin-bottom: 10px;">
+    <!-- <a href="https://www.buymeacoffee.com/lucas04" target='_blank'> 
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50px" alt="Buy Me a Coffee" />
+    </a> -->
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50px" alt="Buy Me a Coffee" />
+</p>
+
+Or, you can use [Patreon](https://patreon.com/lucas04) or [Afdian](https://afdian.com/a/lucas04) if you like.
+
+<p align="center">
+    <a href='https://patreon.com/lucas04' target='_blank'>
+        <img src="https://github.com/Lucas04-nhr/Lucas04-nhr/blob/main/static/patreon.png" alt='Patreon' width="50%" />
+    </a>
+    <a href='https://afdian.com/a/lucas04' target='_blank'>
+        <img src="https://github.com/Lucas04-nhr/Lucas04-nhr/blob/main/static/afdian.jpg" alt='Afdian QR code' width="50%" />
     </a>
 </p>
 
-## License
+> [!NOTE]
+> Tips from **Buy me a Coffee** is currently unavailable due to the service's restriction in my country. Please consider using **Ko-Fi**, **Patreon** or **Afdian** instead.
 
-Copyright&nbsp;&copy;&nbsp;{{ site.author }}
-
-- - -
-
-If any <b>question</b>, please send an <b>email</b> to me or just open an <b>issue</b> on the github repository. 
-
-As for all articles(except reference) are under [CC Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/), you are free to <b>share</b> and <b>adapt</b> for any purpose.
-
-- - -
-
-#### Personal information
-
-Email: {{ site.email }}
+---
+> [!TIP]
+> This README is a living document and will be updated as my journey unfolds. I also write a [CV](https://drive.google.com/file/d/1l0_ZuJrDdkmp7azPF76MVIlxMYd13p_6/view).

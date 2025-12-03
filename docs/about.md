@@ -52,30 +52,6 @@ If you share similar interests or have exciting ideas for collaboration, feel fr
     </picture>
 </p>
 
-<!-- <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=tokyonight" />
-        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=transparent" />
-        <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lucas04-nhr&show_icons=true&locale=en&layout=compact&hide=html&theme=transparent" alt="lucas04-nhr" />
-    </picture>
-</p> -->
-
-<!-- <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=tokyonight" />
-        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=transparent" />
-        <img src="https://github-readme-stats.vercel.app/api?username=lucas04-nhr&show_icons=true&locale=en&theme=transparent" alt="lucas04-nhr" />
-    </picture>
-</p> -->
-
-<!-- <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=tokyonight" />
-        <source media="(prefers-color-scheme: light)" srcset="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=transparent" />
-        <img src="https://github-readme-streak-stats.herokuapp.com/?user=lucas04-nhr&theme=transparent" alt="lucas04-nhr" />
-    </picture>
-</p> -->
-
 ### Languages and Tools
 
 <p align="center" style="display: inline-flex;">
@@ -126,9 +102,6 @@ You can use [Ko-Fi](https://ko-fi.com/lucas04) or **~~Buy Me a Coffee~~** to sup
     <a href="https://ko-fi.com/lucas04" target='_blank'> 
         <img height="50px" style='height:50px' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' alt='Buy Me a Coffee at ko-fi.com' />
     </a>
-    <!-- <a href="https://www.buymeacoffee.com/lucas04" target='_blank'> 
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50px" alt="Buy Me a Coffee" />
-    </a> -->
     <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50px" alt="Buy Me a Coffee" />
 </p>
 
@@ -148,4 +121,4 @@ Or, you can use [Patreon](https://patreon.com/lucas04) or [Afdian](https://afdia
 
 ---
 > [!TIP]
-> This README is a living document and will be updated as my journey unfolds. I also write a [CV](https://drive.google.com/file/d/1l0_ZuJrDdkmp7azPF76MVIlxMYd13p_6/view).
+> This README is a living document and will be updated as my journey unfolds.

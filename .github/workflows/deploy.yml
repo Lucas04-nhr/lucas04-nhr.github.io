@@ -49,13 +49,12 @@ jobs:
           path: docs/.vuepress/dist
 
   deploy:
-    name: Deploy artifact to GitHub Pages
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # 部署需要写入 Pages 的权限和 id-token 用于 OIDC
-    permissions:
-      pages: write
-      id-token: write
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        id: deployment
+        uses: actions/deploy-pages@v4

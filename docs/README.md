@@ -19,12 +19,16 @@ config:
     hero:
       name: Hi~
       tagline: 
-      text: Welcome to my blog
+      text: Welcome to my blog :)
       actions:
         -
-          theme: brand
+          theme: primary
           text: Blog
           link: /blog/
+        - 
+          theme: primary
+          text: About Me →
+          link: /about/
         -
           theme: alt
           text: Github →

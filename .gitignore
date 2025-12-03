@@ -27,3 +27,4 @@ dist-ssr
 node_modules
 .temp
 .cache
+docs/.vuepress/public/static/*

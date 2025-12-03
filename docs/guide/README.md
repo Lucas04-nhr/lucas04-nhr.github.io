@@ -6,4 +6,5 @@ permalink: /docs/
 
 ## Table of Contents
 
+- [R for Bioinformatics Cookbook](/docs/r-course/)
 - [HUST Graduation Project Template Usage Guide](/docs/hust-gp-template/)

@@ -7,6 +7,15 @@ createTime: 2025/12/03 19:58:43
 permalink: /docs/hust-gp-template/
 ---
 
+<LinkCard 
+  icon="ic:round-file-copy"
+  title="项目 GitHub 主页"
+  href="https://github.com/Lucas04-nhr/HUST-GP-Template" > 
+  
+  点击卡片前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~
+
+</LinkCard>
+
 ::: note
 由于本模板主要面向华中科技大学（HUST）生命科学与技术学院的本科毕业论文撰写需求，故指南采用中文进行编写。如有任何疑问，欢迎访问 [FAQs](/docs/hust-gp-template/faqs/) 页面查阅常见问题解答。
 :::

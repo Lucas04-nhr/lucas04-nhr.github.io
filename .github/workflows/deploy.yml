@@ -9,6 +9,13 @@ on:
   # Manually trigger deployment
   workflow_dispatch:
 
+# Grant write permissions to the workflow's GITHUB_TOKEN so it can push to gh-pages
+# See: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   docs:
     runs-on: ubuntu-latest

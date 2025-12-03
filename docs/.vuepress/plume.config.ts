@@ -95,7 +95,7 @@ export default defineThemeConfig({
        // },
 
       footer: {
-        message: '<a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a> <br> Power by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a>',
+        message: '<a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a> <br> Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a>',
         copyright: 'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted.',
       },
     },

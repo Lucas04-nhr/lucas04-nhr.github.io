@@ -1,9 +1,9 @@
 ---
-title: Markdown
+title: Markdown Example
 tags:
   - markdown
 createTime: 2025/12/03 15:02:27
-permalink: /blog/7h0rvu89/
+permalink: /docs/markdown-example/
 ---
 
 ## Heading 2

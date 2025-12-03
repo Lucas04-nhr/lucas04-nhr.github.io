@@ -26,8 +26,8 @@ The purpose of this material **not only** to deal with the "R for Data Science" 
 
 ## Table of Contents {#table-of-contents}
 
-- [Talk 01](/docs/r-course/talk01/)
-- [Talk 02](/docs/r-course/talk02/)
+- [Talk 01: Multi-omics data analysis and visualisation](/docs/r-course/talk01/)
+- [Talk 02: R language basics, part 1](/docs/r-course/talk02/)
 - [Talk 03](/docs/r-course/talk03/)
 <!-- - [Talk 04](/docs/r-course/talk04/) -->
 

@@ -30,6 +30,6 @@ config:
           link: /docs/
         -
           theme: alt
-          text: Github →
-          link: https://github.com/Lucas04-nhr
+          text: Source Code →
+          link: https://github.com/Lucas04-nhr/lucas04-nhr.github.io
 ---

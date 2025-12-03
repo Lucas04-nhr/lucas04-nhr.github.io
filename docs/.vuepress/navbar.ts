@@ -16,7 +16,10 @@ export const enNavbar = defineNavbarConfig([
    },
   {
     text: 'Docs',
-    items: [{ text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' }]
+    items: [
+      { text: 'All', link: '/docs/' },
+      { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
+    ]
   },
   { text: 'About', link: '/about/' },
 ])

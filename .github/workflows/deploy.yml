@@ -43,7 +43,7 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-artifact@v5
         with:
           # VuePress 默认输出目录
           path: docs/.vuepress/dist

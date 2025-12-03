@@ -1,5 +1,5 @@
 ---
-pageLayout: Page
+title: About Me
 externalLinkIcon: false
 permalink: /about/
 ---

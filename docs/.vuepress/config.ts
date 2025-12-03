@@ -161,10 +161,10 @@ export default defineUserConfig({
     comment: {
       provider: 'Giscus', // "Artalk" | "Giscus" | "Twikoo" | "Waline"
       comment: true,
-      repo: 'lucas04-nhr/lucas04-nhr.github.io',
-      repoId: '',
-      category: '',
-      categoryId: '',
+      repo: 'Lucas04-nhr/lucas04-nhr.github.io',
+      repoId: 'R_kgDOO-Hkjw',
+      category: 'General',
+      categoryId: 'DIC_kwDOO-Hkj84CzVYh',
       mapping: 'pathname',
       reactionsEnabled: true,
       inputPosition: 'top',

@@ -56,9 +56,9 @@ export default defineThemeConfig({
   /* 站点页脚 */
   footer: {
     message:
-      '<span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a></span> <br> Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a>',
+      ' Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
     copyright:
-      'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted.',
+      'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a><br></span>',
   },
 
   /* 过渡动画 @see https://theme-plume.vuejs.press/config/theme/#transition */
@@ -98,9 +98,9 @@ export default defineThemeConfig({
 
       footer: {
         message:
-          '<span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a></span> <br> Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a>',
+          ' Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
         copyright:
-          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted.',
+          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a><br></span>',
       },
     },
   },

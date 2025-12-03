@@ -1,0 +1,3 @@
+Sitemap: https://blog.lucas04.top/sitemap.xml
+User-agent:*
+Disallow:

@@ -78,13 +78,13 @@ permalink: /docs/hust-gp-template/
 - 请确保在编辑过程中不要更改模板中的命令和环境定义，除非你非常清楚自己在做什么，否则可能会导致编译错误或排版问题。
 :::
 
-#### 一些自定义的命令
+#### 一些自定义的命令 {#custom-commands}
 
 模板中预定义了一些自定义命令以简化论文的编写过程，可以[点击前往查看](/docs/hust-gp-template/custom-commands/)
 
-### 编译模板
+### 编译模板 {#compile-template}
 
-#### 环境配置
+#### 环境配置 {#environment-configuration}
 
 在编辑器中打开 `.latexmkrc` 文件，确保其中的环境变量路径配置正确，将 `'$YOUR_CUSTOM_FILE_PATH'` 替换为你本地安装 `pygments` 以及 `minted` 的路径，否则可能会在有代码插入时出现问题：
 
@@ -92,7 +92,7 @@ permalink: /docs/hust-gp-template/
 $ENV{'PATH'} = '~/Developer/miniconda3/bin:' . $ENV{'PATH'};
 ```
 
-#### 编译命令
+#### 编译命令 {#compilation-command}
 
 在编辑器中打开 `sample.tex` 文件后，可以使用以下命令进行编译：
 
@@ -150,11 +150,11 @@ latexmk sample.tex
 - 部分报错可以参考后续的 [FAQs](/docs/hust-gp-template/faqs/) 部分进行解决。
 :::
 
-## 协助编辑
+## 协助编辑 {#contribute}
 
 如果你有更好的想法，欢迎 Fork 本仓库并提交 Pull Request，达到一定质量后将会被合并至主分支，并在[支持者名单](SUPPORTERS.md)中进行记录以示感谢。
 
-## 问题反馈
+## 问题反馈 {#issue-feedback}
 
 如果在使用过程中遇到任何问题，请先查看 [FAQ](/docs/hust-gp-template/faqs/) 页面，如果页面中没有你所遇到的情形，欢迎前往本仓库的 [Issues](https://github.com/Lucas04-nhr/HUST-GP-template/issues) 页面进行反馈。
 
@@ -172,7 +172,7 @@ latexmk sample.tex
 </LinkCard>
 :::
 
-## 投喂
+## 投喂 {#support}
 
 如果你觉得这个模板对你有帮助，欢迎通过 [此页面](https://github.com/Lucas04-nhr#-support-me) 进行支持，另外，也欢迎点击 Star 来表示对本项目的认可。本人将不定期将达到一定金额的支持者名单更新在 [支持者名单](/docs/hust-gp-template/supporters/) 中，以表达感谢。
 

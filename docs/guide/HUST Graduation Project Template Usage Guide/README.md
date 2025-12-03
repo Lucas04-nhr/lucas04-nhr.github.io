@@ -12,7 +12,7 @@ permalink: /docs/hust-gp-template/
   title="项目 GitHub 主页"
   href="https://github.com/Lucas04-nhr/HUST-GP-Template" > 
   
-  点击卡片前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~
+  点击前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~
 
 </LinkCard>
 
@@ -20,7 +20,7 @@ permalink: /docs/hust-gp-template/
 由于本模板主要面向华中科技大学（HUST）生命科学与技术学院的本科毕业论文撰写需求，故指南采用中文进行编写。如有任何疑问，欢迎访问 [FAQs](/docs/hust-gp-template/faqs/) 页面查阅常见问题解答。
 :::
 
-## 适用于 HUST 的本科毕业论文 $LaTeX$ 模板使用指南 {#hust-gp-template-guide}
+## 适用于 HUST 的本科毕业论文 $\LaTeX$ 模板使用指南 {#hust-gp-template-guide}
 
 学校似乎只提供了 Word 格式的论文模板，然而 $\LaTeX$ 在排版学术论文方面有着显著优势，尤其是在需要插入大量图片、代码及表格的情况下。
 

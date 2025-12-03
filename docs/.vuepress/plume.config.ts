@@ -58,12 +58,12 @@ export default defineThemeConfig({
        * @see https://theme-plume.vuejs.press/config/theme/#profile
        */
       profile: {
-        avatar: 'https://theme-plume.vuejs.press/plume.png',
-        name: 'Lucas&#x27;s Blog',
-        description: 'A blog belongs to Lucas',
-        // circle: true,
-        // location: '',
-        // organization: '',
+        avatar: 'https://avatars.githubusercontent.com/u/117806313',
+        name: 'Lucas',
+        description: 'An undergraduate student studying bioinformatics.',
+        circle: true,
+        location: 'China',
+        organization: 'Huazhong University of Science and Technology',
       },
 
       navbar: enNavbar,
@@ -85,12 +85,12 @@ export default defineThemeConfig({
        * @see https://theme-plume.vuejs.press/config/theme/#profile
        */
       profile: {
-        avatar: 'https://theme-plume.vuejs.press/plume.png',
-        name: 'Lucas&#x27;s Blog',
-        description: 'A blog belongs to Lucas',
-        // circle: true,
-        // location: '',
-        // organization: '',
+        avatar: 'https://avatars.githubusercontent.com/u/117806313',
+        name: 'Lucas',
+        description: 'An undergraduate student studying bioinformatics.',
+        circle: true,
+        location: 'Wuhan, China',
+        organization: 'Huazhong University of Science and Technology',
       },
 
       navbar: zhNavbar,

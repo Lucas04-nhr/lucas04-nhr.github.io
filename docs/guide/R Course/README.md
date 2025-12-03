@@ -21,7 +21,7 @@ permalink: /docs/r-course/
 
 
 ::: note
-The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials, so generate a lot of versions of many formats of the file, to facilitate the user to different conditions on different devices to view more easily. Therefore, many versions and formats of files have been generated to make it easier for users to view them under *different conditions* and on *different devices*. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, also welcome anyone to submit bug reports through "issue" and participate in cooperation through **"Pull Request"**. 
+The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials, so generate a lot of versions of many formats of the file, to facilitate the user to different conditions on different devices to view more easily. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, also welcome anyone to submit bug reports through "issue" and participate in cooperation through **"Pull Request"**. 
 :::
 
 ## Table of Contents {#table-of-contents}

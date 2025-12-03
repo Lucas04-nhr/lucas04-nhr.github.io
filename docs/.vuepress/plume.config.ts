@@ -11,8 +11,8 @@
  */
 
 import { defineThemeConfig } from 'vuepress-theme-plume'
-import { enCollections, zhCollections } from './collections'
-import { enNavbar, zhNavbar } from './navbar'
+import { enCollections } from './collections'
+import { enNavbar } from './navbar'
 
 /**
  * @see https://theme-plume.vuejs.press/config/theme/
@@ -97,38 +97,6 @@ export default defineThemeConfig({
       footer: {
         message: '<a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a> <br> Power by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a>',
         copyright: 'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted.',
-      },
-
-    },
-    '/zh/': {
-      /**
-       * @see https://theme-plume.vuejs.press/config/theme/#profile
-       */
-      profile: {
-        avatar: 'https://avatars.githubusercontent.com/u/117806313',
-        name: 'Lucas',
-        description: '一个学生信的废柴大学生。',
-        circle: true,
-        location: '中国',
-        organization: '华中科技大学',
-      },
-
-      navbar: zhNavbar,
-      collections: zhCollections,
-
-      /**
-       * 公告板
-       * @see https://theme-plume.vuejs.press/guide/features/bulletin/
-       */
-       // bulletin: {
-       //   layout: 'top-right',
-       //   contentType: 'markdown',
-       //   title: '',
-       //   content: '',
-       // },
-      footer: {
-        message: 'ICP 备案号：<a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a> <br> 由 <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> 驱动',
-        copyright: '本站所有内容版权均由 Lucas 所有，除特别说明外受 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 协议保护。',
       },
     },
   },

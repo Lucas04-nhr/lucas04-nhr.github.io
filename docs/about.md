@@ -15,22 +15,23 @@ permalink: /about/
 </p>
 
 ---
-# Hi there! 👋
+
+# Hi there! 👋 {#head}
 
 I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
 
-## 🔍 About Me
+## 🔍 About Me {#basic}
 
 - 🎓 **Education:** Studying Bioinformatics at HUST.
 - 💻 **Programming Languages:** Proficient in Python and C++, and actively engaged in crafting interesting projects.
 - 📊 **Data Analysis:** Utilizing R for in-depth analysis and visualization of biological data.
 - 🌐 **Web Development:** Experienced in JavaScript and contributed to building Wiki web pages for iGEM HUST-China [2023](https://2023.igem.wiki/hust-china), [2024](https://2024.igem.wiki/hust-china), also be an advisor to build Wiki web pages for iGEM HUST-China [2025](https://2025.igem.wiki/hust-china).
 
-## 🚀 What I Do
+## 🚀 What I Do {#what-i-do}
 
 I enjoy exploring the intersection of biology and technology, constantly seeking innovative ways to apply programming skills to solve biological challenges. Whether it's coding algorithms, analyzing datasets, or creating web pages, I'm always up for a coding adventure.
 
-## 🌱 Currently Exploring
+## 🌱 Currently Exploring  {#currently-exploring}
 
 I am currently diving deeper into the realms of bioinformatics, exploring new tools and technologies to enhance my understanding and skills in the field. Additionally, I'm keen on expanding my knowledge in JavaScript and web development.
 
@@ -38,49 +39,11 @@ By the time, I'm also learning about the basics of machine learning and artifici
 
 In my GitHub repositories, you can find a range of interesting projects, covering everything from basic bioinformatics tools to complex data analysis projects. These projects reflect my efforts to integrate technology with biology.
 
-## 🤝 Let's Connect
+## 🤝 Let's Connect {#connect}
 
 If you share similar interests or have exciting ideas for collaboration, feel free to reach out. Let's connect and create something amazing together!
 
-## 📈 Skills and Statistics
-
-### GitHub Stats
-
-<p align="center">
-    <picture>
-    <img alt="github-metrics" src="/static/github-metrics.svg" />
-    </picture>
-</p>
-
-### Languages and Tools
-
-<p align="center" style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/GitHub/GitHub.png?raw=true" alt="GitHub" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/GitLab/GitLab.png?raw=true" alt="GitLab" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/VisualStudioCode/VisualStudioCode.png?raw=true" alt="Visual Studio Code" style="width: 160px; height: 90px; margin: 10px 10px;">
-</p>
-<p align="center" style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Vue/Vue.png?raw=true" alt="Vue" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Node.js/Node.js.png?raw=true" alt="Node.js" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Python/Python.png?raw=true" alt="Python" style="width: 160px; height: 90px; margin: 10px 10px;">
-</p>
-<p align="center" style="display: inline-flex;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Swift/Swift.png?raw=true" alt="Swift" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Html/HTML.png?raw=true" alt="HTML" style="width: 160px; height: 90px; margin: 10px 10px;">
-    <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Ubuntu/Ubuntu.png?raw=true" alt="Ubuntu" style="width: 160px; height: 90px; margin: 10px 10px;">
-</p>
-
-### Commit Activity
-
-<p align="center">
-    <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="/static/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="/static/github-snake.svg" />
-    <img alt="github-snake" src="/static/github-snake.svg" />
-    </picture>
-</p>
-
-## 📮 Contact Me
+## 📮 Contact Me {#contact}
 
 You can contact me via email: <lucas04@foxmail.com>.
 
@@ -94,30 +57,9 @@ Some of my other social accounts are:
     <img src="https://github.com/Lucas04-nhr/ServiceLogos/blob/main/Twitter/Twitter.png?raw=true" alt="Twitter" style="width: 160px; height: 90px; margin: 10px 10px;">
 </p>
 
-## ☕ Support Me
+## ☕ Support Me {#support}
 
-You can use [Ko-Fi](https://ko-fi.com/lucas04) or **~~Buy Me a Coffee~~** to support me.
-
-<p align="center">
-    <a href="https://ko-fi.com/lucas04" target='_blank'> 
-        <img height="50px" style='height:50px' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' alt='Buy Me a Coffee at ko-fi.com' />
-    </a>
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50px" alt="Buy Me a Coffee" />
-</p>
-
-Or, you can use [Patreon](https://patreon.com/lucas04) or [Afdian](https://afdian.com/a/lucas04) if you like.
-
-<p align="center">
-    <a href='https://patreon.com/lucas04' target='_blank'>
-        <img src="https://github.com/Lucas04-nhr/Lucas04-nhr/blob/main/static/patreon.png" alt='Patreon' width="50%" />
-    </a>
-    <a href='https://afdian.com/a/lucas04' target='_blank'>
-        <img src="https://github.com/Lucas04-nhr/Lucas04-nhr/blob/main/static/afdian.jpg" alt='Afdian QR code' width="50%" />
-    </a>
-</p>
-
-> [!NOTE]
-> Tips from **Buy me a Coffee** is currently unavailable due to the service's restriction in my country. Please consider using **Ko-Fi**, **Patreon** or **Afdian** instead.
+You can use [Ko-Fi](https://ko-fi.com/lucas04), [Patreon](https://patreon.com/lucas04) or [Afdian](https://afdian.com/a/lucas04) if you like.
 
 ---
 > [!TIP]

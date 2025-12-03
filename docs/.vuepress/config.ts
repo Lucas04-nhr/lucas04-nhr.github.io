@@ -24,11 +24,6 @@ export default defineUserConfig({
       lang: 'en-US',
       description: 'Recording some random stuff...',
     },
-    '/zh/': {
-      title: 'Lucas 的随想',
-      lang: 'zh-CN',
-      description: '记录一些乱七八糟的东西',
-    },
   },
 
   head: [

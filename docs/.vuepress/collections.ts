@@ -59,6 +59,7 @@ const enDemoDoc = defineCollection({
   title: 'Documents',
   // 手动配置侧边栏结构
   sidebar: 'auto',
+  sidebarCollapsed: true, // 侧边栏默认折叠
   // 根据文件结构自动生成侧边栏
   // sidebar: 'auto',
 })

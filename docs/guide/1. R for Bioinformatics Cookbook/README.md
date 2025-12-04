@@ -33,7 +33,7 @@ The purpose of this material **not only** to deal with the "R for Data Science" 
 - [Talk 01: Multi-omics data analysis and visualisation](/docs/r-course/talk01/)
 - [Talk 02: R language basics, part 1](/docs/r-course/talk02/)
 - [Talk 03: R language basics, part 2](/docs/r-course/talk03/)
-<!-- - [Talk 04](/docs/r-course/talk04/) -->
+- [Talk 04: R language basics, part 3: factor](/docs/r-course/talk04/)
 
 ## About these notes {#about-notes}
 

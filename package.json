@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
   "packageManager": "pnpm@10.24.0",
-  "author": "Haoran Nie <niehaoran@genomics.cn>",
+  "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "MIT",
   "scripts": {
     "docs:build": "vuepress build docs --clean-cache --clean-temp",
@@ -19,7 +19,7 @@
     "typescript": "^5.9.3",
     "vue": "^3.5.25",
     "vuepress": "2.0.0-rc.26",
-    "vuepress-theme-plume": "1.0.0-rc.180"
+    "vuepress-theme-plume": "1.0.0-rc.181"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

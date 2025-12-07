@@ -34,6 +34,10 @@ The purpose of this material **not only** to deal with the "R for Data Science" 
 - [Talk 02: R language basics, part 1](/docs/r-course/talk02/)
 - [Talk 03: R language basics, part 2](/docs/r-course/talk03/)
 - [Talk 04: R language basics, part 3: factor](/docs/r-course/talk04/)
+- [Talk 05: Data wrangler, part 1](/docs/r-course/talk05/)
+- [Talk 06: Data wrangler, part 2](/docs/r-course/talk06/)
+- [Talk 07: Strings and regular expression](/docs/r-course/talk07/)
+- [Talk 08: Data iteration & parallel computing](/docs/r-course/talk08/)
 
 ## About these notes {#about-notes}
 

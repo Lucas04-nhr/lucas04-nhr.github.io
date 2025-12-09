@@ -1,4 +1,11 @@
+import { layouts } from "chart.js";
+import { layoutCovers } from "echarts/types/src/component/brush/visualEncoding.js";
+import { DiagramNotFoundError } from "mermaid/dist/diagram-api/diagramAPI.js";
+import NotFound from "./layouts/NotFound.vue";
+// import Layout from "./layouts/Layout.vue";
+import { Layout } from "vuepress-theme-plume/client";
 import { defineClientConfig } from "vuepress/client";
+import { CreateComponentPublicInstanceWithMixins, ComponentOptionsMixin, PublicProps, GlobalComponents, GlobalDirectives, ComponentProvideOptions, ComponentOptionsBase, VNodeProps, AllowedComponentProps, ComponentCustomProps } from "vue";
 // import RepoCard from 'vuepress-theme-plume/features/RepoCard.vue'
 // import NpmBadge from 'vuepress-theme-plume/features/NpmBadge.vue'
 // import NpmBadgeGroup from 'vuepress-theme-plume/features/NpmBadgeGroup.vue'
@@ -9,6 +16,11 @@ import { defineClientConfig } from "vuepress/client";
 // import './theme/styles/custom.css'
 
 export default defineClientConfig({
+
+  layouts: {
+    NotFound: NotFound,
+  },
+
   enhance({ app }) {
     // built-in components
     // app.component('RepoCard', RepoCard)
@@ -18,9 +30,6 @@ export default defineClientConfig({
 
     // your custom components
     // app.component('CustomComponent', CustomComponent)
-
-    // IP-based beian display
-    if (typeof window === "undefined") return;
 
     void (async () => {
       console.log("Attempting to detect visitor country for beian display...");

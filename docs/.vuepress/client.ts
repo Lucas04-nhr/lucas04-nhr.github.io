@@ -37,7 +37,7 @@ export default defineClientConfig({
         });
         const country = (await res.text()).trim().toUpperCase();
         console.log(`Detected country: ${country}`);
-        if (country === "CN") {
+        if (country === "CN" && typeof document !== "undefined") {
           const el = document.getElementById("beian-cn");
           if (el) {
             el.style.display = "inline";
@@ -50,21 +50,23 @@ export default defineClientConfig({
       }
     })();
 
-    // Hide footer on home page (vp-content.is-home) to avoid layout shift
-    const hideHomeFooter = () => {
-      const isHome = Boolean(document.querySelector(".vp-content.is-home"));
-      document.querySelectorAll(".vp-footer").forEach((el) => {
-        (el as HTMLElement).style.display = isHome ? "none" : "";
-      });
-    };
+    // Hide footer on home page (vp-content.is-home) to avoid layout shift (only run in browser)
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      const hideHomeFooter = () => {
+        const isHome = Boolean(document.querySelector(".vp-content.is-home"));
+        document.querySelectorAll(".vp-footer").forEach((el) => {
+          el.style.display = isHome ? "none" : "";
+        });
+      };
 
-    hideHomeFooter();
-    const footerObserver = new MutationObserver(hideHomeFooter);
-    footerObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+      hideHomeFooter();
+      const footerObserver = new MutationObserver(hideHomeFooter);
+      footerObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
   },
 });

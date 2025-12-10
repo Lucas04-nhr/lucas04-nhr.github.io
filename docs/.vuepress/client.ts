@@ -1,13 +1,7 @@
 import { h } from "vue";
-import { layouts } from "chart.js";
-import { layoutCovers } from "echarts/types/src/component/brush/visualEncoding.js";
-import { DiagramNotFoundError } from "mermaid/dist/diagram-api/diagramAPI.js";
-// import NotFound from "./layouts/NotFound.vue";
-// import Layout from "./layouts/Layout.vue";
-import CustomNotFound from './components/CustomContent.vue';
-import { Layout, NotFound } from "vuepress-theme-plume/client";
+import CustomNotFound from "./components/CustomNotFound.vue";
+import { NotFound } from "vuepress-theme-plume/client";
 import { defineClientConfig } from "vuepress/client";
-import { CreateComponentPublicInstanceWithMixins, ComponentOptionsMixin, PublicProps, GlobalComponents, GlobalDirectives, ComponentProvideOptions, ComponentOptionsBase, VNodeProps, AllowedComponentProps, ComponentCustomProps } from "vue";
 // import RepoCard from 'vuepress-theme-plume/features/RepoCard.vue'
 // import NpmBadge from 'vuepress-theme-plume/features/NpmBadge.vue'
 // import NpmBadgeGroup from 'vuepress-theme-plume/features/NpmBadgeGroup.vue'
@@ -18,12 +12,12 @@ import { CreateComponentPublicInstanceWithMixins, ComponentOptionsMixin, PublicP
 // import './theme/styles/custom.css'
 
 export default defineClientConfig({
-
+  
   layouts: {
-    NotFound: () => h( NotFound, null, {
-      'layout-top': () => h( CustomNotFound ),
-      'not-found': () => h( NotFound ),
-    }),
+    NotFound: () =>
+      h(NotFound, null, {
+        "not-found": () => h(CustomNotFound),
+      }),
   },
 
   enhance({ app }) {

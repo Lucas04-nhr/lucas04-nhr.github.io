@@ -5,7 +5,7 @@ permalink: /about/
 ---
 
 <p align="center">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&center=true&vCenter=true&random=true&width=435&lines=Ad+astra+abyssosque.;%E5%90%91%E7%9D%80%E6%98%9F%E8%BE%B0%E4%B8%8E%E6%B7%B1%E6%B8%8A%E3%80%82;%E6%98%9F%E3%81%A8%E6%B7%B1%E6%B7%B5%E3%82%92%E7%9B%AE%E6%8C%87%E3%81%97%E3%81%A6%E3%80%82" alt="Typing SVG" />
+    <img src="https://static.lucas04.top/static/typing.svg" alt="Ad astra abyssosque." />
 </p>
 
 <p align="center"> 
@@ -31,7 +31,7 @@ I'm a passionate undergraduate student at Huazhong University of Science and Tec
 
 I enjoy exploring the intersection of biology and technology, constantly seeking innovative ways to apply programming skills to solve biological challenges. Whether it's coding algorithms, analyzing datasets, or creating web pages, I'm always up for a coding adventure.
 
-## 🌱 Currently Exploring  {#currently-exploring}
+## 🌱 Currently Exploring {#currently-exploring}
 
 I am currently diving deeper into the realms of bioinformatics, exploring new tools and technologies to enhance my understanding and skills in the field. Additionally, I'm keen on expanding my knowledge in JavaScript and web development.
 
@@ -62,5 +62,6 @@ Some of my other social accounts are:
 You can use [Ko-Fi](https://ko-fi.com/lucas04), [Patreon](https://patreon.com/lucas04) or [Afdian](https://afdian.com/a/lucas04) if you like.
 
 ---
+
 > [!TIP]
 > This README is a living document and will be updated as my journey unfolds.

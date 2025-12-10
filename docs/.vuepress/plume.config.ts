@@ -85,6 +85,10 @@ export default defineThemeConfig({
       navbar: enNavbar,
       collections: enCollections,
 
+      // notFound: {
+      //   code: "",
+      // },
+
       /**
        * 公告板
        * @see https://theme-plume.vuejs.press/guide/features/bulletin/

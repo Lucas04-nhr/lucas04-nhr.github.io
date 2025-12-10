@@ -12,7 +12,6 @@ import { defineClientConfig } from "vuepress/client";
 // import './theme/styles/custom.css'
 
 export default defineClientConfig({
-  
   layouts: {
     NotFound: () =>
       h(NotFound, null, {
@@ -50,5 +49,22 @@ export default defineClientConfig({
         // silently ignore errors (network, rate limit, CORS, ...)
       }
     })();
+
+    // Hide footer on home page (vp-content.is-home) to avoid layout shift
+    const hideHomeFooter = () => {
+      const isHome = Boolean(document.querySelector(".vp-content.is-home"));
+      document.querySelectorAll(".vp-footer").forEach((el) => {
+        (el as HTMLElement).style.display = isHome ? "none" : "";
+      });
+    };
+
+    hideHomeFooter();
+    const footerObserver = new MutationObserver(hideHomeFooter);
+    footerObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
   },
 });

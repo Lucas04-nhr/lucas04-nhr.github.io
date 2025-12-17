@@ -26,6 +26,20 @@ permalink: /docs/hust-gp-template/
 
 因此，我基于之前各类实验报告的模板，参考着学校要求，创建了一个基于 $\LaTeX$ 的本科毕业论文模板。
 
+::: info
+由于学校并未提供适用于答辩的 PPT 模板，故我参照 [liu-qilong/college-beamer](https://github.com/liu-qilong/college-beamer) 适配了一个华中科技大学的答辩 beamer 模板，可以前往该仓库查看使用方法。
+
+<LinkCard 
+  icon="ic:round-file-copy"
+  title="LaTeX Beamer 模板 HUST 适配版"
+  href="https://github.com/liu-qilong/college-beamer/pull/33" > 
+  
+  目前仍处在 PR 阶段，后续可能会合并进主分支
+
+</LinkCard>
+
+:::
+
 ::: note
 - 本模板基于 $\LaTeX$ 制作，如需使用建议先行学习相关知识。
 - 软件及字体的安装教程不在此赘述，可参考网络资源。

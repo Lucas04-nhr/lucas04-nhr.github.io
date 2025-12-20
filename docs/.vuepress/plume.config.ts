@@ -18,7 +18,7 @@ import { enNavbar } from "./navbar";
  * @see https://theme-plume.vuejs.press/config/theme/
  */
 export default defineThemeConfig({
-  logo: "https://theme-plume.vuejs.press/plume.png",
+  logo: "https://static.lucas04.top/static/favicon/favicon-256.png",
 
   appearance: true, // 配置 深色模式
 

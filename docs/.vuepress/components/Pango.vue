@@ -2,9 +2,9 @@
   <span v-html="processedText"></span>
 </template>
 
-<script>
+<script lang="ts">
 // 盘古之白自动插入空格实现
-function panguSpacing(text) {
+export function panguSpacing(text: string): string {
   // 中英文、数字与汉字之间插入空格
   return (
     text
@@ -17,6 +17,43 @@ function panguSpacing(text) {
   );
 }
 
+// 在 DOM 中应用盘古之白空格
+export function applyPanguSpacingToDOM(selector: string = ".vp-doc"): void {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return;
+  }
+
+  const contentElement = document.querySelector(selector);
+  if (!contentElement) {
+    return;
+  }
+
+  const walker = document.createTreeWalker(
+    contentElement,
+    NodeFilter.SHOW_TEXT,
+    null
+  );
+
+  const nodesToReplace: Text[] = [];
+  let node = walker.nextNode() as Text | null;
+  while (node) {
+    // Skip empty or whitespace-only nodes
+    if (node.textContent?.trim()) {
+      nodesToReplace.push(node);
+    }
+    node = walker.nextNode() as Text | null;
+  }
+
+  nodesToReplace.forEach((textNode) => {
+    const processedText = panguSpacing(textNode.textContent || "");
+    if (processedText !== textNode.textContent) {
+      const span = document.createElement("span");
+      span.textContent = processedText;
+      textNode.parentNode?.replaceChild(span, textNode);
+    }
+  });
+}
+
 export default {
   name: "Pango",
   props: {
@@ -26,7 +63,7 @@ export default {
     },
   },
   computed: {
-    processedText() {
+    processedText(): string {
       return panguSpacing(this.text);
     },
   },

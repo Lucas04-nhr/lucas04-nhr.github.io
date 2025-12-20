@@ -17,7 +17,7 @@ config:
         offset: 0
     hero:
       name: Hi~
-      tagline: <img src="https://static.lucas04.top/static/typing.svg" alt="Ad astra abyssosque." />
+      tagline: '<picture data-theme> <source data-srcset-key="dark" data-srcset="https://static.lucas04.top/static/typing_night.svg" /> <source data-srcset-key="light" data-srcset="https://static.lucas04.top/static/typing_day.svg" /> <img src="https://static.lucas04.top/static/typing_day.svg" alt="Ad astra abyssosque." /> </picture>'
       actions:
         - theme: brand
           text: Blog

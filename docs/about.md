@@ -5,9 +5,13 @@ permalink: /about/
 comment: false
 ---
 
-<p align="center">
-    <img src="https://static.lucas04.top/static/typing.svg" alt="Ad astra abyssosque." />
-</p>
+::: center
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/static/typing_night.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/static/typing_day.svg" />
+    <img src="https://static.lucas04.top/static/typing_day.svg" alt="Typing SVG" />
+</picture>
+:::
 
 <p align="center"> 
     <img src="https://komarev.com/ghpvc/?username=lucas04-nhr&label=Profile%20views&color=0e75b6&style=flat" alt="lucas04-nhr" /> 

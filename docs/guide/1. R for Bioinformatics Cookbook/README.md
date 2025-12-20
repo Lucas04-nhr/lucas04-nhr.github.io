@@ -42,6 +42,10 @@ The purpose of this material **not only** to deal with the "R for Data Science" 
 - [Talk 06: Data wrangler, part 2](/docs/r-course/talk06/)
 - [Talk 07: Strings and regular expression](/docs/r-course/talk07/)
 - [Talk 08: Data iteration & parallel computing](/docs/r-course/talk08/)
+- [Talk 09: Data visualisation](/docs/r-course/talk09/)
+- [Talk 10: Data summarisation and statistics](/docs/r-course/talk10/)
+- [Talk 11: Linear and nonlinear regression](/docs/r-course/talk11/)
+- [Talk 12: Machine learning basics](/docs/r-course/talk12/)
 
 ## About these notes {#about-notes}
 

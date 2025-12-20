@@ -7,8 +7,9 @@
 import { defineNavbarConfig } from 'vuepress-theme-plume'
 
 export const enNavbar = defineNavbarConfig([
-  { text: 'Home', link: '/' },
+  { text: 'Home', icon:'mdi:home', link: '/' },
   { text: 'Blog',
+    icon: 'mdi:blog',
     items: [
       { text: 'All Posts', link: '/blog/' },
       { text: 'Tags', link: '/blog/tags/' },
@@ -16,11 +17,12 @@ export const enNavbar = defineNavbarConfig([
    },
   {
     text: 'Docs',
+    icon: 'mdi:file-document-box-multiple-outline',
     items: [
       { text: 'All', link: '/docs/' },
       { text: 'R for Bioinformatics Cookbook', link: '/docs/r-course/' },
       { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
     ]
   },
-  { text: 'About', link: '/about/' },
+  { text: 'About', icon: 'mdi:about-circle-outline', link: '/about/' },
 ])

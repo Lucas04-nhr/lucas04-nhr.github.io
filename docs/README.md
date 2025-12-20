@@ -20,12 +20,15 @@ config:
       tagline: '<picture data-theme> <source data-srcset-key="dark" data-srcset="https://static.lucas04.top/static/typing_night.svg" /> <source data-srcset-key="light" data-srcset="https://static.lucas04.top/static/typing_day.svg" /> <img src="https://static.lucas04.top/static/typing_day.svg" alt="Ad astra abyssosque." /> </picture>'
       actions:
         - theme: brand
+          icon: mdi:blog
           text: Blog
           link: /blog/
         - theme: brand
+          icon: mdi:file-document-box-multiple-outline
           text: Docs
           link: /docs/
         - theme: alt
+          icon: mdi:github
           text: Source Code →
           link: https://github.com/Lucas04-nhr/lucas04-nhr.github.io
 ---

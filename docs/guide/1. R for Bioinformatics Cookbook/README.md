@@ -2,6 +2,7 @@
 title: R for Bioinformatics Cookbook
 createTime: 2025/12/03 19:58:43
 permalink: /docs/r-course/
+comment: false
 tags:
   - R
   - Bioinformatics

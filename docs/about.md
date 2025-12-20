@@ -2,6 +2,7 @@
 title: About Me
 externalLinkIcon: false
 permalink: /about/
+comment: false
 ---
 
 <p align="center">

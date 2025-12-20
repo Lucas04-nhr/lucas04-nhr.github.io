@@ -31,12 +31,14 @@
     "node": "^20.6.0 || >=22.0.0"
   },
   "dependencies": {
-    "@vuepress/shiki-twoslash": "2.0.0-rc.120",
+    "@vuepress/shiki-twoslash": "2.0.0-rc.121",
     "artplayer": "^5.3.0",
     "chart.js": "^4.5.1",
     "echarts": "^6.0.0",
     "flowchart.ts": "^3.0.1",
     "mermaid": "^11.12.2",
-    "pyodide": "^0.29.0"
+    "pyodide": "^0.29.0",
+    "react": "19.2.1",
+    "shiki-twoslash=2.0.0-rc.121": "link:@vuepress/shiki-twoslash=2.0.0-rc.121"
   }
 }

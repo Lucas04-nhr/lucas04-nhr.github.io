@@ -188,6 +188,6 @@ latexmk sample.tex
 
 ## 投喂 {#support}
 
-如果你觉得这个模板对你有帮助，欢迎通过 [此页面](https://github.com/Lucas04-nhr#-support-me) 进行支持，另外，也欢迎点击 Star 来表示对本项目的认可。本人将不定期将达到一定金额的支持者名单更新在 [支持者名单](/docs/hust-gp-template/supporters/) 中，以表达感谢。
+如果你觉得这个模板对你有帮助，欢迎通过 [此页面](/support/) 进行支持，另外，也欢迎点击 Star 来表示对本项目的认可。本人将不定期将支持此项目达到一定金额的支持者名单更新在 [支持者名单](/docs/hust-gp-template/supporters/) 中，以表达感谢。
 
 

@@ -30,7 +30,7 @@ You can use the "::ic:outline-local-printshop::" function near "On this page" of
 
 ---
 
-The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, also welcome anyone to submit bug reports through "issue" and participate in cooperation through **"Pull Request"**. 
+The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, or buy me a coffee [here](/support/), also welcome anyone to submit bug reports through **"issue"** and participate in cooperation through **"Pull Request"**. 
 :::
 
 ## Table of Contents {#table-of-contents}

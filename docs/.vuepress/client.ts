@@ -1,7 +1,7 @@
 import { h } from "vue";
-import CustomNotFound from "./components/CustomNotFound.vue";
-import CustomAside from "./components/CustomAside.vue";
-import { applyPanguSpacingToDOM } from "./components/Pango.vue";
+import CustomNotFound from "./components/custom_not_found.vue";
+import CustomAside from "./components/custom_aside.vue";
+import { applyPanguSpacingToDOM } from "./components/pango_component.vue";
 import { Layout } from "vuepress-theme-plume/client";
 import { NotFound } from "vuepress-theme-plume/client";
 import { defineClientConfig } from "vuepress/client";

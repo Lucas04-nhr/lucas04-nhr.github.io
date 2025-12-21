@@ -30,7 +30,7 @@ export default defineThemeConfig({
     { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
     { icon: "ri:zhihu-fill", link: "https://www.zhihu.com/people/NHR-zh-cn" },
   ],
-  navbarSocialInclude: ['github'], // 允许显示在导航栏的 social 社交链接
+  navbarSocialInclude: ["github"], // 允许显示在导航栏的 social 社交链接
   // aside: true, // 页内侧边栏， 默认显示在右侧
   // outline: [2, 3], // 页内大纲， 默认显示 h2, h3
 
@@ -58,7 +58,7 @@ export default defineThemeConfig({
     message:
       ' Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
     copyright:
-      'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a><br></span>',
+      'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span>',
   },
 
   /* 过渡动画 @see https://theme-plume.vuejs.press/config/theme/#transition */
@@ -70,8 +70,8 @@ export default defineThemeConfig({
 
   locales: {
     "/": {
-
-      encryptPageText: "This page is protected. Please enter the password to access.",
+      encryptPageText:
+        "This page is protected. Please enter the password to access.",
       /**
        * @see https://theme-plume.vuejs.press/config/theme/#profile
        */
@@ -106,7 +106,7 @@ export default defineThemeConfig({
         message:
           ' Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
         copyright:
-          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备2025066001 号</a><br></span>',
+          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span>',
       },
     },
   },

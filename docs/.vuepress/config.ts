@@ -12,13 +12,11 @@
 import { viteBundler } from "@vuepress/bundler-vite";
 import { defineUserConfig } from "vuepress";
 import { plumeTheme } from "vuepress-theme-plume";
-import panguPlugin from "./plugins/pango.js";
-
 const isProd = process.env.NODE_ENV === "production";
 
 export default defineUserConfig({
   base: "/",
-  plugins: [panguPlugin],
+  plugins: [],
   lang: "en-US",
   locales: {
     "/": {

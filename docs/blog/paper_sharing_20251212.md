@@ -12,11 +12,9 @@ tags:
 ## 原始文献 {#original-paper}
 
 <LinkCard
-icon="ic:outline-description"
-title="Original Paper"
-href="https://www.sciencedirect.com/science/article/pii/S0092867425008517"
-
->
+  icon="ic:outline-description"
+  title="Original Paper"
+  href="https://www.sciencedirect.com/science/article/pii/S0092867425008517">
 
 Bronze Age Yersinia pestis genome from sheep sheds light on hosts and evolution of a prehistoric plague lineage（青铜时代羊中鼠疫耶尔森菌基因组揭示了史前鼠疫谱系的宿主和进化）
 

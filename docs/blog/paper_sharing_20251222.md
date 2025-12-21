@@ -1,7 +1,7 @@
 ---
 title: 文献分享 20251222
 createTime: 2025/12/21 16:56:02
-password: 1c8d5b1cc707956237c0eeed01c81339
+# password: 1c8d5b1cc707956237c0eeed01c81339
 permalink: /blog/paper_sharing_20251222
 tags:
   - Paper Sharing
@@ -11,7 +11,7 @@ tags:
 
 ## Slide 1 {#slide-01}
 
-各位师兄师姐大家好！今天，我为大家分享一篇最新发表在 The Lancet Microbe 上的文章，题目是《Macrolide-resistant Mycoplasma pneumoniae resurgence in China and its clinical implications》，中文翻译为《2023 年中国儿童中大环内酯抗性肺炎支原体的再度出现：一项纵向、横断面及基因组流行病学研究》。这篇文章于 2025 年发表，由北京儿童医院的袁静教授和军事科学院的崔玉军教授共同通讯作者。将从背景、方法、结果和启示几个方面进行解读。
+各位师兄师姐大家好！今天，我为大家分享一篇最新发表在 The Lancet Microbe 上的文章，题目是《Macrolide-resistant _Mycoplasma pneumoniae_ resurgence in China and its clinical implications》，中文翻译为《2023 年中国儿童中大环内酯抗性肺炎支原体的再度出现》。这篇文章于 2025 年发表，由北京儿童医院的袁静教授和军事科学院的崔玉军教授共同通讯作者。将从背景、方法、结果和启示几个方面进行解读。
 
 ## Slide 2: 关于文章 {#slide-02}
 
@@ -159,3 +159,5 @@ SNP 分析管道应从高质量 WGS 开始，强调重组过滤和多维度整�
 - **局限性启示**：有限公共数据阻碍全球分析；需更多非亚洲序列。你的研究应优先数据共享（如 GenBank）。
 
 此研究强调 SNP 分析是细菌进化研究的基石，尤其在耐药和复苏背景下。
+
+## Q&A {#q-and-a}

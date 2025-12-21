@@ -25,4 +25,6 @@ export const enNavbar = defineNavbarConfig([
     ]
   },
   { text: 'About', icon: 'mdi:about-circle-outline', link: '/about/' },
+  { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
+  { text: 'Support', icon: 'ic:round-attach-money', link: '/support/' },
 ])

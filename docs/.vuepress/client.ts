@@ -184,5 +184,55 @@ export default defineClientConfig({
         attributeFilter: ["class"],
       });
     }
+
+    // Ensure back-to-top button stays within viewport bounds
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      const ensureBackToTopInBounds = () => {
+        const backToTopBtn = document.querySelector(
+          ".vp-back-to-top"
+        ) as HTMLElement | null;
+        if (!backToTopBtn) return;
+
+        const rect = backToTopBtn.getBoundingClientRect();
+        const padding = 16; // padding from edge
+        let adjusted = false;
+
+        // Check if element exceeds right edge
+        if (rect.right > window.innerWidth) {
+          backToTopBtn.style.right = `${padding}px`;
+          adjusted = true;
+        }
+
+        // Check if element exceeds bottom edge
+        if (rect.bottom > window.innerHeight) {
+          backToTopBtn.style.bottom = `${padding}px`;
+          adjusted = true;
+        }
+
+        // Reset if within bounds
+        if (!adjusted) {
+          backToTopBtn.style.right = "";
+          backToTopBtn.style.bottom = "";
+        }
+      };
+
+      // Run on initial load
+      setTimeout(ensureBackToTopInBounds, 100);
+
+      // Watch for DOM changes
+      const backToTopObserver = new MutationObserver(ensureBackToTopInBounds);
+      backToTopObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      // Watch for window resize
+      window.addEventListener("resize", ensureBackToTopInBounds);
+
+      // Watch for route changes
+      router.afterEach(() => {
+        setTimeout(ensureBackToTopInBounds, 100);
+      });
+    }
   },
 });

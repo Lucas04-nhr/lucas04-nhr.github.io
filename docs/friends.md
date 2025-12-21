@@ -15,7 +15,7 @@ list:
         icon: github
         link: https://github.com/pengzhanbo
       -
-        icon: twitter
+        icon: mdi:twitter
         link: https://twitter.com/pengzhanbo
   -
     name: Hakadao
@@ -26,7 +26,7 @@ list:
         icon: github
         link: https://github.com/Hakadao
       -
-        icon: twitter
+        icon: mdi:twitter
         link: https://twitter.com/hakadaooo
   -
     name: Raphael
@@ -36,5 +36,16 @@ list:
       -
         icon: github
         link: https://github.com/chide-org
+  -
+    name: 17lwl
+    link: https://lwstkhyl.me/
+    avatar: https://github.com/lwstkhyl.png
+    socials:
+      -
+        icon: github
+        link: https://github.com/lwstkhyl
+      -
+        icon: mdi:twitter
+        link: https://twitter.com/lwstkhyl
 ---
 

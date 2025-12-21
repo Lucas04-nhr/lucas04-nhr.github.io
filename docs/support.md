@@ -36,7 +36,7 @@ If you find my work helpful and would like to support me, consider buying me a c
 ::: flex center
 | Alipay | Weixin Pay | Ko-Fi | Afdian |
 | :--------: | :-------: | :-------: | :-------: |
-| <ResponsiveImage src="https://static.lucas04.top/static/payment/ali.png" alt="Alipay" :desktopWidth="100" :mobileWidth="50" /> | <ResponsiveImage src="https://static.lucas04.top/static/payment/wx.png" alt="Weixin Pay" :desktopWidth="100" :mobileWidth="50" /> | <a href="https://ko-fi.com/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/ko-fi.png" alt="Ko-Fi" :desktopWidth="100" :mobileWidth="50" /></a> | <a href="https://afdian.com/a/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/afdian.png" alt="Afdian" :desktopWidth="100" :mobileWidth="50" /></a> |
+| <ResponsiveImage src="https://static.lucas04.top/static/payment/ali.png" alt="Alipay" :desktopWidth="120" :mobileWidth="50" /> | <ResponsiveImage src="https://static.lucas04.top/static/payment/wx.png" alt="Weixin Pay" :desktopWidth="120" :mobileWidth="50" /> | <a href="https://ko-fi.com/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/ko-fi.png" alt="Ko-Fi" :desktopWidth="120" :mobileWidth="50" /></a> | <a href="https://afdian.com/a/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/afdian.png" alt="Afdian" :desktopWidth="120" :mobileWidth="50" /></a> |
 :::
 
 ::: note

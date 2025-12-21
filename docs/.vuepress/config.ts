@@ -45,6 +45,10 @@ export default defineUserConfig({
     /* 添加您的部署域名, 有助于 SEO, 生成 sitemap */
     hostname: "https://blog.lucas04.top",
 
+    encrypt: {
+      admin: ["gyrzuT-2xamte-xuzdek"],
+    },
+
     /* 文档仓库配置，用于 editLink */
     docsRepo: "https://github.com/lucas04-nhr/lucas04-nhr.github.io",
     docsDir: "docs",
@@ -127,6 +131,7 @@ export default defineUserConfig({
       npmTo: true, // 启用 npm-to 容器  ::: npm-to
       demo: true, // 启用 demo 容器  ::: demo
       collapse: true, // 启用折叠容器  ::: collapse
+      qrcode: true,  // 启用 二维码 容器  ::: qrcode
       repl: {
         // 启用 代码演示容器
         go: true, // ::: go-repl

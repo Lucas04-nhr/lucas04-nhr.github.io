@@ -1,5 +1,6 @@
 import { h } from "vue";
 import CustomNotFound from "./components/CustomNotFound.vue";
+import CustomAside from "./components/CustomAside.vue";
 import { applyPanguSpacingToDOM } from "./components/Pango.vue";
 import { Layout } from "vuepress-theme-plume/client";
 import { NotFound } from "vuepress-theme-plume/client";
@@ -15,8 +16,8 @@ import "./theme/styles/custom.css";
 export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
-      // 将 PageContextMenu 添加到 doc-title-after 插槽，即文章标题的右侧
       "doc-title-after": () => h(PageContextMenu),
+      'aside-outline-after': () => h(CustomAside),
     }),
 
     NotFound: () =>

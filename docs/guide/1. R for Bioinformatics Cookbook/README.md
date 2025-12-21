@@ -11,26 +11,25 @@ tags:
 
 > Reference: [R for Data Science](https://r4ds.had.co.nz)
 >
-> The book updated to 2nd ed. on July,2023, here’ s a [link](https://r4ds.hadley.nz) to the official website.
+> The book updated to 2nd ed. on July, 2023, here’s a [link](https://r4ds.hadley.nz) to the official website.
 
 ## R for Bioinformatics Cookbook {#cookbook}
 
 <LinkCard
   icon="ic:round-file-copy"
   title="GitHub Repository"
-  href="https://github.com/Lucas04-nhr/Review-of-R" > 
-  
-  The original repository of this document. Updated on late 2023.
+  href="https://github.com/Lucas04-nhr/Review-of-R" >
+
+The original repository of this document. Updated on late 2023.
 
 </LinkCard>
-
 
 ::: note
 You can use the "::ic:outline-local-printshop::" function near "On this page" of your desktop browser to save this page as a PDF file for offline reading.
 
 ---
 
-The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, or buy me a coffee [here](/support/), also welcome anyone to submit bug reports through **"issue"** and participate in cooperation through **"Pull Request"**. 
+The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, or buy me a coffee [here](/support/), also welcome anyone to submit bug reports through **"issue"** and participate in cooperation through **"Pull Request"**.
 :::
 
 ## Table of Contents {#table-of-contents}
@@ -87,4 +86,3 @@ We would like to express our sincere gratitude to the users who participated in 
 
 - [Rui Zhu](https://github.com/1508324011)
 - [Tianhao Wang](https://github.com/lwstkhyl)
-

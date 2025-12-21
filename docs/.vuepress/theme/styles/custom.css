@@ -5,15 +5,9 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-Regular.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 @font-face {
@@ -23,15 +17,9 @@
   font-weight: 400;
   font-style: italic;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-RegularItalic.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 @font-face {
@@ -41,15 +29,9 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-Medium.woff2")
-    format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 @font-face {
@@ -59,15 +41,9 @@
   font-weight: 500;
   font-style: italic;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-MediumItalic.woff2")
-    format("woff2");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 @font-face {
@@ -77,15 +53,9 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-Bold.woff2")
-    format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 @font-face {
@@ -95,15 +65,9 @@
   font-weight: 700;
   font-style: italic;
   font-display: swap;
-}
-
-@font-face {
-  font-family: "Maple Mono NF CN";
-  src: url("https://static.lucas04.top/static/MapleMono/MapleMonoNormal-BoldItalic.woff2")
-    format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
+  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
+    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
+    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
 }
 
 :root {

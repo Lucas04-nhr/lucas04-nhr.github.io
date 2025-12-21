@@ -1,6 +1,7 @@
 ---
 pageLayout: home
 externalLinkIcon: false
+comment: false
 config:
   - type: hero
     full: true

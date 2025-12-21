@@ -28,5 +28,13 @@ list:
       -
         icon: twitter
         link: https://twitter.com/hakadaooo
+  -
+    name: Raphael
+    link: https://chide-org.github.io
+    avatar: https://github.com/chide-org.png
+    socials:
+      -
+        icon: github
+        link: https://github.com/chide-org
 ---
 

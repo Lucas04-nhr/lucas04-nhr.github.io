@@ -70,6 +70,8 @@ export default defineThemeConfig({
 
   locales: {
     "/": {
+
+      encryptPageText: "This page is protected. Please enter the password to access.",
       /**
        * @see https://theme-plume.vuejs.press/config/theme/#profile
        */

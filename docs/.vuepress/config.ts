@@ -36,6 +36,29 @@ export default defineUserConfig({
         href: "https://static.lucas04.top/static/favicon/favicon-128.png",
       },
     ],
+    // Load Google Fonts for page body text (Google Sans Flex + Noto Sans SC)
+    [
+      "link",
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossorigin: "",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Noto+Sans+SC:wght@100..900&display=swap",
+      },
+    ],
   ],
 
   bundler: viteBundler(),
@@ -131,7 +154,7 @@ export default defineUserConfig({
       npmTo: true, // 启用 npm-to 容器  ::: npm-to
       demo: true, // 启用 demo 容器  ::: demo
       collapse: true, // 启用折叠容器  ::: collapse
-      qrcode: true,  // 启用 二维码 容器  ::: qrcode
+      qrcode: true, // 启用 二维码 容器  ::: qrcode
       repl: {
         // 启用 代码演示容器
         go: true, // ::: go-repl
@@ -196,8 +219,8 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/guide/features/llmstxt/
      */
     llmstxt: {
-      locale: '/',    // 默认仅为主语言生成 llms 友好内容
+      locale: "/", // 默认仅为主语言生成 llms 友好内容
       // locale: 'all',  // 为所有语言生成 llms 友好内容
-    }
+    },
   }),
 });

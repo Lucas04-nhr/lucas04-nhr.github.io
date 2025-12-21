@@ -12,7 +12,8 @@ import NpmBadge from "vuepress-theme-plume/features/NpmBadge.vue";
 import NpmBadgeGroup from "vuepress-theme-plume/features/NpmBadgeGroup.vue";
 import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 // import CustomComponent from './theme/components/Custom.vue'
-import "./theme/styles/custom.css";
+import "./theme/styles/fonts_body.css";
+import "./theme/styles/custom_color.css";
 
 export default defineClientConfig({
   layouts: {
@@ -38,6 +39,37 @@ export default defineClientConfig({
     app.component("ResponsiveImage", ResponsiveImage);
     // app.component('CustomComponent', CustomComponent)
 
+    // Replace encrypted page lock icon with custom image
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      const replaceLockIcon = () => {
+        const lockIcon = document.querySelector(
+          "span.vpi-lock.icon-lock-head"
+        ) as HTMLElement | null;
+        if (lockIcon && !(lockIcon as any).dataset.replaced) {
+          const img = document.createElement("img");
+          img.src = "https://static.lucas04.top/static/Forbidden.png";
+          img.alt = "Encrypted";
+          img.title = "Forbidden";
+          img.style.display = "inline";
+          img.style.height = "120px";
+          img.style.verticalAlign = "middle";
+          lockIcon.replaceWith(img);
+        }
+      };
+
+      // Replace on router navigation
+      router.afterEach(() => {
+        setTimeout(replaceLockIcon, 100);
+      });
+
+      // Replace on initial load
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", replaceLockIcon);
+      } else {
+        replaceLockIcon();
+      }
+    }
+
     // Apply Pangu spacing on page content update
     if (typeof window !== "undefined" && typeof document !== "undefined") {
       // Apply on router navigation
@@ -62,6 +94,7 @@ export default defineClientConfig({
       }
     }
 
+    // Detect visitor country to conditionally display beian info
     void (async () => {
       console.log("Attempting to detect visitor country for beian display...");
       try {

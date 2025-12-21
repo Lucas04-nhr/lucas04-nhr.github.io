@@ -25,10 +25,10 @@ export default defineThemeConfig({
   social: [
     { icon: "github", link: "https://github.com/Lucas04-nhr" },
     { icon: "gitlab", link: "https://gitlab.com/Lucas04" },
-    { icon: "twitter", link: "https://x.com/__Lucas04__" },
+    { icon: "mdi:twitter", link: "https://x.com/__Lucas04__" },
     { icon: "discord", link: "https://discord.com/users/1078951739576815626" },
     { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
-    { icon: "zhihu", link: "https://www.zhihu.com/people/NHR-zh-cn" },
+    { icon: "ri:zhihu-fill", link: "https://www.zhihu.com/people/NHR-zh-cn" },
   ],
   navbarSocialInclude: ['github'], // 允许显示在导航栏的 social 社交链接
   // aside: true, // 页内侧边栏， 默认显示在右侧

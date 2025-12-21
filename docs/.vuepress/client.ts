@@ -1,7 +1,8 @@
 import { h } from "vue";
-import CustomNotFound from "./components/custom_not_found.vue";
-import CustomAside from "./components/custom_aside.vue";
-import { applyPanguSpacingToDOM } from "./components/pango_component.vue";
+import CustomNotFound from "./components/customNotFound.vue";
+import CustomAside from "./components/customAside.vue";
+import ResponsiveImage from "./components/customResponseImage.vue";
+import { applyPanguSpacingToDOM } from "./components/customPango.vue";
 import { Layout } from "vuepress-theme-plume/client";
 import { NotFound } from "vuepress-theme-plume/client";
 import { defineClientConfig } from "vuepress/client";
@@ -17,7 +18,7 @@ export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
       "doc-title-after": () => h(PageContextMenu),
-      'aside-outline-after': () => h(CustomAside),
+      "aside-outline-after": () => h(CustomAside),
     }),
 
     NotFound: () =>
@@ -34,6 +35,7 @@ export default defineClientConfig({
     // app.component('Swiper', Swiper) // you should install `swiper`
 
     // your custom components
+    app.component("ResponsiveImage", ResponsiveImage);
     // app.component('CustomComponent', CustomComponent)
 
     // Apply Pangu spacing on page content update

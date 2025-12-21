@@ -29,7 +29,7 @@ const locale = computed(() => locales[lang.value])
       <span class="link-text">{{ locale.sponsor }}</span>
       <span class="vpi-arrow-right" />
     </VPLink>
-    <VPLink class="link" no-icon href="https://go.lucas04.top/connect">
+    <VPLink class="link" no-icon href="/about/#connect">
       <icon name="mdi:email-fast-outline" />
       <span class="link-text">{{ locale.email }}</span>
       <span class="vpi-arrow-right" />

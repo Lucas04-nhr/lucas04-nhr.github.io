@@ -48,3 +48,5 @@ If you find my work helpful and would like to support me, consider buying me a c
 ::: note
 Buy Me a Coffee is currently unavailable due to service restrictions in my country. Please consider using other methods instead.
 :::
+
+---

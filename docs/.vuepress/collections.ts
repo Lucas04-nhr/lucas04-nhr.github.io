@@ -40,13 +40,13 @@ const enBlog = defineCollection({
   //   linkPrefix: '/article/', // 相关文章的链接前缀
   //   postList: true, // 是否启用文章列表页
   tags: true, // 是否启用标签页
-  //   archives: true, // 是否启用归档页
-  categories: true, // 是否启用分类页
+  archives: false, // 是否启用归档页
+  categories: false, // 是否启用分类页
   //   postCover: 'right', // 文章封面位置
   //   pagination: 15, // 每页显示文章数量
 })
 
-const enDemoDoc = defineCollection({
+const enDoc = defineCollection({
   // doc 类型，该类型带有侧边栏
   type: 'doc',
   // 文档集合所在目录，相对于 `docs/`
@@ -66,10 +66,8 @@ const enDemoDoc = defineCollection({
 
 /**
  * 导出所有的 collections
- *  (enBlog 为博客示例，如果不需要博客功能，请删除)
- *  (enDemoDoc 为参考示例，如果不需要它，请删除)
  */
 export const enCollections = defineCollections([
   enBlog,
-  enDemoDoc,
+  enDoc,
 ])

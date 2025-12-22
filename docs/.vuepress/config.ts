@@ -219,9 +219,8 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/guide/features/llmstxt/
      */
     llmstxt: {
-      locale: "all", // 默认仅为主语言生成 llms 友好内容
+      locale: "all",
       filter: () => true, // 为所有页面生成 llms 友好内容
-      // locale: 'all',  // 为所有语言生成 llms 友好内容
     },
   }),
 });

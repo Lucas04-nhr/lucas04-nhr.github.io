@@ -20,7 +20,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 - SVM, Artificial neural networks, Hidden Markov Model…
 
-> {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/Lkr0Yz.jpg" caption="VM, Artificial neural networks, Hidden Markov Model" %}
+> ![VM, Artificial neural networks, Hidden Markov Model](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/Lkr0Yz.jpg)
 
 ## 中国早期机器学习在生物学中的应用
 
@@ -57,7 +57,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 - 准确性 (Accuracy, Ac): 对于整个数据集(包括阳性和阴性数据)，预测总共的准确比例是多少
 - 马修相关系数(Mathew correlation coefficient, MCC): 当阳性数据的数量与阴性数据的数量差别较大时，能够更为公平的反映预测能力，值域`[-1,1]`
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/PzYkEI.png" caption="常用评估指标" %}
+![常用评估指标](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/PzYkEI.png)
 
 ## ROC curve
 
@@ -66,7 +66,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 - AUC（area under the curve）
   - 值：ROC 的面积越大，预测能力越强
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/jO1lFH.png" caption="ROC curve" %}
+![ROC curve](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/jO1lFH.png)
 
 ## 预测性能的评估
 
@@ -127,7 +127,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 ## 如何评估算法的准确性？
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/JvcJRh.png" caption="Example" %}
+![Example](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/JvcJRh.png)
 
 ### 线性模型 & 决策树
 
@@ -144,13 +144,13 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 - 单层 & 多层神经网络
 - 误差逆传播 (Back propagation, BP)
-  - {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/8cJUIc.jpg" caption="误差逆传播 1" %}
-  - {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/GFfwPd.jpg" caption="误差逆传播 2" %}
+  - ![误差逆传播 1](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/8cJUIc.jpg)
+  - ![误差逆传播 2](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/GFfwPd.jpg)
 - 划分超平面
   - $f(x)=w^{T}x+b$
 - 核函数
   - 将线性不可分样本映射到更高维空间，从而线性可分
-  - {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/lUHEva.jpg" caption="核函数" %}
+  - ![核函数](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/lUHEva.jpg)
 
 ### 贝叶斯分类器 & 集成学习
 
@@ -174,11 +174,11 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 > Reinforcement Learning from Human Feedback **(RLHF)**
 
 - 四代语言模型的演化过程
-  - {% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/x7aRHb.jpg" caption="演化过程" %}
+  - ![演化过程](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/x7aRHb.jpg)
 - 大型语言模型研发的时间线
-  - {% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/CxCtQj.jpg" caption="时间线" %}
+  - ![时间线](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/CxCtQj.jpg)
 - 人类反馈的强化学习算法
-  - {% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/6oaCHY.jpg" caption="算法" %}
+  - ![算法](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/6oaCHY.jpg)
 
 ### AGI and its developments
 
@@ -186,25 +186,25 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 > 生成对抗网络
 
-{% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/FzryZ8.jpg" caption="GAN" %}
+![GAN](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/FzryZ8.jpg)
 
 #### Variational Autoencoder, VAE
 
 > 变分自编码器
 
-{% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/h214At.png" caption="VAE" %}
+![VAE](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/h214At.png)
 
 #### Stable Diffusion, SD
 
 > 稳定扩散
 
-{% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/hzQTVO.png" caption="SD" %}
+![SD](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/hzQTVO.png)
 
 #### Text Encoder, TE
 
 > 文本编码器
 
-{% include figure.html image="https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/fmqSGO.jpg" caption="TE" %}
+![TE](https://raw.githubusercontent.com/Lucas04-nhr/Pictures/main/uPic/fmqSGO.jpg)
 
 **And more...**
 

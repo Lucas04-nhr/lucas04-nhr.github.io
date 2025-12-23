@@ -18,11 +18,11 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 ## DNA 结构
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/rjffcx.png" caption="DNA 结构" %}
+![DNA 结构](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/rjffcx.png)
 
 ## 双脱氧核糖核苷酸(Dideoxyribonucleotide)
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/XNNP8c.png" caption="双脱氧核糖核苷酸" %}
+![双脱氧核糖核苷酸](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/XNNP8c.png)
 
 ## 序列数据的存储
 

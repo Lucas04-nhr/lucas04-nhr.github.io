@@ -39,7 +39,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 电磁辐射具有**波动性**，其许多性质可以用经典的正弦波加以描述，通常用周期($T$)、波长($\lambda$)、频率($\nu$)、波数($\widetilde{\nu}$​)和传播速率等进行表征。这些物理量满足如下关系: $\lambda \nu = c$ , $\sigma \lambda = 10^4$
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/%E5%9B%BE%E7%89%87%201.png" caption="电磁波谱的主要参数" %}
+![电磁波谱的主要参数](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/%E5%9B%BE%E7%89%87%201.png)
 
 电磁辐射还具有微粒性，表现为电磁辐射的能量不是均匀连续分布在它传播的空间，而是集中在辐射产生的微粒上。
 
@@ -49,7 +49,7 @@ $E=h \nu={\frac{h c}{\lambda}}$, $p={\frac{h\nu}{c}}={\frac{h}{\lambda}}$
 
 ### 电磁辐射的吸收
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240419230556065.png" caption="电磁辐射的吸收" %}
+![电磁辐射的吸收](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240419230556065.png)
 
 1. **原子**吸收
 2. **分子**吸收
@@ -115,7 +115,7 @@ $E=h \nu={\frac{h c}{\lambda}}$, $p={\frac{h\nu}{c}}={\frac{h}{\lambda}}$
 
 ## 光谱分析
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134449753.png" caption="光谱分析" %}
+![光谱分析](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134449753.png)
 
 ### 光谱的分类
 
@@ -125,11 +125,11 @@ $E=h \nu={\frac{h c}{\lambda}}$, $p={\frac{h\nu}{c}}={\frac{h}{\lambda}}$
 
 ### 吸收光谱法
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134143549.png" caption="吸收光谱法" %}
+![吸收光谱法](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134143549.png)
 
 ### 发射光谱法
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134209154.png" caption="发射光谱法" %}
+![发射光谱法](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/image-20240420134209154.png)
 
 ### 光谱分析仪器
 

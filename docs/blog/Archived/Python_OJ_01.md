@@ -295,11 +295,11 @@ ID_REF
 
 同时利用`matplotlib`及`seaborn`库画出每个阵列的箱线图如下：
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100910_fig01.png" caption="Boxplot" %}
+![Boxplot](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100910_fig01.png)
 
 为查看不同样本之间是否有总体差异，我们再画出每个基因表达量的密度分布图：
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100933_fig02.png" caption="Boxplot" %}
+![Boxplot](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100933_fig02.png)
 
 可以看出样本之间基本没有总体差异，可以做差异分析。
 
@@ -339,7 +339,7 @@ dtype: float64
 
 令`fold`为这两个样本表达平均值的差，我们可以制作出直方图如下：
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100953_fig03.png" caption="Boxplot" %}
+![Boxplot](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_100953_fig03.png)
 
 #### `p-value`差异化分析
 
@@ -363,4 +363,4 @@ The first few p-values are:
 
 生成图表
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_101054_fig04.png" caption="Boxplot" %}
+![Boxplot](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240516_101054_fig04.png)

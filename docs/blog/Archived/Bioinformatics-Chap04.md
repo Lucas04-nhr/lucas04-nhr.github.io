@@ -226,7 +226,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 $p_i \geq 0, \sum_{i=1}^{6} p_i = 1$
 
-考虑三次连续的掷色子，结果为 $[1，6，3]$，则总概率为：$p_1 \cdot p_6 \cdot p_3$
+考虑三次连续的掷色子，结果为 $[1\text{，}6\text{，}3]$，则总概率为：$p_1 \cdot p_6 \cdot p_3$
 
 ### 二项分布
 
@@ -275,18 +275,18 @@ $P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$
   - 细菌在噬菌体攻击之前已经具有抵抗能力，不需要与病毒相互作用，受到攻击时也不产生新的突变
   - 具有抵抗能力的细菌随时间比例增加
   - **非泊松分布**：抵抗性细菌由紧密相关的个体构成群落
-  - {% include figure.html image="https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107582955791710758294656.png" caption="Mondel" %}
+  - ![Mondel](https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107582955791710758294656.png)
 - 拉马克 – 获得性遗传
   - 细菌在受到攻击的时候才产生免疫能力
   - 具有抵抗能力的细菌在受到攻击时的比例恒定
   - **泊松分布：**每一个抵抗是一个独立的事件
-  - {% include figure.html image="https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107584485741710758447915.png" caption="Lamarck" %}
+  - ![Lamarck](https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107584485741710758447915.png)
 
 ##### 结果：方差分析
 
 > 泊松分布的方差等于均值，而非泊松分布的方差大于均值
 
-{% include figure.html image="https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107585275721710758527407.png" caption="The result" %}
+![The result](https://fastly.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/17107585275721710758527407.png)
 
 结论：细菌的抵抗性是由基因决定的，而非获得性遗传。
 

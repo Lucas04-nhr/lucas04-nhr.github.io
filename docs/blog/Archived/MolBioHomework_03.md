@@ -34,7 +34,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 4. The DNA of most organisms is usually **negatively supercoiled**. It becomes temporarily positively supercoiled when it is being replicated or transcribed.
 
-   {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111357_week03_1.png" caption="Supercoiled DNA" %}
+   ![Supercoiled DNA](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111357_week03_1.png)
 
    > 大多数生物的 DNA 通常是**负超螺旋**的。在复制或转录时，它会暂时变为正超螺旋。
 
@@ -72,7 +72,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 12. **cccDNA (covalently closed circular DNA)**, a topological domain whose ends are impossible to rotate, is a special DNA structure that arises during the propagation of some viruses in the cell nucleus and may remain permanently there. It is a double-stranded DNA that originates in a linear form that is ligated by means of DNA ligase to a covalently closed ring. In most cases, transcription of viral DNA can occur from the circular form only. The cccDNA of viruses is also known as **episomal DNA** or occasionally as a **minichromosome**.
 
-    {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111405_week03_2.png" caption="cccDNA" %}
+    ![cccDNA](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111405_week03_2.png)
 
     <center><small>By Navneet Matharu, Nadav Ahituv - Matharu, Navneet (<span class="mw-formatted-date" title="2015-12-03">2015-12-03</span>). "<a rel="nofollow" class="external text" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMCPMC4669122">Minor Loops in Major Folds: Enhancer–Promoter Looping, Chromatin Restructuring, and Their Association with Transcriptional Regulation and Disease</a>". PLOS Genetics 11 (12): e1005640. <span lang="en" dir="ltr"><a href="https://en.wikipedia.org/wiki/Digital_object_identifier" class="extiw" title="en:Digital object identifier">DOI</a></span>:<a rel="nofollow" class="external text" href="https://doi.org/10.1371/journal.pgen.1005640">10.1371/journal.pgen.1005640</a>. <span lang="en" dir="ltr"><a href="https://en.wikipedia.org/wiki/PubMed" class="extiw" title="en:PubMed"><span lang="en" dir="ltr">PMID</span></a></span> <a rel="nofollow" class="external text" href="https://www.ncbi.nlm.nih.gov/pubmed/26632825">26632825</a>. <span lang="en" dir="ltr"><a href="https://en.wikipedia.org/wiki/PubMed_Central" class="extiw" title="en:PubMed Central"><span lang="en" dir="ltr">PMC</span></a></span>: <a rel="nofollow" class="external text" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMCPMC4669122">PMC4669122</a>. <span lang="en" dir="ltr"><a href="https://en.wikipedia.org/wiki/ISSN" class="extiw" title="en:ISSN"><span lang="en" dir="ltr">ISSN</span></a></span> <a rel="nofollow" class="external text" href="https://www.worldcat.org/issn/1553-7404">1553-7404</a>., <a href="https://creativecommons.org/licenses/by-sa/4.0" title="Creative Commons Attribution-Share Alike 4.0">CC BY-SA 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=59894646">Link</a></small></center>
 
@@ -92,7 +92,7 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 
 ### Slide 01
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111409_week03_3.png" caption="Slide 01" %}
+![Slide 01](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111409_week03_3.png)
 
 ---
 
@@ -132,7 +132,7 @@ This slide illustrates the migration of different forms of DNA during gel electr
 
 ### Slide 02
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111414_week03_4.png" caption="Slide 02" %}
+![Slide 02](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240922_111414_week03_4.png)
 
 ---
 

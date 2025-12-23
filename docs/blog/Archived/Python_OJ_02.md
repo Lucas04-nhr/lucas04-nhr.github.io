@@ -131,17 +131,17 @@ The number of differentially expressed genes: 3481
 
 ##### 原始数据
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222919_fig01_01.png" caption="1_Original" %}
+![1_Original](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222919_fig01_01.png)
 
 ##### 经过取对数之后的数据
 
 横轴取$\log_2x$，纵轴取$-\log_{10}x$。
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222941_fig01_02.png" caption="1_log" %}
+![1_log](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222941_fig01_02.png)
 
 ##### 网络图
 
-{% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222955_fig01_03.png" caption="1_network" %}
+![1_network](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/image/20240522_222955_fig01_03.png)
 
 ## 机器学习
 

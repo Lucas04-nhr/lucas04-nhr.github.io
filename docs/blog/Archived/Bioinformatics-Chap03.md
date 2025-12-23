@@ -21,16 +21,16 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 GenBank 是一个由美国国家生物技术信息中心（NCBI）维护的公共数据库，它包含了大量的 DNA 序列数据，以及一些蛋白质序列数据，下面是一些 GenBank 的基础知识：
 
 - GenBank 数据格式
-  {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/ViP7Zm.png" caption="GenBank 数据格式" %}
+  ![GenBank 数据格式](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/ViP7Zm.png)
 - GenBank 数据类型
-  {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/HvW0wZ.png" caption="GenBank 数据类型" %}
+  ![GenBank 数据类型](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/HvW0wZ.png)
 
 ## UniProt
 
 UniProt 是一个由三个数据库组成的联合数据库，它包含了大量的蛋白质序列数据，下面是一些 UniProt 的基础知识：
 
 - UniProt 数据格式
-  {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/xEDdIz.png" caption="UniProt 数据格式" %}
+  ![UniProt 数据格式](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/xEDdIz.png)
 - UniProt 数据类型
   1. UniProtKB（UniProt Knowledgebase）：这是最大的组成部分，包含了已知的蛋白质序列和相关信息。它提供了详细的注释、功能预测和分类信息。
   2. UniRef（UniProt Reference Clusters）：这是一组聚类的蛋白质序列，根据相似性进行聚类。每个聚类都有一个代表性序列，以减少数据库的冗余。
@@ -70,7 +70,7 @@ UniProt 是一个由三个数据库组成的联合数据库，它包含了大量
   - `part-of`
 
 > 父子关系
-> {% include figure.html image="https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/dK0amA.png" caption="父子关系" %}
+> ![父子关系](https://cdn.jsdelivr.net/gh/Lucas04-nhr/Pictures@main/uPic/dK0amA.png)
 
 ### 注意
 

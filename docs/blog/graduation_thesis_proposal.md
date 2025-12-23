@@ -1,12 +1,11 @@
 ---
-title: 毕业论文开题答辩 20251226
+title: 毕业论文开题答辩
 createTime: 2025/12/21 19:11:09
 password: 4cf29c79042107501aba5240ce1c21ba
 permalink: /blog/graduation_thesis_proposal_20251226/
 tags:
   - Graduation Thesis
-  - SNP
-  - Evolution
+  - Presentation
 ---
 
 ## 讲稿 {#script}

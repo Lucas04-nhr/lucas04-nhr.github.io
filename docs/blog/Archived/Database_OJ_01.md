@@ -1,0 +1,249 @@
+---
+title: Database Online Job 01
+createTime: 2024/05/01
+permalink: /blog/database-oj-01/
+tags:
+  - Database
+  - Homework
+  - Archived
+---
+
+> Under maintainance
+
+## Useful SQL commands
+
+  <table width="80%" cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td valign="center">命令<br>
+          </td>
+          <td valign="center">缩写<br>
+          </td>
+          <td valign="center">命令作用<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>Append text</code><br>
+          </td>
+          <td valign="center"><code>A text</code><br>
+          </td>
+          <td valign="center">追加文本到语句，即为当前行追加 text 内容<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>Change/oldtext/newtext</code><br>
+          </td>
+          <td valign="center"><code>C/oldtext/newtext</code><br>
+          </td>
+          <td valign="center">替换文本，将当前行中的 oldtext 换成新的 newtext,&nbsp;如果不提供
+            newtext 表示删除 oldtext<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>n text</code><br>
+          </td>
+          <td valign="center"> </td>
+          <td valign="center">修改文本：其中的 n 为缓冲区的行号，text 为修改后的内容<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>DEL n</code><br>
+          </td>
+          <td valign="center"> </td>
+          <td valign="center">删除行号为 n 的行，删除的是缓冲区中的语句<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>CLEAR BUFFER</code><br>
+          </td>
+          <td valign="center"><code>CL BUFF</code><br>
+          </td>
+          <td valign="center">清空缓冲区内容<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>Input text</code><br>
+          </td>
+          <td valign="center"><code>I text</code><br>
+          </td>
+          <td valign="center">增加一行或多行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>LIST</code><br>
+          </td>
+          <td valign="center"><code>L /LI /LIS</code><br>
+          </td>
+          <td valign="center">显示缓冲区内容，即显示所有行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>LIST n</code><br>
+          </td>
+          <td valign="center"><code>L n 或 n</code><br>
+          </td>
+          <td valign="center">显示缓冲区内容：显示第 n 行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>LIST *</code><br>
+          </td>
+          <td valign="center"><code>L *</code><br>
+          </td>
+          <td valign="center">显示缓冲区内容：显示当前行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>LIST LAST</code><br>
+          </td>
+          <td valign="center"><code>LAST</code><br>
+          </td>
+          <td valign="center">显示缓冲区内容：显示最后一行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>LIST m n</code><br>
+          </td>
+          <td valign="center"><code>L m n</code><br>
+          </td>
+          <td valign="center">显示缓冲区内容：从 m 行到 n 行<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="center"><code>n</code><br>
+          </td>
+          <td valign="center"> </td>
+          <td valign="center">把第 n 行设置为当前行<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+## Exercise
+
+用 SQLPLUS 进入界面：
+
+```bash
+sqlplus / as sysdba
+```
+
+输入以下命令练习上表中的基本操作：
+
+```sql
+SQL> show user
+USER 为 "SYS"
+```
+
+```sql
+SQL> show pdbs
+SQL>alter pluggable databse PDBDRUGDB OPEN;
+```
+
+```sql
+SQL> conn as sysdba
+请输入用户名:  sys
+输入口令:
+已连接到空闲例程。
+```
+
+```sql
+SQL> show user
+USER 为 "SYS"
+```
+
+```sql
+SQL> disc
+已断开连接
+```
+
+```sql
+SQL> show user
+USER 为 ""
+```
+
+```sql
+SQL>alter pluggable databse PDBDRUGDB    //会报错
+list
+change/batabse/database
+LIST
+```
+
+```sql
+SQL>alter pluggable
+sql>databse
+sql>PDBDRUGDB
+2    //
+change/batabse/database
+a open   //add text
+add where
+del 5
+2
+a 55
+li
+```
+
+```sql
+SQL>edit    //打开一个文本编辑器窗口， 显示缓冲区代码，可以修改后用菜单：save 保存
+sql> a open;    //用 List, 附加命令
+sql> save test.sql     //可以用 save sss.sql create,    save sss.sql append,  save ww.sql replace,
+sql>get test.sql    //看看有没有变化？？？
+sql@test.sql   //或用： start test.sql
+sql>spool on // spool off,  spool out
+```
+
+SQLPLUS 中设置环境变量:
+
+```sql
+set serveroutput on | off
+set echo on | off
+set pagesize n // 设置每面行数，缺省为 14 行，可设为 0 表示不分页
+set linesize n //设置每行字符数，缺少为 80 个
+set feedback on | off | n  //设置脚注，查询返回多少行会有提示； n 表示自定义多少行提示
+sql>desc v$log  //显示表结构
+sql>select * from v$log;  //显示表内容
+sql>select * from v$log where CON_ID='1';  //显示表内容，只显示 CON_ID=1 的内容
+```
+
+```sql
+column BYTES heading by;   将字段名改为 by 输出显示，设置别名
+column NETXT_CHANGE# format 9;   // col xxx for 999;
+column NETXT_CHANGE# format a3;   //取消格式：column NETXT_CHANGE# clear;
+remark 'test now'
+help
+```
+
+```sql
+sql> select * from v$log where CON_ID='&conid';  //会提示用户输入相应的信息
+sql> select * from v$log where CON_ID='&&conid';     //只需输入一次，以后再用到这个变量就无需再输入了。
+```
+
+```sql
+SQL>DEFINE     //不带参数，会显示所有定义好的变量，包括用&定义的变量
+SQL>DEFINE conid ="9999"    //使用时仍用： &conid,   不用时删除：   undefine   conid
+SQL>@test.sql 10 2000   //可以命令行输入两个参数， 在 sql 文件中直接用: &1,  &2,  分别用于获取参数：
+如，将 SQL 语句 select * from v$log where conid = &1 and groupid = &2   存为 test.sql,
+SQL>@test.sql 10 2000   //这样运行就可以获得参数了。
+使用 accept prompt:
+SQL> ACCEPT A NUMBER PROMT MYNUMBERIS:   //会提示输入数，然后 sql> define 即可看到定义的变量及值了。
+```
+
+## Create a user
+
+1. Under pluggable database "PDBDRUGDB", create a user "druguser" with password "druguser" and grant the user the "CONNECT" and "RESOURCE" roles.
+
+```sql
+SQL> alter session set container=PDBDRUGDB;
+SQL> create user druguser identified by druguser;
+SQL> grant connect, resource to druguser;
+```
+
+2. Under global database, create a user "drugdba" with password "drugdba" and grant the user the "DBA" role.
+
+```sql
+SQL> alter session set container=CDB$ROOT;
+SQL> create user drugdba identified by drugdba;
+SQL> grant dba to drugdba;
+```
+
+> Using 'SID' to connect to the database via the user created in the global database.
+> Using 'SERVICE_NAME' to connect to the database via the user created in the pluggable database.

@@ -5,8 +5,8 @@ password: 3864fec39006b4ea59e2a32949f85659
 permalink: /blog/paper_sharing_20251212/
 tags:
   - Paper Sharing
-  - SNP
-  - Evolution
+  - Presentation
+  - BGI Nutrition
 ---
 
 ## 原始文献 {#original-paper}

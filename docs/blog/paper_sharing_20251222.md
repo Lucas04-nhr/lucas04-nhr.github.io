@@ -5,8 +5,8 @@ createTime: 2025/12/21 16:56:02
 permalink: /blog/paper_sharing_20251222/
 tags:
   - Paper Sharing
-  - SNP
-  - Evolution
+  - Presentation
+  - BGI Nutrition
 ---
 
 ## Slide 1 {#slide-01}

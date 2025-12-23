@@ -8,6 +8,14 @@ tags:
   - Archived
 ---
 
+::: warning
+
+All the posts with "Archived" tag are old notes for backup only. They are migrated from my old blog system with `Jekyll`, with lack of proper formatting.
+
+所有带有 “Archived” 标签的文章均为旧笔记，仅供备份存档。它们是从我以前使用 `Jekyll` 博客系统迁移过来的，缺乏更新的格式支持。
+
+:::
+
 ## 二叉树的遍历
 
 二叉树的遍历是指按照一定的顺序访问树中的每一个节点。常见的遍历方法有前序遍历、中序遍历和后序遍历。下面是这些遍历方法的定义和示例：

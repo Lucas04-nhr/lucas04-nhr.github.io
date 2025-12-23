@@ -8,6 +8,14 @@ tags:
   - Archived
 ---
 
+::: warning
+
+All the posts with "Archived" tag are old notes for backup only. They are migrated from my old blog system with `Jekyll`, with lack of proper formatting.
+
+所有带有 “Archived” 标签的文章均为旧笔记，仅供备份存档。它们是从我以前使用 `Jekyll` 博客系统迁移过来的，缺乏更新的格式支持。
+
+:::
+
 ## GenBank
 
 GenBank 是一个由美国国家生物技术信息中心（NCBI）维护的公共数据库，它包含了大量的 DNA 序列数据，以及一些蛋白质序列数据，下面是一些 GenBank 的基础知识：

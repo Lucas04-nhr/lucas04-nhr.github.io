@@ -8,6 +8,14 @@ tags:
   - Archived
 ---
 
+::: warning
+
+All the posts with "Archived" tag are old notes for backup only. They are migrated from my old blog system with `Jekyll`, with lack of proper formatting.
+
+所有带有 “Archived” 标签的文章均为旧笔记，仅供备份存档。它们是从我以前使用 `Jekyll` 博客系统迁移过来的，缺乏更新的格式支持。
+
+:::
+
 ## 生物信息学主要研究内容与方向
 
 - 开发新的算法及统计学方法来揭示大数据之间的联系;

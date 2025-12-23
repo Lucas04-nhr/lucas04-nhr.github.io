@@ -8,6 +8,14 @@ tags:
   - Archived
 ---
 
+::: warning
+
+All the posts with "Archived" tag are old notes for backup only. They are migrated from my old blog system with `Jekyll`, with lack of proper formatting.
+
+所有带有 “Archived” 标签的文章均为旧笔记，仅供备份存档。它们是从我以前使用 `Jekyll` 博客系统迁移过来的，缺乏更新的格式支持。
+
+:::
+
 > 此文档仅供参考，所有代码均未包含主程序中的调用部分，请自行根据`Basic`章节中的模板函数生成实例调用。
 
 ## 二叉树的建立

@@ -8,6 +8,14 @@ tags:
   - Archived
 ---
 
+::: warning
+
+All the posts with "Archived" tag are old notes for backup only. They are migrated from my old blog system with `Jekyll`, with lack of proper formatting.
+
+所有带有 “Archived” 标签的文章均为旧笔记，仅供备份存档。它们是从我以前使用 `Jekyll` 博客系统迁移过来的，缺乏更新的格式支持。
+
+:::
+
 ## 希尔排序
 
 希尔排序是一种基于插入排序的算法，通过比较相距一定间隔的元素来工作，各趟比较所用的距离随着算法的进行而减小，直到只比较相邻元素的最后一趟排序为止。

@@ -170,3 +170,60 @@ samp {
 .mjx-chtml * {
   font-family: initial;
 }
+
+/* KaTeX: force \mathrm (upright roman in math mode) to use math fonts
+   instead of the site body sans font. This targets KaTeX's generated
+   elements and provides robust fallbacks when KaTeX webfonts are missing. */
+.katex .mathrm,
+.katex .mord.mathrm,
+.katex .mord.mathrm.mtight {
+  font-family: "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
+}
+
+/* KaTeX: other math font families */
+/* Italic math (\mathit) */
+.katex .mathit,
+.katex .mord.mathit,
+.katex .mord.mathit.mtight {
+  font-family: "KaTeX_Math", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
+}
+
+/* Bold math (\mathbf) */
+.katex .mathbf,
+.katex .mord.textbf,
+.katex .mord.boldsymbol {
+  font-family: "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
+}
+
+/* Sans-serif math (\mathsf) */
+.katex .mathsf {
+  font-family: "KaTeX_SansSerif", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", sans-serif !important;
+}
+
+/* Typewriter/monospace math (\mathtt) */
+.katex .mathtt {
+  font-family: "KaTeX_Typewriter", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", monospace !important;
+}
+
+/* Blackboard bold (\mathbb) */
+.katex .mathbb {
+  font-family: "KaTeX_AMS", "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
+}
+
+/* Fraktur (\mathfrak) */
+.katex .mathfrak {
+  font-family: "KaTeX_Fraktur", "STIX Two Text", "STIX Two Math",
+    "Latin Modern Math", serif !important;
+}
+
+/* Calligraphic (\mathcal) */
+.katex .mathcal {
+  font-family: "KaTeX_Caligraphic", "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
+}

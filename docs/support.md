@@ -33,14 +33,42 @@ If you find my work helpful and would like to support me, consider buying me a c
 
 ## Methods
 
-::: flex center
-| Alipay | Weixin Pay | Ko-Fi | Afdian |
-| :--------: | :-------: | :-------: | :-------: |
-| <ResponsiveImage src="https://static.lucas04.top/static/payment/ali.png" alt="Alipay" :desktopWidth="120" :mobileWidth="50" /> | <ResponsiveImage src="https://static.lucas04.top/static/payment/wx.png" alt="Weixin Pay" :desktopWidth="120" :mobileWidth="50" /> | <a href="https://ko-fi.com/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/ko-fi.png" alt="Ko-Fi" :desktopWidth="120" :mobileWidth="50" /></a> | <a href="https://afdian.com/a/lucas04"><ResponsiveImage src="https://static.lucas04.top/static/payment/afdian.png" alt="Afdian" :desktopWidth="120" :mobileWidth="50" /></a> |
+::: flex center start
+
+@[qrcode svg title="Patreon" align="center" dark="#1266AF"](https://patreon.com/lucas04)
+
+@[qrcode svg title="Alipay" align="center" dark="#015FFF"](https://qr.alipay.com/fkx13803nlme01oxzv3n7a7)
+
+@[qrcode svg title="Afdian" align="center" dark="#58CDF0"](https://afdian.com/a/lucas04)
+
+@[qrcode svg title="Ko-Fi" align="center" dark="#FF7900"](https://ko-fi.com/lucas04)
+
 :::
 
 ::: note
-Buy Me a Coffee is currently unavailable due to service restrictions in my country. Please consider using other methods instead.
+- If you are using desktop devices, you can click the following cards to open Patreon,Afdian or Ko-Fi page directly.
+
+  ::: flex around start
+  <LinkCard 
+    icon="ph:patreon-logo-fill"
+    title="Patreon"
+    href="https://patreon.com/lucas04" >
+  </LinkCard>
+
+  <LinkCard 
+    icon="simple-icons:afdian"
+    title="Afdian"
+    href="https://afdian.com/a/lucas04" >
+  </LinkCard>
+
+  <LinkCard 
+    icon="cib:ko-fi"
+    title="Ko-Fi"
+    href="https://ko-fi.com/lucas04" >
+  </LinkCard>
+  :::
+
+- I hate Weixin/WeChat due to several reasons, so no QR code for Weixin Pay.
 :::
 
 ---

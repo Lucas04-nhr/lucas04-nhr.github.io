@@ -68,6 +68,10 @@ export default defineUserConfig({
     /* 添加您的部署域名, 有助于 SEO, 生成 sitemap */
     hostname: "https://blog.lucas04.top",
 
+    /**
+     * 加密功能
+     * @see https://theme-plume.vuejs.press/guide/features/encryption/
+     */
     encrypt: {
       admin: ["gyrzuT-2xamte-xuzdek"],
     },
@@ -83,7 +87,7 @@ export default defineUserConfig({
       formatOptions: { dateStyle: "short", timeStyle: "short" },
     },
     contributors: false,
-    changelog: true,
+    changelog: false,
 
     /**
      * 编译缓存，加快编译速度
@@ -207,12 +211,6 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/guide/features/replace-assets/
      */
     replaceAssets: "https://static.lucas04.top/blog",
-
-    /**
-     * 加密功能
-     * @see https://theme-plume.vuejs.press/guide/features/encryption/
-     */
-    // encrypt: {},
 
     /**
      * 启用 llmstxt 插件，用于为大语言模型提供更友好的内容

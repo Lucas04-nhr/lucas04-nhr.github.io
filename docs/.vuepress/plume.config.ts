@@ -30,9 +30,9 @@ export default defineThemeConfig({
     { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
     { icon: "ri:zhihu-fill", link: "https://www.zhihu.com/people/NHR-zh-cn" },
   ],
-  navbarSocialInclude: ["github"], // 允许显示在导航栏的 social 社交链接
-  // aside: true, // 页内侧边栏， 默认显示在右侧
-  // outline: [2, 3], // 页内大纲， 默认显示 h2, h3
+  navbarSocialInclude: ["github", "mdi:twitter"], // 允许显示在导航栏的 social 社交链接
+  aside: true, // 页内侧边栏， 默认显示在右侧
+  outline: [2, 4], // 页内大纲， 默认显示 h2, h3
 
   /**
    * 文章版权信息
@@ -49,8 +49,8 @@ export default defineThemeConfig({
     },
   },
 
-  prevPage: true, // 是否启用上一页链接
-  nextPage: true, // 是否启用下一页链接
+  prevPage: false, // 是否启用上一页链接
+  nextPage: false, // 是否启用下一页链接
   createTime: true, // 是否显示文章创建时间
 
   /* 站点页脚 */

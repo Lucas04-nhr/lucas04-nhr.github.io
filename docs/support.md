@@ -48,7 +48,6 @@ If you find my work helpful and would like to support me, consider buying me a c
 ::: note
 - If you are using desktop devices, you can click the following cards to open Patreon,Afdian or Ko-Fi page directly.
 
-  ::: flex around start
   <LinkCard 
     icon="ph:patreon-logo-fill"
     title="Patreon"
@@ -66,7 +65,6 @@ If you find my work helpful and would like to support me, consider buying me a c
     title="Ko-Fi"
     href="https://ko-fi.com/lucas04" >
   </LinkCard>
-  :::
 
 - I hate Weixin/WeChat due to several reasons, so no QR code for Weixin Pay.
 :::

@@ -26,11 +26,12 @@ export default defineThemeConfig({
     { icon: "github", link: "https://github.com/Lucas04-nhr" },
     { icon: "gitlab", link: "https://gitlab.com/Lucas04" },
     { icon: "mdi:twitter", link: "https://twitter.com/__Lucas04__" },
+    { icon: "bluesky", link: "https://bsky.app/profile/lucas-04.bsky.social" },
     { icon: "discord", link: "https://discord.com/users/1078951739576815626" },
     { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
-    { icon: "ri:zhihu-fill", link: "https://www.zhihu.com/people/NHR-zh-cn" },
+    { icon: "zhihu", link: "https://www.zhihu.com/people/NHR-zh-cn" },
   ],
-  navbarSocialInclude: ["github", "mdi:twitter"], // 允许显示在导航栏的 social 社交链接
+  navbarSocialInclude: ["github", "mdi:twitter", "bluesky"], // 允许显示在导航栏的 social 社交链接
   aside: true, // 页内侧边栏， 默认显示在右侧
   outline: [2, 4], // 页内大纲， 默认显示 h2, h3
 
@@ -40,7 +41,7 @@ export default defineThemeConfig({
    */
   copyright: {
     license: {
-      name: "CC BY-NC-SA 4.0",
+      name: "CC-BY-NC-SA-4.0",
       url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     },
     author: {

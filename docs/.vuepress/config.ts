@@ -12,14 +12,14 @@
 import { viteBundler } from "@vuepress/bundler-vite";
 import { defineUserConfig } from "vuepress";
 import { plumeTheme } from "vuepress-theme-plume";
-import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics'
+import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 const isProd = process.env.NODE_ENV === "production";
 
 export default defineUserConfig({
   base: "/",
   plugins: [
     googleAnalyticsPlugin({
-      id: "G-DWLF5JZRCX" // 选项
+      id: "G-DWLF5JZRCX", // 选项
     }),
   ],
   lang: "en-US",
@@ -63,6 +63,22 @@ export default defineUserConfig({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Noto+Sans+SC:wght@100..900&display=swap",
       },
+    ],
+    // Google tag (gtag.js)
+    [
+      "script",
+      {
+        async: true,
+        src: "https://www.googletagmanager.com/gtag/js?id=G-DWLF5JZRCX",
+      },
+    ],
+    [
+      "script",
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DWLF5JZRCX');`,
     ],
   ],
 

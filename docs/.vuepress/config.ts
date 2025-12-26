@@ -12,11 +12,16 @@
 import { viteBundler } from "@vuepress/bundler-vite";
 import { defineUserConfig } from "vuepress";
 import { plumeTheme } from "vuepress-theme-plume";
+import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics'
 const isProd = process.env.NODE_ENV === "production";
 
 export default defineUserConfig({
   base: "/",
-  plugins: [],
+  plugins: [
+    googleAnalyticsPlugin({
+      id: "G-DWLF5JZRCX" // 选项
+    }),
+  ],
   lang: "en-US",
   locales: {
     "/": {

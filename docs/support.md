@@ -35,13 +35,13 @@ If you find my work helpful and would like to support me, consider buying me a c
 
 ::: flex center start
 
-@[qrcode svg title="Patreon" align="center" dark="#1266AF"](https://patreon.com/lucas04)
+@[qrcode svg title="Patreon" align="center" dark="#1266AF" light="#EFF0F3"](https://patreon.com/lucas04)
 
-@[qrcode svg title="Alipay" align="center" dark="#015FFF"](https://qr.alipay.com/fkx13803nlme01oxzv3n7a7)
+@[qrcode svg title="Alipay" align="center" dark="#015FFF" light="#EFF0F3"](https://qr.alipay.com/fkx13803nlme01oxzv3n7a7)
 
-@[qrcode svg title="Afdian" align="center" dark="#58CDF0"](https://afdian.com/a/lucas04)
+@[qrcode svg title="Afdian" align="center" dark="#58CDF0" light="#EFF0F3"](https://afdian.com/a/lucas04)
 
-@[qrcode svg title="Ko-Fi" align="center" dark="#FF7900"](https://ko-fi.com/lucas04)
+@[qrcode svg title="Ko-Fi" align="center" dark="#FF7900" light="#EFF0F3"](https://ko-fi.com/lucas04)
 
 :::
 

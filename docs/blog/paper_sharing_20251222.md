@@ -9,6 +9,15 @@ tags:
   - BGI Nutrition
 ---
 
+<LinkCard 
+  icon="mdi:file-document-box-search-outline"
+  title="Original Paper"
+  href="https://www.nature.com/articles/s41598-025-29135-7" >
+
+  Click to read the original paper.
+
+</LinkCard>
+
 ## Slide 1 {#slide-01}
 
 各位师兄师姐大家好！今天，我为大家分享一篇最新发表在 The Lancet Microbe 上的文章，题目是《Macrolide-resistant _Mycoplasma pneumoniae_ resurgence in China and its clinical implications》，中文翻译为《2023 年中国儿童中大环内酯抗性肺炎支原体的再度出现》。这篇文章于 2025 年发表，由北京儿童医院的袁静教授和军事科学院的崔玉军教授共同通讯作者。将从背景、方法、结果和启示几个方面进行解读。

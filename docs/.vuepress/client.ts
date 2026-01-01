@@ -235,5 +235,72 @@ export default defineClientConfig({
         setTimeout(ensureBackToTopInBounds, 100);
       });
     }
+
+    // Add long press on hero-tagline to navigate to /debug/
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      let pressTimer: NodeJS.Timeout | null = null;
+
+      const setupHeroTaglineLongPress = () => {
+        const heroTagline = document.querySelector(
+          ".hero-tagline"
+        ) as HTMLElement | null;
+
+        if (!heroTagline || (heroTagline as any).dataset.longPressEnabled) {
+          return;
+        }
+
+        // Mark as processed to avoid duplicate listeners
+        (heroTagline as any).dataset.longPressEnabled = "true";
+
+        const handlePressStart = (e: MouseEvent | TouchEvent) => {
+          // Prevent default behavior to avoid text selection
+          e.preventDefault();
+
+          // Clear any existing timer
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+          }
+
+          // Start the 10-second timer
+          pressTimer = setTimeout(() => {
+            console.log("Long press detected, navigating to /debug/");
+            router.push("/debug/");
+          }, 10000); // 10 seconds
+        };
+
+        const handlePressEnd = () => {
+          // Cancel the timer if user releases before 10 seconds
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+        };
+
+        // Add event listeners for both mouse and touch events
+        heroTagline.addEventListener("mousedown", handlePressStart);
+        heroTagline.addEventListener("mouseup", handlePressEnd);
+        heroTagline.addEventListener("mouseleave", handlePressEnd);
+        heroTagline.addEventListener("touchstart", handlePressStart, {
+          passive: false,
+        });
+        heroTagline.addEventListener("touchend", handlePressEnd);
+        heroTagline.addEventListener("touchcancel", handlePressEnd);
+      };
+
+      // Setup on initial load
+      setTimeout(setupHeroTaglineLongPress, 100);
+
+      // Setup after route changes
+      router.afterEach(() => {
+        setTimeout(setupHeroTaglineLongPress, 100);
+      });
+
+      // Setup when DOM changes (in case hero-tagline is dynamically added)
+      const heroObserver = new MutationObserver(setupHeroTaglineLongPress);
+      heroObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }
   },
 });

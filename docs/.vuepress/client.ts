@@ -2,6 +2,8 @@ import { h } from "vue";
 import CustomNotFound from "./components/customNotFound.vue";
 import CustomAside from "./components/customAside.vue";
 import ResponsiveImage from "./components/customResponseImage.vue";
+import DebugInfo from "./components/debugInfo.vue";
+import RawJsonOutput from "./components/rawJsonOutput.vue";
 import { applyPanguSpacingToDOM } from "./components/customPango.vue";
 import { Layout } from "vuepress-theme-plume/client";
 import { NotFound } from "vuepress-theme-plume/client";
@@ -37,6 +39,8 @@ export default defineClientConfig({
 
     // your custom components
     app.component("ResponsiveImage", ResponsiveImage);
+    app.component("DebugInfo", DebugInfo);
+    app.component("RawJsonOutput", RawJsonOutput);
     // app.component('CustomComponent', CustomComponent)
 
     // Replace encrypted page lock icon with custom image

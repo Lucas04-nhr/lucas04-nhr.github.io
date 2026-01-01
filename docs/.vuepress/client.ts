@@ -98,10 +98,11 @@ export default defineClientConfig({
     void (async () => {
       console.log("Attempting to detect visitor country for beian display...");
       try {
-        const res = await fetch("https://ipapi.co/country/", {
+        const res = await fetch("https://ip.lucas04.top", {
           cache: "no-store",
         });
-        const country = (await res.text()).trim().toUpperCase();
+        const data = await res.json();
+        const country = data.IP.Country.toUpperCase();
         console.log(`Detected country: ${country}`);
         if (country === "CN" && typeof document !== "undefined") {
           const el = document.getElementById("beian-cn");

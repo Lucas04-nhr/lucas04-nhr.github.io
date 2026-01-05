@@ -8,7 +8,7 @@ permalink: /docs/hust-gp-template/
 ---
 
 <LinkCard 
-  icon="ic:round-file-copy"
+  icon="mdi:github"
   title="项目 GitHub 主页"
   href="https://github.com/Lucas04-nhr/HUST-GP-Template" > 
   
@@ -17,6 +17,10 @@ permalink: /docs/hust-gp-template/
 </LinkCard>
 
 ::: note
+截至 2026 年 1 月 5 日，所有相关报告的模板均已完善，后续若无重大改动，仓库将进入仅维护状态。
+
+---
+
 由于本模板主要面向华中科技大学（HUST）生命科学与技术学院的本科毕业论文撰写需求，故指南采用中文进行编写。如有任何疑问，欢迎访问 [FAQs](/docs/hust-gp-template/faqs/) 页面查阅常见问题解答。
 :::
 
@@ -188,6 +192,4 @@ latexmk sample.tex
 
 ## 投喂 {#support}
 
-如果你觉得这个模板对你有帮助，欢迎通过 [此页面](/support/) 进行支持，另外，也欢迎点击 Star 来表示对本项目的认可。本人将不定期将支持此项目达到一定金额的支持者名单更新在 [支持者名单](/docs/hust-gp-template/supporters/) 中，以表达感谢。
-
-
+如果你觉得这个模板对你有帮助，欢迎通过 [此页面](/support/) 进行支持，另外，也欢迎点击 Star 来表示对本项目的认可。本人将不定期将支持此项目达到一定金额的支持者名单更新在 [支持者名单](/support/) 中，以表达感谢。

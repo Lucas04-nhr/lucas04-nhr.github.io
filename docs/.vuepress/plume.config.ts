@@ -105,9 +105,9 @@ export default defineThemeConfig({
 
       footer: {
         message:
-          ' Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
+          'See <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">here</a> for page status. <br>  Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
         copyright:
-          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span>',
+          'All the contents are produced by Lucas under <a href="https://status.lucas04.top/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span>',
       },
     },
   },

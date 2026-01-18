@@ -41,7 +41,7 @@
     "hls.js": "^1.6.15",
     "mermaid": "^11.12.2",
     "mpegts.js": "^1.8.0",
-    "pyodide": "^0.29.0",
+    "pyodide": "^0.29.1",
     "react": "19.2.1",
     "shiki-twoslash=2.0.0-rc.121": "link:@vuepress/shiki-twoslash=2.0.0-rc.121"
   }

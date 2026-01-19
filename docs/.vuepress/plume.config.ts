@@ -107,7 +107,7 @@ export default defineThemeConfig({
         message:
           'Powered by <a target="_blank" href="https://v2.vuepress.vuejs.org/">VuePress</a> & <a target="_blank" href="https://theme-plume.vuejs.press">vuepress-theme-plume</a> <br>',
         copyright:
-          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span> <br> See <a target="_blank" href="https://status.lucas04.top/">here</a> for page status information',
+          'All the contents are produced by Lucas under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless otherwise noted. <br> <span id="beian-cn" style="display:none"><a target="_blank" href="https://beian.miit.gov.cn/">赣 ICP 备 2025066001 号</a><br></span> See <a target="_blank" href="https://status.lucas04.top/">here</a> for page status information',
       },
     },
   },

@@ -1,4 +1,4 @@
-name: Deploy VuePress Site to GitHub Pages
+name: Check and Deploy
 
 on:
   # 当 push 到 main 分支时触发部署
@@ -18,51 +18,84 @@ jobs:
     name: Check template version
     runs-on: ubuntu-latest
     outputs:
-      is-latest: ${{ steps.check.outputs.is-latest }}
+      is_latest: ${{ steps.check.outputs.is_latest }}
+      needs_update: ${{ steps.check.outputs.needs_update }}
+      new_version: ${{ steps.check.outputs.new_version }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Check if template version is latest
+      - name: Check for updates
         id: check
         run: |
           # 使用 GITHUB_TOKEN 避免 API 限速
           LATEST_VERSION=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/pengzhanbo/vuepress-theme-plume/releases/latest | jq -r .tag_name)
 
-          # 移除 v 前缀
+          # 移除 v 前缀用于比较
           LATEST_VERSION_CLEAN="${LATEST_VERSION#v}"
 
           # 获取当前版本
           CURRENT_VERSION=$(jq -r '.devDependencies["vuepress-theme-plume"]' package.json)
 
-          echo "Latest version: $LATEST_VERSION_CLEAN"
+          echo "Latest version: $LATEST_VERSION (clean: $LATEST_VERSION_CLEAN)"
           echo "Current version: $CURRENT_VERSION"
 
-          if [ "$LATEST_VERSION_CLEAN" = "$CURRENT_VERSION" ]; then
-            echo "is-latest=true" >> $GITHUB_OUTPUT
-            echo "✅ Template version is up to date"
+          # 比较版本是否需要更新
+          if [ "$LATEST_VERSION_CLEAN" != "$CURRENT_VERSION" ] && [ "$LATEST_VERSION_CLEAN" != "null" ] && [ "$LATEST_VERSION_CLEAN" != "" ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "is_latest=false" >> $GITHUB_OUTPUT
+            echo "new_version=$LATEST_VERSION_CLEAN" >> $GITHUB_OUTPUT
+            echo "⚠️ Version outdated: $CURRENT_VERSION -> $LATEST_VERSION_CLEAN (will update, skip deployment)"
           else
-            echo "is-latest=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Template version is outdated: $CURRENT_VERSION (latest: $LATEST_VERSION_CLEAN)"
-            echo "Please wait for the update_dependencies workflow to update the template"
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "is_latest=true" >> $GITHUB_OUTPUT
+            echo "✅ Version is up to date (will proceed with deployment)"
           fi
 
-      - name: Trigger update workflow
-        if: steps.check.outputs.is-latest == 'false'
+  update-dependencies:
+    name: Update template dependencies
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.needs_update == 'true'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update dependencies
         run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/update_dependencies.yml/dispatches \
-            -d '{"ref":"main"}'
-          echo "🔄 Triggered update_dependencies workflow"
-          exit 1
+          pnpm dlx vp-update
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --local user.name 'github-actions[bot]'
+          git add package.json pnpm-lock.yaml
+          git commit -m "chore(dep): Update template to ${{ needs.check-version.outputs.new_version }}"
+          git push
 
   build:
     name: Build site and upload pages artifact
     runs-on: ubuntu-latest
     needs: check-version
-    if: needs.check-version.outputs.is-latest == 'true'
+    if: needs.check-version.outputs.is_latest == 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,7 +133,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [check-version, build]
+    if: needs.check-version.outputs.is_latest == 'true'
     permissions:
       pages: write
       id-token: write

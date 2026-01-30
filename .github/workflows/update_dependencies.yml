@@ -1,0 +1,61 @@
+name: Update Dependencies
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 20 * * 0" # 每周一 4:00(CST) 运行一次
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.24.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Check for updates
+        id: check_updates
+        run: |
+          # 使用 GITHUB_TOKEN 避免 API 限速
+          LATEST_VERSION=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/pengzhanbo/vuepress-theme-plume/releases/latest | jq -r .tag_name)
+
+          # 获取当前版本
+          CURRENT_VERSION=$(jq -r '.devDependencies["vuepress-theme-plume"]' package.json)
+
+          echo "Latest version: $LATEST_VERSION"
+          echo "Current version: $CURRENT_VERSION"
+
+          # 比较版本是否需要更新
+          if [ "$LATEST_VERSION" != "$CURRENT_VERSION" ] && [ "$LATEST_VERSION" != "null" ] && [ "$LATEST_VERSION" != "" ]; then
+            echo "NEEDS_UPDATE=true" >> $GITHUB_ENV
+            echo "NEW_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+            echo "Update needed: $CURRENT_VERSION -> $LATEST_VERSION"
+          else
+            echo "NEEDS_UPDATE=false" >> $GITHUB_ENV
+            echo "Already up to date or no valid version found"
+          fi
+
+      - name: Update dependencies
+        if: env.NEEDS_UPDATE == 'true'
+        run: |
+          pnpm dlx vp-update
+
+      - name: Commit changes
+        if: env.NEEDS_UPDATE == 'true'
+        run: |
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --local user.name 'github-actions[bot]'
+          git add package.json pnpm-lock.yaml
+          git commit -m "chore(dep): Update template to ${{ env.NEW_VERSION }}"
+          git push

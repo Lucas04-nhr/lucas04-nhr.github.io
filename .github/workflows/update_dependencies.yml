@@ -66,5 +66,5 @@ jobs:
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git config --local user.name 'github-actions[bot]'
           git add package.json pnpm-lock.yaml
-          git commit -m "chore(dep): Update template to ${{ env.NEW_VERSION }}"
+          git commit -m "chore(dep): Update template to `${{ env.NEW_VERSION }}`"
           git push

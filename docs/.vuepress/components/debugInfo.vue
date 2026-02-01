@@ -272,7 +272,6 @@ onMounted(() => {
   text-align: center;
   margin: 20px 0;
   font-weight: 900;
-  background-color: var(--vp-c-brand-1, #3eaf7c);
   color: var(--vp-c-white, #ffffff);
 }
 
@@ -327,53 +326,68 @@ onMounted(() => {
   font-size: 0.9em;
 }
 
-@media (prefers-color-scheme: dark) {
-  .debug-error {
-    background: #7f1d1d;
-    color: #fecaca;
-  }
+html.dark .debug-error,
+:root[data-theme="dark"] .debug-error {
+  background: #7f1d1d !important;
+  color: #fecaca !important;
+}
 
-  .debug-content th {
-    background-color: #374151;
-    color: #f9fafb;
-  }
+html.dark .debug-content th,
+:root[data-theme="dark"] .debug-content th {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
 
-  .debug-content td {
-    color: #f9fafb;
-  }
+html.dark .debug-content td,
+:root[data-theme="dark"] .debug-content td {
+  color: #f9fafb !important;
+}
 
-  .debug-content code {
-    background-color: #374151;
-    color: #f9fafb;
-  }
+html.dark .debug-content code,
+:root[data-theme="dark"] .debug-content code {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
 
-  .debug-content pre {
-    background-color: #1f2937;
-    color: #f9fafb;
-  }
+html.dark .debug-content pre,
+:root[data-theme="dark"] .debug-content pre {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
 
-  .debug-content h2,
-  .debug-content h3 {
-    color: #f9fafb;
-  }
+html.dark .debug-content h2,
+html.dark .debug-content h3,
+:root[data-theme="dark"] .debug-content h2,
+:root[data-theme="dark"] .debug-content h3 {
+  color: #f9fafb !important;
+}
 
-  .debug-content p {
-    color: #d1d5db;
-  }
+html.dark .debug-content p,
+:root[data-theme="dark"] .debug-content p {
+  color: #d1d5db !important;
+}
 
-  .ip-highlight {
-    background-color: var(--vp-c-brand-1, #3eaf7c);
-    color: #ffffff;
-  }
+html.dark .ip-highlight,
+:root[data-theme="dark"] .ip-highlight {
+  background-color: var(--vp-c-brand-1, #3eaf7c) !important;
+  color: #ffffff !important;
+}
 
-  .debug-content table {
-    border-bottom-color: #4b5563;
-  }
+html.dark .debug-content table,
+:root[data-theme="dark"] .debug-content table {
+  border-bottom-color: #4b5563 !important;
+}
 
-  .debug-content th,
-  .debug-content td {
-    border-bottom-color: #4b5563;
-  }
+html.dark .debug-content th,
+html.dark .debug-content td,
+:root[data-theme="dark"] .debug-content th,
+:root[data-theme="dark"] .debug-content td {
+  border-bottom-color: #4b5563 !important;
+}
+
+html.dark .debug-content th,
+html.dark .debug-content td {
+  border-bottom: 1px solid #4b5563 !important;
 }
 .vp-page-context-menu {
   display: none !important;

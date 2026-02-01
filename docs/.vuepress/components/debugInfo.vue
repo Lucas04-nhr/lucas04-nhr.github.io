@@ -369,7 +369,6 @@ html.dark .debug-content p,
 
 html.dark .ip-highlight,
 :root[data-theme="dark"] .ip-highlight {
-  background-color: var(--vp-c-brand-1, #3eaf7c) !important;
   color: #ffffff !important;
 }
 

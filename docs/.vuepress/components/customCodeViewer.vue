@@ -136,7 +136,7 @@ const highlightedCode = computed(() => {
   right: 8px;
   display: none;
   background: none;
-  border: 1px solid currentColor;
+  border: none;
   cursor: pointer;
   padding: 8px;
   border-radius: 6px;
@@ -154,13 +154,30 @@ const highlightedCode = computed(() => {
 
 .code-viewer .copy:hover {
   opacity: 1;
-  border-color: currentColor;
   transform: scale(1.05);
 }
 
 .code-viewer .copy:active {
   transform: scale(0.95);
   transition-duration: 0.1s;
+}
+
+.code-viewer .shiki {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.code-viewer .shiki pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.code-viewer .shiki code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .code-viewer .copy:hover {

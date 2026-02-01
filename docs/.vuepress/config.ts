@@ -61,7 +61,7 @@ export default defineUserConfig({
       "link",
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Noto+Sans+SC:wght@100..900&display=swap",
+        href: "https://static.lucas04.top/static/googlefonts.css",
       },
     ],
     // Google tag (gtag.js)

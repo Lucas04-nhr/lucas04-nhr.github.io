@@ -1,18 +1,16 @@
 <template>
   <div class="debug-info-wrapper">
     <div v-if="loading" class="debug-loading">
-      <p>Loading debug information...</p>
+      <p>Loading connection information...</p>
     </div>
 
     <div v-else-if="error" class="debug-error">
-      <strong>Error loading debug information</strong><br />
+      <strong>Error loading connection information</strong><br />
       {{ error }}
     </div>
 
     <div v-else class="debug-content">
       <!-- IP Highlight -->
-      <h2>Client Debug Information</h2>
-      <p>Here's the information we have about your connection:</p>
       <h3>Your IP Address</h3>
       <div class="ip-highlight">
         <code
@@ -121,42 +119,44 @@
       </table>
 
       <!-- Security & Protocol -->
-      <h3>Security & Protocol</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>HTTP Protocol</td>
-            <td>
-              <code>{{ data.Security.httpProtocol || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>TLS Version</td>
-            <td>
-              <code>{{ data.Security.tlsVersion || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>TLS Cipher</td>
-            <td>
-              <code>{{ data.Security.tlsCipher || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Client TCP RTT</td>
-            <td>{{ data.Security.clientTcpRtt || "N/A" }} ms</td>
-          </tr>
-        </tbody>
-      </table>
+      <template v-if="data.Security">
+        <h3>Security & Protocol</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HTTP Protocol</td>
+              <td>
+                <code>{{ data.Security.httpProtocol || "N/A" }}</code>
+              </td>
+            </tr>
+            <tr>
+              <td>TLS Version</td>
+              <td>
+                <code>{{ data.Security.tlsVersion || "N/A" }}</code>
+              </td>
+            </tr>
+            <tr>
+              <td>TLS Cipher</td>
+              <td>
+                <code>{{ data.Security.tlsCipher || "N/A" }}</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Client TCP RTT</td>
+              <td>{{ data.Security.clientTcpRtt || "N/A" }} ms</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
 
       <!-- Request Information -->
-      <h3>Request Information</h3>
+      <!-- <h3>Request Information</h3>
       <table>
         <thead>
           <tr>
@@ -178,29 +178,30 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
 
       <!-- HTTP Headers -->
-      <h3>HTTP Headers</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Header</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(value, key) in data.Headers" :key="key">
-            <td>
-              <code>{{ key }}</code>
-            </td>
-            <td>
-              <code>{{ value }}</code>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <h3>Full JSON Response</h3>
+      <template v-if="data.Headers">
+        <h3>HTTP Headers</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Header</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(value, key) in data.Headers" :key="key">
+              <td>
+                <code>{{ key }}</code>
+              </td>
+              <td>
+                <code>{{ value }}</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
     </div>
   </div>
 </template>
@@ -276,26 +277,25 @@ onMounted(() => {
 }
 
 .debug-content {
-  max-width: 75%;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px 0;
 }
 
 .debug-content h3 {
-  margin-top: 30px;
-  margin-bottom: 15px;
+  margin-top: 5px;
 }
 
 .debug-content table {
   width: 100%;
-  margin-bottom: 20px;
+  margin: 20px auto 20px auto;
   border-collapse: collapse;
 }
 
 .debug-content th,
 .debug-content td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #e5e7eb;
 }
 

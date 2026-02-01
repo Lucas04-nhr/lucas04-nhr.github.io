@@ -24,7 +24,14 @@ export const enNavbar = defineNavbarConfig([
       { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
     ]
   },
-  { text: 'About', icon: 'mdi:about-circle-outline', link: '/about/' },
-  { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
-  { text: 'Support', icon: 'ic:round-attach-money', link: '/support/' },
+  {
+    text: 'Information',
+    icon: 'mdi:about-circle-outline',
+    items: [
+      { text: 'About', icon: 'icon-park-twotone:people', link: '/about/' },
+      { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
+      { text: 'Buy me a coffee', icon: 'ic:round-attach-money', link: '/support/' },
+      { text: 'Tools', icon: 'mdi:tools', link: '/tools/' },
+    ]
+  },
 ])

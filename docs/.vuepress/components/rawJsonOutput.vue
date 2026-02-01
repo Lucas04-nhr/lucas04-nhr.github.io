@@ -45,7 +45,6 @@ onMounted(() => {
 
 <style scoped>
 .vp-code-group {
-  max-width: 55%;
   margin: 0 auto;
 }
 </style>

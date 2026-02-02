@@ -4,13 +4,13 @@ import { VPIcon, VPLink } from 'vuepress-theme-plume/client'
 import { useRouteLocale } from 'vuepress/client'
 
 interface Locale {
-  follow: string
+  gh: string
   sponsor: string
   email: string
 }
 
 const locales: Record<string, Locale> = {
-  '/': { follow: 'Follow on GitHub', sponsor: 'Buy me a Coffee', email: 'Contact Me' },
+  '/': { gh: 'See GitHub repo', sponsor: 'Buy me a Coffee', email: 'Contact Me' },
 }
 
 const lang = useRouteLocale()
@@ -19,9 +19,9 @@ const locale = computed(() => locales[lang.value])
 
 <template>
   <div class="aside-nav-wrapper">
-    <VPLink class="link" no-icon href="https://github.com/lucas04-nhr">
+    <VPLink class="link" no-icon href="https://github.com/lucas04-nhr/lucas04-nhr.github.io">
       <icon name="mdi:github" />
-      <span class="link-text">{{ locale.follow }}</span>
+      <span class="link-text">{{ locale.gh }}</span>
       <span class="vpi-arrow-right" />
     </VPLink>
     <VPLink class="link" href="/support/">

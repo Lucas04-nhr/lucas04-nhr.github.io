@@ -9,6 +9,21 @@ comments: false
 externalLinkIcon: false
 ---
 
+## Status Badges {#status-badges}
+
+::: flex center end
+
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/t/Lucas04-nhr/lucas04-nhr.github.io?logo=github)](https://github.com/Lucas04-nhr/lucas04-nhr.github.io/graphs/commit-activity)
+
+[![Page build status](https://github.com/Lucas04-nhr/lucas04-nhr.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/Lucas04-nhr/lucas04-nhr.github.io/actions/workflows/deploy.yml)
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/Lucas04-nhr/lucas04-nhr.github.io?display_timestamp=committer&logo=github)](https://github.com/Lucas04-nhr/lucas04-nhr.github.io/commits/main)
+
+:::
+
+
+## Useful Tools {#useful-tools}
+
 Here lists some tools for development and debugging.
 
 ::: note

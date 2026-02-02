@@ -5,7 +5,7 @@ password: Quadrant9-Referable-Refute
 permalink: /blog/utokyo_oral_exam/
 copyright: false
 comment: false
-exexcerpt: 'Some preparation notes for my upcoming oral exam for the University of Tokyo''s Computational Biology Master''s program, focusing on my chosen supervisor and potential Q&A topics.'
+excerpt: 'Some preparation notes for my upcoming oral exam for the University of Tokyo''s Computational Biology Master''s program, focusing on my chosen supervisor and potential Q&A topics.'
 tags:
   - UTokyo
   - Exam

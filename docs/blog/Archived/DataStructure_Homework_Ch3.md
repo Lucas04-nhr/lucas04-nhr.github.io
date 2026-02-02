@@ -2,6 +2,7 @@
 title: Data Structure - Homework Chapter 3
 createTime: 2024/03/15
 permalink: /blog/data-structure-homework-chapter-3/
+excerpt: "Archived homework solutions for Data Structure Chapter 3, focusing on advanced data structure algorithms and optimization."
 tags:
   - Data Structure
   - Homework

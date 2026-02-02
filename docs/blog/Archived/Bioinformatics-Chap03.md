@@ -2,6 +2,7 @@
 title: Bioinformatics - Chapter 03
 createTime: 2024/03/04
 permalink: /blog/bioinformatics-chap03/
+excerpt: "Archived review notes on Bioinformatics Chapter 03, exploring specialized bioinformatics techniques."
 tags:
   - Bioinformatics
   - Review

@@ -2,6 +2,7 @@
 title: Medicine Exercises
 createTime: 2024/09/09
 permalink: /blog/medicine-exercises/
+excerpt: "Archived medicine exercise and review materials, covering fundamental medical concepts and clinical applications."
 tags:
   - Medicine
   - Review
@@ -73,7 +74,6 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 2. CAR-T 是一种免疫细胞治疗技术，通过工程化患者自身的 T 细胞，使其表面携带一个被称为 CAR（chimeric antigen receptor）的受体，从而使 T 细胞能够识别并攻击肿瘤细胞。CAR 是由单链抗体结构域、连接区和信号域组成，单链抗体结构域用于识别肿瘤抗原，连接区连接单链抗体结构域与信号域，信号域激活 T 细胞并引发抗肿瘤效应。CAR-T 疗法在治疗血液肿瘤等方面取得了一定的成功。
 
 3. CAR-T 细胞治疗是一种新兴的免疫疗法，通过工程化改造患者自身的 T 细胞，使其能够识别并攻击肿瘤细胞。然而，肿瘤细胞常常会发展出多种逃逸机制，使得 CAR-T 细胞的治疗效果受到影响。以下是一些常见的肿瘤逃逸机制：
-
    1. **抗原丧失或变化**：肿瘤细胞可能会通过失去 CAR-T 细胞识别的靶抗原或改变其表达来逃避免疫监视。例如，一些肿瘤细胞可能会降低特定抗原的表达，或者完全失去该抗原。
 
    2. **免疫抑制微环境**：肿瘤微环境通常富含免疫抑制因子，如 TGF-β、IL-10 和 PD-L1 等，这些因子可以抑制 T 细胞的活性，降低 CAR-T 细胞的功能。此外，肿瘤相关巨噬细胞和调节性 T 细胞（Tregs）也可能对 CAR-T 细胞进行抑制。
@@ -91,7 +91,6 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
    针对这些逃逸机制，研究人员正在探索多种策略，包括改进 CAR-T 细胞的设计、联合使用免疫检查点抑制剂、优化肿瘤微环境以及使用其他免疫疗法等，以提高 CAR-T 细胞治疗的效果。
 
 4. CAR-T 细胞治疗在血液恶性肿瘤（如某些类型的白血病和淋巴瘤）中取得了显著成功，但在实体瘤的治疗中面临着多种挑战。以下是一些主要挑战：
-
    1. **靶向抗原的选择**：实体瘤往往缺乏特异性强且普遍表达的靶抗原，很多潜在的靶抗原在正常组织中也有表达，这可能导致 CAR-T 细胞攻击正常细胞，从而引发副作用。
 
    2. **肿瘤微环境的免疫抑制**：实体瘤的微环境通常包含许多免疫抑制因子（如 TGF-β、IL-10 等），这些因子能够抑制 T 细胞的活性。此外，肿瘤相关巨噬细胞和调节性 T 细胞（Tregs）的存在也会抑制 CAR-T 细胞的功能。
@@ -120,7 +119,6 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 ### 答案
 
 1. 抗体（免疫球蛋白）的主要结构包括两条重链和两条轻链，每条链都由不同的区域组成：可变区和恒定区。抗体的功能包括：
-
    1. 识别和结合特定抗原，通过可变区与抗原结合形成抗原-抗体复合物。
    2. 激活免疫系统，促进巨噬细胞吞噬抗原-抗体复合物。
    3. 激活补体系统，引发炎症反应和细胞溶解。

@@ -2,6 +2,7 @@
 title: Bioinformatics - Chapter 02
 createTime: 2024/02/28
 permalink: /blog/bioinformatics-chap02/
+excerpt: "Archived review notes on Bioinformatics Chapter 02, covering advanced topics and methodologies."
 tags:
   - Bioinformatics
   - Review

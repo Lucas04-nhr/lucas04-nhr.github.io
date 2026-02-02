@@ -2,6 +2,7 @@
 title: Bioinformatics - Chapter 04
 createTime: 2024/03/06
 permalink: /blog/bioinformatics-chap04/
+excerpt: "Archived review notes on Bioinformatics Chapter 04, concluding the comprehensive review of bioinformatics concepts."
 tags:
   - Bioinformatics
   - Review

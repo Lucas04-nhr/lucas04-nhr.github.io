@@ -2,6 +2,7 @@
 title: 毕业论文开题答辩
 createTime: 2025/12/21 19:11:09
 permalink: /blog/graduation_thesis_proposal_20251226/
+excerpt: "Comprehensive presentation for thesis defense on SNP-based bacterial evolution analysis using large-scale genomic data, covering research background, data sources, methodology, and timeline."
 tags:
   - Graduation Thesis
   - Presentation
@@ -17,7 +18,7 @@ tags:
 
 在细菌基因组学中，单核苷酸多态性（SNPs）是核心标记，用于解码基因组结构、描绘进化轨迹和构建高质量组装图。与水平基因转移（HGT）和结构变异（SV）相比，SNP 产生速率稳定（每代 10^-9^ 到 10^-8^ 个突变），适合作为分子钟估算最近共同祖先时间（tMRCA）和量化自然选择强度（如通过 $\pi$ 和 $\theta_W$ 比较）。
 
-然而，现有进化研究多停留在基因组草图阶段，常因缺失位置信息和分辨率不足而受限，且对假单胞菌（*Pseudomonadota*）门关注不足。本研究通过高质量完成图结合全基因组 SNP 检测，构建高分辨率系统发育网络，并借助进化路径与传播模式分析，揭示细菌在生态适应及抗生素选择压力下的潜在选择驱动因素。
+然而，现有进化研究多停留在基因组草图阶段，常因缺失位置信息和分辨率不足而受限，且对假单胞菌（_Pseudomonadota_）门关注不足。本研究通过高质量完成图结合全基因组 SNP 检测，构建高分辨率系统发育网络，并借助进化路径与传播模式分析，揭示细菌在生态适应及抗生素选择压力下的潜在选择驱动因素。
 
 接下来，是对项目的数据来源进行介绍。
 
@@ -84,7 +85,6 @@ tags:
     ==**创新在于**== 大规模高质量完成图（而非草图）结合全基因组 SNP，构建高分辨率进化网络；跨生境整合（人类、环境、动物），揭示生态适应；时空网络分析量化传播和选择。现有研究多聚焦单一物种或肠道（如 Nature Communications 论文），本课题覆盖多门类、全球数据，填补分辨率和生境多样性空白。
 
 9.  课题可能遇到的困难和风险是什么？如何应对？
-
     - ==**困难包括**== 大规模数据计算量大（需高性能计算）；重组干扰进化信号；参考选择偏差。
     - ==**应对**== 使用 `Parsnp` 分区模式降低内存；多工具交叉验证（如 `Gubbins` 过滤重组）；物种内自动选参考（ANI/MUMi）。初步已处理部分数据，验证流程可行。
 

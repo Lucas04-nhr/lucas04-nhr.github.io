@@ -2,6 +2,7 @@
 title: Data Structure Q&A
 createTime: 2024/03/18
 permalink: /blog/data-structure-qa/
+excerpt: "Archived discussion and Q&A on data structures, addressing common questions and clarifying complex concepts in the field."
 tags:
   - Data Structure
   - Review
@@ -39,7 +40,6 @@ Press [here](#giscus-target) to jump to the comment section
 > 2016 版本之前的 Visual Studio 需要~~破解之后使用~~安装学习版
 
 2. 如果没有留下来，可以做如下尝试（难度依次递增，但是功能性也相应依次递增，操作不来的可以~~淘宝搜索“软件代安装”~~私信我）：
-
    - 在线网站 [Lightly](https://lightly.teamcode.com/)
 
      ![Price of Lightly](https://github.com/Lucas04-nhr/lucas04-nhr.github.io/assets/117806313/62dbb46f-401d-40ee-ab23-71c09157c14e)

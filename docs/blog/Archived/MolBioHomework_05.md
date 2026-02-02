@@ -2,6 +2,7 @@
 title: Molecular Biology Homework 05
 createTime: 2024/10/12
 permalink: /blog/molecular-biology-homework-05/
+excerpt: "Archived molecular biology homework synthesizing comprehensive knowledge on molecular mechanisms and biological applications."
 tags:
   - Molecular Biology
   - Homework
@@ -147,6 +148,9 @@ Mutagenesis and its repair are of concern to us because they permanently affect 
 ## References
 
 [^1]: [Okazaki fragments](https://en.wikipedia.org/wiki/Okazaki_fragments) , Wikipedia
+
 [^2]: [DNA Replication - Replication Fork](https://en.wikipedia.org/wiki/DNA_replication#Replication_fork) , Wikipedia
+
 [^3]: [DNA Polimerase](https://en.wikipedia.org/wiki/DNA_polymerase) , Wikipedia
+
 [^4]: [DNA Polimerase - Processivity](https://en.wikipedia.org/wiki/DNA_polymerase#Processivity) , Wikipedia

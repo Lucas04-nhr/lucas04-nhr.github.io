@@ -2,6 +2,7 @@
 title: Database Online Job 01
 createTime: 2024/05/01
 permalink: /blog/database-oj-01/
+excerpt: "Archived online judge solutions for Database OJ 01, featuring SQL queries and database management problem solutions."
 tags:
   - Database
   - Homework

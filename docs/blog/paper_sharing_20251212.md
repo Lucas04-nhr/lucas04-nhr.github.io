@@ -2,6 +2,7 @@
 title: 组会文献分享 20251212
 createTime: 2025/12/10 16:48:35
 permalink: /blog/paper_sharing_20251212/
+excerpt: "Paper sharing on Bronze Age Yersinia pestis genome recovered from an ancient sheep, revealing the evolutionary history and zoonotic transmission patterns of prehistoric plague."
 tags:
   - Paper Sharing
   - Presentation
@@ -79,11 +80,9 @@ Bronze Age Yersinia pestis genome from sheep sheds light on hosts and evolution 
 这篇文章的方法对我们做细菌全基因组和进化分析特别有参考价值：
 
 1. 古 DNA 的 SNP 过滤策略完全可以搬到现代低质量数据上
-
    - 例如，针对污染、损伤和低覆盖度，采用严格的变异位点筛选标准（如去除端点损伤、设定最小支持读数、过滤低质量碱基），这些方法同样适用于现代样本的低质量测序数据，能有效提升结果的可靠性。
 
 2. 用 `IQ-TREE` 做 SNP-based 最大似然树，短分支判断近期共同祖先的方法很严谨
-
    - 利用 SNP 数据构建最大似然系统发育树，结合分支长度和支持度，能够精确识别样本间的亲缘关系。对于极短分支，可以推断出样本间存在近期共同祖先，适合分析爆发事件或快速传播的病原体谱系。
 
 3. $\dfrac{\text{d}N}{\text{d}S}$ + 平行进化分析，能很好地解释功能基因的丢失和选择压力

@@ -2,6 +2,7 @@
 title: Molecular Biology Homework 02
 createTime: 2024/09/12
 permalink: /blog/molecular-biology-homework-02/
+excerpt: "Archived molecular biology homework exploring DNA, RNA, and protein synthesis mechanisms and their biological significance."
 tags:
   - Molecular Biology
   - Homework
@@ -101,14 +102,12 @@ The chart illustrates the vast range of genome sizes across different domains of
 The conclusion that "gene density increases while gene size decreases in complex eukaryotic genomes" can be deduced from the diagram, mainly through the following analyses:
 
 1. **Relationship between Gene Number and Genome Length**:
-
    - **Escherichia coli** has 57 genes with a relatively small genome length, showing high gene density.
    - **Saccharomyces cerevisiae** has 31 genes with a moderate genome length, exhibiting high gene density.
    - **Drosophila melanogaster** has 9 genes with an increased genome length, resulting in decreased gene density.
    - **Human** has only 2 genes, but with a very large genome length, displaying the lowest gene density.
 
 2. **Variation in Gene Size**:
-
    - In complex eukaryotes (such as humans), genes are often larger, containing more introns and regulatory regions.
    - Conversely, genes in simple organisms (like Escherichia coli) are smaller, usually lacking introns, and with smaller intergenic regions.
 

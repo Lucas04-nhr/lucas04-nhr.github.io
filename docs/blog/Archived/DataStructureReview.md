@@ -2,6 +2,7 @@
 title: Data Structure - Review
 createTime: 2024/05/20
 permalink: /blog/data-structure-review/
+excerpt: "Comprehensive archived review notes on data structures, synthesizing key concepts and essential knowledge for the field."
 tags:
   - Data Structure
   - Review

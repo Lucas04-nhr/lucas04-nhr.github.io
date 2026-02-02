@@ -2,6 +2,7 @@
 title: Instrumental Analysis Chapter 03 Review
 createTime: 2024/04/20
 permalink: /blog/instrumental-analysis-chapter-03-review/
+excerpt: "Archived review notes on Instrumental Analysis Chapter 03, exploring advanced analytical methods and instrument applications."
 tags:
   - Instrumental Analysis
   - Review
@@ -81,7 +82,6 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 1. 溶剂的影响——改变溶剂极性
 
    非极性粗糙，极性光滑，同时改变$\lambda_{\max}$：
-
    - $\pi \rightarrow \pi^*$: $\lambda \downarrow$
    - $n \rightarrow \pi^*$: $\lambda \uparrow$​
 

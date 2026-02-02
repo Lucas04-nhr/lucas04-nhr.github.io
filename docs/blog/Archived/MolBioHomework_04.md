@@ -2,6 +2,7 @@
 title: Molecular Biology Homework 04
 createTime: 2024/10/03
 permalink: /blog/molecular-biology-homework-04/
+excerpt: "Archived molecular biology homework on advanced topics including genetic engineering and biotechnology applications."
 tags:
   - Molecular Biology
   - Homework
@@ -35,7 +36,6 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 8. The **nuclear scaffold**, also known as the nuclear matrix, is a network of protein structures that provides structural support to the nucleus of eukaryotic cells. It plays a role in organizing and maintaining the overall three-dimensional structure of the nucleus. The nuclear scaffold is involved in various nuclear processes, including DNA replication, transcription, and chromatin organization. It helps to anchor and organize chromatin into specific domains within the nucleus, contributing to the regulation of gene expression and other nuclear functions.
 
 9. **CENP-A and histone H3** are both histone proteins that play important roles in chromatin structure and function.
-
    - CENP-A is a variant of histone H3 that is specifically localized to centromeres, the regions of chromosomes that are essential for proper chromosome segregation during cell division. CENP-A helps to form the specialized chromatin structure at centromeres, known as the kinetochore, which is crucial for attaching chromosomes to the mitotic spindle during cell division.
    - Histone H3, on the other hand, is one of the core histone proteins that make up the nucleosome, the basic repeating unit of chromatin. Histone H3 is involved in packaging DNA into chromatin and regulating gene expression by influencing the accessibility of DNA to transcription factors and other regulatory proteins. It undergoes various post-translational modifications, such as methylation, acetylation, and phosphorylation, which can affect chromatin structure and gene expression.
 
@@ -60,7 +60,6 @@ In summary, CENP-A is a specialized histone variant localized to centromeres, wh
   - Working with histone chaperones, it is possible to exchange histone variants, thereby affecting chromosome structure and consequently influencing DNA expression.
 
 15. **HATs and HDAcs, HMTs and HDMs**
-
     - HATs (Histone Acetyltransferases) and HDACs (Histone Deacetylases) are enzymes that regulate gene expression by adding or removing acetyl groups from histone proteins. HATs add acetyl groups to histones, leading to a more open chromatin structure and increased gene transcription, while HDACs remove acetyl groups, resulting in a more condensed chromatin structure and decreased gene transcription. The balance between HATs and HDACs plays a crucial role in controlling gene expression and various cellular processes. Dysregulation of HATs and HDACs has been linked to various diseases, including cancer, making them important targets for therapeutic interventions.
     - HMTs (Histone Methyltransferases) and HDMs (Histone Demethylases) are enzymes involved in the post-translational modification of histone proteins. Histones play a crucial role in regulating gene expression by packaging DNA into chromatin. HMTs add methyl groups to histone proteins, primarily at lysine or arginine residues, leading to either activation or repression of gene expression depending on the specific site of methylation. On the other hand, HDMs remove methyl groups from histones, thereby modulating the chromatin structure and gene expression patterns.
 
@@ -69,7 +68,6 @@ In summary, CENP-A is a specialized histone variant localized to centromeres, wh
 16. **Bromodomain and Chromodomain**
 
     Bromodomains and chromodomains are protein domains that specifically recognize and bind to certain types of histone modifications, playing a crucial role in regulating chromatin structure and gene expression.
-
     - Bromodomains are modules that recognize acetylated lysine residues on histone proteins. They are commonly found in proteins involved in chromatin remodeling, transcriptional regulation, and other nuclear processes. By binding to acetylated histones, bromodomains help recruit other proteins or protein complexes to specific chromatin regions, thereby influencing gene expression.
 
     - Chromodomains, on the other hand, recognize methylated lysine or arginine residues on histones. They are often found in proteins involved in chromatin organization, gene silencing, and heterochromatin formation. Chromodomains can mediate interactions with methylated histones, leading to the recruitment of chromatin-modifying enzymes and other proteins that regulate chromatin structure and function.

@@ -2,6 +2,7 @@
 title: Database Online Job Initiation
 createTime: 2024/04/30
 permalink: /blog/database-oj-init/
+excerpt: "Archived introductory database online judge problems, covering basic SQL and database administration fundamentals."
 tags:
   - Database
   - Homework

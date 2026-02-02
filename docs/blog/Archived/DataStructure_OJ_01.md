@@ -2,6 +2,7 @@
 title: Data Structure - Online Job 01
 createTime: 2024/03/14
 permalink: /blog/data-structure-oj-01/
+excerpt: "Archived online judge solutions for Data Structure OJ 01, featuring various algorithm implementations and problem solutions."
 tags:
   - Data Structure
   - Homework

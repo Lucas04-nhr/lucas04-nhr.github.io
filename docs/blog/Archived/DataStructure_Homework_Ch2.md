@@ -2,6 +2,7 @@
 title: Data Structure - Homework Chapter 2
 createTime: 2024/03/15
 permalink: /blog/data-structure-homework-chapter-2/
+excerpt: "Archived homework solutions for Data Structure Chapter 2, covering fundamental data structure implementations and applications."
 tags:
   - Data Structure
   - Homework

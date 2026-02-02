@@ -2,6 +2,7 @@
 title: Python - Online Job 02
 createTime: 2024/05/22
 permalink: /blog/python-oj-02/
+excerpt: "Archived Python online judge solutions featuring advanced programming techniques and comprehensive algorithm implementations."
 tags:
   - Python
   - Homework

@@ -2,6 +2,7 @@
 title: Data Structure - Online Job Basic
 createTime: 2024/03/13
 permalink: /blog/data-structure-oj-basic/
+excerpt: "Archived online judge solutions for fundamental Data Structure problems, covering basic algorithms and data structure implementations."
 tags:
   - Data Structure
   - Homework

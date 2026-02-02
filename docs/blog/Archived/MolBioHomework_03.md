@@ -2,6 +2,7 @@
 title: Molecular Biology Homework 03
 createTime: 2024/09/19
 permalink: /blog/molecular-biology-homework-03/
+excerpt: "Archived molecular biology homework addressing gene expression regulation and molecular signal transduction pathways."
 tags:
   - Molecular Biology
   - Homework
@@ -99,14 +100,12 @@ All the posts with "Archived" tag are old notes for backup only. They are migrat
 This slide illustrates the migration of different forms of DNA during gel electrophoresis, highlighting how the conformation of DNA affects its movement through the gel matrix.
 
 1. **Types of DNA Conformations**:
-
    - **Supercoiled DNA** (represented in section A): This form is tightly coiled and compact, allowing it to migrate faster through the gel.
    - **Relaxed Circular DNA** (section B): This DNA is less compact than supercoiled DNA, resulting in slower migration.
    - **Linear DNA** (section C): This form has a distinct linear structure and migrates at a rate that is intermediate between supercoiled and relaxed circular DNA.
    - **Open Circular DNA** (section D): This form is similar to relaxed circular DNA but has some nicks or breaks, affecting its migration speed.
 
 2. **Migration Behavior**:
-
    - The slide notes that supercoiled DNA molecules are more compact than relaxed ones, which allows them to migrate more rapidly during gel electrophoresis. The more compact the DNA, the easier it moves through the gel's pores.
 
 3. **Gel Electrophoresis**:
@@ -117,14 +116,12 @@ This slide illustrates the migration of different forms of DNA during gel electr
 这张幻灯片展示了在凝胶电泳过程中不同形式的 DNA 迁移情况，突出了 DNA 的构象如何影响其在凝胶基质中的迁移。
 
 1. **DNA 构象类型**：
-
    - **超螺旋 DNA**（在 A 区域表示）：这种形式紧密缠绕、紧凑，使其能够更快地在凝胶中迁移。
    - **松弛环状 DNA**（B 区域）：这种 DNA 比超螺旋 DNA 更松散，导致迁移速度较慢。
    - **线性 DNA**（C 区域）：这种形式具有明显的线性结构，迁移速度介于超螺旋和松弛环状 DNA 之间。
    - **开放环状 DNA**（D 区域）：这种形式类似于松弛环状 DNA，但有一些切口或断裂，影响其迁移速度。
 
 2. **迁移行为**：
-
    - 幻灯片指出，超螺旋 DNA 分子比松弛的分子更紧凑，这使它们在凝胶电泳过程中迁移更快。DNA 越紧凑，就越容易穿过凝胶的孔隙。
 
 3. **凝胶电泳**：
@@ -139,12 +136,10 @@ This slide illustrates the migration of different forms of DNA during gel electr
 This slide focuses on the concept of topoisomers—different forms of DNA that have the same number of base pairs but differ in their linking number, which affects their degree of supercoiling. It illustrates how these variations can be observed through gel electrophoresis.
 
 1. **Topoisomers**:
-
    - Defined as DNA forms that differ in topology, specifically in linking number ($Lk$), while maintaining the same base pair count (bps).
    - They exhibit different degrees of supercoiling, which influences their physical properties.
 
 2. **Gel Electrophoresis Results**:
-
    - **Lane 1**: Contains highly supercoiled DNA. It migrates as a single band due to its compact structure, which allows it to move quickly through the gel.
    - **Lane 2**: Represents DNA that has undergone some relaxation but not as much as in lane 3. This DNA migrates to a different position compared to the highly supercoiled DNA.
    - **Lane 3**: Shows DNA that has been treated with a type I topoisomerase for a longer duration than the DNA in lane 2. This treatment reduces the supercoiling and results in a further change in migration pattern.
@@ -158,12 +153,10 @@ This slide focuses on the concept of topoisomers—different forms of DNA that h
 这张幻灯片着重介绍了拓扑异构体的概念——这是指具有相同碱基对数目但连接数不同的 DNA 形式，连接数的不同会影响其超螺旋程度。
 
 1. **拓扑异构体**：
-
    - 定义为在拓扑结构上不同的 DNA 形式，具体表现为连接数（$Lk$）不同，但碱基对数目相同。
    - 它们表现出不同程度的超螺旋，这影响了它们的物理特性。
 
 2. **凝胶电泳结果**：
-
    - **Lane 1**：含有高度超螺旋的 DNA。由于其紧凑的结构，它以单一带状迁移，能够快速通过凝胶。
    - **Lane 2**：代表经历了一定程度松弛的 DNA，但不及 **Lane 3**。这种 DNA 与高度超螺旋的 DNA 相比迁移至不同位置。
    - **Lane 3**：展示了经过比 **Lane 2** 更长时间处理的 DNA，使用了 I 型拓扑异构酶。这种处理减少了超螺旋，并导致迁移模式的进一步改变。

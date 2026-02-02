@@ -2,6 +2,7 @@
 title: Instrumental Analysis Chapter 02 Review
 createTime: 2024/04/18
 permalink: /blog/instrumental-analysis-chapter-02-review/
+excerpt: "Archived review notes on Instrumental Analysis Chapter 02, covering analytical techniques and instrumentation principles."
 tags:
   - Instrumental Analysis
   - Review

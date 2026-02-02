@@ -2,6 +2,7 @@
 title: Bioinformatics - Chapter 01
 createTime: 2024/02/26
 permalink: /blog/bioinformatics-chap01/
+excerpt: "Archived review notes on Bioinformatics Chapter 01, covering fundamental concepts and principles in the field."
 tags:
   - Bioinformatics
   - Review

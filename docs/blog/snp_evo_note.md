@@ -337,7 +337,7 @@ p <- ggtree(tree) +
 ggsave("phylo_tree_ggtree.pdf", p, width = 6, height = 6)
 ```
 
-@tab tree_visualization_gffread.md
+@tab tree_visualization_gffread.sh
 ```bash
 # Using gffread to extract CDS sequences from a genome
 # 提取一个基因组所有 CDS 序列

@@ -43,6 +43,8 @@ If you find my work helpful and would like to support me, consider buying me a c
 
 @[qrcode svg title="Ko-Fi" align="center" dark="#FF7900" light="#EFF0F3"](https://ko-fi.com/lucas04)
 
+@[qrcode svg title="Buy me a Coffee" align="center" dark="#FFDD04" light="#EFF0F3"](https://buymeacoffee.com/lucas04)
+
 :::
 
 ::: note
@@ -64,6 +66,12 @@ If you find my work helpful and would like to support me, consider buying me a c
     icon="cib:ko-fi"
     title="Ko-Fi"
     href="https://ko-fi.com/lucas04" >
+  </LinkCard>
+
+  <LinkCard 
+    icon="simple-icons:buymeacoffee"
+    title="Buy me a Coffee"
+    href="https://buymeacoffee.com/lucas04" >
   </LinkCard>
 
 - I hate Weixin/WeChat due to several reasons, so no QR code for Weixin Pay.

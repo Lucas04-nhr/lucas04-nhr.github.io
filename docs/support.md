@@ -27,6 +27,14 @@ list:
     avatar: https://github.com/Shiroko114514.png
 ---
 
+## Pay for some of my work & documents {#tip}
+
+You can use Stripe to pay for some of my work and documents. If you have any questions, please feel free to contact me.
+
+::: note
+Paying for services is **not the same as supporting me**. You'll not be listed in this page. If you want to support me, consider buying me a coffee or donating through one of the methods below.
+:::
+
 ## Support Me
 
 If you find my work helpful and would like to support me, consider buying me a coffee! Your support helps me continue creating and sharing valuable content.

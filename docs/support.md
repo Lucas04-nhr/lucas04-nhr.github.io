@@ -74,25 +74,8 @@ If you find my work helpful and would like to support me, consider buying me a c
     href="https://buymeacoffee.com/lucas04" >
   </LinkCard>
 
-- You can also use Stripe to automatically pay every month.
+- You can also use ::bi:stripe:: Stripe to automatically pay every month. See [Shop](/shop/) page for more details.
 
-  <LinkCard 
-    icon="mage:stripe"
-    title="Stripe (monthly billing ￥9.99)"
-    href="https://buy.stripe.com/3cI9ASabY4fubBbcvFg3600" >
-  </LinkCard>
-
-  <LinkCard 
-    icon="mage:stripe"
-    title="Stripe (monthly billing ￥29.99)"
-    href="https://buy.stripe.com/fZu8wO5VI7rGax72V5g3602" >
-  </LinkCard>
-
-  <LinkCard 
-    icon="mage:stripe"
-    title="Stripe (monthly billing ￥49.99)"
-    href="https://buy.stripe.com/9B63cu4RE4fudJj2V5g3603" >
-  </LinkCard>
 
 - I hate Weixin/WeChat due to several reasons, so no QR code for Weixin Pay.
 :::
@@ -101,13 +84,7 @@ If you find my work helpful and would like to support me, consider buying me a c
 
 ## Pay for some of my work & documents {#tip}
 
-You can use Stripe to pay for some of my work and documents. If you have any questions, please feel free to contact me.
-
-<LinkCard 
-  icon="mage:stripe"
-  title="Guidance related to HUST Graduation Thesis Template"
-  href="https://buy.stripe.com/4gMfZg97U7rGeNndzJg3601" >
-</LinkCard>
+You can use Stripe to pay for some of my work and documents on [shop](/shop/) page. If you have any questions, please feel free to contact me.
 
 ::: note
 Paying for services is **not the same as supporting me**. You'll not be listed in this page. If you want to support me, consider buying me a coffee or donating through one of the methods above.

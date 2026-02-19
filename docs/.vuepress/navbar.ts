@@ -25,14 +25,14 @@ export const enNavbar = defineNavbarConfig([
     ]
   },
   {
-    text: 'Information',
+    text: 'Miscellaneous',
     icon: 'mdi:about-circle-outline',
     items: [
-      { text: 'About', icon: 'icon-park-twotone:people', link: '/about/' },
       { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
       { text: 'Support', icon: 'ic:round-attach-money', link: '/support/' },
       { text: 'Shop', icon: 'ic:outline-shopping-bag', link: '/shop/' },
       { text: 'Tools', icon: 'mdi:tools', link: '/tools/' },
     ]
   },
+  { text: 'About', icon: 'icon-park-twotone:people', link: '/about/' },
 ])

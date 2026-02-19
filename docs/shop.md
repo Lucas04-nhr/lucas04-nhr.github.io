@@ -5,13 +5,19 @@ comment: false
 copyright: false
 ---
 
-Here lists some of my products and services that you can buy via ::bi:stripe::Stripe. Your support helps me continue creating and sharing valuable content.
+Here lists some of my products and services that you can buy via ::simple-icons:patreon::Patreon or ::bi:stripe::Stripe. Your support helps me continue creating and sharing valuable content.
 
 ## Monthly Subscription {#monthly-subscription}
 
 ### Patreon {#patreon-subscription}
 
 Click [here](https://www.patreon.com/lucas04) to support me on Patreon and gain access to exclusive content, early releases, and behind-the-scenes updates.
+
+<LinkCard 
+  title="Patreon Profile"
+  href="https://www.patreon.com/lucas04" >
+</LinkCard>
+
 
 ### Stripe {#stripe-subscription}
 

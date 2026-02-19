@@ -30,7 +30,8 @@ export const enNavbar = defineNavbarConfig([
     items: [
       { text: 'About', icon: 'icon-park-twotone:people', link: '/about/' },
       { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
-      { text: 'Buy me a coffee', icon: 'ic:round-attach-money', link: '/support/' },
+      { text: 'Support', icon: 'ic:round-attach-money', link: '/support/' },
+      { text: 'Shop', icon: 'ic:outline-shopping-bag', link: '/shop/' },
       { text: 'Tools', icon: 'mdi:tools', link: '/tools/' },
     ]
   },

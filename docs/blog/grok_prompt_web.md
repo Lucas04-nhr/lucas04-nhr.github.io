@@ -14,7 +14,7 @@ All content on this page is the intellectual property of ::bxl:xai::xAI LLC. If 
 
 This page is provided **AS IS** without any warranties or guarantees. The prompts are shared for educational and research purposes only. Use of this content is at your own risk, and I am not responsible for any direct or indirect damages arising from its use.
 
-**This page itself is licensed under [CC-BY-NC-SA-4.0](#doc-copyright).** You are free to share and adapt this content under the terms of this license.
+**This page itself is licensed under [CC-BY-NC-SA-4.0](#doc-copyright) posted on both my blog and [::mdi:twitter::Twitter](https://twitter.com/i/status/2027219426232459286).** You are free to share and adapt this content under the terms of this license.
 
 ## Introduction
 

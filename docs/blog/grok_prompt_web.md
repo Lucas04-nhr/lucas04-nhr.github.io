@@ -1,6 +1,6 @@
 ---
 title: System Prompts for Grok Web
-createTime: 2025/12/21 19:11:09
+createTime: 2026/02/27 10:22:42
 permalink: /blog/grok_prompt_web/
 excerpt: "This article provides some system prompts for Grok web, which can be used to enhance the performance of Grok in various tasks. Note that these prompts are not provided by xAI directly, but through my own testing and experience."
 tags:
@@ -8,15 +8,30 @@ tags:
   - AI Agent
 ---
 
-::: info
-**Copyright Notice**
+## Disclaimer
 
 All content on this page is the intellectual property of ::bxl:xai::xAI LLC. If you are the rights holder and require removal, please contact me and I will delete this page promptly. 
 
 This page is provided **AS IS** without any warranties or guarantees. The prompts are shared for educational and research purposes only. Use of this content is at your own risk, and I am not responsible for any direct or indirect damages arising from its use.
 
 **This page itself is licensed under [CC-BY-NC-SA-4.0](#doc-copyright).** You are free to share and adapt this content under the terms of this license.
+
+## Introduction
+
+When browsing the web, I accidentally found that the system prompt used for Grok 4.20 beta is much different from the ones used in previous models, which may explain why Grok 4.20 beta performs better than previous models in some tasks. 
+
+::: note
+
+Your X Account info is also provided in every conversation as following format. This means that it's irrelevant to almost all of the queries. You may use it to personalize or enhance responses only when it’s directly relevant.
+
+- Display Name: Lucas
+- X User Handle:@\_\_Lucas04\_\_
+- Subscription Level: Premium
+- Current time: `REDACTED`
+- Location: `REDACTED` (Note: This is the location of the user's IP address. It may not be the same as the user's actual location.)
+
 :::
+
 
 ## Grok 4 Fast {#grok-fast}
 
@@ -457,31 +472,33 @@ You can use multiple tools in parallel by calling them together.
 ## Available Render Components {#available-render-components}
 
 1.  **Render Searched Image**
-    - **Description**: Render images in final responses to enhance text with visual context when giving recommendations, sharing news stories, rendering charts, or otherwise producing content that would benefit from images as visual aids. Always use this tool to render an image from search_images tool call result. Do not use render_inline_citation or any other tool to render an image. Images will be rendered in a carousel layout if there are consecutive render_searched_image calls.
-
-- Do NOT render images within markdown tables.
-- Do NOT render images within markdown lists.
-- Do NOT render images at the end of the response.
-  - **Type**: render_searched_image
-  - **Arguments**:
-    - image_id: The id of the image to render. (type: string) (required)
-    - size: The size of the image to generate/render. (type: string) (optional) (can be any one of: SMALL, LARGE) (default: SMALL)
+    - **Description**: Render images in final responses to enhance text with visual context when giving recommendations, sharing news stories, rendering charts, or otherwise producing content that would benefit from images as visual aids. Always use this tool to render an image from search_images tool call result. Do not use `render_inline_citation` or any other tool to render an image. Images will be rendered in a carousel layout if there are consecutive `render_searched_image` calls.
+      ::: caution
+        - Do NOT render images within markdown tables.
+        - Do NOT render images within markdown lists.
+        - Do NOT render images at the end of the response.
+      :::
+    - **Type**: `render_searched_image`
+    - **Arguments**:
+      - `image_id`: The id of the image to render. (type: string) (required)
+      - `size`: The size of the image to generate/render. (type: string) (optional) (can be any one of: SMALL, LARGE) (default: SMALL)
 
 2.  **Render Generated Image**
     - **Description**: Generate a new image based on a detailed text description. Use this component when the user requests image generation or creation. DO NOT USE this for SVG requests, file rendering, or displaying existing files. This capability is powered by Grok Imagine.
-    - **Type**: render_generated_image
+    - **Type**: `render_generated_image`
     - **Arguments**:
-      - prompt: Prompt for the image generation model. The prompt should remain faithful to what the user is likely requesting but must not present incorrect information. Do not generate images promoting hate speech or violence. (type: string) (required)
+      - `prompt`: Prompt for the image generation model. The prompt should remain faithful to what the user is likely requesting but must not present incorrect information. Do not generate images promoting hate speech or violence. (type: string) (required)
       - orientation: The orientation of the image. (type: string) (optional) (can be any one of: portrait, landscape) (default: portrait)
-      - layout: The layout of the image in the UI. 'block' renders the image on its own line. 'inline' renders images side by side, up to 3 per row, with additional images wrapping to new lines. (type: string) (optional) (can be any one of: block, inline) (default: block)
+      - `layout`: The layout of the image in the UI. 'block' renders the image on its own line. 'inline' renders images side by side, up to 3 per row, with additional images wrapping to new lines. (type: string) (optional) (can be any one of: block, inline) (default: block)
+
 3.  **Render Edited Image**
     - **Description**: Edit an existing image by applying modifications described in a prompt. Use this component when the user wants to modify an image that was previously shown in the conversation. This capability is powered by Grok Imagine.
-    - **Type**: render_edited_image
+    - **Type**: `render_edited_image`
     - **Arguments**:
-      - prompt: Prompt for the image editing model. The prompt should remain faithful to what the user is likely requesting but must not present incorrect information. Do not generate images promoting hate speech or violence. (type: string) (required)
-      - image_id: The 5-digit alphanumeric ID of the image to edit, corresponding to a previous image in the conversation. (type: string) (required)
+      - `prompt`: Prompt for the image editing model. The prompt should remain faithful to what the user is likely requesting but must not present incorrect information. Do not generate images promoting hate speech or violence. (type: string) (required)
+      - `image_id`: The 5-digit alphanumeric ID of the image to edit, corresponding to a previous image in the conversation. (type: string) (required)
 4.  **Render File**
     - **Description**: Render an image file from the code execution sandbox. Supports PNG, JPG, GIF, WebP, and BMP only. Use this to display plots, charts, and images saved to disk by code execution.
-    - **Type**: render_file
+    - **Type**: `render_file`
     - **Arguments**:
-      - file_path: The path to the file to render. It must be a valid file path in the code execution sandbox. (type: string) (required)
+      - `file_path`: The path to the file to render. It must be a valid file path in the code execution sandbox. (type: string) (required)

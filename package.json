@@ -45,6 +45,7 @@
     "pyodide": "^0.29.3",
     "react": "19.2.1",
     "shiki": "^3.23.0",
-    "shiki-twoslash": "3.1.2"
+    "shiki-twoslash": "3.1.2",
+    "swiper": "^12.1.2"
   }
 }

@@ -28,14 +28,7 @@ permalink: /docs/hust-gp-template/
 ::: info
 由于学校并未提供适用于答辩的 PPT 模板，故我参照 [liu-qilong/college-beamer](https://github.com/liu-qilong/college-beamer) 适配了一个华中科技大学的答辩 beamer 模板，可以前往该仓库查看使用方法。
 
-<LinkCard 
-  icon="ic:round-file-copy"
-  title="LaTeX Beamer 模板 HUST 适配版"
-  href="https://github.com/liu-qilong/college-beamer/pull/33" > 
-  
-  目前仍处在 PR 阶段，后续可能会合并进主分支
-
-</LinkCard>
+<RepoCard repo="liu-qilong/college-beamer" />
 
 :::
 

@@ -9,28 +9,26 @@ tags:
   - Multi-omics
 ---
 
-> Reference: [R for Data Science](https://r4ds.had.co.nz)
->
-> The book updated to 2nd ed. on July, 2023, here’s a [link](https://r4ds.hadley.nz) to the official website.
-
-## R for Bioinformatics Cookbook {#cookbook}
-
-<LinkCard
-  icon="ic:round-file-copy"
-  title="GitHub Repository"
-  href="https://github.com/Lucas04-nhr/Review-of-R" >
-
-The original repository of this document. Updated on late 2023.
-
-</LinkCard>
-
 ::: note
+Reference: [R for Data Science](https://r4ds.had.co.nz)
+
+The book updated to 2nd ed. on July, 2023, here’s a [link](https://r4ds.hadley.nz) to the official website.
+
+---
+
 You can use the "::ic:outline-local-printshop::" function near "On this page" of your desktop browser to save this page as a PDF file for offline reading.
 
 ---
 
 The purpose of this material **not only** to deal with the "R for Data Science" course final exam, or in the subsequent learning process need to use the R language to deal with data and draw images of one of the effective reference materials. If you think this project is helpful to your R language learning and usage, welcome to click on **"Star"** and **follow** me, or buy me a coffee [here](/support/), also welcome anyone to submit bug reports through **"issue"** and participate in cooperation through **"Pull Request"**.
 :::
+
+## GitHub Repository {#github-repository}
+
+Here's the GitHub repository for this project, which contains all the code and data used in the course, updated on late 2023.
+
+<RepoCard repo="Lucas04-nhr/Review-of-R" />
+
 
 ## Table of Contents {#table-of-contents}
 

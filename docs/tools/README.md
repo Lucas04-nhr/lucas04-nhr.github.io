@@ -21,6 +21,24 @@ externalLinkIcon: false
 
 :::
 
+## Backgrounds {#backgrounds}
+
+Here's the monthly updated background images of ::arcticons:zenless-zone-zero::Zenless Zone Zero. You can use them as wallpapers or for other purposes.
+
+::: flex around center
+
+![For desktop devices](https://static.lucas04.top/static/background.jpg)
+
+![For mobile devices](https://static.lucas04.top/static/background_mobile.jpg)
+
+:::
+
+::: note
+  The images are collected from the official website. All rights reserved by ::simple-icons:mihoyo =3em::, as well as its affiliates and subsidiaries. 
+  
+  The link here is only for sharing and downloading, not for commercial use. The copyrightholder may request to remove the link at any time. Please contact me if you have any questions.
+:::
+
 
 ## Useful Tools {#useful-tools}
 

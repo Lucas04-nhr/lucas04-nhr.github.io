@@ -7,14 +7,9 @@ createTime: 2025/12/03 19:58:43
 permalink: /docs/hust-gp-template/
 ---
 
-<LinkCard 
-  icon="mdi:github"
-  title="项目 GitHub 主页"
-  href="https://github.com/Lucas04-nhr/HUST-GP-Template" > 
-  
-  点击前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~
+点击前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~
 
-</LinkCard>
+<RepoCard repo="Lucas04-nhr/HUST-GP-Template" />
 
 ::: note
 截至 2026 年 1 月 5 日，所有相关报告的模板均已完善，后续若无重大改动，仓库将进入仅维护状态。

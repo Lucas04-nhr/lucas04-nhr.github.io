@@ -36,6 +36,9 @@ list:
       -
         icon: github
         link: https://github.com/chide-org
+      -
+        icon: mdi:twitter
+        link: https://twitter.com/huijun_wang_
   -
     name: 17lwl
     link: https://lwstkhyl.me/

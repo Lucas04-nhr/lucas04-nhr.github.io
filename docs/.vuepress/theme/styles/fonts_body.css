@@ -5,9 +5,25 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 @font-face {
@@ -17,9 +33,25 @@
   font-weight: 400;
   font-style: italic;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 @font-face {
@@ -29,9 +61,25 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 @font-face {
@@ -41,9 +89,25 @@
   font-weight: 500;
   font-style: italic;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 @font-face {
@@ -53,9 +117,25 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 @font-face {
@@ -65,9 +145,25 @@
   font-weight: 700;
   font-style: italic;
   font-display: swap;
-  font-feature-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 /* Apply Google Sans Flex (English) + Noto Sans SC (Chinese) to page body text only.
@@ -76,9 +172,10 @@
 */
 
 :root {
-  --site-body-font-fallback: system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", sans-serif;
+  --site-body-font-fallback:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
 }
 
 /* Apply new body fonts broadly across the site, excluding code/math which are
@@ -114,8 +211,8 @@ ul,
 ol,
 details,
 summary {
-  font-family: "Google Sans Flex", "Noto Sans SC",
-    var(--site-body-font-fallback);
+  font-family:
+    "Google Sans Flex", "Noto Sans SC", var(--site-body-font-fallback);
   font-weight: 400;
   /* allow variable font axes if supported */
   font-variation-settings: "wght" 400;
@@ -158,17 +255,25 @@ pre,
 samp {
   font-family: var(--vp-font-family-mono);
   font-weight: var(--vp-font-weight-mono);
-  font-variation-settings: "liga" 1, "calt" 1, "cv01" 1, "cv02" 1, "cv33" 1,
-    "cv34" 1, "cv35" 1, "cv36" 1, "cv61" 1, "cv62" 1, "ss03" 1, "ss05" 1,
-    "ss06" 1, "ss07" 1, "ss08" 1, "ss09" 1, "ss10" 1, "ss11" 1;
-}
-
-/* Ensure KaTeX/math elements keep their original rendering font */
-.katex,
-.katex *,
-.mjx-chtml,
-.mjx-chtml * {
-  font-family: initial;
+  font-variation-settings:
+    "liga" 1,
+    "calt" 1,
+    "cv01" 1,
+    "cv02" 1,
+    "cv33" 1,
+    "cv34" 1,
+    "cv35" 1,
+    "cv36" 1,
+    "cv61" 1,
+    "cv62" 1,
+    "ss03" 1,
+    "ss05" 1,
+    "ss06" 1,
+    "ss07" 1,
+    "ss08" 1,
+    "ss09" 1,
+    "ss10" 1,
+    "ss11" 1;
 }
 
 /* KaTeX: force \mathrm (upright roman in math mode) to use math fonts
@@ -177,8 +282,8 @@ samp {
 .katex .mathrm,
 .katex .mord.mathrm,
 .katex .mord.mathrm.mtight {
-  font-family: "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", serif !important;
+  font-family:
+    "KaTeX_Main", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
 }
 
 /* KaTeX: other math font families */
@@ -186,44 +291,49 @@ samp {
 .katex .mathit,
 .katex .mord.mathit,
 .katex .mord.mathit.mtight {
-  font-family: "KaTeX_Math", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", serif !important;
+  font-family:
+    "KaTeX_Math", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
 }
 
 /* Bold math (\mathbf) */
 .katex .mathbf,
 .katex .mord.textbf,
 .katex .mord.boldsymbol {
-  font-family: "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", serif !important;
+  font-family:
+    "KaTeX_Main", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
 }
 
 /* Sans-serif math (\mathsf) */
 .katex .mathsf {
-  font-family: "KaTeX_SansSerif", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", sans-serif !important;
+  font-family:
+    "KaTeX_SansSerif", "STIX Two Math", "Latin Modern Math", "Cambria Math",
+    sans-serif !important;
 }
 
 /* Typewriter/monospace math (\mathtt) */
 .katex .mathtt {
-  font-family: "KaTeX_Typewriter", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", monospace !important;
+  font-family:
+    "KaTeX_Typewriter", "STIX Two Math", "Latin Modern Math", "Cambria Math",
+    monospace !important;
 }
 
 /* Blackboard bold (\mathbb) */
 .katex .mathbb {
-  font-family: "KaTeX_AMS", "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
+  font-family:
+    "KaTeX_AMS", "KaTeX_Main", "STIX Two Math", "Latin Modern Math",
     "Cambria Math", serif !important;
 }
 
 /* Fraktur (\mathfrak) */
 .katex .mathfrak {
-  font-family: "KaTeX_Fraktur", "STIX Two Text", "STIX Two Math",
-    "Latin Modern Math", serif !important;
+  font-family:
+    "KaTeX_Fraktur", "STIX Two Text", "STIX Two Math", "Latin Modern Math",
+    serif !important;
 }
 
 /* Calligraphic (\mathcal) */
 .katex .mathcal {
-  font-family: "KaTeX_Caligraphic", "STIX Two Math", "Latin Modern Math",
-    "Cambria Math", serif !important;
+  font-family:
+    "KaTeX_Caligraphic", "STIX Two Math", "Latin Modern Math", "Cambria Math",
+    serif !important;
 }

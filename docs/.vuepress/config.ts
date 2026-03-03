@@ -146,7 +146,7 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/config/plugins/code-highlight/
      */
     codeHighlighter: {
-      twoslash: true, // 启用 twoslash
+      // twoslash: true, // 启用 twoslash
       whitespace: true, // 启用 空格/Tab 高亮
       lineNumbers: true, // 启用行号
     },

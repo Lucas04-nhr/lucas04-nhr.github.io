@@ -55,11 +55,11 @@ content right
 - [x] Task List 3
 - [x] Task List 4
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
 | col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| col 2 is      |   centered    |   $12 |
+| zebra stripes |   are neat    |    $1 |
 
 > quote content
 >
@@ -84,7 +84,8 @@ content right
 
 **demo wrapper：**
 
-::: demo-wrapper title="Demo" no-padding height="200px"
+::: window title="Demo" no-padding height="200px"
+
 <style scoped>
 .open-door {
   display: flex;
@@ -106,9 +107,9 @@ content right
 **code block：**
 
 ```js whitespace
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 
 // [!code word:obj]
 const obj = {
@@ -116,12 +117,13 @@ const obj = {
     deep: {
       deep: {
         deep: {
-          value: 'this is to long text. this is to long text. this is to long text. this is to long text.', // [!code highlight]
-        }
-      }
-    }
-  }
-}
+          value:
+            "this is to long text. this is to long text. this is to long text. this is to long text.", // [!code highlight]
+        },
+      },
+    },
+  },
+};
 ```
 
 **code groups：**
@@ -130,17 +132,17 @@ const obj = {
 @tab tab1
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 @tab tab2
 
 ```ts
-const a: number = 1
-const b: number = 2
-const c: number = a + b
+const a: number = 1;
+const b: number = 2;
+const c: number = a + b;
 ```
 
 :::
@@ -149,15 +151,15 @@ const c: number = a + b
 
 ```ts
 function foo() {
-  const a = 1 // [!code highlight]
+  const a = 1; // [!code highlight]
 
-  console.log(a)
+  console.log(a);
 
-  const b = 2 // [!code ++]
-  const c = 3 // [!code --]
+  const b = 2; // [!code ++]
+  const c = 3; // [!code --]
 
-  console.log(a + b + c) // [!code error]
-  console.log(a + b) // [!code warning]
+  console.log(a + b + c); // [!code error]
+  console.log(a + b); // [!code warning]
 }
 ```
 
@@ -165,7 +167,7 @@ function foo() {
 
 ```ts
 function foo() {
-  const a = 1 // [!code focus]
+  const a = 1; // [!code focus]
 }
 ```
 
@@ -173,9 +175,9 @@ function foo() {
 note content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -184,9 +186,9 @@ const c = a + b
 content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -195,9 +197,9 @@ const c = a + b
 content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -206,9 +208,9 @@ const c = a + b
 content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -217,9 +219,9 @@ const c = a + b
 content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -228,9 +230,9 @@ const c = a + b
 content [link](https://github.com/pengzhanbo) `inline code`
 
 ```js
-const a = 1
-const b = 2
-const c = a + b
+const a = 1;
+const b = 2;
+const c = a + b;
 ```
 
 :::
@@ -271,9 +273,9 @@ const c = a + b
 @tab Javascript
 
 ```js
-const a = 'So Awesome!'
-const app = document.querySelector('#app')
-app.appendChild(window.document.createElement('small')).textContent = a
+const a = "So Awesome!";
+const app = document.querySelector("#app");
+app.appendChild(window.document.createElement("small")).textContent = a;
 ```
 
 @tab CSS

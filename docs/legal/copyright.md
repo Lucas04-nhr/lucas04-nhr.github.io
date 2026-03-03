@@ -1,8 +1,9 @@
 ---
 title: Copyright Statement
-permalink: /copyright/
+permalink: /legal/copyright/
 comment: false
 copyright: false
+createTime: 2026/03/03 11:12:48
 ---
 
 ::: note

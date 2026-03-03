@@ -39,8 +39,8 @@ export const enNavbar = defineNavbarConfig([
     text: 'Legal',
     icon: 'mdi:scale-balance',
     items: [
-      { text: 'Copyright Statement', icon: 'mdi:copyright', link: '/copyright/' },
-      { text: 'Privacy Policy', icon: 'mdi:shield-lock-outline', link: '/privacy/' },
+      { text: 'Copyright Statement', icon: 'mdi:copyright', link: '/legal/copyright/' },
+      { text: 'Privacy Policy', icon: 'mdi:shield-lock-outline', link: '/legal/privacy/' },
     ]
   },
 ])

@@ -1,11 +1,10 @@
 ---
 title: Privacy Policy
-permalink: /privacy/
+permalink: /legal/privacy/
 comment: false
 copyright: false
+createTime: 2026/03/03 11:17:20
 ---
-
-## Privacy Policy
 
 This Privacy Policy applies to `lucas04.top` and all related subdomains.
 

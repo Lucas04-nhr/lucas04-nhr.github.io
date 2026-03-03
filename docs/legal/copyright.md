@@ -13,7 +13,10 @@ If you are a user in Chinese mainland, you should note that the domain `lucas04.
 
 ---
 
-Unless otherwise stated, all content and assets on `lucas04.top` and its associated subdomains are ::mdi:copyright:: Lucas. All rights reserved.
+Unless otherwise stated, all content and assets on `lucas04.top` and its associated subdomains are 
+::: center
+  **::mdi:copyright:: Lucas. All rights reserved.**{style="font-size: 1.2em;"}
+:::
 
 ## License of Page
 

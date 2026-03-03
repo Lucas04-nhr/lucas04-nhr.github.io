@@ -3,6 +3,7 @@ title: Privacy Policy
 permalink: /legal/privacy/
 comment: false
 copyright: false
+changelog: true
 createTime: 2026/03/03 11:17:20
 ---
 

@@ -9,3 +9,4 @@ comment: false
 
 - [R for Bioinformatics Cookbook](/docs/r-course/)
 - [HUST Graduation Project Template Usage Guide](/docs/hust-gp-template/)
+- [StayUP Schedule](/docs/stayup-schedule/)

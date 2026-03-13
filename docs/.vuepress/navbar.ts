@@ -22,6 +22,7 @@ export const enNavbar = defineNavbarConfig([
       { text: 'All', link: '/docs/' },
       { text: 'R for Bioinformatics Cookbook', link: '/docs/r-course/' },
       { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
+      { text: 'StayUP Schedule', link: '/docs/stayup-schedule/' },
     ]
   },
   {

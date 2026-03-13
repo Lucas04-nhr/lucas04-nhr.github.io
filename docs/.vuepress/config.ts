@@ -107,7 +107,9 @@ export default defineUserConfig({
     lastUpdated: {
       formatOptions: { dateStyle: "short", timeStyle: "short" },
     },
-    contributors: false,
+    contributors: {
+      mode: "block", // 显示贡献者名字，设置为 'block' 则显示头像和名字
+    },
     changelog: false,
 
     /**

@@ -26,7 +26,9 @@ export default defineThemeConfig({
     { icon: "github", link: "https://github.com/Lucas04-nhr" },
     { icon: "gitlab", link: "https://gitlab.com/Lucas04" },
     { icon: "mdi:twitter", link: "https://twitter.com/__Lucas04__" },
-    { icon: "bluesky", link: "https://bsky.app/profile/lucas04.top" },
+    { icon: "mdi:facebook", link: "https://www.facebook.com/haorannie04" },
+    { icon: "mdi:instagram", link: "https://instagram.com/lucas04_11" },
+    { icon: "bluesky", link: "https://bsky.app/profile/lucas.lucas04.top" },
     { icon: "discord", link: "https://discord.com/users/1078951739576815626" },
     { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
     { icon: "zhihu", link: "https://www.zhihu.com/people/NHR-zh-cn" },
@@ -77,12 +79,12 @@ export default defineThemeConfig({
        * @see https://theme-plume.vuejs.press/config/theme/#profile
        */
       profile: {
-        avatar: "https://avatars.githubusercontent.com/u/117806313",
+        avatar: "https://github.com/Lucas04-nhr.png",
         name: "Lucas",
-        description: "An undergraduate student studying bioinformatics.",
+        description: "A student studying bioinformatics.",
         circle: true,
-        location: "China",
-        organization: "Huazhong University of Science and Technology",
+        location: "Denmark",
+        organization: "Københavns Universitet",
       },
 
       navbar: enNavbar,

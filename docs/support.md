@@ -74,9 +74,6 @@ If you find my work helpful and would like to support me, consider buying me a c
     href="https://buymeacoffee.com/lucas04" >
   </LinkCard>
 
-- You can also use ::bi:stripe:: Stripe to automatically pay every month. See [Shop](/shop/) page for more details.
-
-
 - I hate Weixin/WeChat due to several reasons, so no QR code for Weixin Pay.
 :::
 

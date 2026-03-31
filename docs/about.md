@@ -23,6 +23,10 @@ copyright: false
 
 I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
 
+::: note
+I'm currently admitted to MSc. of Bioinformatics at Københavns Universitet (KU). Since Sept. 2026, I will be a graduate student at KU, and I will continue to pursue my passion for bioinformatics and contribute to the field with my knowledge and skills.
+:::
+
 ## About Me {#basic}
 
 - 🎓 **Education:** Studying Bioinformatics at HUST.
@@ -107,9 +111,15 @@ You can contact me via [email](https://go.lucas04.top/connect){.no-icon}, and so
 </LinkCard>
 
 <LinkCard 
+  icon="ri:bluesky-fill"
+  title="Bluesky"
+  href="https://bsky.app/profile/lucas.lucas04.top" > 
+</LinkCard>
+
+<LinkCard 
   icon="mdi:facebook"
   title="Facebook"
-  href="https://fb.com/lucas.04.n" > 
+  href="https://fb.com/haorannie04" > 
 </LinkCard>
 
 <LinkCard 

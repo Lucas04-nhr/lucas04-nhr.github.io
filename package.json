@@ -20,7 +20,7 @@
     "typescript": "^5.9.3",
     "vue": "^3.5.32",
     "vuepress": "2.0.0-rc.28",
-    "vuepress-theme-plume": "1.0.0-rc.193"
+    "vuepress-theme-plume": "1.0.0-rc.196"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -38,7 +38,7 @@
     "dashjs": "^5.1.1",
     "echarts": "^6.0.0",
     "flowchart.ts": "^3.0.1",
-    "hls.js": "^1.6.15",
+    "hls.js": "^1.6.16",
     "mermaid": "^11.14.0",
     "mpegts.js": "^1.8.0",
     "prismjs": "^1.30.0",

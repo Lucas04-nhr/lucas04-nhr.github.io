@@ -197,7 +197,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-R.ttf")
     format("truetype");
-  font-weight: 500;
+  font-weight: 450;
   font-style: normal;
   font-display: swap;
 }
@@ -206,7 +206,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-M.ttf")
     format("truetype");
-  font-weight: 600;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -224,7 +224,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-B.ttf")
     format("truetype");
-  font-weight: 700;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -342,33 +342,35 @@ samp {
 /* When user selects Traditional Chinese, prefer the two Traditional fonts
    so that mixed-script rendering uses the intended glyph shapes. This is
    scoped to body/content elements so code blocks and KaTeX are unaffected. */
-html.zh-traditional body,
-html.zh-traditional main,
-html.zh-traditional article,
-html.zh-traditional .plume-article,
-html.zh-traditional .vp-doc,
-html.zh-traditional .markdown,
-html.zh-traditional p,
-html.zh-traditional li,
-html.zh-traditional blockquote,
-html.zh-traditional table,
-html.zh-traditional td,
-html.zh-traditional th,
-html.zh-traditional a {
+.zh-traditional body,
+.zh-traditional main,
+.zh-traditional article,
+.zh-traditional .plume-article,
+.zh-traditional .vp-doc,
+.zh-traditional .markdown,
+.zh-traditional p,
+.zh-traditional li,
+.zh-traditional blockquote,
+.zh-traditional table,
+.zh-traditional td,
+.zh-traditional th,
+.zh-traditional a{
   font-family:
-    "Google Sans Flex", FanWunHak-M, "Noto Sans TC",
+    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
     var(--site-body-font-fallback);
+  font-weight: 500;
   font-variation-settings: "wght" 500;
 }
 
-html.zh-traditional h1,
-html.zh-traditional h2,
-html.zh-traditional h3,
-html.zh-traditional h4,
-html.zh-traditional h5,
-html.zh-traditional h6 {
+.zh-traditional h1,
+.zh-traditional h2,
+.zh-traditional h3,
+.zh-traditional h4,
+.zh-traditional h5,
+.zh-traditional h6,
+.zh-traditional a.outline-link {
   font-family:
-    "Google Sans Flex", FanWunHak-B, "Noto Sans TC",
+    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
     var(--site-body-font-fallback);
   font-weight: 550;
   font-variation-settings: "wght" 550;

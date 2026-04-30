@@ -358,7 +358,7 @@ html.zh-traditional a {
   font-family:
     "Google Sans Flex", FanWunHak-M, "Noto Sans TC",
     var(--site-body-font-fallback);
-  font-variation-settings: "wght" 550;
+  font-variation-settings: "wght" 500;
 }
 
 html.zh-traditional h1,
@@ -368,15 +368,7 @@ html.zh-traditional h4,
 html.zh-traditional h5,
 html.zh-traditional h6 {
   font-family:
-    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
-    var(--site-body-font-fallback);
-  font-weight: 550;
-  font-variation-settings: "wght" 550;
-}
-
-html.zh-traditional .vp-doc-aside-outline.has-outline ul {
-  font-family:
-    "FanWunHak", "Google Sans Flex", "Noto Sans TC",
+    "Google Sans Flex", FanWunHak-B, "Noto Sans TC",
     var(--site-body-font-fallback);
   font-weight: 550;
   font-variation-settings: "wght" 550;

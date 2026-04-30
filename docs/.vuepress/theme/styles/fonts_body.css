@@ -368,7 +368,8 @@ samp {
 .zh-traditional h4,
 .zh-traditional h5,
 .zh-traditional h6,
-.zh-traditional a.outline-link {
+.zh-traditional a.outline-link,
+.zh-traditional span.vp-link > .text {
   font-family:
     "Google Sans Flex", "FanWunHak", "Noto Sans TC",
     var(--site-body-font-fallback);

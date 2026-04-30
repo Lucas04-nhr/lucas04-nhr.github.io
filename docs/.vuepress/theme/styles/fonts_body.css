@@ -166,6 +166,69 @@
     "ss11" 1;
 }
 
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-EL.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-L.ttf")
+    format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-N.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-R.ttf")
+    format("truetype");
+  font-weight: 550;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-M.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-H.ttf")
+    format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FanWunHak";
+  src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-B.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Apply Google Sans Flex (English) + Noto Sans SC (Chinese) to page body text only.
    - If the fonts can't be loaded, fall back to the site's original/system fonts.
    - Do NOT change fonts for code blocks, inline code, or math (KaTeX/MathJax).
@@ -215,7 +278,7 @@ summary {
     "Google Sans Flex", "Noto Sans SC", var(--site-body-font-fallback);
   font-weight: 400;
   /* allow variable font axes if supported */
-  font-variation-settings: "wght" 400;
+  font-variation-settings: "wght" 500;
 }
 
 /* Bold text weight */
@@ -274,6 +337,49 @@ samp {
     "ss09" 1,
     "ss10" 1,
     "ss11" 1;
+}
+
+/* When user selects Traditional Chinese, prefer the two Traditional fonts
+   so that mixed-script rendering uses the intended glyph shapes. This is
+   scoped to body/content elements so code blocks and KaTeX are unaffected. */
+html.zh-traditional body,
+html.zh-traditional main,
+html.zh-traditional article,
+html.zh-traditional .plume-article,
+html.zh-traditional .vp-doc,
+html.zh-traditional .markdown,
+html.zh-traditional p,
+html.zh-traditional li,
+html.zh-traditional blockquote,
+html.zh-traditional table,
+html.zh-traditional td,
+html.zh-traditional th,
+html.zh-traditional a {
+  font-family:
+    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
+    var(--site-body-font-fallback);
+  font-variation-settings: "wght" 400;
+}
+
+html.zh-traditional h1,
+html.zh-traditional h2,
+html.zh-traditional h3,
+html.zh-traditional h4,
+html.zh-traditional h5,
+html.zh-traditional h6 {
+  font-family:
+    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
+    var(--site-body-font-fallback);
+  font-weight: 500;
+  font-variation-settings: "wght" 500;
+}
+
+html.zh-traditional .vp-doc-aside-outline.has-outline ul {
+  font-family:
+    "FanWunHak", "Google Sans Flex", "Noto Sans TC",
+    var(--site-body-font-fallback);
+  font-weight: 550;
+  font-variation-settings: "wght" 550;
 }
 
 /* KaTeX: force \mathrm (upright roman in math mode) to use math fonts

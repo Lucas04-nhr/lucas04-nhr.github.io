@@ -16,12 +16,14 @@ import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 // import CustomComponent from './theme/components/Custom.vue'
 import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
+import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 
 export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
       "doc-title-after": () => h(PageContextMenu),
       "aside-outline-after": () => h(CustomAside),
+      "nav-bar-content-after": () => h(NavBarLocaleToggle),
     }),
 
     NotFound: () =>
@@ -32,15 +34,16 @@ export default defineClientConfig({
 
   enhance({ app, router }) {
     // built-in components
-    app.component('RepoCard', RepoCard)
-    app.component('NpmBadge', NpmBadge)
-    app.component('NpmBadgeGroup', NpmBadgeGroup)
-    app.component('Swiper', Swiper) // you should install `swiper`
+    app.component("RepoCard", RepoCard);
+    app.component("NpmBadge", NpmBadge);
+    app.component("NpmBadgeGroup", NpmBadgeGroup);
+    app.component("Swiper", Swiper); // you should install `swiper`
 
     // your custom components
     app.component("ResponsiveImage", ResponsiveImage);
     app.component("DebugInfo", DebugInfo);
     app.component("RawJsonOutput", RawJsonOutput);
+    app.component("NavBarLocaleToggle", NavBarLocaleToggle);
     // app.component('CustomComponent', CustomComponent)
 
     // Replace encrypted page lock icon with custom image

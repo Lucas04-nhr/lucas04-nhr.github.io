@@ -197,7 +197,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-R.ttf")
     format("truetype");
-  font-weight: 550;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -206,7 +206,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-M.ttf")
     format("truetype");
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -215,7 +215,7 @@
   font-family: "FanWunHak";
   src: url("https://static.lucas04.top/static/FanWunHak/FanWunHak-H.ttf")
     format("truetype");
-  font-weight: 800;
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -356,9 +356,9 @@ html.zh-traditional td,
 html.zh-traditional th,
 html.zh-traditional a {
   font-family:
-    "Google Sans Flex", "FanWunHak", "Noto Sans TC",
+    "Google Sans Flex", FanWunHak-M, "Noto Sans TC",
     var(--site-body-font-fallback);
-  font-variation-settings: "wght" 400;
+  font-variation-settings: "wght" 550;
 }
 
 html.zh-traditional h1,
@@ -370,8 +370,8 @@ html.zh-traditional h6 {
   font-family:
     "Google Sans Flex", "FanWunHak", "Noto Sans TC",
     var(--site-body-font-fallback);
-  font-weight: 500;
-  font-variation-settings: "wght" 500;
+  font-weight: 550;
+  font-variation-settings: "wght" 550;
 }
 
 html.zh-traditional .vp-doc-aside-outline.has-outline ul {

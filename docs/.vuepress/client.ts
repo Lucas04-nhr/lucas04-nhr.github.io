@@ -23,7 +23,10 @@ export default defineClientConfig({
     Layout: h(Layout, null, {
       "doc-title-after": () => h(PageContextMenu),
       "aside-outline-after": () => h(CustomAside),
-      "nav-bar-content-after": () => h(NavBarLocaleToggle),
+      "nav-bar-content-after": () =>
+        h(NavBarLocaleToggle, { placement: "desktop" }),
+      "nav-screen-menu-after": () =>
+        h(NavBarLocaleToggle, { placement: "mobile" }),
     }),
 
     NotFound: () =>

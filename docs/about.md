@@ -7,9 +7,9 @@ copyright: false
 
 ::: center
 <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/static/typing_night.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/static/typing_day.svg" />
-    <img src="https://static.lucas04.top/static/typing_day.svg" alt="Typing SVG" />
+<source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/typing_night.svg" />
+<source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/typing_day.svg" />
+<img src="https://static.lucas04.top/typing_day.svg" alt="Typing SVG" />
 </picture>
 :::
 
@@ -39,6 +39,7 @@ I'm currently admitted to MSc. of Bioinformatics at Københavns Universitet (KU)
 I enjoy exploring the intersection of biology and technology, constantly seeking innovative ways to apply programming skills to solve biological challenges. Whether it's coding algorithms, analyzing datasets, or creating web pages, I'm always up for a coding adventure.
 
 ## Currently Exploring {#currently-exploring}
+
 I am currently diving deeper into the realms of bioinformatics, exploring new tools and technologies to enhance my understanding and skills in the field. Additionally, I'm keen on expanding my knowledge in JavaScript and web development.
 
 By the time, I'm also learning about the basics of machine learning and artificial intelligence, as well as basic knowledge of computer science, mainly focusing on front-end development using `vue.js`. I hope to integrate these skills with my bioinformatics knowledge to create innovative solutions.
@@ -90,7 +91,7 @@ Thanks to [@sawaratsuki1004](https://twitter.com/sawaratsuki1004) for creating t
 <LinkCard 
   icon="mdi:twitter"
   title="Twitter"
-  href="https://twitter.com/sawaratsuki1004" > 
+  href="https://twitter.com/sawaratsuki1004" >
 
 Creator's Twitter Profile
 
@@ -107,43 +108,43 @@ You can contact me via [email](https://go.lucas04.top/connect){.no-icon}, and so
 <LinkCard 
   icon="mdi:twitter"
   title="Twitter"
-  href="https://twitter.com/__lucas04__" > 
+  href="https://twitter.com/__lucas04__" >
 </LinkCard>
 
 <LinkCard 
   icon="ri:bluesky-fill"
   title="Bluesky"
-  href="https://bsky.app/profile/lucas.lucas04.top" > 
+  href="https://bsky.app/profile/lucas.lucas04.top" >
 </LinkCard>
 
 <LinkCard 
   icon="mdi:facebook"
   title="Facebook"
-  href="https://fb.com/haorannie04" > 
+  href="https://fb.com/haorannie04" >
 </LinkCard>
 
 <LinkCard 
   icon="mdi:instagram"
   title="Instagram"
-  href="https://instagram.com/lucas04_11" > 
+  href="https://instagram.com/lucas04_11" >
 </LinkCard>
 
 <LinkCard 
   icon="ic:baseline-discord"
   title="Discord"
-  href="https://discord.com/users/1078951739576815626" > 
+  href="https://discord.com/users/1078951739576815626" >
 </LinkCard>
 
 <LinkCard 
   icon="mingcute:bilibili-line"
   title="Bilibili"
-  href="https://space.bilibili.com/474539451" > 
+  href="https://space.bilibili.com/474539451" >
 </LinkCard>
 
 <LinkCard 
   icon="ri:zhihu-fill"
   title="Zhihu"
-  href="https://www.zhihu.com/people/NHR-zh-cn" > 
+  href="https://www.zhihu.com/people/NHR-zh-cn" >
 </LinkCard>
 
 ## Support {#support}

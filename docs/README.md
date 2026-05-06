@@ -18,7 +18,7 @@ config:
         offset: 36
     hero:
       name: Hi~
-      tagline: '<picture><source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/static/typing_night.svg"><source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/static/typing_day.svg"><img src="https://static.lucas04.top/static/typing_day.svg" alt="Ad astra abyssosque."></picture>'
+      tagline: '<picture><source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/typing_night.svg"><source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/typing_day.svg"><img src="https://static.lucas04.top/typing_day.svg" alt="Ad astra abyssosque."></picture>'
       actions:
         - theme: brand
           icon: mdi:blog

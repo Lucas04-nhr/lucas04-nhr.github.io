@@ -2,7 +2,7 @@
   <section class="not-found">
     <div class="not-found__art">
       <img
-        src="https://static.lucas04.top/static/NotFound.png"
+        src="https://static.lucas04.top/NotFound.png"
         alt="404 Not Found"
         class="not-found__image"
       />

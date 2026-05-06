@@ -57,7 +57,7 @@ export default defineClientConfig({
         ) as HTMLElement | null;
         if (lockIcon && !(lockIcon as any).dataset.replaced) {
           const img = document.createElement("img");
-          img.src = "https://static.lucas04.top/static/Forbidden.png";
+          img.src = "https://static.lucas04.top/Forbidden.png";
           img.alt = "Encrypted";
           img.title = "Forbidden";
           img.style.display = "inline";

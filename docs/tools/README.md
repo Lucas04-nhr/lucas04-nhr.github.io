@@ -27,25 +27,24 @@ Here's the monthly updated background images of ::arcticons:zenless-zone-zero::Z
 
 ::: flex around center
 
-![For desktop devices](https://static.lucas04.top/static/background.jpg)
+![For desktop devices](https://static.lucas04.top/background.jpg)
 
-![For mobile devices](https://static.lucas04.top/static/background_mobile.jpg)
+![For mobile devices](https://static.lucas04.top/background_mobile.jpg)
 
 :::
 
 ::: note
-  The images are collected from the official website. All rights reserved by ::simple-icons:mihoyo =3em::, as well as its affiliates and subsidiaries. 
-  
-  The link here is only for sharing and downloading, not for commercial use. The copyrightholder may request to remove the link at any time. Please contact me if you have any questions.
-:::
+The images are collected from the official website. All rights reserved by ::simple-icons:mihoyo =3em::, as well as its affiliates and subsidiaries.
 
+The link here is only for sharing and downloading, not for commercial use. The copyrightholder may request to remove the link at any time. Please contact me if you have any questions.
+:::
 
 ## Useful Tools {#useful-tools}
 
 Here lists some tools for development and debugging.
 
 ::: note
-  The following tools are not only hosted on this site. Some external tools behind ::devicon:cloudflare:: **Cloudflare access** are also included, which may use specific email to log in. Contact me if you want to have a try.
+The following tools are not only hosted on this site. Some external tools behind ::devicon:cloudflare:: **Cloudflare access** are also included, which may use specific email to log in. Contact me if you want to have a try.
 :::
 
 <LinkCard

@@ -38,7 +38,7 @@ export default defineUserConfig({
       {
         rel: "icon",
         type: "image/png",
-        href: "https://static.lucas04.top/static/favicon/favicon-128.png",
+        href: "https://static.lucas04.top/favicon/favicon-128.png",
       },
     ],
     // Load Google Fonts for page body text (Google Sans Flex + Noto Sans SC)
@@ -61,7 +61,7 @@ export default defineUserConfig({
       "link",
       {
         rel: "stylesheet",
-        href: "https://static.lucas04.top/static/googlefonts.css",
+        href: "https://static.lucas04.top/googlefonts.css",
       },
     ],
     // Google tag (gtag.js)

@@ -127,6 +127,11 @@ onUnmounted(() => {
   .locale-toggle-divider {
     display: none;
   }
+
+  .nav-toggle-btn.active {
+    background: transparent;
+    color: var(--vp-c-brand-1);
+  }
 }
 
 .locale-toggle-mobile {

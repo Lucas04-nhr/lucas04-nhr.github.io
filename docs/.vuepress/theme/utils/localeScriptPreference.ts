@@ -109,15 +109,15 @@ export const clearAndResetScriptPreference = () => {
   applyScriptPreferenceToDocument("simplified");
 };
 
-export const parseLcQueryAction = (
+export const parseLocaleQueryAction = (
   value: string | null,
 ): LocaleScriptPreference | "reset" | null => {
   if (!value) return null;
 
   const normalized = value.trim().toLowerCase();
-  if (normalized === "s") return "simplified";
-  if (normalized === "t") return "traditional";
-  if (normalized === "r") return "reset";
+  if (normalized === "zh-hans") return "simplified";
+  if (normalized === "zh-hant") return "traditional";
+  if (normalized === "clear") return "reset";
 
   return null;
 };

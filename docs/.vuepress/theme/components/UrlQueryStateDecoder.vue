@@ -1,45 +1,27 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { useRouter } from "vuepress/client";
-import {
-  applyAndPersistScriptPreference,
-  clearAndResetScriptPreference,
-  parseLcQueryAction,
-} from "../utils/localeScriptPreference";
+import { runUrlQueryHandlers } from "../utils/urlQueryHandlers";
 
 const router = useRouter();
 
-const decodeLocaleFromUrl = () => {
+const decodeUrlQueryState = () => {
   if (typeof window === "undefined") return;
 
   const url = new URL(window.location.href);
-  const action = parseLcQueryAction(url.searchParams.get("lc"));
+  const urlChanged = runUrlQueryHandlers(url);
+  if (!urlChanged) return;
 
-  if (!action) return;
-
-  // Clean lc query after handling it to keep sharable URLs stable.
-  const cleanupLcQuery = () => {
-    url.searchParams.delete("lc");
-    const cleaned = `${url.pathname}${url.search}${url.hash}`;
-    window.history.replaceState(window.history.state, "", cleaned);
-  };
-
-  if (action === "reset") {
-    clearAndResetScriptPreference();
-    cleanupLcQuery();
-    return;
-  }
-
-  applyAndPersistScriptPreference(action);
-  cleanupLcQuery();
+  const cleaned = `${url.pathname}${url.search}${url.hash}`;
+  window.history.replaceState(window.history.state, "", cleaned);
 };
 
 let removeAfterEachHook: (() => void) | undefined;
 
 onMounted(() => {
-  decodeLocaleFromUrl();
+  decodeUrlQueryState();
   removeAfterEachHook = router.afterEach(() => {
-    decodeLocaleFromUrl();
+    decodeUrlQueryState();
   });
 });
 

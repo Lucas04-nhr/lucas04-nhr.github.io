@@ -1,7 +1,7 @@
 export type LocaleScriptPreference = "simplified" | "traditional";
 
-const STORAGE_KEY = "site-zh-script";
-const COOKIE_KEY = "site-zh-script";
+const STORAGE_KEY = "zh-locale-spec";
+const COOKIE_KEY = "zh-locale-spec";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
 const isBrowser = () =>

@@ -17,14 +17,17 @@ import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
+import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 
 export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
       "doc-title-after": () => h(PageContextMenu),
       "aside-outline-after": () => h(CustomAside),
-      "nav-bar-content-after": () =>
+      "nav-bar-content-after": () => [
+        h(UrlQueryStateDecoder),
         h(NavBarLocaleToggle, { placement: "desktop" }),
+      ],
       "nav-screen-menu-after": () =>
         h(NavBarLocaleToggle, { placement: "mobile" }),
     }),
@@ -47,6 +50,7 @@ export default defineClientConfig({
     app.component("DebugInfo", DebugInfo);
     app.component("RawJsonOutput", RawJsonOutput);
     app.component("NavBarLocaleToggle", NavBarLocaleToggle);
+    app.component("UrlQueryStateDecoder", UrlQueryStateDecoder);
     // app.component('CustomComponent', CustomComponent)
 
     // Replace encrypted page lock icon with custom image

@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import {
+  applyAndPersistScriptPreference,
+  applyScriptPreferenceToDocument,
+  readStoredScriptPreference,
+  type LocaleScriptPreference,
+} from "../utils/localeScriptPreference";
 
 const props = defineProps<{
   placement: "desktop" | "mobile";
@@ -23,26 +29,16 @@ const isTraditionalChineseLocale = () => {
   );
 };
 
-const applyTraditional = (showAlert: boolean) => {
-  current.value = "traditional";
-  try {
-    localStorage.setItem("site-zh-script", "traditional");
-  } catch {}
-
-  const doc = typeof document !== "undefined" ? document.documentElement : null;
-  if (doc) doc.classList.add("zh-traditional");
+const applyScriptPreference = (preference: LocaleScriptPreference) => {
+  current.value = preference;
+  applyAndPersistScriptPreference(preference);
 };
 
 const setTraditional = (t: boolean) => {
-  const doc = typeof document !== "undefined" ? document.documentElement : null;
   if (t) {
-    applyTraditional(true);
+    applyScriptPreference("traditional");
   } else {
-    current.value = "simplified";
-    try {
-      localStorage.setItem("site-zh-script", "simplified");
-    } catch {}
-    if (doc) doc.classList.remove("zh-traditional");
+    applyScriptPreference("simplified");
   }
 };
 
@@ -66,17 +62,15 @@ onMounted(() => {
   updateDeviceState();
   window.addEventListener("resize", updateDeviceState);
 
-  try {
-    const saved = localStorage.getItem("site-zh-script");
-    if (saved === "traditional") {
-      applyTraditional(false);
-      return;
-    }
-    if (saved === "simplified") return;
-  } catch {}
+  const saved = readStoredScriptPreference();
+  if (saved) {
+    current.value = saved;
+    applyScriptPreferenceToDocument(saved);
+    return;
+  }
 
   if (isTraditionalChineseLocale()) {
-    applyTraditional(false);
+    applyScriptPreference("traditional");
   }
 });
 

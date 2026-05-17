@@ -64,9 +64,3 @@ The following tools are not only hosted on this site. Some external tools behind
   icon="streamline-plump:convert-pdf-1"
   href="https://pdf.lucas04.top/">
 </LinkCard>
-
-<LinkCard
-  title="LobeChat self-hosted"
-  icon="octicon:agent-16"
-  href="https://lobe.lucas04.top/">
-</LinkCard>

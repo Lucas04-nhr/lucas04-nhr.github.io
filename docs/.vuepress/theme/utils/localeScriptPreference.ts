@@ -117,7 +117,7 @@ export const parseLocaleQueryAction = (
   const normalized = value.trim().toLowerCase();
   if (normalized === "zh-hans") return "simplified";
   if (normalized === "zh-hant") return "traditional";
-  if (normalized === "clear") return "reset";
+  if (normalized === "default") return "reset";
 
   return null;
 };

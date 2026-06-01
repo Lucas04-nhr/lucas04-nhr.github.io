@@ -117,6 +117,7 @@ You can contact me via [email](https://go.lucas04.top/connect){.no-icon}, and so
   href="https://bsky.app/profile/lucas.lucas04.top" >
 </LinkCard>
 
+<!-- 
 <LinkCard 
   icon="mdi:facebook"
   title="Facebook"
@@ -128,7 +129,8 @@ You can contact me via [email](https://go.lucas04.top/connect){.no-icon}, and so
   title="Instagram"
   href="https://instagram.com/lucas04_11" >
 </LinkCard>
-
+ -->
+ 
 <LinkCard 
   icon="ic:baseline-discord"
   title="Discord"

@@ -40,6 +40,8 @@
     "react": "19.2.1",
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",
-    "swiper": "^12.2.0"
+    "swiper": "^12.2.0",
+    "tm-grammars": "^1.31.15",
+    "tm-themes": "^1.12.2"
   }
 }

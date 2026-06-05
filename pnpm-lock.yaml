@@ -56,6 +56,12 @@ importers:
       swiper:
         specifier: ^12.2.0
         version: 12.2.0
+      tm-grammars:
+        specifier: ^1.31.15
+        version: 1.31.15
+      tm-themes:
+        specifier: ^1.12.2
+        version: 1.12.2
     devDependencies:
       '@vuepress/bundler-vite':
         specifier: 2.0.0-rc.30

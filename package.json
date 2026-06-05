@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.5.1",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "GPLv3",
   "scripts": {
@@ -18,15 +18,9 @@
     "@vuepress/plugin-google-analytics": "2.0.0-rc.130",
     "http-server": "^14.1.1",
     "typescript": "^5.9.3",
-    "vue": "^3.5.34",
+    "vue": "^3.5.35",
     "vuepress": "2.0.0-rc.30",
-    "vuepress-theme-plume": "1.0.0-rc.201"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "esbuild"
-    ]
+    "vuepress-theme-plume": "1.0.0-rc.202"
   },
   "engines": {
     "node": "^20.6.0 || >=22.0.0"
@@ -35,8 +29,8 @@
     "@simonwep/pickr": "^1.9.1",
     "artplayer": "^5.4.0",
     "chart.js": "^4.5.1",
-    "dashjs": "^5.1.1",
-    "echarts": "^6.0.0",
+    "dashjs": "^5.2.0",
+    "echarts": "^6.1.0",
     "flowchart.ts": "^3.0.1",
     "hls.js": "^1.6.16",
     "mermaid": "^11.15.0",
@@ -46,6 +40,6 @@
     "react": "19.2.1",
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",
-    "swiper": "^12.1.4"
+    "swiper": "^12.2.0"
   }
 }

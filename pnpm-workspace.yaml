@@ -1,3 +1,5 @@
 allowBuilds:
   core-js: true
   esbuild: true
+overrides:
+  webworkify-webpack: 2.1.5

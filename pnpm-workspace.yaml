@@ -1,5 +1,10 @@
 allowBuilds:
   core-js: true
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@vuepress-plume/plugin-fonts@1.0.0-rc.203'
+  - '@vuepress-plume/plugin-search@1.0.0-rc.203'
+  - vuepress-plugin-md-power@1.0.0-rc.203
+  - vuepress-theme-plume@1.0.0-rc.203
 overrides:
   webworkify-webpack: 2.1.5

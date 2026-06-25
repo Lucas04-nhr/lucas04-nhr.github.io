@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@simonwep/pickr": "^1.9.1",
+    "@vuepress/shiki-twoslash": "2.0.0-rc.130",
     "artplayer": "^5.4.0",
     "chart.js": "^4.5.1",
     "dashjs": "^5.2.0",

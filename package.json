@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@11.5.2",
+  "packageManager": "pnpm@11.9.0",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "GPLv3",
   "scripts": {
@@ -18,7 +18,7 @@
     "@vuepress/plugin-google-analytics": "2.0.0-rc.130",
     "http-server": "^14.1.1",
     "typescript": "^5.9.3",
-    "vue": "^3.5.35",
+    "vue": "^3.5.38",
     "vuepress": "2.0.0-rc.30",
     "vuepress-theme-plume": "1.0.0-rc.203"
   },

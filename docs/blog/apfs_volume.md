@@ -855,6 +855,6 @@ Autofs
 
 ---
 
-**文档版本：** v1.0
-**分析对象：** MacBook Pro 14（macOS Golden Gate 27.0 beta 1）
-**分析方式：** 实机验证（diskutil、mount、firmlink、snapshot、APFS Volume Group、Simulator Runtime）
+- **文档版本：** v1.0
+- **分析对象：** MacBook Pro 14（macOS Golden Gate 27.0 beta 1）
+- **分析方式：** 实机验证（`diskutil`、`mount`、`firmlink`、`snapshot`、APFS Volume Group、Simulator Runtime）

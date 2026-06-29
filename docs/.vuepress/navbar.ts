@@ -42,6 +42,7 @@ export const enNavbar = defineNavbarConfig([
     items: [
       { text: 'Copyright Statement', icon: 'mdi:copyright', link: '/legal/copyright/' },
       { text: 'Privacy Policy', icon: 'mdi:shield-lock-outline', link: '/legal/privacy/' },
+      { text: 'Terms of Service', icon: 'icon-park-solid:agreement', link: '/legal/terms/' },
     ]
   },
 ])

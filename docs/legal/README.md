@@ -10,3 +10,4 @@ You can find the legal documents of this website here, including:
 
 - [Copyright Statement](/legal/copyright/)
 - [Privacy Policy](/legal/privacy/)
+- [Terms of Service](/legal/terms/)

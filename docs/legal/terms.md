@@ -28,8 +28,8 @@ Lucas's Shop provides an AI-powered platform that enables users to have access t
 ### Nature of the Service
 The Service is a digital, intangible product. Upon confirmed payment, access is granted immediately. Due to the immediate digital delivery, specific limitations apply to refunds as described in Section 7.
 
-### AI Model Dependency (optional)
-[Optional: Our Service utilizes third-party AI model providers including [e.g., OpenAI, Anthropic, Google]. Service performance and availability may be affected by the operational status of these providers. We will endeavor to communicate significant disruptions in a timely manner.]
+### AI Model Dependency
+Optional: Our Service utilizes third-party AI model providers including [e.g., OpenAI, Anthropic, Google]. Service performance and availability may be affected by the operational status of these providers. We will endeavor to communicate significant disruptions in a timely manner.
 
 ## Account Registration & Eligibility
 
@@ -38,11 +38,11 @@ The Service is a digital, intangible product. Upon confirmed payment, access is 
 To use the Service, you must create an account with accurate and complete information. You are responsible for maintaining the confidentiality of your login credentials and for all activities under your account.
 
 ::: caution
-We have disabled the ability to create accounts with email addresses from external domains. Please contact us [here](/about/) to apply for the access.
+We have disabled the ability to create accounts with email addresses from external domains. Please contact us [here](/about#contact/) to apply for the access.
 :::
 
 ### Account Security
-- Notify us immediately of any unauthorized use [here](/about/).
+- Notify us immediately of any unauthorized use [here](/about#contact/).
 - Do not share your credentials with any third party.
 - Keep your billing email address up to date.
 

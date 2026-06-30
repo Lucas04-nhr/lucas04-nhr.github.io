@@ -149,6 +149,10 @@ You can contact me via [email](https://go.lucas04.top/connect){.no-icon}, and so
   href="https://www.zhihu.com/people/NHR-zh-cn" >
 </LinkCard>
 
+## Contact Me {#contact}
+
+If you have any questions regarding my products, such as [New API self-hosted](https://chat.lucas04.top), or if you have any inquiries about my projects, feel free to reach out to me via [email](mailto:lucas@lucas04.top){.no-icon}. I will do my best to respond promptly and assist you with any concerns you may have.
+
 ## Support {#support}
 
 See [here](/support/) if you would like to support me.

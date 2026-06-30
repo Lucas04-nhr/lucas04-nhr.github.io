@@ -61,10 +61,6 @@ By subscribing to a paid plan, you expressly authorize Lucas's Shop to charge yo
 ### Credit Purchase Authorization
 Each credit purchase is a one-time transaction authorized at checkout.
 
-### Auto Top-up Authorization (if enabled)
-[Optional — include ONLY if your product offers auto top-up]
-If you enable Auto Top-up, you authorize Lucas's Shop to automatically charge your payment method when your credit balance falls below your configured threshold, at the amount configured in your Account Settings. You may disable this at any time.
-
 ### Taxes
 Prices are exclusive of applicable taxes unless otherwise stated.
 

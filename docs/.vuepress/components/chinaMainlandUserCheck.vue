@@ -211,9 +211,14 @@ const hasIpLinkDetail = computed(
     ),
 );
 
+const formatIpLookupPathSegment = (ipAddress: string) =>
+  /^[0-9a-fA-F:.]+$/.test(ipAddress)
+    ? ipAddress
+    : encodeURIComponent(ipAddress);
+
 const ipLookupUrl = computed(() =>
   ipSignal.value?.ipAddress
-    ? `https://www.whatismyip.com/ip/${encodeURIComponent(ipSignal.value.ipAddress)}/`
+    ? `https://www.whatismyip.com/ip/${formatIpLookupPathSegment(ipSignal.value.ipAddress)}/`
     : "",
 );
 

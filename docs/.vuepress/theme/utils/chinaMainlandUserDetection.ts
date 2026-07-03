@@ -22,6 +22,7 @@ export type BrowserSignal = {
   result: DetectionState;
   value: string;
   detail: string;
+  matches?: string[];
 };
 
 export type IpSignal = {
@@ -321,10 +322,11 @@ const detectFont = (): BrowserSignal => {
 
   return {
     id: "font",
-    label: `Chinese fonts: ${matchedCount} ${formatPlural(matchedCount, "font")} found`,
+    label: `Chinese fonts`,
     result: matchedCount > 0,
-    value: matchedCount > 0 ? matchedFonts.join(", ") : "none",
+    value: `${matchedCount} ${formatPlural(matchedCount, "font")} found`,
     detail: "Detects the availability of selected Chinese fonts.",
+    matches: matchedFonts,
   };
 };
 

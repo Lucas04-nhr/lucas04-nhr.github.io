@@ -80,6 +80,9 @@
         See <a href="/tools/connection-info/">Connection Info</a> for more details about your IP and network connection information.
       </li>
       <li>
+        {{ fontFootnote }}
+      </li>
+      <li>
         The result is for reference only and may not be accurate. Some internet providers may use proxies automatically without action by the user.
       </li>
     </ul>
@@ -145,6 +148,33 @@ const mainlandSignalRuleText = computed(() => {
   const verb = score === 1 ? "is" : "are";
 
   return `${score} in ${browserSignalTotal.value} signals ${verb} treated as mainland-like.`;
+});
+
+const formatPlural = (
+  count: number,
+  singular: string,
+  plural = `${singular}s`,
+) => (count === 1 ? singular : plural);
+
+const fontFootnote = computed(() => {
+  const fontSignal = browserSignals.value.find((signal) => signal.id === "font");
+
+  if (!fontSignal) {
+    return "According to your browser's font detection, the font result is not available yet.";
+  }
+
+  const matchedFonts = fontSignal.matches ?? [];
+  const matchedCount = matchedFonts.length;
+
+  if (fontSignal.result === null) {
+    return `According to your browser's font detection, the font result is unavailable: ${fontSignal.detail}`;
+  }
+
+  if (matchedCount === 0) {
+    return "According to your browser's font detection, you have no matching fonts installed.";
+  }
+
+  return `According to your browser's font detection, you have the following ${formatPlural(matchedCount, "font")} installed: ${matchedFonts.join(", ")}.`;
 });
 
 const statusClass = (result: boolean | null) => {

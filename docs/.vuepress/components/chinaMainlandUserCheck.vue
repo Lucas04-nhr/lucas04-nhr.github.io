@@ -28,7 +28,7 @@
         </div>
         <p class="signal-value">{{ ipSignal?.value ?? "Loading..." }}</p>
         <p v-if="loading" class="signal-detail">
-          Fetching from ip.lucas04.top...
+          Fetching from API...
         </p>
         <p v-else-if="hasIpLinkDetail" class="signal-detail">
           According to our data, you are visiting our site from

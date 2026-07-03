@@ -19,6 +19,12 @@ import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
+import {
+  type IpSignal,
+  detectBrowserSignals,
+  fetchIpSignal,
+  shouldTreatAsMainlandUser,
+} from "./theme/utils/chinaMainlandUserDetection";
 
 export default defineClientConfig({
   layouts: {
@@ -110,28 +116,29 @@ export default defineClientConfig({
       }
     }
 
-    // Detect visitor country to conditionally display beian info
-    void (async () => {
-      console.log("Attempting to detect visitor country for beian display...");
-      try {
-        const res = await fetch("https://ip.lucas04.top", {
-          cache: "no-store",
-        });
-        const data = await res.json();
-        const country = data.IP.Country.toUpperCase();
-        console.log(`Detected country: ${country}`);
-        if (country === "CN" && typeof document !== "undefined") {
+    // Detect visitor region to conditionally display beian info.
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      void (async () => {
+        console.log("Attempting to detect visitor region for beian display...");
+        const browserSignals = detectBrowserSignals();
+        let ipSignal: IpSignal | null = null;
+
+        try {
+          ipSignal = await fetchIpSignal();
+        } catch (e) {
+          console.log("Failed to detect visitor IP region:", e);
+          // silently ignore errors (network, rate limit, CORS, ...)
+        }
+
+        if (shouldTreatAsMainlandUser(ipSignal, browserSignals)) {
           const el = document.getElementById("beian-cn");
           if (el) {
             el.style.display = "inline";
-            console.log("Visitor from China, displaying beian info.");
+            console.log("Visitor is treated as mainland China user, displaying beian info.");
           }
         }
-      } catch (e) {
-        console.log("Failed to detect country:", e);
-        // silently ignore errors (network, rate limit, CORS, ...)
-      }
-    })();
+      })();
+    }
 
     // Hide footer on home page (vp-content.is-home) to avoid layout shift (only run in browser)
     if (typeof window !== "undefined" && typeof document !== "undefined") {

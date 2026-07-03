@@ -31,7 +31,10 @@ export type IpSignal = {
   data: IpApiResponse | null;
 };
 
-export type MainlandVerdictKind = "yes" | "mixed" | "no" | "unknown";
+export type MainlandVerdictKind =
+  | "mainland-ip"
+  | "mainland-like"
+  | "non-mainland";
 
 export type MainlandVerdict = {
   kind: MainlandVerdictKind;
@@ -72,6 +75,10 @@ const formatValue = (value: unknown) => {
   if (Array.isArray(value)) return value.length ? value.join(", ") : "N/A";
   return String(value);
 };
+
+export const countMainlandBrowserSignals = (
+  signals: BrowserSignal[],
+): number => signals.filter((signal) => signal.result === true).length;
 
 export const readIpSignal = (data: IpApiResponse | null): IpSignal => {
   if (!data?.IP) {
@@ -314,10 +321,10 @@ const detectFont = (): BrowserSignal => {
 
   return {
     id: "font",
-    label: `Chinese fonts`,
+    label: `Chinese fonts: ${matchedCount} ${formatPlural(matchedCount, "font")} found`,
     result: matchedCount > 0,
-    value: `${matchedCount} ${formatPlural(matchedCount, "font")} found`,
-    detail: `Detects the availability of selected Chinese fonts. You have ${matchedCount} matching ${formatPlural(matchedCount, "font")}: ${matchedCount > 0 ? matchedFonts.join(", ") : "none"}.`,
+    value: matchedCount > 0 ? matchedFonts.join(", ") : "none",
+    detail: "Detects the availability of selected Chinese fonts.",
   };
 };
 
@@ -329,50 +336,41 @@ export const detectBrowserSignals = (): BrowserSignal[] => [
 ];
 
 export const isBrowserMainlandLike = (signals: BrowserSignal[]): boolean =>
-  signals.some((signal) => signal.result === true);
+  countMainlandBrowserSignals(signals) >= 3;
+
+export const shouldTreatAsMainlandUser = (
+  ipSignal: IpSignal | null,
+  browserSignals: BrowserSignal[],
+): boolean =>
+  ipSignal?.result === true || isBrowserMainlandLike(browserSignals);
 
 export const resolveMainlandVerdict = (
   ipSignal: IpSignal | null,
   browserSignals: BrowserSignal[],
 ): MainlandVerdict => {
   const ipResult = ipSignal?.result ?? null;
-  const browserPositive = isBrowserMainlandLike(browserSignals);
+  const mainlandBrowserSignalCount = countMainlandBrowserSignals(browserSignals);
+  const totalBrowserSignals = browserSignals.length || 4;
 
   if (ipResult === true) {
     return {
-      kind: "yes",
+      kind: "mainland-ip",
       title: "Mainland China User",
-      summary: "The current IP geolocation is CN. Be careful if you want to use some region-restricted services.",
+      summary: `The current IP geolocation is CN, so this is treated as a mainland China user.\nVPNs, proxies, and privacy tools may change regional access behavior.`,
     };
   }
 
-  if (ipResult === false && browserPositive) {
+  if (mainlandBrowserSignalCount >= 3) {
     return {
-      kind: "mixed",
-      title: "Cannot Determined - probably using VPN",
-      summary: "Browser traits look mainland-like, but the current IP geolocation is not CN.",
-    };
-  }
-
-  if (ipResult === false) {
-    return {
-      kind: "no",
-      title: "Non-mainland China User",
-      summary: "The current IP geolocation is not CN, and browser-side mainland signals did not hit.",
-    };
-  }
-
-  if (browserPositive) {
-    return {
-      kind: "mixed",
-      title: "Cannot Determined - probably using VPN",
-      summary: "IP geolocation is unavailable, but at least one browser-side mainland signal hit.",
+      kind: "mainland-like",
+      title: "Mainland China User",
+      summary: `${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as a mainland China user.\nYour IP does not directly confirm mainland China: you may be using a VPN, proxy, privacy relay, or routed network.`,
     };
   }
 
   return {
-    kind: "unknown",
-    title: "Cannot Determined - probably using VPN",
-    summary: "IP geolocation is unavailable and browser-side signals did not provide a positive hit.",
+    kind: "non-mainland",
+    title: "Non-mainland China User",
+    summary: `The current IP geolocation is not CN or unavailable, and only ${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like.`,
   };
 };

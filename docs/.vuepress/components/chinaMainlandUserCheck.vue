@@ -53,24 +53,36 @@
       <tbody>
         <tr>
           <td>IP country</td>
-          <td>{{ formatResult(ipSignal?.result ?? null) }}</td>
-          <td>
-            <code>{{ ipSignal?.data?.IP?.Country ?? "N/A" }}</code>
+          <td :class="resultClass(ipSignal?.result ?? null)">
+            {{ formatResult(ipSignal?.result ?? null) }}
           </td>
+          <td>{{ ipSignal?.data?.IP?.Country ?? "N/A" }}</td>
+        </tr>
+        <tr>
+          <td>Non-IP mainland signals</td>
+          <td :class="mainlandSignalRuleResultClass">
+            {{ mainlandSignalRuleResult }}
+          </td>
+          <td>{{ mainlandSignalRuleText }}</td>
         </tr>
         <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
           <td>{{ signal.label }}</td>
-          <td>{{ formatResult(signal.result) }}</td>
-          <td>
-            <code>{{ signal.value }}</code>
+          <td :class="resultClass(signal.result)">
+            {{ formatResult(signal.result) }}
           </td>
+          <td>{{ signal.value }}</td>
         </tr>
       </tbody>
     </table>
 
-    <p class="footnote">
-      The result is for reference only and may not be accurate. Some internet providers may use proxies automatically without action by the user.
-    </p>
+    <ul class="footnote footnote-list">
+      <li>
+        See <a href="/tools/connection-info/">Connection Info</a> for more details about your IP and network connection information.
+      </li>
+      <li>
+        The result is for reference only and may not be accurate. Some internet providers may use proxies automatically without action by the user.
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -79,6 +91,7 @@ import { computed, onMounted, ref } from "vue";
 import {
   type BrowserSignal,
   type IpSignal,
+  countMainlandBrowserSignals,
   detectBrowserSignals,
   fetchIpSignal,
   resolveMainlandVerdict,
@@ -113,17 +126,25 @@ const verdict = computed(() =>
   resolveMainlandVerdict(ipSignal.value, browserSignals.value),
 );
 
-const ipAddress = computed(
-  () =>
-    ipSignal.value?.data?.IP?.IP ??
-    ipSignal.value?.data?.Headers?.["x-real-ip"] ??
-    "N/A",
+const mainlandSignalScore = computed(
+  () => countMainlandBrowserSignals(browserSignals.value),
 );
 
-const asnInfo = computed(() => {
-  const ip = ipSignal.value?.data?.IP;
-  if (!ip) return "N/A";
-  return [ip.ASN, ip.ASOrganization].filter(Boolean).join(" / ") || "N/A";
+const browserSignalTotal = computed(() => browserSignals.value.length || 4);
+
+const mainlandSignalRuleResult = computed(() =>
+  mainlandSignalScore.value >= 3 ? "Mainland-like" : "Non-mainland",
+);
+
+const mainlandSignalRuleResultClass = computed(() =>
+  mainlandSignalScore.value >= 3 ? "result-mainland-like" : "result-non-mainland",
+);
+
+const mainlandSignalRuleText = computed(() => {
+  const score = mainlandSignalScore.value;
+  const verb = score === 1 ? "is" : "are";
+
+  return `${score} in ${browserSignalTotal.value} signals ${verb} treated as mainland-like.`;
 });
 
 const statusClass = (result: boolean | null) => {
@@ -136,6 +157,12 @@ const formatResult = (result: boolean | null) => {
   if (result === true) return "Mainland-like";
   if (result === false) return "Non-mainland";
   return "Unknown";
+};
+
+const resultClass = (result: boolean | null) => {
+  if (result === true) return "result-mainland-like";
+  if (result === false) return "result-non-mainland";
+  return "";
 };
 
 onMounted(() => {
@@ -155,17 +182,17 @@ onMounted(() => {
   margin: 24px 0;
 }
 
-.china-user-check.is-yes {
+.china-user-check.is-mainland-ip {
   --check-accent: #dc2626;
   --check-accent-soft: rgba(220, 38, 38, 0.12);
 }
 
-.china-user-check.is-mixed {
+.china-user-check.is-mainland-like {
   --check-accent: #d97706;
   --check-accent-soft: rgba(217, 119, 6, 0.12);
 }
 
-.china-user-check.is-no {
+.china-user-check.is-non-mainland {
   --check-accent: #16a34a;
   --check-accent-soft: rgba(22, 163, 74, 0.12);
 }
@@ -285,7 +312,7 @@ onMounted(() => {
 }
 
 .status-unknown {
-  background: #d97706;
+  background: #94a3b8;
 }
 
 .signal-value {
@@ -311,7 +338,7 @@ onMounted(() => {
 .details-table td {
   padding: 10px;
   border-bottom: 1px solid var(--check-border);
-  text-align: left;
+  text-align: center;
   vertical-align: top;
 }
 
@@ -324,8 +351,26 @@ onMounted(() => {
   overflow-wrap: anywhere;
 }
 
+.result-mainland-like {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.result-non-mainland {
+  color: #16a34a;
+  font-weight: 700;
+}
+
 .footnote {
   margin: 0;
+}
+
+.footnote-list {
+  padding-left: 1.25rem;
+}
+
+.footnote-list li {
+  margin: 4px 0;
 }
 
 html.dark .china-user-check,

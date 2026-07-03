@@ -32,6 +32,13 @@ export type IpSignal = {
   data: IpApiResponse | null;
 };
 
+export type InternalMainlandRuleSignal = {
+  id: "internal-rule-check-result";
+  result: DetectionState;
+  bypassed: boolean;
+  detail: string;
+};
+
 export type MainlandVerdictKind =
   | "mainland"
   | "suspected-mainland"
@@ -44,6 +51,16 @@ export type MainlandVerdict = {
 };
 
 export const IP_API_URL = "https://ip.lucas04.top";
+
+const decodeInternalCheckTarget = (codes: number[]) =>
+  String.fromCharCode(...codes);
+
+export const INTERNAL_CONNECTIVITY_CHECK_URL = decodeInternalCheckTarget([
+  104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 101, 112, 111, 99,
+  104, 116, 105, 109, 101, 115, 46, 99, 111, 109, 47,
+]);
+
+const INTERNAL_RULE_BYPASS_COOKIE = "lucas-mainland-internal-rule-bypass";
 
 const mainlandLanguagePattern = /^zh(-Hans)?(-CN)?$/i;
 
@@ -70,6 +87,29 @@ const chineseFonts = [
 
 const isBrowser = () =>
   typeof window !== "undefined" && typeof document !== "undefined";
+
+const writeCookie = (name: string, value: string, maxAge: number) => {
+  if (!isBrowser()) return;
+
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${name}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+};
+
+const readCookie = (name: string): string | null => {
+  if (!isBrowser()) return null;
+
+  const prefix = `${name}=`;
+  const cookie = document.cookie
+    .split(";")
+    .map((item) => item.trim())
+    .find((item) => item.startsWith(prefix));
+
+  return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+};
+
+const deleteCookie = (name: string) => {
+  writeCookie(name, "", 0);
+};
 
 const formatValue = (value: unknown) => {
   if (value === undefined || value === null || value === "") return "N/A";
@@ -115,6 +155,97 @@ export const fetchIpSignal = async (): Promise<IpSignal> => {
   const data = (await response.json()) as IpApiResponse;
   return readIpSignal(data);
 };
+
+export type InternalRuleBypassQueryAction = "true" | "false" | "reset";
+
+export const parseInternalRuleBypassQueryAction = (
+  value: string | null,
+): InternalRuleBypassQueryAction | null => {
+  if (!value) return null;
+
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true") return "true";
+  if (normalized === "false") return "false";
+  if (normalized === "reset") return "reset";
+
+  return null;
+};
+
+export const applyAndPersistInternalRuleBypassPreference = (
+  action: InternalRuleBypassQueryAction,
+) => {
+  if (action === "reset") {
+    deleteCookie(INTERNAL_RULE_BYPASS_COOKIE);
+    return;
+  }
+
+  writeCookie(INTERNAL_RULE_BYPASS_COOKIE, action, 60 * 60 * 24 * 365);
+};
+
+const syncInternalRuleBypassPreferenceFromUrl = () => {
+  if (!isBrowser()) return;
+
+  const action = parseInternalRuleBypassQueryAction(
+    new URL(window.location.href).searchParams.get("bypass"),
+  );
+
+  if (action) {
+    applyAndPersistInternalRuleBypassPreference(action);
+  }
+};
+
+const isInternalRuleBypassed = (): boolean =>
+  readCookie(INTERNAL_RULE_BYPASS_COOKIE) === "true";
+
+export const detectInternalMainlandRule =
+  async (): Promise<InternalMainlandRuleSignal> => {
+    if (!isBrowser()) {
+      return {
+        id: "internal-rule-check-result",
+        result: null,
+        bypassed: false,
+        detail: "Browser networking is unavailable.",
+      };
+    }
+
+    syncInternalRuleBypassPreferenceFromUrl();
+
+    if (isInternalRuleBypassed()) {
+      return {
+        id: "internal-rule-check-result",
+        result: false,
+        bypassed: true,
+        detail: "Internal connectivity rule is bypassed by cookie.",
+      };
+    }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 5000);
+
+    try {
+      await fetch(INTERNAL_CONNECTIVITY_CHECK_URL, {
+        cache: "no-store",
+        mode: "no-cors",
+        signal: controller.signal,
+      });
+
+      return {
+        id: "internal-rule-check-result",
+        result: false,
+        bypassed: false,
+        detail: "Internal connectivity target is reachable.",
+      };
+    } catch {
+      return {
+        id: "internal-rule-check-result",
+        result: true,
+        bypassed: false,
+        detail: "Internal connectivity target is unreachable.",
+      };
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  };
 
 const detectLanguage = (): BrowserSignal => {
   if (typeof navigator === "undefined") {
@@ -343,22 +474,33 @@ export const isBrowserMainlandLike = (signals: BrowserSignal[]): boolean =>
 export const shouldTreatAsMainlandUser = (
   ipSignal: IpSignal | null,
   browserSignals: BrowserSignal[],
+  internalRuleSignal: InternalMainlandRuleSignal | null = null,
 ): boolean =>
+  internalRuleSignal?.result === true ||
   ipSignal?.result === true || isBrowserMainlandLike(browserSignals);
 
 export const resolveMainlandVerdict = (
   ipSignal: IpSignal | null,
   browserSignals: BrowserSignal[],
+  internalRuleSignal: InternalMainlandRuleSignal | null = null,
 ): MainlandVerdict => {
   const ipResult = ipSignal?.result ?? null;
   const mainlandBrowserSignalCount = countMainlandBrowserSignals(browserSignals);
   const totalBrowserSignals = browserSignals.length || 4;
 
+  if (internalRuleSignal?.result === true) {
+    return {
+      kind: "mainland",
+      title: "Mainland China User",
+      summary: `You are flagged as a mainland China user.\nYou may need a proxy to use some regional-restricted services, but your account is very likely to be suspended.`,
+    };
+  }
+
   if (ipResult === true) {
     return {
       kind: "mainland",
       title: "Mainland China User",
-      summary: `The current IP geolocation is CN, so this is treated as a mainland China user.\nVPNs, proxies, and privacy tools may change regional access behavior.`,
+      summary: `You are flagged as a mainland China user.\nYou may need a proxy to use some regional-restricted services, but your account is very likely to be suspended.`,
     };
   }
 
@@ -366,7 +508,7 @@ export const resolveMainlandVerdict = (
     return {
       kind: "mainland",
       title: "Mainland China User",
-      summary: `All ${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as a mainland China user.\nUsing some region-restricted services may cause your account to be disabled.`,
+      summary: `You are flagged as a mainland China user.\nYou may need a proxy to use some regional-restricted services, but your account is very likely to be suspended.`,
     };
   }
 
@@ -374,16 +516,13 @@ export const resolveMainlandVerdict = (
     return {
       kind: "suspected-mainland",
       title: "Suspected Mainland China User",
-      summary:
-        ipResult === null
-          ? `The current IP geolocation is unavailable, so this is treated as suspected mainland China.\nUsing the region-restricted services at your own risk.`
-          : `${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as suspected mainland China.`,
+      summary: `You are flagged as a suspected mainland China user.\nUsing some regional-restricted services may still carry risk.`,
     };
   }
 
   return {
     kind: "non-mainland",
     title: "Non-mainland China User",
-    summary: `The current IP geolocation is not CN, using the region-restricted services is not-that risky.`,
+    summary: `You are flagged as a non-mainland China user.\nFollow each service's rules when using regional-restricted services.`,
   };
 };

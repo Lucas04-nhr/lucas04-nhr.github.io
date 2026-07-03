@@ -22,6 +22,7 @@ import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import {
   type IpSignal,
   detectBrowserSignals,
+  detectInternalMainlandRule,
   fetchIpSignal,
   shouldTreatAsMainlandUser,
 } from "./theme/utils/chinaMainlandUserDetection";
@@ -128,6 +129,7 @@ export default defineClientConfig({
         mainlandUserDetectionPromise = (async () => {
           const browserSignals = detectBrowserSignals();
           let ipSignal: IpSignal | null = null;
+          const internalRuleSignal = await detectInternalMainlandRule();
 
           try {
             ipSignal = await fetchIpSignal();
@@ -136,7 +138,11 @@ export default defineClientConfig({
             // silently ignore errors (network, rate limit, CORS, ...)
           }
 
-          return shouldTreatAsMainlandUser(ipSignal, browserSignals);
+          return shouldTreatAsMainlandUser(
+            ipSignal,
+            browserSignals,
+            internalRuleSignal,
+          );
         })();
 
         return mainlandUserDetectionPromise;

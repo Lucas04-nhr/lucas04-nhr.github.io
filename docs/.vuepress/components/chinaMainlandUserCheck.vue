@@ -77,13 +77,16 @@
 
     <ul class="footnote footnote-list">
       <li>
+        {{ proxyFootnote }}
+      </li>
+      <li>
+        Some internet providers may use proxies automatically without action by the user.
+      </li>
+      <li>
         See <a href="/tools/connection-info/">Connection Info</a> for more details about your IP and network connection information.
       </li>
       <li>
         {{ fontFootnote }}
-      </li>
-      <li>
-        The result is for reference only and may not be accurate. Some internet providers may use proxies automatically without action by the user.
       </li>
     </ul>
   </section>
@@ -93,9 +96,11 @@
 import { computed, onMounted, ref } from "vue";
 import {
   type BrowserSignal,
+  type InternalMainlandRuleSignal,
   type IpSignal,
   countMainlandBrowserSignals,
   detectBrowserSignals,
+  detectInternalMainlandRule,
   fetchIpSignal,
   resolveMainlandVerdict,
 } from "../theme/utils/chinaMainlandUserDetection";
@@ -104,6 +109,7 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const ipSignal = ref<IpSignal | null>(null);
 const browserSignals = ref<BrowserSignal[]>([]);
+const internalRuleSignal = ref<InternalMainlandRuleSignal | null>(null);
 
 const refresh = async () => {
   loading.value = true;
@@ -111,7 +117,26 @@ const refresh = async () => {
   browserSignals.value = detectBrowserSignals();
 
   try {
-    ipSignal.value = await fetchIpSignal();
+    const [ipResult, internalRuleResult] = await Promise.allSettled([
+      fetchIpSignal(),
+      detectInternalMainlandRule(),
+    ]);
+
+    if (ipResult.status === "fulfilled") {
+      ipSignal.value = ipResult.value;
+    } else {
+      throw ipResult.reason;
+    }
+
+    internalRuleSignal.value =
+      internalRuleResult.status === "fulfilled"
+        ? internalRuleResult.value
+        : {
+            id: "internal-rule-check-result",
+            result: null,
+            bypassed: false,
+            detail: "Internal connectivity rule failed to run.",
+          };
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Unknown error";
     ipSignal.value = {
@@ -120,13 +145,18 @@ const refresh = async () => {
       detail: "Could not fetch IP geolocation from ip.lucas04.top.",
       data: null,
     };
+    internalRuleSignal.value = await detectInternalMainlandRule();
   } finally {
     loading.value = false;
   }
 };
 
 const verdict = computed(() =>
-  resolveMainlandVerdict(ipSignal.value, browserSignals.value),
+  resolveMainlandVerdict(
+    ipSignal.value,
+    browserSignals.value,
+    internalRuleSignal.value,
+  ),
 );
 
 const mainlandSignalScore = computed(
@@ -192,6 +222,17 @@ const fontFootnote = computed(() => {
   }
 
   return `According to your browser's font detection, you have the following ${formatPlural(matchedCount, "font")} installed: ${matchedFonts.join(", ")}.`;
+});
+
+const proxyFootnote = computed(() => {
+  const base =
+    "The result is for reference only and may not be accurate.";
+
+  if (internalRuleSignal.value?.result === true) {
+    return `One of the internal rules has flagged you as a mainland Chinese user. ${base}`;
+  }
+
+  return base;
 });
 
 const statusClass = (result: boolean | null) => {

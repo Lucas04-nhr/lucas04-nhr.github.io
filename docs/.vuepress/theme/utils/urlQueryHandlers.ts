@@ -7,6 +7,10 @@ import {
   applyAndPersistThemeAppearancePreference,
   parseThemeQueryAction,
 } from "./themeAppearancePreference";
+import {
+  applyAndPersistInternalRuleBypassPreference,
+  parseInternalRuleBypassQueryAction,
+} from "./chinaMainlandUserDetection";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -47,6 +51,14 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
     if (!action) return unhandledResult;
 
     applyAndPersistThemeAppearancePreference(action);
+    return { handled: true, removeParam: true };
+  },
+
+  bypass(value) {
+    const action = parseInternalRuleBypassQueryAction(value);
+    if (!action) return unhandledResult;
+
+    applyAndPersistInternalRuleBypassPreference(action);
     return { handled: true, removeParam: true };
   },
 };

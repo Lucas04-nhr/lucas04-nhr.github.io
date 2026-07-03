@@ -54,6 +54,12 @@ The following tools are not only hosted on this site. Some external tools behind
 </LinkCard>
 
 <LinkCard
+  title="Region Detection"
+  icon="mdi:map-marker-question-outline"
+  href="/tools/region-detect/">
+</LinkCard>
+
+<LinkCard
   title="VERT Image Converter"
   icon="mdi:image-edit-outline"
   href="https://vert.lucas04.top/">

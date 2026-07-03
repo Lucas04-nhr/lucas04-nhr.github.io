@@ -27,8 +27,32 @@
           <h3>IP geolocation</h3>
         </div>
         <p class="signal-value">{{ ipSignal?.value ?? "Loading..." }}</p>
-        <p class="signal-detail">
-          {{ loading ? "Fetching from ip.lucas04.top..." : ipSignal?.detail }}
+        <p v-if="loading" class="signal-detail">
+          Fetching from ip.lucas04.top...
+        </p>
+        <p v-else-if="hasIpLinkDetail" class="signal-detail">
+          According to our data, you are visiting our site from
+          <a
+            :href="ipLookupUrl"
+            class="no-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ ipSignal?.ipAddress }}
+          </a>
+          with
+          <a
+            :href="asnLookupUrl"
+            class="no-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ ipSignal?.asn }}
+          </a>,
+          located in {{ ipSignal?.country }}.
+        </p>
+        <p v-else class="signal-detail">
+          {{ ipSignal?.detail }}
         </p>
       </article>
 
@@ -79,11 +103,9 @@
       <li>
         {{ proxyFootnote }}
       </li>
+      <li v-html="ipFootnote" />
       <li>
-        Some internet providers may use proxies automatically without action by the user.
-      </li>
-      <li>
-        See <a href="/tools/connection-info/">Connection Info</a> for more details about your IP and network connection information.
+        Using a proxy, such as a VPN, or iCloud private relay, may change the country or region that is displayed on this page.
       </li>
       <li>
         {{ fontFootnote }}
@@ -158,6 +180,36 @@ const verdict = computed(() =>
     internalRuleSignal.value,
   ),
 );
+
+const hasIpLinkDetail = computed(
+  () =>
+    Boolean(
+      ipSignal.value?.ipAddress && ipSignal.value?.asn && ipSignal.value?.country,
+    ),
+);
+
+const ipLookupUrl = computed(() =>
+  ipSignal.value?.ipAddress
+    ? `https://www.whatismyip.com/ip/${encodeURIComponent(ipSignal.value.ipAddress)}/`
+    : "",
+);
+
+const asnLookupUrl = computed(() =>
+  ipSignal.value?.asn
+    ? `https://www.whatismyip.com/asn/${encodeURIComponent(ipSignal.value.asn)}/`
+    : "",
+);
+
+const ipFootnote = computed(() => {
+  const externalLink =
+    '<a href="https://ip.skk.moe" class="no-icon" target="_blank" rel="noopener noreferrer">an external website</a>';
+
+  if (hasIpLinkDetail.value) {
+    return `See <a href="/tools/connection-info/">Connection Info</a> or go to ${externalLink} for more details about your IP and network connection information.`;
+  }
+
+  return `Go to ${externalLink} for more details about your IP and network connection information.`;
+});
 
 const mainlandSignalScore = computed(
   () => countMainlandBrowserSignals(browserSignals.value),

@@ -29,6 +29,9 @@ export type IpSignal = {
   result: DetectionState;
   value: string;
   detail: string;
+  ipAddress?: string;
+  asn?: string;
+  country?: string;
   data: IpApiResponse | null;
 };
 
@@ -126,7 +129,7 @@ export const readIpSignal = (data: IpApiResponse | null): IpSignal => {
     return {
       result: null,
       value: "N/A",
-      detail: "IP API did not return a usable IP object.",
+      detail: "We cannot detect your IP information.",
       data,
     };
   }
@@ -135,13 +138,19 @@ export const readIpSignal = (data: IpApiResponse | null): IpSignal => {
   const location = [data.IP.City, data.IP.Region, country]
     .filter(Boolean)
     .join(", ");
+  const ipAddress = data.IP.IP || data.Headers?.["x-real-ip"];
+  const asn = data.IP.ASN ? `AS${String(data.IP.ASN).replace(/^AS/i, "")}` : "";
 
   return {
     result: country ? country === "CN" : null,
     value: location || country || "N/A",
-    detail: country
-      ? `Cloudflare geolocation country code: ${country}.`
-      : "Cloudflare geolocation country code is unavailable.",
+    detail:
+      ipAddress && asn && country
+        ? `You are visiting our site from ${ipAddress} with ${asn}, located in ${country}.`
+        : "We cannot detect your IP information.",
+    ipAddress,
+    asn,
+    country,
     data,
   };
 };

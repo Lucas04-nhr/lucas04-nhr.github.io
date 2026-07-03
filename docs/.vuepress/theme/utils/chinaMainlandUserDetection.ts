@@ -33,8 +33,8 @@ export type IpSignal = {
 };
 
 export type MainlandVerdictKind =
-  | "mainland-ip"
-  | "mainland-like"
+  | "mainland"
+  | "suspected-mainland"
   | "non-mainland";
 
 export type MainlandVerdict = {
@@ -338,7 +338,7 @@ export const detectBrowserSignals = (): BrowserSignal[] => [
 ];
 
 export const isBrowserMainlandLike = (signals: BrowserSignal[]): boolean =>
-  countMainlandBrowserSignals(signals) >= 3;
+  countMainlandBrowserSignals(signals) === signals.length && signals.length > 0;
 
 export const shouldTreatAsMainlandUser = (
   ipSignal: IpSignal | null,
@@ -356,23 +356,34 @@ export const resolveMainlandVerdict = (
 
   if (ipResult === true) {
     return {
-      kind: "mainland-ip",
+      kind: "mainland",
       title: "Mainland China User",
       summary: `The current IP geolocation is CN, so this is treated as a mainland China user.\nVPNs, proxies, and privacy tools may change regional access behavior.`,
     };
   }
 
-  if (mainlandBrowserSignalCount >= 3) {
+  if (mainlandBrowserSignalCount === totalBrowserSignals) {
     return {
-      kind: "mainland-like",
+      kind: "mainland",
       title: "Mainland China User",
-      summary: `${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as a mainland China user.\nYour IP does not directly confirm mainland China: you may be using a VPN, proxy, privacy relay, or routed network.`,
+      summary: `All ${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as a mainland China user.\nUsing some region-restricted services may cause your account to be disabled.`,
+    };
+  }
+
+  if (ipResult === null || mainlandBrowserSignalCount >= 2) {
+    return {
+      kind: "suspected-mainland",
+      title: "Suspected Mainland China User",
+      summary:
+        ipResult === null
+          ? `The current IP geolocation is unavailable, so this is treated as suspected mainland China.\nUsing the region-restricted services at your own risk.`
+          : `${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like, so this is treated as suspected mainland China.`,
     };
   }
 
   return {
     kind: "non-mainland",
     title: "Non-mainland China User",
-    summary: `The current IP geolocation is not CN or unavailable, and only ${mainlandBrowserSignalCount}/${totalBrowserSignals} non-IP signals look mainland-like.`,
+    summary: `The current IP geolocation is not CN, using the region-restricted services is not-that risky.`,
   };
 };

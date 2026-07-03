@@ -135,19 +135,36 @@ const mainlandSignalScore = computed(
 
 const browserSignalTotal = computed(() => browserSignals.value.length || 4);
 
-const mainlandSignalRuleResult = computed(() =>
-  mainlandSignalScore.value >= 3 ? "Mainland-like" : "Non-mainland",
-);
+const mainlandSignalRuleResult = computed(() => {
+  if (mainlandSignalScore.value === browserSignalTotal.value) {
+    return "Mainland-like";
+  }
 
-const mainlandSignalRuleResultClass = computed(() =>
-  mainlandSignalScore.value >= 3 ? "result-mainland-like" : "result-non-mainland",
-);
+  if (mainlandSignalScore.value >= 2) {
+    return "Suspected mainland-like";
+  }
+
+  return "Non-mainland";
+});
+
+const mainlandSignalRuleResultClass = computed(() => {
+  if (mainlandSignalScore.value === browserSignalTotal.value) {
+    return "result-mainland-like";
+  }
+
+  if (mainlandSignalScore.value >= 2) {
+    return "result-suspected-mainland";
+  }
+
+  return "result-non-mainland";
+});
 
 const mainlandSignalRuleText = computed(() => {
   const score = mainlandSignalScore.value;
+  const subject = score === 1 ? "signal" : "signals";
   const verb = score === 1 ? "is" : "are";
 
-  return `${score} in ${browserSignalTotal.value} signals ${verb} treated as mainland-like.`;
+  return `${score} in ${browserSignalTotal.value} ${subject} ${verb} treated as mainland-like.`;
 });
 
 const formatPlural = (
@@ -212,12 +229,12 @@ onMounted(() => {
   margin: 24px 0;
 }
 
-.china-user-check.is-mainland-ip {
+.china-user-check.is-mainland {
   --check-accent: #dc2626;
   --check-accent-soft: rgba(220, 38, 38, 0.12);
 }
 
-.china-user-check.is-mainland-like {
+.china-user-check.is-suspected-mainland {
   --check-accent: #d97706;
   --check-accent-soft: rgba(217, 119, 6, 0.12);
 }
@@ -388,6 +405,11 @@ onMounted(() => {
 
 .result-non-mainland {
   color: #16a34a;
+  font-weight: 700;
+}
+
+.result-suspected-mainland {
+  color: #d97706;
   font-weight: 700;
 }
 

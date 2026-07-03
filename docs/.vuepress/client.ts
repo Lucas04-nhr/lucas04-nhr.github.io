@@ -118,26 +118,66 @@ export default defineClientConfig({
 
     // Detect visitor region to conditionally display beian info.
     if (typeof window !== "undefined" && typeof document !== "undefined") {
-      void (async () => {
+      let mainlandUserDetectionPromise: Promise<boolean> | null = null;
+      let beianDisplayLogged = false;
+
+      const detectMainlandUserForBeian = () => {
+        if (mainlandUserDetectionPromise) return mainlandUserDetectionPromise;
+
         console.log("Attempting to detect visitor region for beian display...");
-        const browserSignals = detectBrowserSignals();
-        let ipSignal: IpSignal | null = null;
+        mainlandUserDetectionPromise = (async () => {
+          const browserSignals = detectBrowserSignals();
+          let ipSignal: IpSignal | null = null;
 
-        try {
-          ipSignal = await fetchIpSignal();
-        } catch (e) {
-          console.log("Failed to detect visitor IP region:", e);
-          // silently ignore errors (network, rate limit, CORS, ...)
-        }
-
-        if (shouldTreatAsMainlandUser(ipSignal, browserSignals)) {
-          const el = document.getElementById("beian-cn");
-          if (el) {
-            el.style.display = "inline";
-            console.log("Visitor is treated as mainland China user, displaying beian info.");
+          try {
+            ipSignal = await fetchIpSignal();
+          } catch (e) {
+            console.log("Failed to detect visitor IP region:", e);
+            // silently ignore errors (network, rate limit, CORS, ...)
           }
-        }
-      })();
+
+          return shouldTreatAsMainlandUser(ipSignal, browserSignals);
+        })();
+
+        return mainlandUserDetectionPromise;
+      };
+
+      const applyBeianVisibility = () => {
+        void detectMainlandUserForBeian().then((isMainlandUser) => {
+          const beianEls = document.querySelectorAll("#beian-cn");
+
+          beianEls.forEach((el) => {
+            (el as HTMLElement).style.display = isMainlandUser
+              ? "inline"
+              : "none";
+          });
+
+          if (isMainlandUser && beianEls.length > 0 && !beianDisplayLogged) {
+            beianDisplayLogged = true;
+            console.log(
+              "Visitor is treated as mainland China user, displaying beian info.",
+            );
+          }
+        });
+      };
+
+      const applyBeianVisibilitySoon = () => {
+        setTimeout(applyBeianVisibility, 100);
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", applyBeianVisibility);
+      } else {
+        applyBeianVisibility();
+      }
+
+      router.afterEach(applyBeianVisibilitySoon);
+
+      const beianObserver = new MutationObserver(applyBeianVisibility);
+      beianObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
     }
 
     // Hide footer on home page (vp-content.is-home) to avoid layout shift (only run in browser)

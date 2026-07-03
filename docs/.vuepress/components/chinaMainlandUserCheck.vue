@@ -1,10 +1,10 @@
 <template>
-  <section class="china-user-check" :class="`is-${verdict.kind}`">
+  <section class="china-user-check" :class="`is-${displayVerdict.kind}`">
     <header class="result-panel">
       <div>
         <p class="eyebrow">Mainland China User Check</p>
-        <h2>{{ verdict.title }}</h2>
-        <p>{{ verdict.summary }}</p>
+        <h2>{{ displayVerdict.title }}</h2>
+        <p>{{ displayVerdict.summary }}</p>
       </div>
       <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
         {{ loading ? "Checking..." : "Refresh" }}
@@ -132,23 +132,23 @@ const error = ref<string | null>(null);
 const ipSignal = ref<IpSignal | null>(null);
 const browserSignals = ref<BrowserSignal[]>([]);
 const internalRuleSignal = ref<InternalMainlandRuleSignal | null>(null);
+const internalRuleChecking = ref(true);
 
 const refresh = async () => {
   loading.value = true;
   error.value = null;
   browserSignals.value = detectBrowserSignals();
+  internalRuleSignal.value = null;
+  internalRuleChecking.value = true;
+  const internalRulePromise = detectInternalMainlandRule().finally(() => {
+    internalRuleChecking.value = false;
+  });
 
   try {
     const [ipResult, internalRuleResult] = await Promise.allSettled([
       fetchIpSignal(),
-      detectInternalMainlandRule(),
+      internalRulePromise,
     ]);
-
-    if (ipResult.status === "fulfilled") {
-      ipSignal.value = ipResult.value;
-    } else {
-      throw ipResult.reason;
-    }
 
     internalRuleSignal.value =
       internalRuleResult.status === "fulfilled"
@@ -159,6 +159,12 @@ const refresh = async () => {
             bypassed: false,
             detail: "Internal connectivity rule failed to run.",
           };
+
+    if (ipResult.status === "fulfilled") {
+      ipSignal.value = ipResult.value;
+    } else {
+      throw ipResult.reason;
+    }
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Unknown error";
     ipSignal.value = {
@@ -167,7 +173,12 @@ const refresh = async () => {
       detail: "Could not fetch IP geolocation from ip.lucas04.top.",
       data: null,
     };
-    internalRuleSignal.value = await detectInternalMainlandRule();
+    internalRuleSignal.value ??= {
+      id: "internal-rule-check-result",
+      result: null,
+      bypassed: false,
+      detail: "Internal connectivity rule failed to run.",
+    };
   } finally {
     loading.value = false;
   }
@@ -180,6 +191,18 @@ const verdict = computed(() =>
     internalRuleSignal.value,
   ),
 );
+
+const displayVerdict = computed(() => {
+  if (internalRuleChecking.value && !internalRuleSignal.value) {
+    return {
+      kind: "checking-internal-rule",
+      title: "Checking Internal Rules",
+      summary: `Checking internal connectivity rules.\nThe final result will update shortly.`,
+    };
+  }
+
+  return verdict.value;
+});
 
 const hasIpLinkDetail = computed(
   () =>
@@ -335,6 +358,11 @@ onMounted(() => {
 .china-user-check.is-non-mainland {
   --check-accent: #16a34a;
   --check-accent-soft: rgba(22, 163, 74, 0.12);
+}
+
+.china-user-check.is-checking-internal-rule {
+  --check-accent: #64748b;
+  --check-accent-soft: rgba(100, 116, 139, 0.12);
 }
 
 .result-panel {

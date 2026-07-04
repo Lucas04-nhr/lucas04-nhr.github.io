@@ -4,6 +4,15 @@
       <div>
         <p class="eyebrow">Mainland China User Check</p>
         <h2>{{ displayVerdict.title }}</h2>
+        <div
+          v-if="isCheckingResult"
+          :key="checkingProgressKey"
+          class="checking-progress"
+          :style="checkingProgressStyle"
+          aria-hidden="true"
+        >
+          <span />
+        </div>
         <p>{{ displayVerdict.summary }}</p>
       </div>
       <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
@@ -23,12 +32,12 @@
     <div class="signal-grid">
       <article class="signal-card ip-card">
         <div class="signal-header">
-          <span class="status-dot" :class="statusClass(ipSignal?.result ?? null)" />
+          <span class="status-dot" :class="visibleStatusClass(ipSignal?.result ?? null)" />
           <h3>IP geolocation</h3>
         </div>
-        <p class="signal-value">{{ ipSignal?.value ?? "Loading..." }}</p>
-        <p v-if="loading" class="signal-detail">
-          Fetching from API...
+        <p class="signal-value">{{ visibleValue(ipSignal?.value) }}</p>
+        <p v-if="isCheckingResult" class="signal-detail">
+          Collecting detection signals...
         </p>
         <p v-else-if="hasIpLinkDetail" class="signal-detail">
           According to our data, you are visiting our site from
@@ -58,11 +67,11 @@
 
       <article v-for="signal in browserSignals" :key="signal.id" class="signal-card">
         <div class="signal-header">
-          <span class="status-dot" :class="statusClass(signal.result)" />
+          <span class="status-dot" :class="visibleStatusClass(signal.result)" />
           <h3>{{ signal.label }}</h3>
         </div>
-        <p class="signal-value">{{ signal.value }}</p>
-        <p class="signal-detail">{{ signal.detail }}</p>
+        <p class="signal-value">{{ visibleValue(signal.value) }}</p>
+        <p class="signal-detail">{{ visibleValue(signal.detail) }}</p>
       </article>
     </div>
 
@@ -77,10 +86,10 @@
       <tbody>
         <tr>
           <td>IP country</td>
-          <td :class="resultClass(ipSignal?.result ?? null)">
-            {{ formatResult(ipSignal?.result ?? null) }}
+          <td :class="visibleResultClass(ipSignal?.result ?? null)">
+            {{ visibleResult(ipSignal?.result ?? null) }}
           </td>
-          <td>{{ ipSignal?.country ?? "N/A" }}</td>
+          <td>{{ visibleValue(ipSignal?.country ?? "N/A") }}</td>
         </tr>
         <tr>
           <td>Non-IP mainland signals</td>
@@ -91,15 +100,15 @@
         </tr>
         <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
           <td>{{ signal.label }}</td>
-          <td :class="resultClass(signal.result)">
-            {{ formatResult(signal.result) }}
+          <td :class="visibleResultClass(signal.result)">
+            {{ visibleResult(signal.result) }}
           </td>
-          <td>{{ signal.value }}</td>
+          <td>{{ visibleValue(signal.value) }}</td>
         </tr>
       </tbody>
     </table>
 
-    <ul class="footnote footnote-list">
+    <ul v-if="!isCheckingResult" class="footnote footnote-list">
       <li>
         {{ proxyFootnote }}
       </li>
@@ -133,14 +142,36 @@ const ipSignal = ref<IpSignal | null>(null);
 const browserSignals = ref<BrowserSignal[]>([]);
 const internalRuleSignal = ref<InternalMainlandRuleSignal | null>(null);
 const internalRuleChecking = ref(true);
+const checkingProgressDuration = ref(4000);
+const checkingProgressEasing = ref("cubic-bezier(0.16, 1, 0.3, 1)");
+const checkingProgressKey = ref(0);
+
+const CHECKING_TEXT = "Checking...";
+
+const randomBetween = (min: number, max: number) =>
+  min + Math.random() * (max - min);
+
+const wait = (duration: number) =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, duration);
+  });
+
+const randomizeCheckingProgress = () => {
+  checkingProgressDuration.value = Math.round(randomBetween(1500, 2500));
+  checkingProgressEasing.value = `cubic-bezier(${randomBetween(0.08, 0.24).toFixed(2)}, ${randomBetween(0.78, 1).toFixed(2)}, ${randomBetween(0.22, 0.42).toFixed(2)}, 1)`;
+  checkingProgressKey.value += 1;
+};
 
 const refresh = async () => {
   loading.value = true;
   error.value = null;
   ipSignal.value = null;
+  randomizeCheckingProgress();
+  const progressPromise = wait(checkingProgressDuration.value);
   browserSignals.value = detectBrowserSignals();
   internalRuleSignal.value = null;
   internalRuleChecking.value = true;
+  let nextInternalRuleSignal: InternalMainlandRuleSignal | null = null;
   const internalRulePromise = detectInternalMainlandRule().finally(() => {
     internalRuleChecking.value = false;
   });
@@ -151,7 +182,7 @@ const refresh = async () => {
       internalRulePromise,
     ]);
 
-    internalRuleSignal.value =
+    nextInternalRuleSignal =
       internalRuleResult.status === "fulfilled"
         ? internalRuleResult.value
         : {
@@ -162,11 +193,14 @@ const refresh = async () => {
           };
 
     if (ipResult.status === "fulfilled") {
+      await progressPromise;
+      internalRuleSignal.value = nextInternalRuleSignal;
       ipSignal.value = ipResult.value;
     } else {
       throw ipResult.reason;
     }
   } catch (err) {
+    await progressPromise;
     error.value = err instanceof Error ? err.message : "Unknown error";
     ipSignal.value = {
       result: null,
@@ -174,7 +208,7 @@ const refresh = async () => {
       detail: "Could not fetch IP geolocation from ip.lucas04.top.",
       data: null,
     };
-    internalRuleSignal.value ??= {
+    internalRuleSignal.value = nextInternalRuleSignal ?? {
       id: "internal-rule-check-result",
       result: null,
       bypassed: false,
@@ -197,13 +231,22 @@ const displayVerdict = computed(() => {
   if (loading.value || (internalRuleChecking.value && !internalRuleSignal.value)) {
     return {
       kind: "checking-internal-rule",
-      title: "Checking Result...",
-      summary: `Checking detection signals...\nThe final result will update shortly.`,
+      title: "Checking Results...",
+      summary: `Checking detection signals.\nThe final result will update shortly.`,
     };
   }
 
   return verdict.value;
 });
+
+const isCheckingResult = computed(
+  () => displayVerdict.value.kind === "checking-internal-rule",
+);
+
+const checkingProgressStyle = computed(() => ({
+  "--checking-progress-duration": `${checkingProgressDuration.value}ms`,
+  "--checking-progress-easing": checkingProgressEasing.value,
+}));
 
 const hasIpLinkDetail = computed(
   () =>
@@ -247,6 +290,10 @@ const mainlandSignalScore = computed(
 const browserSignalTotal = computed(() => browserSignals.value.length || 4);
 
 const mainlandSignalRuleResult = computed(() => {
+  if (isCheckingResult.value) {
+    return CHECKING_TEXT;
+  }
+
   if (mainlandSignalScore.value === browserSignalTotal.value) {
     return "Mainland-like";
   }
@@ -259,6 +306,10 @@ const mainlandSignalRuleResult = computed(() => {
 });
 
 const mainlandSignalRuleResultClass = computed(() => {
+  if (isCheckingResult.value) {
+    return "";
+  }
+
   if (mainlandSignalScore.value === browserSignalTotal.value) {
     return "result-mainland-like";
   }
@@ -271,6 +322,10 @@ const mainlandSignalRuleResultClass = computed(() => {
 });
 
 const mainlandSignalRuleText = computed(() => {
+  if (isCheckingResult.value) {
+    return CHECKING_TEXT;
+  }
+
   const score = mainlandSignalScore.value;
   const subject = score === 1 ? "signal" : "signals";
   const verb = score === 1 ? "is" : "are";
@@ -334,6 +389,18 @@ const resultClass = (result: boolean | null) => {
   return "";
 };
 
+const visibleStatusClass = (result: boolean | null) =>
+  statusClass(isCheckingResult.value ? null : result);
+
+const visibleResult = (result: boolean | null) =>
+  isCheckingResult.value ? CHECKING_TEXT : formatResult(result);
+
+const visibleResultClass = (result: boolean | null) =>
+  isCheckingResult.value ? "" : resultClass(result);
+
+const visibleValue = (value?: string | null) =>
+  isCheckingResult.value ? CHECKING_TEXT : value || "N/A";
+
 onMounted(() => {
   void refresh();
 });
@@ -392,6 +459,40 @@ onMounted(() => {
 .result-panel p {
   margin: 0;
   white-space: pre-line;
+}
+
+.checking-progress {
+  width: min(320px, 100%);
+  height: 6px;
+  margin: 12px 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.24);
+}
+
+.checking-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--check-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: checking-progress-fill var(--checking-progress-duration) var(--checking-progress-easing) forwards;
+}
+
+@keyframes checking-progress-fill {
+  0% {
+    transform: scaleX(0);
+  }
+
+  62% {
+    transform: scaleX(0.86);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
 }
 
 .eyebrow {

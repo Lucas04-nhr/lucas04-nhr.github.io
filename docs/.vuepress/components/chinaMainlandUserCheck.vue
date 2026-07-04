@@ -137,6 +137,7 @@ const internalRuleChecking = ref(true);
 const refresh = async () => {
   loading.value = true;
   error.value = null;
+  ipSignal.value = null;
   browserSignals.value = detectBrowserSignals();
   internalRuleSignal.value = null;
   internalRuleChecking.value = true;
@@ -193,11 +194,11 @@ const verdict = computed(() =>
 );
 
 const displayVerdict = computed(() => {
-  if (internalRuleChecking.value && !internalRuleSignal.value) {
+  if (loading.value || (internalRuleChecking.value && !internalRuleSignal.value)) {
     return {
       kind: "checking-internal-rule",
-      title: "Checking Internal Rules",
-      summary: `Checking internal connectivity rules.\nThe final result will update shortly.`,
+      title: "Checking Result...",
+      summary: `Checking detection signals...\nThe final result will update shortly.`,
     };
   }
 

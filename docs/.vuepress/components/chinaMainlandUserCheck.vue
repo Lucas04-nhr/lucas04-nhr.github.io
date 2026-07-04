@@ -1,24 +1,26 @@
 <template>
   <section class="china-user-check" :class="`is-${displayVerdict.kind}`">
     <header class="result-panel">
-      <div>
+      <div class="result-panel-content">
         <p class="eyebrow">Mainland China User Check</p>
         <h2>{{ displayVerdict.title }}</h2>
-        <div
-          v-if="isCheckingResult"
-          :key="checkingProgressKey"
-          class="checking-progress"
-          :style="checkingProgressStyle"
-          aria-hidden="true"
-        >
-          <span />
+        <div class="result-panel-action-row">
+          <div
+            v-if="isCheckingResult"
+            :key="checkingProgressKey"
+            class="checking-progress"
+            :style="checkingProgressStyle"
+            aria-hidden="true"
+          >
+            <span />
+          </div>
+          <div v-else class="checking-progress-spacer" aria-hidden="true" />
+          <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
+            {{ loading ? "Checking..." : "Refresh" }}
+          </button>
         </div>
-        <div v-else class="checking-progress-spacer" aria-hidden="true" />
-        <p>{{ displayVerdict.summary }}</p>
+        <p class="result-summary">{{ displayVerdict.summary }}</p>
       </div>
-      <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
-        {{ loading ? "Checking..." : "Refresh" }}
-      </button>
     </header>
 
     <div v-if="error" class="message error-message">
@@ -426,15 +428,21 @@ onMounted(() => {
 }
 
 .result-panel {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
   padding: 22px;
   border: 1px solid var(--check-border);
   border-left: 5px solid var(--check-accent);
   border-radius: 8px;
   background: var(--check-accent-soft);
+}
+
+@media (min-width: 720px) {
+  .result-panel {
+    padding-bottom: 28px;
+  }
+}
+
+.result-panel-content {
+  min-width: 0;
 }
 
 .result-panel h2 {
@@ -448,11 +456,19 @@ onMounted(() => {
   white-space: pre-line;
 }
 
+.result-panel-action-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 12px 0 10px;
+}
+
 .checking-progress,
 .checking-progress-spacer {
-  width: min(320px, 100%);
+  flex: 1 1 auto;
+  width: 100%;
   height: 6px;
-  margin: 12px 0 10px;
+  min-width: 0;
 }
 
 .checking-progress {
@@ -500,8 +516,8 @@ onMounted(() => {
 }
 
 .refresh-button {
-  flex: 0 0 auto;
-  min-width: 96px;
+  flex: 0 0 112px;
+  width: 112px;
   min-height: 38px;
   padding: 8px 14px;
   border: 1px solid var(--check-accent);
@@ -509,6 +525,7 @@ onMounted(() => {
   background: var(--check-accent);
   color: #ffffff;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -686,12 +703,29 @@ html.dark .error-message,
 }
 
 @media (max-width: 719px) {
-  .result-panel {
-    align-items: stretch;
+  .result-panel-content {
+    display: flex;
     flex-direction: column;
   }
 
+  .result-panel-action-row {
+    display: contents;
+  }
+
+  .checking-progress,
+  .checking-progress-spacer {
+    order: 1;
+    margin: 12px 0 10px;
+  }
+
+  .result-summary {
+    order: 2;
+  }
+
   .refresh-button {
+    order: 3;
+    flex-basis: auto;
+    margin-top: 14px;
     width: 100%;
   }
 

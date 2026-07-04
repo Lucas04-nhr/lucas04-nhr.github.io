@@ -13,6 +13,7 @@
         >
           <span />
         </div>
+        <div v-else class="checking-progress-spacer" aria-hidden="true" />
         <p>{{ displayVerdict.summary }}</p>
       </div>
       <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
@@ -447,10 +448,14 @@ onMounted(() => {
   white-space: pre-line;
 }
 
-.checking-progress {
+.checking-progress,
+.checking-progress-spacer {
   width: min(320px, 100%);
   height: 6px;
   margin: 12px 0 10px;
+}
+
+.checking-progress {
   overflow: hidden;
   border-radius: 999px;
   background: rgba(100, 116, 139, 0.24);

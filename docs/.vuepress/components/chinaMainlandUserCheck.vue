@@ -71,55 +71,59 @@
           <h3>{{ signal.label }}</h3>
         </div>
         <p class="signal-value">{{ visibleValue(signal.value) }}</p>
-        <p class="signal-detail">{{ visibleValue(signal.detail) }}</p>
+        <p class="signal-detail">{{ signal.detail }}</p>
       </article>
     </div>
 
-    <table class="details-table">
-      <thead>
-        <tr>
-          <th>Signal</th>
-          <th>Result</th>
-          <th>Observed value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>IP country</td>
-          <td :class="visibleResultClass(ipSignal?.result ?? null)">
-            {{ visibleResult(ipSignal?.result ?? null) }}
-          </td>
-          <td>{{ visibleValue(ipSignal?.country ?? "N/A") }}</td>
-        </tr>
-        <tr>
-          <td>Non-IP mainland signals</td>
-          <td :class="mainlandSignalRuleResultClass">
-            {{ mainlandSignalRuleResult }}
-          </td>
-          <td>{{ mainlandSignalRuleText }}</td>
-        </tr>
-        <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
-          <td>{{ signal.label }}</td>
-          <td :class="visibleResultClass(signal.result)">
-            {{ visibleResult(signal.result) }}
-          </td>
-          <td>{{ visibleValue(signal.value) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <Transition name="result-reveal">
+      <div v-if="!isCheckingResult" class="result-details">
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>Signal</th>
+              <th>Result</th>
+              <th>Observed value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>IP country</td>
+              <td :class="resultClass(ipSignal?.result ?? null)">
+                {{ formatResult(ipSignal?.result ?? null) }}
+              </td>
+              <td>{{ ipSignal?.country ?? "N/A" }}</td>
+            </tr>
+            <tr>
+              <td>Non-IP mainland signals</td>
+              <td :class="mainlandSignalRuleResultClass">
+                {{ mainlandSignalRuleResult }}
+              </td>
+              <td>{{ mainlandSignalRuleText }}</td>
+            </tr>
+            <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
+              <td>{{ signal.label }}</td>
+              <td :class="resultClass(signal.result)">
+                {{ formatResult(signal.result) }}
+              </td>
+              <td>{{ signal.value }}</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <ul v-if="!isCheckingResult" class="footnote footnote-list">
-      <li>
-        {{ proxyFootnote }}
-      </li>
-      <li v-html="ipFootnote" />
-      <li>
-        Using a proxy, such as a VPN, or iCloud private relay, may change the country or region that is displayed on this page.
-      </li>
-      <li>
-        {{ fontFootnote }}
-      </li>
-    </ul>
+        <ul class="footnote footnote-list">
+          <li>
+            {{ proxyFootnote }}
+          </li>
+          <li v-html="ipFootnote" />
+          <li>
+            Using a proxy, such as a VPN, or iCloud private relay, may change the country or region that is displayed on this page.
+          </li>
+          <li>
+            {{ fontFootnote }}
+          </li>
+        </ul>
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -290,10 +294,6 @@ const mainlandSignalScore = computed(
 const browserSignalTotal = computed(() => browserSignals.value.length || 4);
 
 const mainlandSignalRuleResult = computed(() => {
-  if (isCheckingResult.value) {
-    return CHECKING_TEXT;
-  }
-
   if (mainlandSignalScore.value === browserSignalTotal.value) {
     return "Mainland-like";
   }
@@ -306,10 +306,6 @@ const mainlandSignalRuleResult = computed(() => {
 });
 
 const mainlandSignalRuleResultClass = computed(() => {
-  if (isCheckingResult.value) {
-    return "";
-  }
-
   if (mainlandSignalScore.value === browserSignalTotal.value) {
     return "result-mainland-like";
   }
@@ -322,10 +318,6 @@ const mainlandSignalRuleResultClass = computed(() => {
 });
 
 const mainlandSignalRuleText = computed(() => {
-  if (isCheckingResult.value) {
-    return CHECKING_TEXT;
-  }
-
   const score = mainlandSignalScore.value;
   const subject = score === 1 ? "signal" : "signals";
   const verb = score === 1 ? "is" : "are";
@@ -391,12 +383,6 @@ const resultClass = (result: boolean | null) => {
 
 const visibleStatusClass = (result: boolean | null) =>
   statusClass(isCheckingResult.value ? null : result);
-
-const visibleResult = (result: boolean | null) =>
-  isCheckingResult.value ? CHECKING_TEXT : formatResult(result);
-
-const visibleResultClass = (result: boolean | null) =>
-  isCheckingResult.value ? "" : resultClass(result);
 
 const visibleValue = (value?: string | null) =>
   isCheckingResult.value ? CHECKING_TEXT : value || "N/A";
@@ -607,6 +593,30 @@ onMounted(() => {
   display: table;
   width: 100%;
   border-collapse: collapse;
+}
+
+.result-details {
+  display: grid;
+  gap: 18px;
+}
+
+.result-reveal-enter-active {
+  transition:
+    opacity 0.38s ease-out,
+    transform 0.38s ease-out,
+    clip-path 0.42s ease-out;
+}
+
+.result-reveal-enter-from {
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(-10px);
+}
+
+.result-reveal-enter-to {
+  opacity: 1;
+  clip-path: inset(0);
+  transform: translateY(0);
 }
 
 .details-table th,

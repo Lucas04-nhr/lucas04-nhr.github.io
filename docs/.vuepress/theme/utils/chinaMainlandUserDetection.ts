@@ -1,19 +1,40 @@
 export type DetectionState = boolean | null;
 
 export type IpApiResponse = {
-  IP?: {
-    IP?: string;
-    Continent?: string;
-    Country?: string;
-    Region?: string;
-    RegionCode?: string;
-    City?: string;
-    Timezone?: string;
-    ASN?: string | number;
-    ASOrganization?: string;
-    Colo?: string;
+  ip?: {
+    address?: string;
+    version?: number;
+    source?: string;
   };
-  Headers?: Record<string, string>;
+  geo?: {
+    continentCode?: string;
+    countryCode?: string;
+    isEU?: boolean;
+    region?: {
+      name?: string;
+      code?: string;
+    };
+    city?: string;
+    postalCode?: string;
+    metroCode?: string;
+    coordinates?: {
+      latitude?: number;
+      longitude?: number;
+    };
+    timezone?: string;
+  };
+  network?: {
+    asn?: string | number;
+    asOrganization?: string;
+    connection?: {
+      transport?: string;
+      rttMs?: number;
+      deliveryRateBps?: number;
+    };
+  };
+  headers?: {
+    values?: Record<string, string | number | boolean | null | undefined>;
+  };
 };
 
 export type BrowserSignal = {
@@ -125,7 +146,7 @@ export const countMainlandBrowserSignals = (
 ): number => signals.filter((signal) => signal.result === true).length;
 
 export const readIpSignal = (data: IpApiResponse | null): IpSignal => {
-  if (!data?.IP) {
+  if (!data?.ip && !data?.geo && !data?.network) {
     return {
       result: null,
       value: "N/A",
@@ -134,12 +155,16 @@ export const readIpSignal = (data: IpApiResponse | null): IpSignal => {
     };
   }
 
-  const country = data.IP.Country?.toUpperCase();
-  const location = [data.IP.City, data.IP.Region, country]
+  const country = data.geo?.countryCode?.toUpperCase();
+  const location = [data.geo?.city, data.geo?.region?.name, country]
     .filter(Boolean)
     .join(", ");
-  const ipAddress = data.IP.IP || data.Headers?.["x-real-ip"];
-  const asn = data.IP.ASN ? `AS${String(data.IP.ASN).replace(/^AS/i, "")}` : "";
+  const forwardedIp = data.headers?.values?.["x-real-ip"];
+  const ipAddress =
+    data.ip?.address || (forwardedIp ? String(forwardedIp) : undefined);
+  const asn = data.network?.asn
+    ? `AS${String(data.network.asn).replace(/^AS/i, "")}`
+    : "";
 
   return {
     result: country ? country === "CN" : null,

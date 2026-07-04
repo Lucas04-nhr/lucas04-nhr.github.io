@@ -10,7 +10,6 @@
     </div>
 
     <div v-else class="debug-content">
-      <!-- IP Highlight -->
       <h3>Your IP Address</h3>
       <div class="ip-highlight">
         <code
@@ -18,109 +17,8 @@
         >
       </div>
 
-      <!-- Location Information -->
-      <h3>Location Information</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Continent</td>
-            <td>
-              <code>{{ data.IP.Continent || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Country</td>
-            <td>
-              <code>{{ data.IP.Country || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Region</td>
-            <td>
-              <code>{{ data.IP.Region || "N/A" }}</code> (<code>{{
-                data.IP.RegionCode || "N/A"
-              }}</code
-              >)
-            </td>
-          </tr>
-          <tr>
-            <td>City</td>
-            <td>
-              <code>{{ data.IP.City || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Coordinates</td>
-            <td>
-              <code>{{ data.IP.Latitude || "N/A" }}</code
-              >, <code>{{ data.IP.Longitude || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Postal Code</td>
-            <td>
-              <code>{{ data.IP.PostalCode || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Timezone</td>
-            <td>
-              <code>{{ data.IP.Timezone || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Metro Code</td>
-            <td>
-              <code>{{ data.IP.MetroCode || "N/A" }}</code>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Network Information -->
-      <h3>Network Information</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>ASN</td>
-            <td>
-              <code>{{ data.IP.ASN || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>AS Organization</td>
-            <td>
-              <code>{{ data.IP.ASOrganization || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Cloudflare Colo</td>
-            <td>
-              <code>{{ data.IP.Colo || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>Is EU</td>
-            <td>{{ data.IP.IsEU ? "Yes" : "No" }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Security & Protocol -->
-      <template v-if="data.Security">
-        <h3>Security & Protocol</h3>
+      <template v-for="section in sections" :key="section.title">
+        <h3>{{ section.title }}</h3>
         <table>
           <thead>
             <tr>
@@ -129,59 +27,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>HTTP Protocol</td>
+            <tr v-for="row in section.rows" :key="row.label">
+              <td>{{ row.label }}</td>
               <td>
-                <code>{{ data.Security.httpProtocol || "N/A" }}</code>
+                <code>{{ row.value }}</code>
               </td>
-            </tr>
-            <tr>
-              <td>TLS Version</td>
-              <td>
-                <code>{{ data.Security.tlsVersion || "N/A" }}</code>
-              </td>
-            </tr>
-            <tr>
-              <td>TLS Cipher</td>
-              <td>
-                <code>{{ data.Security.tlsCipher || "N/A" }}</code>
-              </td>
-            </tr>
-            <tr>
-              <td>Client TCP RTT</td>
-              <td>{{ data.Security.clientTcpRtt || "N/A" }} ms</td>
             </tr>
           </tbody>
         </table>
       </template>
 
-      <!-- Request Information -->
-      <!-- <h3>Request Information</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Method</td>
-            <td>
-              <code>{{ data.Method || "N/A" }}</code>
-            </td>
-          </tr>
-          <tr>
-            <td>URL</td>
-            <td>
-              <code>{{ data.Url || "N/A" }}</code>
-            </td>
-          </tr>
-        </tbody>
-      </table> -->
-
-      <!-- HTTP Headers -->
-      <template v-if="data.Headers">
+      <template v-if="headerRows.length > 0">
         <h3>HTTP Headers</h3>
         <table>
           <thead>
@@ -191,12 +47,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(value, key) in data.Headers" :key="key">
+            <tr v-for="row in headerRows" :key="row.label">
               <td>
-                <code>{{ key }}</code>
+                <code>{{ row.label }}</code>
               </td>
               <td>
-                <code>{{ value }}</code>
+                <code>{{ row.value }}</code>
               </td>
             </tr>
           </tbody>
@@ -207,16 +63,294 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, h } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 const API_URL = "https://ip.lucas04.top";
-const data = ref<any>(null);
+
+type NullableValue = string | number | boolean | null | undefined;
+
+interface ConnectionInfo {
+  ip?: {
+    address?: string;
+    version?: number;
+    source?: string;
+  };
+  geo?: {
+    continentCode?: string;
+    countryCode?: string;
+    isEU?: boolean;
+    region?: {
+      name?: string;
+      code?: string;
+    };
+    city?: string;
+    postalCode?: string;
+    metroCode?: string;
+    coordinates?: {
+      latitude?: number;
+      longitude?: number;
+    };
+    timezone?: string;
+  };
+  network?: {
+    asn?: number;
+    asOrganization?: string;
+    connection?: {
+      transport?: string;
+      rttMs?: number;
+      deliveryRateBps?: number;
+    };
+  };
+  security?: {
+    tls?: {
+      version?: string;
+      cipher?: string;
+      clientCertificatePresented?: boolean;
+    };
+  };
+  client?: {
+    userAgent?: string;
+    acceptLanguage?: string;
+    acceptEncoding?: string;
+    platform?: string;
+    mobile?: boolean;
+  };
+  edge?: {
+    colo?: string;
+    rayId?: string;
+  };
+  request?: {
+    method?: string;
+    url?: {
+      scheme?: string;
+      host?: string;
+      pathname?: string;
+      queryKeys?: string[];
+    };
+    httpProtocol?: string;
+    priority?: string;
+    referrerOrigin?: string;
+  };
+  headers?: {
+    values?: Record<string, NullableValue>;
+  };
+  api?: {
+    version?: string;
+    generatedAt?: string;
+    processingTimeMs?: number;
+    cache?: string;
+  };
+}
+
+interface TableRow {
+  label: string;
+  value: string;
+}
+
+interface TableSection {
+  title: string;
+  rows: TableRow[];
+}
+
+const data = ref<ConnectionInfo | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+const formatValue = (value: NullableValue) => {
+  if (value === null || value === undefined || value === "") return "N/A";
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  return String(value);
+};
+
+const formatWithUnit = (value: NullableValue, unit: string) => {
+  if (value === null || value === undefined || value === "") return "N/A";
+  return `${value} ${unit}`;
+};
+
+const formatRegion = (name?: string, code?: string) => {
+  if (!name && !code) return "N/A";
+  if (!name) return code ?? "N/A";
+  if (!code) return name;
+  return `${name} (${code})`;
+};
+
+const formatCoordinates = (latitude?: number, longitude?: number) => {
+  if (latitude === undefined || longitude === undefined) return "N/A";
+  return `${latitude}, ${longitude}`;
+};
+
+const formatQueryKeys = (queryKeys?: string[]) => {
+  if (!queryKeys || queryKeys.length === 0) return "None";
+  return queryKeys.join(", ");
+};
+
+const formatUrl = (url?: ConnectionInfo["request"]["url"]) => {
+  if (!url?.host) return "N/A";
+
+  const scheme = url.scheme ? `${url.scheme}://` : "";
+  const pathname = url.pathname ?? "";
+
+  return `${scheme}${url.host}${pathname}`;
+};
+
 const ipAddress = computed(() => {
   if (!data.value) return "Unknown";
-  return data.value.IP?.IP || data.value.Headers?.["x-real-ip"] || "Unknown";
+  return (
+    data.value.ip?.address ||
+    data.value.headers?.values?.["x-real-ip"] ||
+    "Unknown"
+  );
+});
+
+const sections = computed<TableSection[]>(() => {
+  const info = data.value;
+  if (!info) return [];
+
+  return [
+    {
+      title: "IP Information",
+      rows: [
+        { label: "Address", value: formatValue(info.ip?.address) },
+        { label: "Version", value: formatValue(info.ip?.version) },
+        { label: "Source", value: formatValue(info.ip?.source) },
+      ],
+    },
+    {
+      title: "Location Information",
+      rows: [
+        { label: "Continent Code", value: formatValue(info.geo?.continentCode) },
+        { label: "Country Code", value: formatValue(info.geo?.countryCode) },
+        {
+          label: "Region",
+          value: formatRegion(info.geo?.region?.name, info.geo?.region?.code),
+        },
+        { label: "City", value: formatValue(info.geo?.city) },
+        { label: "Postal Code", value: formatValue(info.geo?.postalCode) },
+        { label: "Metro Code", value: formatValue(info.geo?.metroCode) },
+        {
+          label: "Coordinates",
+          value: formatCoordinates(
+            info.geo?.coordinates?.latitude,
+            info.geo?.coordinates?.longitude,
+          ),
+        },
+        { label: "Timezone", value: formatValue(info.geo?.timezone) },
+        { label: "Is EU", value: formatValue(info.geo?.isEU) },
+      ],
+    },
+    {
+      title: "Network Information",
+      rows: [
+        { label: "ASN", value: formatValue(info.network?.asn) },
+        {
+          label: "AS Organization",
+          value: formatValue(info.network?.asOrganization),
+        },
+        {
+          label: "Transport",
+          value: formatValue(info.network?.connection?.transport),
+        },
+        {
+          label: "Round Trip Time",
+          value: formatWithUnit(info.network?.connection?.rttMs, "ms"),
+        },
+        {
+          label: "Delivery Rate",
+          value: formatWithUnit(
+            info.network?.connection?.deliveryRateBps,
+            "bps",
+          ),
+        },
+      ],
+    },
+    {
+      title: "Security",
+      rows: [
+        {
+          label: "TLS Version",
+          value: formatValue(info.security?.tls?.version),
+        },
+        {
+          label: "TLS Cipher",
+          value: formatValue(info.security?.tls?.cipher),
+        },
+        {
+          label: "Client Certificate Presented",
+          value: formatValue(info.security?.tls?.clientCertificatePresented),
+        },
+      ],
+    },
+    {
+      title: "Client",
+      rows: [
+        { label: "User Agent", value: formatValue(info.client?.userAgent) },
+        {
+          label: "Accept Language",
+          value: formatValue(info.client?.acceptLanguage),
+        },
+        {
+          label: "Accept Encoding",
+          value: formatValue(info.client?.acceptEncoding),
+        },
+        { label: "Platform", value: formatValue(info.client?.platform) },
+        { label: "Mobile", value: formatValue(info.client?.mobile) },
+      ],
+    },
+    {
+      title: "Cloudflare Edge",
+      rows: [
+        { label: "Colo", value: formatValue(info.edge?.colo) },
+        { label: "Ray ID", value: formatValue(info.edge?.rayId) },
+      ],
+    },
+    {
+      title: "Request",
+      rows: [
+        { label: "Method", value: formatValue(info.request?.method) },
+        { label: "URL", value: formatUrl(info.request?.url) },
+        { label: "Scheme", value: formatValue(info.request?.url?.scheme) },
+        { label: "Host", value: formatValue(info.request?.url?.host) },
+        { label: "Pathname", value: formatValue(info.request?.url?.pathname) },
+        {
+          label: "Query Keys",
+          value: formatQueryKeys(info.request?.url?.queryKeys),
+        },
+        {
+          label: "HTTP Protocol",
+          value: formatValue(info.request?.httpProtocol),
+        },
+        { label: "Priority", value: formatValue(info.request?.priority) },
+        {
+          label: "Referrer Origin",
+          value: formatValue(info.request?.referrerOrigin),
+        },
+      ],
+    },
+    {
+      title: "API",
+      rows: [
+        { label: "Version", value: formatValue(info.api?.version) },
+        { label: "Generated At", value: formatValue(info.api?.generatedAt) },
+        {
+          label: "Processing Time",
+          value: formatWithUnit(info.api?.processingTimeMs, "ms"),
+        },
+        { label: "Cache", value: formatValue(info.api?.cache) },
+      ],
+    },
+  ];
+});
+
+const headerRows = computed<TableRow[]>(() => {
+  const headers = data.value?.headers?.values;
+  if (!headers) return [];
+
+  return Object.entries(headers)
+    .sort(([first], [second]) => first.localeCompare(second))
+    .map(([label, value]) => ({
+      label,
+      value: formatValue(value),
+    }));
 });
 
 const fetchDebugInfo = async () => {
@@ -284,18 +418,22 @@ onMounted(() => {
 
 .debug-content h3 {
   margin-top: 5px;
+  text-align: center;
 }
 
 .debug-content table {
-  width: 100%;
-  margin: 20px auto 20px auto;
+  display: table;
+  width: min(100%, 960px);
+  margin: 20px auto;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .debug-content th,
 .debug-content td {
   padding: 10px;
   text-align: center;
+  vertical-align: middle;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -309,6 +447,9 @@ onMounted(() => {
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 0.9em;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .debug-content pre {

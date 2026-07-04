@@ -80,7 +80,7 @@
           <td :class="resultClass(ipSignal?.result ?? null)">
             {{ formatResult(ipSignal?.result ?? null) }}
           </td>
-          <td>{{ ipSignal?.data?.IP?.Country ?? "N/A" }}</td>
+          <td>{{ ipSignal?.country ?? "N/A" }}</td>
         </tr>
         <tr>
           <td>Non-IP mainland signals</td>

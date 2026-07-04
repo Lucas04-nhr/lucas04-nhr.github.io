@@ -461,6 +461,11 @@ onMounted(() => {
   background: rgba(100, 116, 139, 0.24);
 }
 
+.checking-progress-spacer {
+  border-radius: 999px;
+  background: var(--check-accent);
+}
+
 .checking-progress span {
   display: block;
   width: 100%;

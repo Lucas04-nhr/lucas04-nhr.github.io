@@ -1,6 +1,5 @@
 import {
   applyAndPersistScriptPreference,
-  clearAndResetScriptPreference,
   parseLocaleQueryAction,
 } from "./localeScriptPreference";
 import {
@@ -14,6 +13,7 @@ import {
 import {
   applyAndPersistContentInteractionPreference,
   parseBooleanPreference,
+  parseMenuPreference,
 } from "./contentInteractionPreference";
 
 export type UrlQueryHandlerResult = {
@@ -40,11 +40,6 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
   locale(value) {
     const action = parseLocaleQueryAction(value);
     if (!action) return unhandledResult;
-
-    if (action === "reset") {
-      clearAndResetScriptPreference();
-      return { handled: true, removeParam: true };
-    }
 
     applyAndPersistScriptPreference(action);
     return { handled: true, removeParam: true };
@@ -83,7 +78,7 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
   },
 
   menuAllowed(value) {
-    const preference = parseBooleanPreference(value);
+    const preference = parseMenuPreference(value);
     if (preference === null) return unhandledResult;
 
     applyAndPersistContentInteractionPreference("menuAllowed", preference);

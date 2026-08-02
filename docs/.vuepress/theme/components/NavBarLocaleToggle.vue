@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import {
   applyAndPersistScriptPreference,
   applyScriptPreferenceToDocument,
-  readStoredScriptPreference,
+  initializeScriptPreference,
   type LocaleScriptPreference,
 } from "../utils/localeScriptPreference";
 
@@ -15,19 +15,6 @@ const current = ref<"simplified" | "traditional">("simplified");
 const root = ref<HTMLElement | null>(null);
 const isMobile = ref(false);
 const mobileBreakpoint = 768;
-
-const isTraditionalChineseLocale = () => {
-  const locales = [
-    typeof navigator !== "undefined" ? navigator.language : "",
-    ...(typeof navigator !== "undefined" ? (navigator.languages ?? []) : []),
-  ]
-    .filter(Boolean)
-    .map((locale) => locale.toLowerCase());
-
-  return locales.some((locale) =>
-    /^(zh-(hk|mo|tw)|zh-hant|zh-tw|zh-hk|zh-mo)\b/.test(locale),
-  );
-};
 
 const applyScriptPreference = (preference: LocaleScriptPreference) => {
   current.value = preference;
@@ -62,16 +49,9 @@ onMounted(() => {
   updateDeviceState();
   window.addEventListener("resize", updateDeviceState);
 
-  const saved = readStoredScriptPreference();
-  if (saved) {
-    current.value = saved;
-    applyScriptPreferenceToDocument(saved);
-    return;
-  }
-
-  if (isTraditionalChineseLocale()) {
-    applyScriptPreference("traditional");
-  }
+  const saved = initializeScriptPreference();
+  current.value = saved;
+  applyScriptPreferenceToDocument(saved);
 });
 
 onUnmounted(() => {

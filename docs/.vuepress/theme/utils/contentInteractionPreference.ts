@@ -1,18 +1,25 @@
+import {
+  type ContextMenuPreference,
+  installCustomContextMenu,
+  syncCustomContextMenuMode,
+} from "./customContextMenu";
+
 export type ContentInteractionPreferenceKey =
   | "copyAllowed"
   | "selectionAllowed"
   | "menuAllowed";
 
-export type ContentInteractionPreferences = Record<
-  ContentInteractionPreferenceKey,
-  boolean
->;
+export type ContentInteractionPreferences = {
+  copyAllowed: boolean;
+  selectionAllowed: boolean;
+  menuAllowed: ContextMenuPreference;
+};
 
 export const defaultContentInteractionPreferences: ContentInteractionPreferences =
   {
     copyAllowed: false,
     selectionAllowed: false,
-    menuAllowed: false,
+    menuAllowed: "custom",
   };
 
 const SELECTION_PROHIBITED_CLASS = "selection-prohibited";
@@ -38,7 +45,19 @@ export const parseBooleanPreference = (
   return null;
 };
 
-const readCookie = (key: ContentInteractionPreferenceKey): boolean | null => {
+export const parseMenuPreference = (
+  value: string | null | undefined,
+): ContextMenuPreference | null => {
+  if (!value) return null;
+
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "custom" || normalized === "original") return normalized;
+  if (normalized === "false") return false;
+
+  return null;
+};
+
+const readCookie = (key: ContentInteractionPreferenceKey): string | null => {
   if (!isBrowser()) return null;
 
   const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -46,14 +65,12 @@ const readCookie = (key: ContentInteractionPreferenceKey): boolean | null => {
     new RegExp(`(?:^|; )${escapedKey}=([^;]*)`),
   );
 
-  return matched
-    ? parseBooleanPreference(decodeURIComponent(matched[1]))
-    : null;
+  return matched ? decodeURIComponent(matched[1]) : null;
 };
 
-const writeCookie = (
-  key: ContentInteractionPreferenceKey,
-  value: boolean,
+const writeCookie = <Key extends ContentInteractionPreferenceKey>(
+  key: Key,
+  value: ContentInteractionPreferences[Key],
 ) => {
   if (!isBrowser()) return;
 
@@ -63,13 +80,13 @@ const writeCookie = (
 export const readContentInteractionPreferences =
   (): ContentInteractionPreferences => ({
     copyAllowed:
-      readCookie("copyAllowed") ??
+      parseBooleanPreference(readCookie("copyAllowed")) ??
       defaultContentInteractionPreferences.copyAllowed,
     selectionAllowed:
-      readCookie("selectionAllowed") ??
+      parseBooleanPreference(readCookie("selectionAllowed")) ??
       defaultContentInteractionPreferences.selectionAllowed,
     menuAllowed:
-      readCookie("menuAllowed") ??
+      parseMenuPreference(readCookie("menuAllowed")) ??
       defaultContentInteractionPreferences.menuAllowed,
   });
 
@@ -81,11 +98,14 @@ const applyPreferences = (preferences: ContentInteractionPreferences) => {
     SELECTION_PROHIBITED_CLASS,
     !preferences.selectionAllowed,
   );
+  syncCustomContextMenuMode(preferences.menuAllowed);
 };
 
-export const applyAndPersistContentInteractionPreference = (
-  key: ContentInteractionPreferenceKey,
-  value: boolean,
+export const applyAndPersistContentInteractionPreference = <
+  Key extends ContentInteractionPreferenceKey,
+>(
+  key: Key,
+  value: ContentInteractionPreferences[Key],
 ) => {
   if (!isBrowser()) return;
 
@@ -93,13 +113,13 @@ export const applyAndPersistContentInteractionPreference = (
   applyPreferences({
     ...activePreferences,
     [key]: value,
-  });
+  } as ContentInteractionPreferences);
 };
 
 const isCodeCopyButton = (target: EventTarget | null): boolean =>
   target instanceof Element && Boolean(target.closest(CODE_COPY_BUTTON_SELECTOR));
 
-const grantCodeCopyExemption = () => {
+const grantCopyExemption = () => {
   const expiresAt = Date.now() + 1_000;
   codeCopyExemptionExpiresAt = expiresAt;
 
@@ -110,7 +130,7 @@ const grantCodeCopyExemption = () => {
   }, 1_000);
 };
 
-const consumeCodeCopyExemption = (): boolean => {
+const consumeCopyExemption = (): boolean => {
   const isExempt = Date.now() <= codeCopyExemptionExpiresAt;
   codeCopyExemptionExpiresAt = 0;
   return isExempt;
@@ -125,13 +145,17 @@ export const installContentInteractionGuards = () => {
   if (!isBrowser() || guardsInstalled) return;
 
   guardsInstalled = true;
-  applyPreferences(readContentInteractionPreferences());
+  const preferences = readContentInteractionPreferences();
+  writeCookie("copyAllowed", preferences.copyAllowed);
+  writeCookie("selectionAllowed", preferences.selectionAllowed);
+  writeCookie("menuAllowed", preferences.menuAllowed);
+  applyPreferences(preferences);
 
   document.addEventListener(
     "click",
     (event) => {
       if (isCodeCopyButton(event.target)) {
-        grantCodeCopyExemption();
+        grantCopyExemption();
       }
     },
     true,
@@ -140,7 +164,7 @@ export const installContentInteractionGuards = () => {
   document.addEventListener(
     "copy",
     (event) => {
-      if (!activePreferences.copyAllowed && !consumeCodeCopyExemption()) {
+      if (!activePreferences.copyAllowed && !consumeCopyExemption()) {
         prohibitEvent(event);
       }
     },
@@ -155,11 +179,8 @@ export const installContentInteractionGuards = () => {
     true,
   );
 
-  document.addEventListener(
-    "contextmenu",
-    (event) => {
-      if (!activePreferences.menuAllowed) prohibitEvent(event);
-    },
-    true,
-  );
+  installCustomContextMenu({
+    getMode: () => activePreferences.menuAllowed,
+    allowNextCopy: grantCopyExemption,
+  });
 };

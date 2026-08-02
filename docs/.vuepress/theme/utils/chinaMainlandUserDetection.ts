@@ -85,6 +85,8 @@ export const INTERNAL_CONNECTIVITY_CHECK_URL = decodeInternalCheckTarget([
 ]);
 
 const INTERNAL_RULE_BYPASS_COOKIE = "internalBypass";
+const LEGACY_INTERNAL_RULE_BYPASS_COOKIE = "internal-rule-bypass";
+const INTERNAL_RULE_BYPASS_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
 const mainlandLanguagePattern = /^zh(-Hans)?(-CN)?$/i;
 
@@ -190,7 +192,7 @@ export const fetchIpSignal = async (): Promise<IpSignal> => {
   return readIpSignal(data);
 };
 
-export type InternalRuleBypassQueryAction = "true" | "false" | "reset";
+export type InternalRuleBypassQueryAction = "true" | "false";
 
 export const parseInternalRuleBypassQueryAction = (
   value: string | null,
@@ -200,7 +202,6 @@ export const parseInternalRuleBypassQueryAction = (
   const normalized = value.trim().toLowerCase();
   if (normalized === "true") return "true";
   if (normalized === "false") return "false";
-  if (normalized === "reset") return "reset";
 
   return null;
 };
@@ -208,12 +209,22 @@ export const parseInternalRuleBypassQueryAction = (
 export const applyAndPersistInternalRuleBypassPreference = (
   action: InternalRuleBypassQueryAction,
 ) => {
-  if (action === "reset") {
-    deleteCookie(INTERNAL_RULE_BYPASS_COOKIE);
-    return;
-  }
+  writeCookie(
+    INTERNAL_RULE_BYPASS_COOKIE,
+    action,
+    INTERNAL_RULE_BYPASS_MAX_AGE_SECONDS,
+  );
+  deleteCookie(LEGACY_INTERNAL_RULE_BYPASS_COOKIE);
+};
 
-  writeCookie(INTERNAL_RULE_BYPASS_COOKIE, action, 60 * 60 * 24 * 365);
+export const initializeInternalRuleBypassPreference = () => {
+  const preference =
+    parseInternalRuleBypassQueryAction(
+      readCookie(INTERNAL_RULE_BYPASS_COOKIE) ??
+        readCookie(LEGACY_INTERNAL_RULE_BYPASS_COOKIE),
+    ) ?? "false";
+
+  applyAndPersistInternalRuleBypassPreference(preference);
 };
 
 const syncInternalRuleBypassPreferenceFromUrl = () => {

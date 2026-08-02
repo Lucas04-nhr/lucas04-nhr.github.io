@@ -25,11 +25,16 @@ import {
   detectBrowserSignals,
   detectInternalMainlandRule,
   fetchIpSignal,
+  initializeInternalRuleBypassPreference,
   shouldTreatAsMainlandUser,
 } from "./theme/utils/chinaMainlandUserDetection";
 import {
   installContentInteractionGuards,
 } from "./theme/utils/contentInteractionPreference";
+import { initializeScriptPreference } from "./theme/utils/localeScriptPreference";
+import {
+  initializeThemeAppearancePreference,
+} from "./theme/utils/themeAppearancePreference";
 
 export default defineClientConfig({
   layouts: {
@@ -51,6 +56,9 @@ export default defineClientConfig({
   },
 
   enhance({ app, router }) {
+    initializeScriptPreference();
+    initializeThemeAppearancePreference();
+    initializeInternalRuleBypassPreference();
     installContentInteractionGuards();
 
     // built-in components

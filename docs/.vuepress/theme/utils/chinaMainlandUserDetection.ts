@@ -84,7 +84,7 @@ export const INTERNAL_CONNECTIVITY_CHECK_URL = decodeInternalCheckTarget([
   104, 116, 105, 109, 101, 115, 46, 99, 111, 109, 47,
 ]);
 
-const INTERNAL_RULE_BYPASS_COOKIE = "internal-rule-bypass";
+const INTERNAL_RULE_BYPASS_COOKIE = "internalBypass";
 
 const mainlandLanguagePattern = /^zh(-Hans)?(-CN)?$/i;
 

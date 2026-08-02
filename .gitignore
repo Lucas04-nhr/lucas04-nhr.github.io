@@ -25,6 +25,7 @@ dist-ssr
 
 # Dependency directories
 node_modules
+.pnpm-store
 .temp
 .cache
 docs/.vuepress/public/static/*

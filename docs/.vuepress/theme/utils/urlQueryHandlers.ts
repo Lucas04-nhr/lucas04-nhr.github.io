@@ -11,6 +11,10 @@ import {
   applyAndPersistInternalRuleBypassPreference,
   parseInternalRuleBypassQueryAction,
 } from "./chinaMainlandUserDetection";
+import {
+  applyAndPersistContentInteractionPreference,
+  parseBooleanPreference,
+} from "./contentInteractionPreference";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -59,6 +63,30 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
     if (!action) return unhandledResult;
 
     applyAndPersistInternalRuleBypassPreference(action);
+    return { handled: true, removeParam: true };
+  },
+
+  copyAllowed(value) {
+    const preference = parseBooleanPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistContentInteractionPreference("copyAllowed", preference);
+    return { handled: true, removeParam: true };
+  },
+
+  selectionAllowed(value) {
+    const preference = parseBooleanPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistContentInteractionPreference("selectionAllowed", preference);
+    return { handled: true, removeParam: true };
+  },
+
+  menuAllowed(value) {
+    const preference = parseBooleanPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistContentInteractionPreference("menuAllowed", preference);
     return { handled: true, removeParam: true };
   },
 };

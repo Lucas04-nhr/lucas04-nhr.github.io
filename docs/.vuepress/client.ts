@@ -17,6 +17,7 @@ import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 // import CustomComponent from './theme/components/Custom.vue'
 import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
+import "./theme/styles/content_interaction.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import {
@@ -26,6 +27,9 @@ import {
   fetchIpSignal,
   shouldTreatAsMainlandUser,
 } from "./theme/utils/chinaMainlandUserDetection";
+import {
+  installContentInteractionGuards,
+} from "./theme/utils/contentInteractionPreference";
 
 export default defineClientConfig({
   layouts: {
@@ -47,6 +51,8 @@ export default defineClientConfig({
   },
 
   enhance({ app, router }) {
+    installContentInteractionGuards();
+
     // built-in components
     app.component("RepoCard", RepoCard);
     app.component("NpmBadge", NpmBadge);

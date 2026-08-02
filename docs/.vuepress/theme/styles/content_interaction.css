@@ -1,0 +1,5 @@
+html.selection-prohibited,
+html.selection-prohibited * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}

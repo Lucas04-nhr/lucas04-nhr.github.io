@@ -15,6 +15,10 @@ import {
   parseBooleanPreference,
   parseMenuPreference,
 } from "./contentInteractionPreference";
+import {
+  applyAndPersistDebugAllowedPreference,
+  parseDebugAllowedPreference,
+} from "./debugPreference";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -82,6 +86,14 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
     if (preference === null) return unhandledResult;
 
     applyAndPersistContentInteractionPreference("menuAllowed", preference);
+    return { handled: true, removeParam: true };
+  },
+
+  debugAllowed(value) {
+    const preference = parseDebugAllowedPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistDebugAllowedPreference(preference);
     return { handled: true, removeParam: true };
   },
 };

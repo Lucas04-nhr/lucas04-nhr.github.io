@@ -1,0 +1,22 @@
+html.debugger-detected body {
+  visibility: hidden !important;
+}
+
+html.debugger-detected {
+  overflow: hidden !important;
+}
+
+html.debugger-detected::before {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  display: block;
+  background: #fff;
+  content: "";
+  pointer-events: auto;
+}
+
+html.debugger-detected[data-theme="dark"]::before,
+html.dark.debugger-detected::before {
+  background: #000;
+}

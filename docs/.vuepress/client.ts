@@ -18,6 +18,7 @@ import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
 import "./theme/styles/content_interaction.css";
+import "./theme/styles/anti_debug.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import {
@@ -32,6 +33,7 @@ import {
   installContentInteractionGuards,
 } from "./theme/utils/contentInteractionPreference";
 import { initializeScriptPreference } from "./theme/utils/localeScriptPreference";
+import { initializeDebugPreference } from "./theme/utils/debugPreference";
 import {
   initializeThemeAppearancePreference,
 } from "./theme/utils/themeAppearancePreference";
@@ -60,6 +62,7 @@ export default defineClientConfig({
     initializeThemeAppearancePreference();
     initializeInternalRuleBypassPreference();
     installContentInteractionGuards();
+    initializeDebugPreference();
 
     // built-in components
     app.component("RepoCard", RepoCard);

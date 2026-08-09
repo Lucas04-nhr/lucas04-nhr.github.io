@@ -21,6 +21,7 @@ import "./theme/styles/content_interaction.css";
 import "./theme/styles/anti_debug.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
+import ContentInteractionPreferenceSync from "./theme/components/ContentInteractionPreferenceSync";
 import {
   type IpSignal,
   detectBrowserSignals,
@@ -29,18 +30,15 @@ import {
   initializeInternalRuleBypassPreference,
   shouldTreatAsMainlandUser,
 } from "./theme/utils/chinaMainlandUserDetection";
-import {
-  installContentInteractionGuards,
-} from "./theme/utils/contentInteractionPreference";
+import { installContentInteractionGuards } from "./theme/utils/contentInteractionPreference";
 import { initializeScriptPreference } from "./theme/utils/localeScriptPreference";
 import { initializeDebugPreference } from "./theme/utils/debugPreference";
-import {
-  initializeThemeAppearancePreference,
-} from "./theme/utils/themeAppearancePreference";
+import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
 
 export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
+      "layout-top": () => h(ContentInteractionPreferenceSync),
       "doc-title-after": () => h(PageContextMenu),
       "aside-outline-after": () => h(CustomAside),
       "nav-bar-content-after": () => [

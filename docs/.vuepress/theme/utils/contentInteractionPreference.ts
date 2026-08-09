@@ -17,8 +17,8 @@ export type ContentInteractionPreferences = {
 
 export const defaultContentInteractionPreferences: ContentInteractionPreferences =
   {
-    copyAllowed: false,
-    selectionAllowed: false,
+    copyAllowed: true,
+    selectionAllowed: true,
     menuAllowed: "custom",
   };
 
@@ -28,6 +28,7 @@ const CODE_COPY_BUTTON_SELECTOR =
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
 let activePreferences = { ...defaultContentInteractionPreferences };
+let pageCopyAllowed: boolean | null = null;
 let guardsInstalled = false;
 let codeCopyExemptionExpiresAt = 0;
 
@@ -102,6 +103,45 @@ const applyPreferences = (preferences: ContentInteractionPreferences) => {
   syncCustomContextMenuMode(preferences.menuAllowed);
 };
 
+const isCopyAllowed = (): boolean =>
+  pageCopyAllowed ?? activePreferences.copyAllowed;
+
+export const applyPageCopyAllowedPreference = (
+  preference: boolean | null,
+) => {
+  pageCopyAllowed = preference;
+};
+
+const BLOCKED_COPY_TEXT = {
+  simplifiedChinese: "由于版权原因禁止复制",
+  traditionalChinese: "由於版權原因禁止複製",
+  english: "Copying is prohibited due to copyright restrictions",
+  japanese: "著作権上の理由により、コピーは禁止されています",
+  danish: "Kopiering er forbudt af ophavsretlige årsager",
+} as const;
+
+export const getBlockedCopyTextForLocale = (locale: string): string => {
+  const normalizedLocale = locale.trim().toLowerCase().replaceAll("_", "-");
+
+  if (/^zh-(hant|hk|mo|tw)(-|$)/.test(normalizedLocale)) {
+    return BLOCKED_COPY_TEXT.traditionalChinese;
+  }
+  if (/^zh(-|$)/.test(normalizedLocale)) {
+    return BLOCKED_COPY_TEXT.simplifiedChinese;
+  }
+  if (/^ja(-|$)/.test(normalizedLocale)) {
+    return BLOCKED_COPY_TEXT.japanese;
+  }
+  if (/^da(-|$)/.test(normalizedLocale)) {
+    return BLOCKED_COPY_TEXT.danish;
+  }
+
+  return BLOCKED_COPY_TEXT.english;
+};
+
+export const getBlockedCopyText = (): string =>
+  getBlockedCopyTextForLocale(isBrowser() ? navigator.language : "en");
+
 export const applyAndPersistContentInteractionPreference = <
   Key extends ContentInteractionPreferenceKey,
 >(
@@ -142,6 +182,19 @@ const prohibitEvent = (event: Event) => {
   event.stopImmediatePropagation();
 };
 
+const replaceBlockedCopy = (event: ClipboardEvent) => {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+
+  const blockedCopyText = getBlockedCopyText();
+  if (event.clipboardData) {
+    event.clipboardData.setData("text/plain", blockedCopyText);
+    return;
+  }
+
+  void navigator.clipboard?.writeText(blockedCopyText).catch(() => {});
+};
+
 export const installContentInteractionGuards = () => {
   if (!isBrowser() || guardsInstalled) return;
 
@@ -165,8 +218,8 @@ export const installContentInteractionGuards = () => {
   document.addEventListener(
     "copy",
     (event) => {
-      if (!activePreferences.copyAllowed && !consumeCopyExemption()) {
-        prohibitEvent(event);
+      if (!isCopyAllowed() && !consumeCopyExemption()) {
+        replaceBlockedCopy(event);
       }
     },
     true,
@@ -182,6 +235,8 @@ export const installContentInteractionGuards = () => {
 
   installCustomContextMenu({
     getMode: () => activePreferences.menuAllowed,
+    getCopyAllowed: isCopyAllowed,
+    getBlockedCopyText,
     allowNextCopy: grantCopyExemption,
   });
 };

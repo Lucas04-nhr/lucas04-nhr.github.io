@@ -2,6 +2,8 @@ export type ContextMenuPreference = "custom" | "original" | false;
 
 type CustomContextMenuOptions = {
   getMode: () => ContextMenuPreference;
+  getCopyAllowed: () => boolean;
+  getBlockedCopyText: () => string;
   allowNextCopy: () => void;
 };
 
@@ -144,7 +146,12 @@ const positionMenu = (menu: HTMLDivElement, x: number, y: number) => {
   menu.style.top = `${Math.max(VIEWPORT_MARGIN_PX, top)}px`;
 };
 
-const showMenu = (x: number, y: number, target: EventTarget | null) => {
+const showMenu = (
+  x: number,
+  y: number,
+  target: EventTarget | null,
+  copyAllowed: boolean,
+) => {
   if (!menuElement) return;
 
   currentText = readContextText(target);
@@ -159,7 +166,9 @@ const showMenu = (x: number, y: number, target: EventTarget | null) => {
   menuElement
     .querySelectorAll<HTMLButtonElement>(".site-context-menu__item")
     .forEach((button) => {
-      button.disabled = !currentText;
+      button.disabled =
+        !currentText ||
+        (button.dataset.action === "copy" && !copyAllowed);
     });
 
   window.clearTimeout(hideTimer);
@@ -168,7 +177,14 @@ const showMenu = (x: number, y: number, target: EventTarget | null) => {
   window.requestAnimationFrame(() => menuElement?.classList.add("is-open"));
 };
 
-const createMenu = (allowNextCopy: () => void): HTMLDivElement => {
+const createMenu = ({
+  getCopyAllowed,
+  getBlockedCopyText,
+  allowNextCopy,
+}: Pick<
+  CustomContextMenuOptions,
+  "getCopyAllowed" | "getBlockedCopyText" | "allowNextCopy"
+>): HTMLDivElement => {
   const menu = document.createElement("div");
   menu.className = "site-context-menu";
   menu.setAttribute("role", "menu");
@@ -202,13 +218,16 @@ const createMenu = (allowNextCopy: () => void): HTMLDivElement => {
     const button = event.target.closest<HTMLButtonElement>(
       ".site-context-menu__item",
     );
-    if (!button || button.disabled || !currentText) return;
+    if (!button || !currentText) return;
 
     if (button.dataset.action === "copy") {
-      void copyText(currentText, allowNextCopy);
+      const text = getCopyAllowed() ? currentText : getBlockedCopyText();
+      void copyText(text, allowNextCopy);
     } else if (button.dataset.action === "google") {
+      if (button.disabled) return;
       openSearch("https://www.google.com/search?q=", currentText);
     } else if (button.dataset.action === "chatgpt") {
+      if (button.disabled) return;
       openSearch("https://chatgpt.com/?q=", currentText);
     }
 
@@ -221,6 +240,8 @@ const createMenu = (allowNextCopy: () => void): HTMLDivElement => {
 
 export const installCustomContextMenu = ({
   getMode,
+  getCopyAllowed,
+  getBlockedCopyText,
   allowNextCopy,
 }: CustomContextMenuOptions) => {
   if (typeof window === "undefined" || typeof document === "undefined" || installed) {
@@ -228,7 +249,11 @@ export const installCustomContextMenu = ({
   }
 
   installed = true;
-  menuElement = createMenu(allowNextCopy);
+  menuElement = createMenu({
+    getCopyAllowed,
+    getBlockedCopyText,
+    allowNextCopy,
+  });
 
   let longPressTimer: number | undefined;
   let longPressTarget: EventTarget | null = null;
@@ -252,7 +277,12 @@ export const installCustomContextMenu = ({
       event.stopImmediatePropagation();
       if (mode === false || Date.now() < suppressNativeContextUntil) return;
 
-      showMenu(event.clientX, event.clientY, event.target);
+      showMenu(
+        event.clientX,
+        event.clientY,
+        event.target,
+        getCopyAllowed(),
+      );
     },
     true,
   );
@@ -277,7 +307,7 @@ export const installCustomContextMenu = ({
       longPressTimer = window.setTimeout(() => {
         longPressTriggered = true;
         suppressNativeContextUntil = Date.now() + 1_000;
-        showMenu(startX, startY, longPressTarget);
+        showMenu(startX, startY, longPressTarget, getCopyAllowed());
       }, LONG_PRESS_DELAY_MS);
     },
     { capture: true, passive: true },

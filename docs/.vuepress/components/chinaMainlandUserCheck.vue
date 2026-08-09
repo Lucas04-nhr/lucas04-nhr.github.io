@@ -36,7 +36,7 @@
       <article class="signal-card ip-card">
         <div class="signal-header">
           <span class="status-dot" :class="visibleStatusClass(ipSignal?.result ?? null)" />
-          <h3>IP geolocation</h3>
+          <h3>IP Geolocation</h3>
         </div>
         <p class="signal-value">{{ visibleValue(ipSignal?.value) }}</p>
         <p v-if="isCheckingResult" class="signal-detail">
@@ -85,19 +85,19 @@
             <tr>
               <th>Signal</th>
               <th>Result</th>
-              <th>Observed value</th>
+              <th>Observed Value</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>IP country</td>
+              <td>IP Country</td>
               <td :class="resultClass(ipSignal?.result ?? null)">
                 {{ formatResult(ipSignal?.result ?? null) }}
               </td>
               <td>{{ ipSignal?.country ?? "N/A" }}</td>
             </tr>
             <tr>
-              <td>Non-IP mainland signals</td>
+              <td>Non-IP Mainland Signals</td>
               <td :class="mainlandSignalRuleResultClass">
                 {{ mainlandSignalRuleResult }}
               </td>

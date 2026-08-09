@@ -296,7 +296,7 @@ const detectLanguage = (): BrowserSignal => {
   if (typeof navigator === "undefined") {
     return {
       id: "language",
-      label: "Browser language",
+      label: "Browser Language",
       result: null,
       value: "N/A",
       detail: "navigator is unavailable.",
@@ -311,7 +311,7 @@ const detectLanguage = (): BrowserSignal => {
 
   return {
     id: "language",
-    label: "Browser language",
+    label: "Browser Language",
     result: matched,
     value: formatValue(languages),
     detail: "Matches any ISO language code for mainland China.",
@@ -327,7 +327,7 @@ const detectTimeZone = (): BrowserSignal => {
   if (timeZone) {
     return {
       id: "timezone",
-      label: "Time zone",
+      label: "Time Zone",
       result: mainlandTimeZones.has(timeZone),
       value: timeZone,
       detail: "Uses known mainland China tzdata names and legacy aliases.",
@@ -338,7 +338,7 @@ const detectTimeZone = (): BrowserSignal => {
 
   return {
     id: "timezone",
-    label: "Time zone",
+    label: "Time Zone",
     result: offset === -480,
     value: `UTC${offset <= 0 ? "+" : "-"}${Math.abs(offset / 60)}`,
     detail: "Intl time zone unavailable; fell back to UTC offset.",
@@ -394,7 +394,7 @@ const detectEmoji = (): BrowserSignal => {
   if (!isBrowser()) {
     return {
       id: "emoji",
-      label: "Emoji rendering",
+      label: "Emoji Rendering",
       result: null,
       value: "N/A",
       detail: "DOM canvas is unavailable.",
@@ -404,7 +404,7 @@ const detectEmoji = (): BrowserSignal => {
   if (isWindows()) {
     return {
       id: "emoji",
-      label: "Emoji rendering",
+      label: "Emoji Rendering",
       result: null,
       value: "Windows",
       detail: "Windows does not provide a reliable flag emoji signal.",
@@ -419,7 +419,7 @@ const detectEmoji = (): BrowserSignal => {
     if (control.opaquePixelCount === 0 || control.isMono) {
       return {
         id: "emoji",
-        label: "Emoji rendering",
+        label: "Emoji Rendering",
         result: null,
         value: "Unsupported",
         detail: "Color emoji rendering is unavailable or protected.",
@@ -431,7 +431,7 @@ const detectEmoji = (): BrowserSignal => {
 
     return {
       id: "emoji",
-      label: "Emoji rendering",
+      label: "Emoji Rendering",
       result: matched,
       value: matched ? "Flag fallback detected" : "Color flag rendered",
       detail: "Checks whether the Taiwan flag emoji falls back after color emoji support is confirmed.",
@@ -439,7 +439,7 @@ const detectEmoji = (): BrowserSignal => {
   } catch (error) {
     return {
       id: "emoji",
-      label: "Emoji rendering",
+      label: "Emoji Rendering",
       result: null,
       value: "N/A",
       detail: error instanceof Error ? error.message : "Canvas test failed.",
@@ -470,7 +470,7 @@ const detectFont = (): BrowserSignal => {
   if (!isBrowser()) {
     return {
       id: "font",
-      label: "Chinese fonts",
+      label: "Chinese Fonts",
       result: null,
       value: "N/A",
       detail: "DOM canvas is unavailable.",
@@ -483,7 +483,7 @@ const detectFont = (): BrowserSignal => {
   if (!context) {
     return {
       id: "font",
-      label: "Chinese fonts",
+      label: "Chinese Fonts",
       result: null,
       value: "N/A",
       detail: "Canvas context not supported.",
@@ -498,7 +498,7 @@ const detectFont = (): BrowserSignal => {
 
   return {
     id: "font",
-    label: `Chinese fonts`,
+    label: `Chinese Fonts`,
     result: matchedCount > 0,
     value: `${matchedCount} ${formatPlural(matchedCount, "font")} found`,
     detail: "Detects the availability of selected Chinese fonts.",

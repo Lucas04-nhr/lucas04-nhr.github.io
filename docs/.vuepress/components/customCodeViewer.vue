@@ -8,7 +8,6 @@ const props = defineProps<{
 }>();
 
 const highlighter = ref();
-const isCopied = ref(false);
 
 onMounted(async () => {
   highlighter.value = await createHighlighter({
@@ -55,35 +54,17 @@ onMounted(async () => {
   });
 });
 
-const copyToClipboard = async () => {
-  console.log("Copy button clicked");
-  try {
-    await navigator.clipboard.writeText(props.content);
-    console.log("Copied to clipboard successfully");
-    isCopied.value = true;
-    setTimeout(() => {
-      isCopied.value = false;
-    }, 2000);
-  } catch (err) {
-    console.log("Clipboard API failed, using fallback", err);
-    // Fallback for older browsers
-    const textArea = document.createElement("textarea");
-    textArea.value = props.content;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-    isCopied.value = true;
-    setTimeout(() => {
-      isCopied.value = false;
-    }, 2000);
-  }
-};
+const escapeHtml = (content: string) =>
+  content
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 
 const highlightedCode = computed(() => {
-  if (!highlighter.value) return props.content;
+  if (!highlighter.value) return escapeHtml(props.content);
+
   try {
-    return highlighter.value.codeToHtml(props.content, {
+    const highlighted = highlighter.value.codeToHtml(props.content, {
       lang: props.lang,
       themes: {
         light: "vitesse-light",
@@ -91,102 +72,21 @@ const highlightedCode = computed(() => {
       },
       defaultColor: false,
     });
+
+    return (
+      highlighted.match(/<code(?:\s[^>]*)?>([\s\S]*?)<\/code>/)?.[1] ??
+      escapeHtml(props.content)
+    );
   } catch {
-    return props.content;
+    return escapeHtml(props.content);
   }
 });
 </script>
 
 <template>
-  <div :class="`code-viewer language-${lang}`" :data-title="lang">
-    <button
-      class="copy"
-      :data-lang="lang"
-      :title="isCopied ? 'Copied!' : 'Copy code'"
-      @click="copyToClipboard"
-    >
-      <svg v-if="!isCopied" viewBox="0 0 24 24" width="16" height="16">
-        <path
-          fill="currentColor"
-          d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-        />
-      </svg>
-      <svg v-else viewBox="0 0 24 24" width="16" height="16">
-        <path
-          fill="currentColor"
-          d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
-        />
-      </svg>
-    </button>
-    <div
-      class="shiki shiki-themes vitesse-light vitesse-dark vp-code"
+  <div :class="`code-viewer language-${lang}`" :data-ext="lang">
+    <pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code
       v-html="highlightedCode"
-    ></div>
+    /></pre>
   </div>
 </template>
-
-<style>
-.code-viewer {
-  position: relative;
-}
-
-.code-viewer .copy {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  color: inherit;
-  opacity: 0.7;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
-  min-width: 32px;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: scale(1);
-}
-
-.code-viewer .copy:hover {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-.code-viewer .copy:active {
-  transform: scale(0.95);
-  transition-duration: 0.1s;
-}
-
-.code-viewer .shiki {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-.code-viewer .shiki pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.code-viewer .shiki code {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.code-viewer .copy:hover {
-  opacity: 1;
-}
-
-@media (min-width: 768px) {
-  .code-viewer .copy {
-    display: block;
-  }
-}
-</style>

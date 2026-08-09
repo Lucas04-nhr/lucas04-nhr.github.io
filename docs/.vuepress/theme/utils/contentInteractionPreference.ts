@@ -23,8 +23,7 @@ export const defaultContentInteractionPreferences: ContentInteractionPreferences
   };
 
 const SELECTION_PROHIBITED_CLASS = "selection-prohibited";
-const CODE_COPY_BUTTON_SELECTOR =
-  ".vp-copy-code-button, .code-viewer .copy";
+const CODE_COPY_BUTTON_SELECTOR = ".vp-copy-code-button";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
 let activePreferences = { ...defaultContentInteractionPreferences };

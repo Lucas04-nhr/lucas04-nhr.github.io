@@ -3,7 +3,16 @@
     <header class="result-panel">
       <div class="result-panel-content">
         <p class="eyebrow">Mainland China User Check</p>
-        <h2>{{ displayVerdict.title }}</h2>
+        <h2 class="result-title">
+          <VPIcon
+            :key="displayVerdictIcon"
+            :name="displayVerdictIcon"
+            color="var(--check-accent)"
+            size="28"
+            aria-hidden="true"
+          />
+          <span>{{ displayVerdict.title }}</span>
+        </h2>
         <div class="result-panel-action-row">
           <div
             v-if="isCheckingResult"
@@ -35,7 +44,12 @@
     <div class="signal-grid">
       <article class="signal-card ip-card">
         <div class="signal-header">
-          <span class="status-dot" :class="visibleStatusClass(ipSignal?.result ?? null)" />
+          <VPIcon
+            :color="visibleStatusIconColor(ipSignal?.result ?? null)"
+            name="mdi:map-marker-outline"
+            size="22"
+            aria-hidden="true"
+          />
           <h3>IP Geolocation</h3>
         </div>
         <p class="signal-value">{{ visibleValue(ipSignal?.value) }}</p>
@@ -70,7 +84,12 @@
 
       <article v-for="signal in browserSignals" :key="signal.id" class="signal-card">
         <div class="signal-header">
-          <span class="status-dot" :class="visibleStatusClass(signal.result)" />
+          <VPIcon
+            :color="visibleStatusIconColor(signal.result)"
+            :name="signalIcon(signal.id)"
+            size="22"
+            aria-hidden="true"
+          />
           <h3>{{ signal.label }}</h3>
         </div>
         <p class="signal-value">{{ visibleValue(signal.value) }}</p>
@@ -132,10 +151,12 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { VPIcon } from "vuepress-theme-plume/client";
 import {
   type BrowserSignal,
   type InternalMainlandRuleSignal,
   type IpSignal,
+  type MainlandVerdict,
   countMainlandBrowserSignals,
   detectBrowserSignals,
   detectInternalMainlandRule,
@@ -234,7 +255,13 @@ const verdict = computed(() =>
   ),
 );
 
-const displayVerdict = computed(() => {
+type DisplayVerdict = MainlandVerdict | {
+  kind: "checking-internal-rule";
+  title: string;
+  summary: string;
+};
+
+const displayVerdict = computed<DisplayVerdict>(() => {
   if (loading.value || (internalRuleChecking.value && !internalRuleSignal.value)) {
     return {
       kind: "checking-internal-rule",
@@ -248,6 +275,17 @@ const displayVerdict = computed(() => {
 
 const isCheckingResult = computed(
   () => displayVerdict.value.kind === "checking-internal-rule",
+);
+
+const verdictIcons: Record<DisplayVerdict["kind"], string> = {
+  "suspected-mainland": "mdi:alert-circle-outline",
+  "non-mainland": "mdi:check-circle-outline",
+  mainland: "mdi:close-circle-outline",
+  "checking-internal-rule": "mdi:help-circle-outline",
+};
+
+const displayVerdictIcon = computed(
+  () => verdictIcons[displayVerdict.value.kind],
 );
 
 const checkingProgressStyle = computed(() => ({
@@ -366,12 +404,6 @@ const proxyFootnote = computed(() => {
   return base;
 });
 
-const statusClass = (result: boolean | null) => {
-  if (result === true) return "status-hit";
-  if (result === false) return "status-miss";
-  return "status-unknown";
-};
-
 const formatResult = (result: boolean | null) => {
   if (result === true) return "Mainland-like";
   if (result === false) return "Non-mainland";
@@ -384,8 +416,21 @@ const resultClass = (result: boolean | null) => {
   return "";
 };
 
-const visibleStatusClass = (result: boolean | null) =>
-  statusClass(isCheckingResult.value ? null : result);
+const visibleStatusIconColor = (result: boolean | null) => {
+  const visibleResult = isCheckingResult.value ? null : result;
+  if (visibleResult === true) return "#dc2626";
+  if (visibleResult === false) return "#16a34a";
+  return "#94a3b8";
+};
+
+const signalIcons: Record<BrowserSignal["id"], string> = {
+  language: "mdi:translate",
+  timezone: "mdi:clock-outline",
+  emoji: "mdi:emoticon-outline",
+  font: "mdi:format-font",
+};
+
+const signalIcon = (id: BrowserSignal["id"]) => signalIcons[id];
 
 const visibleValue = (value?: string | null) =>
   isCheckingResult.value ? CHECKING_TEXT : value || "N/A";
@@ -449,6 +494,12 @@ onMounted(() => {
   margin: 4px 0 8px;
   font-size: 1.55rem;
   line-height: 1.2;
+}
+
+.result-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
 
 .result-panel p {
@@ -581,26 +632,6 @@ onMounted(() => {
 .signal-header h3 {
   margin: 0;
   font-size: 1rem;
-}
-
-.status-dot {
-  width: 11px;
-  height: 11px;
-  flex: 0 0 11px;
-  border-radius: 50%;
-  background: #94a3b8;
-}
-
-.status-hit {
-  background: #dc2626;
-}
-
-.status-miss {
-  background: #16a34a;
-}
-
-.status-unknown {
-  background: #94a3b8;
 }
 
 .signal-value {

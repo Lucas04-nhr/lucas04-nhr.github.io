@@ -1,11 +1,14 @@
 <template>
-  <div v-if="loading">Loading...</div>
-  <div v-else-if="error">Error: {{ error }}</div>
-  <div v-else>
-    <div class="vp-code-group">
-      <CodeViewer lang="json" :content="output" />
+  <details class="raw-json-disclosure">
+    <summary>View raw JSON output</summary>
+    <p v-if="error" class="raw-json-error">Error: {{ error }}</p>
+    <div v-else class="vp-code-group">
+      <CodeViewer
+        lang="json"
+        :content="loading ? 'Loading...' : output"
+      />
     </div>
-  </div>
+  </details>
 </template>
 
 <script setup lang="ts">
@@ -45,6 +48,48 @@ onMounted(() => {
 
 <style scoped>
 .vp-code-group {
-  margin: 0 auto;
+  padding: 0 16px 1px;
+}
+
+.raw-json-disclosure {
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+
+.raw-json-disclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  color: var(--vp-c-brand-1);
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.raw-json-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.raw-json-disclosure summary::after {
+  content: "+";
+  width: 1.25rem;
+  flex: 0 0 1.25rem;
+  font-size: 1.2rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.raw-json-disclosure[open] summary::after {
+  content: "−";
+}
+
+.raw-json-error {
+  margin: 0;
+  padding: 0 16px 16px;
+  color: var(--vp-c-danger-1);
 }
 </style>

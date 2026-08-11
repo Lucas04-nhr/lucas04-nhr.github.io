@@ -42,16 +42,16 @@ Under the following terms:
 
 ## License of Code
 
-Any derivative program code authored by Lucas is licensed under the GNU General Public License v3.0 (GPLv3).
+Any derivative program code authored by Lucas is licensed under the ==**GNU Affero General Public License v3.0 (AGPLv3)**==.
 
 <LinkCard
-  title="GNU GPLv3"
-  href="https://www.gnu.org/licenses/gpl-3.0.en.html"
-  description="A strong copyleft license that allows you to use, study, modify, and redistribute code, provided that derivative works are also released under GPLv3 and source code remains available."
-  icon="simple-icons:gplv3"
+  title="GNU AGPLv3"
+  href="https://www.gnu.org/licenses/agpl-3.0.en.html"
+  description="A strong copyleft license that allows you to use, study, modify, and redistribute code, provided that derivative works are also released under AGPLv3 and source code remains available."
+  icon="mdi:license"
 />
 
-In short, you may use and modify the code, but if you distribute modified versions, you ==**MUST**== keep them under GPLv3 and provide corresponding source code.
+In short, you may use and modify the code, but if you distribute modified versions, you ==**MUST**== keep them under AGPLv3 and provide corresponding source code.
 
 ## Disclaimer
 

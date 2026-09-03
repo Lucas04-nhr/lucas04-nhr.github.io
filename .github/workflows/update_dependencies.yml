@@ -25,9 +25,6 @@ jobs:
         with:
           node-version: "26"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Check for updates
         id: check_updates
         run: |
@@ -54,15 +51,32 @@ jobs:
             echo "Already up to date"
           fi
 
-      - name: Update dependencies
+      - name: Install dependencies
+        id: install
         if: env.NEEDS_UPDATE == 'true'
+        continue-on-error: true
+        run: pnpm install --frozen-lockfile
+
+      - name: Update dependencies
+        id: update
+        if: env.NEEDS_UPDATE == 'true' && steps.install.outcome == 'success'
+        continue-on-error: true
         run: |
           pnpm dlx vp-update
 
       - name: Commit changes
-        if: env.NEEDS_UPDATE == 'true'
+        if: always() && env.NEEDS_UPDATE == 'true'
         id: commit
+        env:
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          UPDATE_OUTCOME: ${{ steps.update.outcome }}
         run: |
+          if [ "$INSTALL_OUTCOME" != "success" ] || [ "$UPDATE_OUTCOME" != "success" ]; then
+            echo "changes_committed=false" >> "$GITHUB_OUTPUT"
+            echo "Dependency update failed; skip commit and continue with Pages build."
+            exit 0
+          fi
+
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git config --local user.name 'github-actions[bot]'
           git add package.json pnpm-lock.yaml

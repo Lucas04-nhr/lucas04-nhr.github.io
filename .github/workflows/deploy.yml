@@ -61,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-version
     if: needs.check-version.outputs.needs_update == 'true'
+    outputs:
+      changes_committed: ${{ steps.commit.outputs.changes_committed }}
     permissions:
       contents: write
     steps:
@@ -86,18 +88,32 @@ jobs:
           pnpm dlx vp-update
 
       - name: Commit and push changes
+        id: commit
         run: |
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git config --local user.name 'github-actions[bot]'
           git add package.json pnpm-lock.yaml
+
+          if git diff --cached --quiet; then
+            echo "changes_committed=false" >> "$GITHUB_OUTPUT"
+            echo "No dependency changes to commit; continue with Pages build."
+            exit 0
+          fi
+
           git commit -m "chore(dep): Update template to \`${{ needs.check-version.outputs.new_version }}\`"
           git push
+          echo "changes_committed=true" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build site and upload pages artifact
     runs-on: ubuntu-latest
-    needs: check-version
-    if: needs.check-version.outputs.is_latest == 'true'
+    needs: [check-version, update-dependencies]
+    if: >-
+      always() &&
+      needs.check-version.result == 'success' &&
+      (needs.check-version.outputs.is_latest == 'true' ||
+      (needs.update-dependencies.result == 'success' &&
+      needs.update-dependencies.outputs.changes_committed == 'false'))
     steps:
       - uses: actions/checkout@v6
         with:
@@ -139,7 +155,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: [check-version, build]
-    if: needs.check-version.outputs.is_latest == 'true'
+    if: always() && needs.build.result == 'success'
     permissions:
       pages: write
       id-token: write

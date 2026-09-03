@@ -12,7 +12,7 @@ It is said on Absalon that these are all the contents that would be asked during
 
 ### In-class exercises
 
-- [Pairwise alignment](/bsa/pairwise-alignment/)
+- [Pairwise alignment](/docs/bsa/pairwise-alignment/)
 
 ### Assignments
 

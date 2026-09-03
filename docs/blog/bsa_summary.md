@@ -75,5 +75,5 @@ $$
 
 ### Complexity Analysis {#nwa-complexity}
 
-The time complexity of the Needleman-Wunsch algorithm is O(mn), where m and n are the lengths of the two sequences. The space complexity is also O(mn) due to the storage of the scoring matrix. However, optimizations can be made to reduce space complexity to O(min(m, n)) by only storing two rows or columns at a time.
+The time complexity of the Needleman-Wunsch algorithm is $O(mn)$, where $m$ and $n$ are the lengths of the two sequences. The space complexity is also $O(mn)$ due to the storage of the scoring matrix. However, optimizations can be made to reduce space complexity to $O(\min(m, n))$ by only storing two rows or columns at a time.
   

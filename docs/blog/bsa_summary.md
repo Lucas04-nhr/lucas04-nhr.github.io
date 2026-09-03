@@ -32,11 +32,15 @@ excerpt: This is the summary of the course Biological Sequence Analysis in KU, w
 
 ### Needleman-Wunsch Algorithm {#needleman-wunsch-algorithm}
 
+#### Background {#nwa-background}
+
 The Needleman-Wunsch algorithm is a dynamic programming algorithm used for ==**global**== sequence alignment. It was developed by Saul Needleman and Christian Wunsch in 1970. The algorithm finds the optimal alignment between two sequences by filling a matrix and backtracking to find the actual alignment.
 
 It aligns two sequences ==**end-to-end**==, meaning it considers the entire length of both sequences. The algorithm uses a scoring system that assigns scores for matches, mismatches, and gaps (insertions or deletions). The goal is to maximize the overall alignment score.
 
 The algorithm is appropriate ==when sequenses are expected to be similar over their entire length==, such as when comparing homologous genes or proteins.
+
+### Algorithm Steps {#nwa-steps}
 
 The algorithm uses the following dynamic programming recurrence relation to fill the scoring matrix:
 
@@ -68,4 +72,8 @@ F(0, j) = j \cdot g_{\text{gap}}.
 \end{cases}
 $$
 :::
+
+### Complexity Analysis {#nwa-complexity}
+
+The time complexity of the Needleman-Wunsch algorithm is O(mn), where m and n are the lengths of the two sequences. The space complexity is also O(mn) due to the storage of the scoring matrix. However, optimizations can be made to reduce space complexity to O(min(m, n)) by only storing two rows or columns at a time.
   

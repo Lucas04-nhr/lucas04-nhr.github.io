@@ -5,6 +5,8 @@ tags:
   - HUST
 createTime: 2025/12/03 19:58:43
 permalink: /docs/hust-gp-template/
+copyright: false
+comments: false
 ---
 
 点击前往本项目的 GitHub 仓库，如果觉得好用欢迎 star ~

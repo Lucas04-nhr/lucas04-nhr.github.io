@@ -7,6 +7,8 @@ tags:
   - R
   - Bioinformatics
   - Multi-omics
+copyright: false
+comments: false
 ---
 
 ::: note

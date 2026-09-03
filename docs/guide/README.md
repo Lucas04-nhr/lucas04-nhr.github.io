@@ -9,4 +9,5 @@ comment: false
 
 - [R for Bioinformatics Cookbook](/docs/r-course/)
 - [HUST Graduation Project Template Usage Guide](/docs/hust-gp-template/)
+- [Biological Sequence Analysis](/docs/bsa/)
 - [StayUP Schedule](/docs/stayup-schedule/)

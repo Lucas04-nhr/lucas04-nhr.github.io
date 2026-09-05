@@ -37,7 +37,8 @@ const readCookie = (): string | null => {
 const writeCookie = (value: boolean) => {
   if (!isBrowser()) return;
 
-  document.cookie = `${DEBUG_ALLOWED_COOKIE}=${String(value)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${DEBUG_ALLOWED_COOKIE}=${String(value)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${secure}`;
 };
 
 const readUrlPreference = (): boolean | null => {

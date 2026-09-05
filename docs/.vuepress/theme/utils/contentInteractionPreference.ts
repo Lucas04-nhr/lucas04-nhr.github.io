@@ -75,7 +75,8 @@ const writeCookie = <Key extends ContentInteractionPreferenceKey>(
 ) => {
   if (!isBrowser()) return;
 
-  document.cookie = `${key}=${String(value)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${key}=${String(value)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${secure}`;
 };
 
 export const readContentInteractionPreferences =

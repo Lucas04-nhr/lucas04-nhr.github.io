@@ -54,13 +54,15 @@ export const writeScriptPreferenceCookie = (
 ) => {
   if (!isBrowser()) return;
 
-  document.cookie = `${COOKIE_KEY}=${encodeURIComponent(preference)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${COOKIE_KEY}=${encodeURIComponent(preference)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${secure}`;
 };
 
 const clearLegacyScriptPreferenceCookie = () => {
   if (!isBrowser()) return;
 
-  document.cookie = `${LEGACY_COOKIE_KEY}=; path=/; max-age=0; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${LEGACY_COOKIE_KEY}=; path=/; max-age=0; SameSite=Lax${secure}`;
 };
 
 export const readStoredScriptPreference = (): LocaleScriptPreference | null => {

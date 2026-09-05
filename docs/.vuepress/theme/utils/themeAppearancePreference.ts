@@ -46,7 +46,8 @@ const writeThemeAppearanceCookie = (
 ) => {
   if (!isBrowser()) return;
 
-  document.cookie = `${COOKIE_KEY}=${encodeURIComponent(preference)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${COOKIE_KEY}=${encodeURIComponent(preference)}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${secure}`;
 };
 
 export const readStoredThemeAppearancePreference =

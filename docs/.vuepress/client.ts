@@ -22,6 +22,7 @@ import "./theme/styles/anti_debug.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import ContentInteractionPreferenceSync from "./theme/components/ContentInteractionPreferenceSync";
+import AlgoliaAiAssistant from "./theme/components/AlgoliaAiAssistant.vue";
 import {
   type IpSignal,
   detectBrowserSignals,
@@ -39,6 +40,7 @@ export default defineClientConfig({
   layouts: {
     Layout: h(Layout, null, {
       "layout-top": () => h(ContentInteractionPreferenceSync),
+      "layout-bottom": () => h(AlgoliaAiAssistant),
       "doc-title-after": () => h(PageContextMenu),
       "aside-outline-after": () => h(CustomAside),
       "nav-bar-content-after": () => [

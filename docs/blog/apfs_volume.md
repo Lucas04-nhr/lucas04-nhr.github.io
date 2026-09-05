@@ -1,7 +1,7 @@
 ---
 title: macOS 文件系统深度解析
 createTime: 2026/06/25 13:58:48
-permalink: /blog/apfs_volume/
+permalink: /blog/apfs-volume/
 copyright: false
 excerpt: '本文将深入探讨 macOS 中 APFS 文件系统的内部结构与工作机制，特别是从 macOS Catalina 开始引入的系统卷与数据卷分离设计。'
 tags:

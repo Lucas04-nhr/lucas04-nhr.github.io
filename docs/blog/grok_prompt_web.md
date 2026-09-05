@@ -1,7 +1,7 @@
 ---
 title: System Prompts for Grok Web
 createTime: 2026/02/27 10:22:42
-permalink: /blog/grok_prompt_web/
+permalink: /blog/grok-prompt-web/
 excerpt: "This article provides some system prompts for Grok web, which can be used to enhance the performance of Grok in various tasks. Note that these prompts are not provided by xAI directly, but through my own testing and experience."
 tags:
   - Grok

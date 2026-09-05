@@ -1,7 +1,7 @@
 ---
 title: 毕业论文开题答辩
 createTime: 2025/12/21 19:11:09
-permalink: /blog/graduation_thesis_proposal_20251226/
+permalink: /blog/graduation-thesis-proposal-20251226/
 excerpt: "Comprehensive presentation for thesis defense on SNP-based bacterial evolution analysis using large-scale genomic data, covering research background, data sources, methodology, and timeline."
 tags:
   - Graduation Thesis

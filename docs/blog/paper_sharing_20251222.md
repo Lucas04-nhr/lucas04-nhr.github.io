@@ -2,7 +2,7 @@
 title: 文献分享 20251222
 createTime: 2025/12/21 16:56:02
 # password: 1c8d5b1cc707956237c0eeed01c81339
-permalink: /blog/paper_sharing_20251222/
+permalink: /blog/paper-sharing-20251222/
 excerpt: "Literature review on macrolide-resistant Mycoplasma pneumoniae resurgence in China among children in 2023, discussing antibiotic resistance mechanisms and clinical implications."
 tags:
   - Paper Sharing

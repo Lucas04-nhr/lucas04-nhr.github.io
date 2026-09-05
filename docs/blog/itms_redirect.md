@@ -1,7 +1,7 @@
 ---
 title: App Store Link Redirection Script
 createTime: 2026/06/09 20:05:30
-permalink: /blog/itms_link_redirection/
+permalink: /blog/itms-link-redirection/
 excerpt: 'A Tampermonkey script to redirect App Store links, avoiding being redirected to homepage when using Chinese IP.'
 tags:
   - Network Engineering

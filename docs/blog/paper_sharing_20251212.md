@@ -1,7 +1,7 @@
 ---
 title: 组会文献分享 20251212
 createTime: 2025/12/10 16:48:35
-permalink: /blog/paper_sharing_20251212/
+permalink: /blog/paper-sharing-20251212/
 excerpt: "Paper sharing on Bronze Age Yersinia pestis genome recovered from an ancient sheep, revealing the evolutionary history and zoonotic transmission patterns of prehistoric plague."
 tags:
   - Paper Sharing

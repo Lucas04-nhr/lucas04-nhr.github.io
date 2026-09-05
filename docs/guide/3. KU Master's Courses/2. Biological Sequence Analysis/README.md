@@ -14,7 +14,7 @@ It is said on Absalon that these are all the contents that would be asked during
 
 ### In-class exercises
 
-- [Pairwise alignment](/docs/ku/bsa/pairwise-alignment/)
+- [Pairwise Alignment](/docs/ku/bsa/pairwise-alignment/)
 
 ### Assignments
 

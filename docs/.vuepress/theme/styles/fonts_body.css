@@ -300,8 +300,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 550;
-  font-variation-settings: "wght" 550;
+  font-weight: 700;
+  font-variation-settings: "wght" 700;
 }
 
 /* Ensure all descendants of headings and bold elements inherit the correct weight */
@@ -318,7 +318,7 @@ h6 *,
 .vp-navbar-title *,
 .vp-footer * {
   font-weight: inherit;
-  font-variation-settings: "wght" 550;
+  font-variation-settings: "wght" 700;
 }
 
 /* Re-apply monospace for code elements to avoid being overridden */
@@ -383,8 +383,8 @@ samp {
   font-family:
     "Google Sans Flex", "FanWunHak", "Noto Sans TC",
     var(--site-body-font-fallback);
-  font-weight: 550;
-  font-variation-settings: "wght" 550;
+  font-weight: 700;
+  font-variation-settings: "wght" 700;
 }
 
 /* KaTeX: force \mathrm (upright roman in math mode) to use math fonts

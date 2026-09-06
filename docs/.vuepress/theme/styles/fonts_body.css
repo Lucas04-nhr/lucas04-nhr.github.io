@@ -281,6 +281,16 @@ summary {
   font-variation-settings: "wght" 500;
 }
 
+/* Mermaid measures HTML labels before a remote webfont has necessarily
+   finished loading. If Google Sans Flex is wider than the fallback font, the
+   generated foreignObject can otherwise clip the last glyphs after the swap. */
+.mermaid-wrapper foreignObject,
+.mermaid-preview foreignObject,
+.mermaid-wrapper .nodeLabel,
+.mermaid-preview .nodeLabel {
+  overflow: visible;
+}
+
 /* Bold text weight */
 strong,
 b,

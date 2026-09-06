@@ -38,6 +38,9 @@ importers:
       hls.js:
         specifier: ^1.7.1
         version: 1.7.1
+      markdown-it:
+        specifier: 14.3.1
+        version: 14.3.1
       mermaid:
         specifier: ^11.17.2
         version: 11.17.2
@@ -69,6 +72,9 @@ importers:
         specifier: ^1.12.10
         version: 1.12.10
     devDependencies:
+      '@types/markdown-it':
+        specifier: 14.2.0
+        version: 14.2.0
       '@vuepress/bundler-vite':
         specifier: 2.0.0-rc.31
         version: 2.0.0-rc.31(@types/node@26.4.1)(@vue/compiler-sfc@3.5.42)(esbuild@0.28.1)(supports-color@7.2.0)(typescript@5.9.3)(yaml@2.9.0)

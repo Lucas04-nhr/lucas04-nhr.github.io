@@ -24,6 +24,7 @@ const CONTENT_SELECTOR = [
   "th",
   "dt",
   "dd",
+  ".assistant-message",
 ].join(",");
 const LONG_PRESS_DELAY_MS = 550;
 const LONG_PRESS_MOVE_TOLERANCE_PX = 12;

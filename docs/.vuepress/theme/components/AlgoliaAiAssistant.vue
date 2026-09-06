@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import MarkdownIt from "markdown-it";
 import { computed, nextTick, onBeforeUnmount, ref } from "vue";
 import VPIcon from "vuepress-theme-plume/components/VPIcon.vue";
 
 type ChatRole = "assistant" | "user";
+type FeedbackVote = 0 | 1;
 
 interface ChatMessage {
   role: ChatRole;
   text: string;
+  messageId?: string;
+  feedbackVote?: FeedbackVote;
+  feedbackPending?: boolean;
+  feedbackError?: string;
 }
 
 interface CompletionPart {
@@ -16,6 +22,7 @@ interface CompletionPart {
 }
 
 interface CompletionResponse {
+  id?: string;
   parts?: CompletionPart[];
 }
 
@@ -28,6 +35,32 @@ const ALGOLIA_APPLICATION_ID = "74YMW3SD6Z";
 const ALGOLIA_SEARCH_API_KEY = "8452a5a75f5166abe464b8fe85d3b3cc";
 const ALGOLIA_AGENT_ID = "782ad8a9-dafa-4e57-90ef-3fc5e42ac9fd";
 const COMPLETIONS_URL = `https://${ALGOLIA_APPLICATION_ID.toLowerCase()}.algolia.net/agent-studio/1/agents/${ALGOLIA_AGENT_ID}/completions?stream=false&compatibilityMode=ai-sdk-5`;
+const FEEDBACK_URL = `https://${ALGOLIA_APPLICATION_ID.toLowerCase()}.algolia.net/agent-studio/1/feedback`;
+const markdown = new MarkdownIt({
+  breaks: true,
+  html: false,
+  linkify: true,
+  typographer: true,
+});
+
+const defaultLinkOpen =
+  markdown.renderer.rules.link_open ??
+  ((tokens, index, options, _environment, renderer) =>
+    renderer.renderToken(tokens, index, options));
+
+markdown.renderer.rules.link_open = (
+  tokens,
+  index,
+  options,
+  environment,
+  renderer,
+) => {
+  tokens[index].attrSet("target", "_blank");
+  tokens[index].attrSet("rel", "noopener noreferrer");
+  return defaultLinkOpen(tokens, index, options, environment, renderer);
+};
+
+const renderMarkdown = (source: string): string => markdown.render(source);
 
 const isOpen = ref(false);
 const isLoading = ref(false);
@@ -85,6 +118,60 @@ function completionText(response: CompletionResponse): string {
     .trim();
 }
 
+async function submitFeedback(message: ChatMessage, vote: FeedbackVote) {
+  if (
+    !message.messageId ||
+    message.feedbackPending ||
+    message.feedbackVote !== undefined
+  ) {
+    return;
+  }
+
+  message.feedbackPending = true;
+  message.feedbackError = undefined;
+
+  try {
+    const response = await fetch(FEEDBACK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-algolia-application-id": ALGOLIA_APPLICATION_ID,
+        "x-algolia-api-key": ALGOLIA_SEARCH_API_KEY,
+      },
+      body: JSON.stringify({
+        messageId: message.messageId,
+        agentId: ALGOLIA_AGENT_ID,
+        vote,
+      }),
+    });
+
+    if (!response.ok) {
+      const responseBody = await response.text();
+      let reason = responseBody;
+
+      try {
+        const parsed = JSON.parse(responseBody) as AlgoliaErrorResponse;
+        reason = parsed.detail ?? parsed.message ?? responseBody;
+      } catch {
+        // Keep a non-JSON response as-is.
+      }
+
+      throw new Error(
+        reason
+          ? `Feedback returned ${response.status}: ${reason}`
+          : `Feedback returned ${response.status}.`,
+      );
+    }
+
+    message.feedbackVote = vote;
+  } catch (cause) {
+    message.feedbackError =
+      cause instanceof Error ? cause.message : "Unable to submit feedback.";
+  } finally {
+    message.feedbackPending = false;
+  }
+}
+
 async function submitQuestion() {
   const question = input.value.trim();
   if (!question || isLoading.value) return;
@@ -136,7 +223,11 @@ async function submitQuestion() {
     const answer = completionText(result);
     if (!answer) throw new Error("The assistant returned an empty response.");
 
-    messages.value.push({ role: "assistant", text: answer });
+    messages.value.push({
+      role: "assistant",
+      text: answer,
+      messageId: result.id,
+    });
   } catch (cause) {
     if (cause instanceof DOMException && cause.name === "AbortError") return;
     error.value =
@@ -189,11 +280,45 @@ onBeforeUnmount(() => requestController?.abort());
         <div ref="messageList" class="assistant-messages" aria-live="polite">
           <div
             v-for="(message, index) in messages"
-            :key="`${message.role}-${index}`"
+            :key="message.messageId ?? `${message.role}-${index}`"
             class="assistant-message"
             :class="message.role"
           >
-            {{ message.text }}
+            <div
+              class="assistant-message-content vp-doc"
+              v-html="renderMarkdown(message.text)"
+            />
+            <div
+              v-if="message.role === 'assistant' && message.messageId"
+              class="assistant-feedback"
+              aria-label="Rate this response"
+            >
+              <button
+                type="button"
+                title="Helpful"
+                aria-label="Helpful"
+                :aria-pressed="message.feedbackVote === 1"
+                :class="{ active: message.feedbackVote === 1 }"
+                :disabled="message.feedbackPending || message.feedbackVote !== undefined"
+                @click="submitFeedback(message, 1)"
+              >
+                <VPIcon name="ic:twotone-thumb-up" size="16" color="currentColor" />
+              </button>
+              <button
+                type="button"
+                title="Not helpful"
+                aria-label="Not helpful"
+                :aria-pressed="message.feedbackVote === 0"
+                :class="{ active: message.feedbackVote === 0 }"
+                :disabled="message.feedbackPending || message.feedbackVote !== undefined"
+                @click="submitFeedback(message, 0)"
+              >
+                <VPIcon name="ic:twotone-thumb-down" size="16" color="currentColor" />
+              </button>
+            </div>
+            <p v-if="message.feedbackError" class="assistant-feedback-error" role="alert">
+              {{ message.feedbackError }}
+            </p>
           </div>
           <div v-if="isLoading" class="assistant-message assistant-loading" aria-label="AI is thinking">
             <i /><i /><i />
@@ -216,7 +341,7 @@ onBeforeUnmount(() => requestController?.abort());
             </svg>
           </button>
         </form>
-        <p class="assistant-disclaimer">For reference only. AI responses may contain mistakes.</p>
+        <p class="assistant-disclaimer">AI response is for reference only and may contain mistakes.</p>
       </section>
     </Transition>
 
@@ -372,7 +497,112 @@ onBeforeUnmount(() => requestController?.abort());
   font-size: 14px;
   line-height: 1.55;
   overflow-wrap: anywhere;
-  white-space: pre-wrap;
+}
+
+.assistant-message :deep(> :first-child) {
+  margin-top: 0;
+}
+
+.assistant-message :deep(> :last-child) {
+  margin-bottom: 0;
+}
+
+.assistant-message :deep(p),
+.assistant-message :deep(blockquote),
+.assistant-message :deep(ul),
+.assistant-message :deep(ol),
+.assistant-message :deep(table),
+.assistant-message :deep(div[class*="language-"]) {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.assistant-message :deep(p),
+.assistant-message :deep(li) {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.assistant-message :deep(h1),
+.assistant-message :deep(h2),
+.assistant-message :deep(h3),
+.assistant-message :deep(h4),
+.assistant-message :deep(h5),
+.assistant-message :deep(h6) {
+  padding-top: 0;
+  margin: 12px 0 6px;
+  border-top: 0;
+  font-size: 1.05em;
+  line-height: 1.4;
+}
+
+.assistant-message :deep(pre) {
+  max-width: 100%;
+  padding: 10px;
+  overflow-x: auto;
+  background: var(--vp-code-block-bg);
+  border-radius: 8px;
+}
+
+.assistant-message :deep(pre code) {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+  white-space: pre;
+}
+
+.assistant-message.user :deep(*) {
+  color: inherit;
+}
+
+.assistant-message.user :deep(a) {
+  text-decoration-color: currentcolor;
+}
+
+.assistant-message.user :deep(code) {
+  background: rgb(255 255 255 / 16%);
+}
+
+.assistant-feedback {
+  display: flex;
+  margin-top: 7px;
+  gap: 2px;
+}
+
+.assistant-feedback button {
+  display: grid;
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  place-items: center;
+}
+
+.assistant-feedback button:hover:not(:disabled),
+.assistant-feedback button:focus-visible,
+.assistant-feedback button.active {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+.assistant-feedback button:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 1px;
+}
+
+.assistant-feedback button:disabled:not(.active) {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.assistant-feedback-error {
+  margin: 5px 0 0;
+  color: var(--vp-c-danger-1);
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 .assistant-message.assistant {

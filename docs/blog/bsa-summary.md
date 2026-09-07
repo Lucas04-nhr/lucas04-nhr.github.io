@@ -6,7 +6,7 @@ tags:
   - KU
   - Biological Sequence Analysis
 outline: [2,3]
-# password: 16e94e5a3702c27bde806930ea634ac9
+password: 16e94e5a3702c27bde806930ea634ac9
 excerpt: This is the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum.
 ---
 

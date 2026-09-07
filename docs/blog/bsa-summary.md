@@ -298,3 +298,59 @@ You can map a key to a table position using a hash function.
 A good hash function distributes keys approx. uniformly across the table, minimizing collisions, that is, two different keys mapping to the same table position. Collisions can be handled by storing multiple entries, e.g., using linked lists or open addressing.
 
 With a suitably sized hash table and few collisions, average lookup can be approx. $O(1)$, which is much faster than searching through a list of keys.
+
+#### Perfect Hasing of DNA k-mers {#perfect-hashing-of-dna-k-mers}
+
+DNA alphabet has only 4 letters, so we can encode each letter as a 2-bit number:
+
+::: flex center
+| **Letter** | **Encoding** |
+|:----------:|:------------:|
+| A          | $(00)_2$     |
+| C          | $(01)_2$     |
+| G          | $(10)_2$     |
+| T          | $(11)_2$     |
+:::
+
+As a result, you only need to do an invert operation to find the paired k-mer. For example, the paired k-mer of `ACGT` is `TGCA`, which can be computed as follows:
+
+$$
+  \begin{array}{rcl}
+    \text{ACGT} & \longleftrightarrow & \text{TGCA} \\
+    00\,01\,10\,11 & \xleftrightarrow{\text{invert}} & 11\,10\,01\,00
+  \end{array}
+$$
+
+General formula for the alphabet size $M$ and k-mer length $k$:
+
+$$
+  M^{k-1}x_1 + M^{k-2}x_2 + \cdots + M^1x_{k-1} + M^0x_k
+$$
+
+This gives a perfect hash for all fixed-length words because there are **no collisions**. For example, for DNA k-mers, the hash value of `ACGT` is:
+$$
+  4^3 \cdot 0 + 4^2 \cdot 1 + 4^1 \cdot 2 + 4^0 \cdot 3 = 27
+$$
+
+### Trees {#trees}
+
+A tree is used to store words over an alphabet. Each node represents a character, and the path from the root to a leaf node represents a word. Trees are useful for storing and searching for words in a dictionary or a set of sequences.
+
+A word can be searched by traversing the tree from the root to the leaf node corresponding to the last character of the word. If a leaf node is reached and it is marked as a valid word, then the word exists in the tree.
+
+Some important terms related to trees:
+
+- ==**Root**==: The topmost node of the tree, which has no parent.
+- ==**Internal Node**==: A node that has at least one child node.
+- ==**Leaf Node**==: A node that has no child nodes, representing the end of a word.
+- ==**Edge**==: A connection between two nodes in the tree.
+- ==**Parent**==: A node that has one or more child nodes.
+- ==**Child**==: A node that has a parent node.
+
+### Suffix {#suffix}
+
+A suffix starts at some sequences position and extends to the end.
+
+A suffix tree is essentially a compressed prefix tree containing **all suffixes** of a given string. It is a data structure that allows for efficient searching and matching of substrings within a larger string.
+
+Nodes with one incoming and one outgoing edge are compressed and leaves store suffix positions, the edge labels may contain multiple characters. The exact query search takes time approx. $O(m)$, where $m$ is the length of the query string, while reporting all matches additionally requires $O(k)$ time, where $k$ is the number of matches found.

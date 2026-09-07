@@ -354,3 +354,73 @@ A suffix starts at some sequences position and extends to the end.
 A suffix tree is essentially a compressed prefix tree containing **all suffixes** of a given string. It is a data structure that allows for efficient searching and matching of substrings within a larger string.
 
 Nodes with one incoming and one outgoing edge are compressed and leaves store suffix positions, the edge labels may contain multiple characters. The exact query search takes time approx. $O(m)$, where $m$ is the length of the query string, while reporting all matches additionally requires $O(k)$ time, where $k$ is the number of matches found.
+
+#### Suffix-tree Construction {#suffix-tree-construction}
+
+A simple way to construct a suffix tree is to insert every suffix into a trie and then compress all non-branching paths. Since a sequence of length $n$ contains $n$ suffixes whose total length is proportional to $n^2$, this naïve construction can require $O(n^2)$ time in the worst case. More advanced algorithms can construct a suffix tree in $O(n)$ time.
+
+#### Generalized Suffix Trees {#generalized-suffix-trees}
+
+A generalized suffix tree stores the suffixes of multiple sequences in a single tree. Different termination symbols are added to distinguish the sequences, and each leaf records both the sequence number and the starting position of its suffix. This makes it possible to search several sequences simultaneously and to identify substrings shared between them.
+
+### Suffix Arrays {#suffix-arrays}
+
+A suffix array is a more memory-efficient alternative to a suffix tree. It contains the starting positions of all suffixes in ==**lexicographically sorted order**==. Once the suffixes have been sorted, an exact pattern can be found using binary search rather than direct tree traversal.
+
+The main trade-off is that suffix trees provide fast, direct traversal but require considerable memory, whereas suffix arrays are more compact but use searches over the sorted suffix positions. Naïvely sorting all suffixes can be expensive, although linear-time construction algorithms also exist.
+
+Modern read-mapping and alignment programs use data structures related to hash tables, suffix arrays, and the Burrows-Wheeler Transform. Their shared principle is that ==**expensive preprocessing and indexing enable much faster repeated searches**==.
+
+### BLAST {#blast}
+
+BLAST is a ==**heuristic local sequence-search method**==. It does not run Smith-Waterman against every sequence in a database because that would be too computationally expensive. Instead, it uses short words to identify promising regions and performs more detailed calculations only around those hits.
+
+The main BLAST workflow is:
+
+::: steps
+1. **Low-complexity Filtering**: Mask regions that would otherwise produce many uninformative matches.
+2. **Word Generation**: Divide the query into short $k$-letter words and generate possible neighbourhood words.
+3. **Word Scoring**: Score the candidate words with a substitution matrix and retain those above a threshold.
+4. **Database Lookup**: Search for exact occurrences of the retained words in the database.
+5. **Hit Extension**: Extend promising hits to construct high-scoring segment pairs.
+6. **Statistical Evaluation**: Calculate alignment scores and E-values, optionally combine nearby high-scoring regions, and report the resulting local alignments.
+:::
+
+An important detail is that a database hit does not necessarily match the original query word exactly. In protein BLAST, the exact database match may instead be to a pre-generated ==**neighbourhood word**== containing biologically plausible substitutions. Candidate words are commonly scored using a matrix such as BLOSUM62, and only sufficiently high-scoring words are retained. This combines the speed of exact lookup with tolerance for evolutionary substitutions.
+
+### Seed-and-extend Principle {#seed-and-extend-principle}
+
+A high-scoring word match provides a ==**seed**==. The algorithm extends the match in both directions to determine whether it belongs to a longer high-scoring local alignment. By restricting expensive alignment calculations to regions near promising seeds, the search space is dramatically reduced. Both FASTA and BLAST use variations of this general principle.
+
+A ==**High-Scoring Segment Pair (HSP)**== is a local region of strong similarity produced by extending a promising seed. A pair of sequences may contain several HSPs, representing separate locally similar regions with their own scores.
+
+### BLAST E-value {#blast-e-value}
+
+The E-value is the ==**expected number of random database matches with a score at least as good as the observed score**==. It is not a probability and can therefore be greater than 1. 
+
+A common form of the equation is:
+
+$$
+  E(S) = Kmne^{-\lambda S},
+$$
+
+where $S$ is the alignment score, $m$ and $n$ describe the effective query and database sizes, and $K$ and $\lambda$ are statistical parameters. As the alignment score increases, the E-value decreases:
+
+$$
+  S \uparrow \quad \Longrightarrow \quad E(S) \downarrow.
+$$
+
+A small E-value indicates that the match is unlikely to occur by chance, whereas a large E-value indicates that the match can more easily be explained by random similarity. Database size also matters: approx., $E \approx pD$, so searching a larger database increases the expected number of chance matches even when the underlying match probability remains the same.
+
+The probability of observing at least one random match with a score greater than $S$ is related to the E-value by:
+
+$$
+  P(X > S) = 1 - e^{-E(S)}.
+$$
+
+When $E(S)$ is very small, $P(X>S) \approx E(S)$. Therefore, E-values and probabilities are numerically similar only in the small-value limit; they are not generally interchangeable.
+
+---
+::: info
+That is the end of Week 01. The following weeks will be summarized afterwards.
+:::

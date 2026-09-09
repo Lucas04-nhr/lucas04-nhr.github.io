@@ -10,7 +10,7 @@ password: 16e94e5a3702c27bde806930ea634ac9
 excerpt: This is the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum.
 ---
 
-## Week 01 - Pairwise Alignment {#pairwise-alignment}
+## Week 01 - Pairwise Alignment {#pairwise-alignment-01}
 
 ### Core Mathematical Concepts {#core-mathematical-concepts}
 
@@ -371,6 +371,8 @@ The main trade-off is that suffix trees provide fast, direct traversal but requi
 
 Modern read-mapping and alignment programs use data structures related to hash tables, suffix arrays, and the Burrows-Wheeler Transform. Their shared principle is that ==**expensive preprocessing and indexing enable much faster repeated searches**==.
 
+## Week 02 - Pairwise Alignment {#pairwise-alignment-02}
+
 ### BLAST {#blast}
 
 BLAST is a ==**heuristic local sequence-search method**==. It does not run Smith-Waterman against every sequence in a database because that would be too computationally expensive. Instead, it uses short words to identify promising regions and performs more detailed calculations only around those hits.
@@ -420,7 +422,7 @@ $$
 
 When $E(S)$ is very small, $P(X>S) \approx E(S)$. Therefore, E-values and probabilities are numerically similar only in the small-value limit; they are not generally interchangeable.
 
----
+<!-- ---
 ::: info
-That is the end of Week 01. The following weeks will be summarized afterwards.
-:::
+That is the end of Week 02. The following weeks will be summarized afterwards.
+::: -->

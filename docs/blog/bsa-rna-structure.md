@@ -1,6 +1,6 @@
 ---
 title: RNA Structure and Folding
-createTime: 2026/09/10 11:56:38
+createTime: 2026/09/10 11:56:23
 permalink: /blog/ku-bsa-rna-structure/
 tags:
   - KU
@@ -34,34 +34,18 @@ RNA secondary structure is formed mainly by intramolecular base pairing. Importa
 - **Junction / Multiloop**: a branching point connecting multiple stems.
 - **Single-stranded region**: nucleotides not involved in base pairing.
 
-Formally, an RNA secondary structure can be represented as a set of base pairs
-
-$$
-(i,j),
-$$
-
-where nucleotide $i$ is paired with nucleotide $j$.
+Formally, an RNA secondary structure can be represented as a set of base pairs $(i,j)$,where nucleotide $i$ is paired with nucleotide $j$.
 
 A valid secondary structure satisfies two important constraints:
 
 1. ==**A nucleotide can participate in at most one base pair**==.
 2. ==**Base pairs cannot cross**==.
 
-For two base pairs $(i,j)$ and $(k,l)$, the configuration
+For two base pairs $(i,j)$ and $(k,l)$, the configuration $i < k < j < l$ is therefore not permitted in the standard secondary-structure model.
 
-$$
-i < k < j < l
-$$
+The base pairs normally considered are `GC`,`CG`,`AU`,`UA`,`GU`,`UG`.
 
-is therefore not permitted in the standard secondary-structure model.
-
-The base pairs normally considered are
-
-$$
-GC,\ CG,\ AU,\ UA,\ GU,\ UG.
-$$
-
-The $GU$ pair is known as a **wobble pair**.
+The `GU` pair is known as a **wobble pair**.
 
 ::: note
 The restriction against crossing base pairs means that standard RNA secondary-structure algorithms usually exclude **pseudoknots**.
@@ -147,10 +131,12 @@ Thus, tmRNA acts as a quality-control mechanism during translation.
 
 Two major snoRNA classes are:
 
+::: flex center
 | snoRNA class | Main function |
-| --- | --- |
+| :---: | :---: |
 | **Box C/D** | $2'$-O-methylation |
 | **Box H/ACA** | Pseudouridylation $(\Psi)$ |
+:::
 
 snoRNAs generally:
 
@@ -608,8 +594,9 @@ Actual RNA stability depends on:
 
 Therefore, modern thermodynamic RNA folding replaces the simple maximization objective with ==**free-energy minimization**==.
 
+::: flex center
 | Property | Nussinov | MFE folding |
-| --- | --- | --- |
+| :---: | :---: | :---: |
 | Objective | Maximize number of base pairs | Minimize free energy |
 | Score | Simple pairing score | Thermodynamic parameters |
 | Loop energetics | Not realistically modeled | Explicitly modeled |
@@ -617,6 +604,7 @@ Therefore, modern thermodynamic RNA folding replaces the simple maximization obj
 | Biological realism | Low | Higher |
 | Pseudoknots | Usually excluded | Usually excluded |
 | Main purpose | Simple DP model | Practical structure prediction |
+:::
 
 The conceptual transition is therefore
 

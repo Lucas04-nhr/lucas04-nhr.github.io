@@ -2,10 +2,10 @@ allowBuilds:
   core-js: true
   esbuild: true
 minimumReleaseAgeExclude:
-  - '@vuepress-plume/plugin-fonts@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209'
-  - '@vuepress-plume/plugin-search@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209'
-  - vuepress-plugin-md-power@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209
-  - vuepress-theme-plume@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209
+  - '@vuepress-plume/plugin-fonts@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210'
+  - '@vuepress-plume/plugin-search@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210'
+  - vuepress-plugin-md-power@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210
+  - vuepress-theme-plume@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210
   - '@vuepress/helper@2.0.0-rc.134'
   - '@vuepress/highlighter-helper@2.0.0-rc.134'
   - '@vuepress/plugin-cache@2.0.0-rc.134'

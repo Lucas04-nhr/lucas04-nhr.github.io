@@ -76,6 +76,8 @@ jobs:
         continue-on-error: true
         run: |
           pnpm dlx vp-update
+          pnpm clean --lockfile
+          pnpm install
 
       - name: Commit changes
         if: always() && env.NEEDS_UPDATE == 'true'

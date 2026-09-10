@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@mathjax/src": "^4.1.3",
-    "@simonwep/pickr": "^1.10.1",
+    "@simonwep/pickr": "^1.10.2",
     "@vuepress/shiki-twoslash": "2.0.0-rc.130",
     "artplayer": "^5.4.0",
     "chart.js": "^4.5.1",
@@ -45,7 +45,7 @@
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",
     "swiper": "^12.2.0",
-    "tm-grammars": "^1.32.13",
-    "tm-themes": "^1.12.10"
+    "tm-grammars": "^1.32.16",
+    "tm-themes": "^1.12.11"
   }
 }

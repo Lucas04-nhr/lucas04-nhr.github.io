@@ -197,6 +197,13 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
+  crawl:
+    name: Trigger Algolia Crawler
+    runs-on: ubuntu-latest
+    needs: deploy
+    permissions:
+      contents: read
+    steps:
       - name: Trigger Algolia Crawler
         uses: cssnr/algolia-crawler-action@v2
         with:

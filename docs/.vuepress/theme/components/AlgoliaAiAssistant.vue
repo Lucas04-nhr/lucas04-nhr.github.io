@@ -6,10 +6,22 @@ import VPIcon from "vuepress-theme-plume/components/VPIcon.vue";
 type ChatRole = "assistant" | "user";
 type FeedbackVote = 0 | 1;
 
+type UnknownRecord = Record<string, unknown>;
+
+interface SearchResult {
+  objectID?: string;
+  title: string;
+  section?: string;
+  content?: string;
+  url: string;
+}
+
 interface ChatMessage {
   role: ChatRole;
   text: string;
   messageId?: string;
+  results?: SearchResult[];
+  suggestions?: string[];
   feedbackVote?: FeedbackVote;
   feedbackPending?: boolean;
   feedbackError?: string;
@@ -19,6 +31,10 @@ interface CompletionPart {
   type?: string;
   text?: string;
   url?: string;
+  data?: unknown;
+  output?: unknown;
+  state?: string;
+  toolName?: string;
 }
 
 interface CompletionResponse {
@@ -118,12 +134,140 @@ async function scrollToLatest() {
   });
 }
 
+function asRecord(value: unknown): UnknownRecord | null {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+    ? (value as UnknownRecord)
+    : null;
+}
+
+function parseMaybeJson(value: unknown): unknown {
+  if (typeof value !== "string") return value;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
+
 function completionText(response: CompletionResponse): string {
   return (response.parts ?? [])
     .filter((part) => part.type === "text" && part.text)
     .map((part) => part.text)
     .join("\n")
     .trim();
+}
+
+function extractSuggestions(response: CompletionResponse): string[] {
+  const suggestions = new Set<string>();
+
+  for (const part of response.parts ?? []) {
+    if (part.type !== "data-suggestions") continue;
+
+    const data = asRecord(parseMaybeJson(part.data));
+    const rawSuggestions = data?.suggestions;
+    if (!Array.isArray(rawSuggestions)) continue;
+
+    for (const suggestion of rawSuggestions) {
+      if (typeof suggestion === "string" && suggestion.trim()) {
+        suggestions.add(suggestion.trim());
+      }
+    }
+  }
+
+  return [...suggestions].slice(0, 4);
+}
+
+function firstString(record: UnknownRecord | null, keys: string[]): string | undefined {
+  if (!record) return undefined;
+
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+
+  return undefined;
+}
+
+function hitToSearchResult(hitValue: unknown): SearchResult | null {
+  const hit = asRecord(hitValue);
+  if (!hit) return null;
+
+  const url = firstString(hit, ["url", "url_without_variables", "url_without_anchor"]);
+  if (!url) return null;
+
+  const hierarchy = asRecord(hit.hierarchy);
+  const title =
+    firstString(hit, ["title", "name"]) ??
+    firstString(hierarchy, ["lvl0", "lvl1", "lvl2", "lvl3", "lvl4", "lvl5", "lvl6"]) ??
+    url;
+
+  const hierarchyLevels = hierarchy
+    ? ["lvl1", "lvl2", "lvl3", "lvl4", "lvl5", "lvl6"]
+        .map((key) => hierarchy[key])
+        .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+    : [];
+
+  const section = hierarchyLevels.at(-1)?.trim();
+  const content = firstString(hit, ["content", "description", "snippet"]);
+  const objectID = firstString(hit, ["objectID"]);
+
+  return {
+    objectID,
+    title,
+    section: section && section !== title ? section : undefined,
+    content,
+    url,
+  };
+}
+
+function extractHitsFromOutput(outputValue: unknown): unknown[] {
+  const output = asRecord(parseMaybeJson(outputValue));
+  if (!output) return [];
+
+  if (Array.isArray(output.hits)) return output.hits;
+
+  const result = asRecord(output.result);
+  if (result && Array.isArray(result.hits)) return result.hits;
+
+  const data = asRecord(output.data);
+  if (data && Array.isArray(data.hits)) return data.hits;
+
+  return [];
+}
+
+function extractSearchResults(response: CompletionResponse): SearchResult[] {
+  const byPage = new Map<string, SearchResult>();
+
+  for (const part of response.parts ?? []) {
+    const isSearchTool =
+      part.type === "tool-algolia_search_index" ||
+      part.toolName === "algolia_search_index" ||
+      part.type?.includes("algolia_search_index");
+
+    if (!isSearchTool) continue;
+
+    for (const hit of extractHitsFromOutput(part.output)) {
+      const result = hitToSearchResult(hit);
+      if (!result) continue;
+
+      let pageKey = result.url;
+      try {
+        const parsed = new URL(result.url);
+        parsed.hash = "";
+        pageKey = parsed.toString();
+      } catch {
+        pageKey = result.url.split("#", 1)[0];
+      }
+
+      if (!byPage.has(pageKey)) byPage.set(pageKey, result);
+      if (byPage.size >= 5) break;
+    }
+
+    if (byPage.size >= 5) break;
+  }
+
+  return [...byPage.values()];
 }
 
 function getPageContext(): PageContext | null {
@@ -143,6 +287,13 @@ function getPageContext(): PageContext | null {
 
 function formatPageContext(context: PageContext): string {
   return `[Page context]\n${JSON.stringify(context)}\n\nUse this context only to identify what page the user is currently viewing. When the user refers to \"this page\", \"this article\", \"this post\", \"here\", \"it\", or similar expressions, use currentPageWithoutHash or pagePath as the strongest retrieval hint for the corresponding content in the configured Algolia index. Treat pageTitle as a secondary retrieval hint. Do not treat this metadata itself as authoritative page content.`;
+}
+
+function truncate(text: string, maxLength = 150): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  return normalized.length <= maxLength
+    ? normalized
+    : `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
 }
 
 async function submitFeedback(message: ChatMessage, vote: FeedbackVote) {
@@ -197,6 +348,12 @@ async function submitFeedback(message: ChatMessage, vote: FeedbackVote) {
   } finally {
     message.feedbackPending = false;
   }
+}
+
+async function submitSuggestedQuestion(suggestion: string) {
+  if (isLoading.value) return;
+  input.value = suggestion;
+  await submitQuestion();
 }
 
 async function submitQuestion() {
@@ -262,12 +419,19 @@ async function submitQuestion() {
 
     const result = (await response.json()) as CompletionResponse;
     const answer = completionText(result);
-    if (!answer) throw new Error("The assistant returned an empty response.");
+    const results = extractSearchResults(result);
+    const suggestions = extractSuggestions(result);
+
+    if (!answer && results.length === 0) {
+      throw new Error("The assistant returned an empty response.");
+    }
 
     messages.value.push({
       role: "assistant",
       text: answer,
       messageId: result.id,
+      results,
+      suggestions,
     });
   } catch (cause) {
     if (cause instanceof DOMException && cause.name === "AbortError") return;
@@ -322,45 +486,97 @@ onBeforeUnmount(() => requestController?.abort());
           <div
             v-for="(message, index) in messages"
             :key="message.messageId ?? `${message.role}-${index}`"
-            class="assistant-message"
+            class="assistant-turn"
             :class="message.role"
           >
             <div
-              class="assistant-message-content vp-doc"
-              v-html="renderMarkdown(message.text)"
-            />
+              v-if="message.text"
+              class="assistant-message"
+              :class="message.role"
+            >
+              <div
+                class="assistant-message-content vp-doc"
+                v-html="renderMarkdown(message.text)"
+              />
+
+              <div
+                v-if="message.role === 'assistant' && message.messageId"
+                class="assistant-feedback"
+                aria-label="Rate this response"
+              >
+                <button
+                  type="button"
+                  title="Helpful"
+                  aria-label="Helpful"
+                  :aria-pressed="message.feedbackVote === 1"
+                  :class="{ active: message.feedbackVote === 1 }"
+                  :disabled="message.feedbackPending || message.feedbackVote !== undefined"
+                  @click="submitFeedback(message, 1)"
+                >
+                  <VPIcon name="ic:twotone-thumb-up" size="16" color="currentColor" />
+                </button>
+                <button
+                  type="button"
+                  title="Not helpful"
+                  aria-label="Not helpful"
+                  :aria-pressed="message.feedbackVote === 0"
+                  :class="{ active: message.feedbackVote === 0 }"
+                  :disabled="message.feedbackPending || message.feedbackVote !== undefined"
+                  @click="submitFeedback(message, 0)"
+                >
+                  <VPIcon name="ic:twotone-thumb-down" size="16" color="currentColor" />
+                </button>
+              </div>
+
+              <p v-if="message.feedbackError" class="assistant-feedback-error" role="alert">
+                {{ message.feedbackError }}
+              </p>
+            </div>
+
             <div
-              v-if="message.role === 'assistant' && message.messageId"
-              class="assistant-feedback"
-              aria-label="Rate this response"
+              v-if="message.role === 'assistant' && message.results?.length"
+              class="assistant-results"
+              aria-label="Related pages"
+            >
+              <div class="assistant-results-label">Related pages</div>
+              <a
+                v-for="result in message.results"
+                :key="result.objectID ?? result.url"
+                class="assistant-result-card"
+                :href="result.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="assistant-result-icon" aria-hidden="true">
+                  <VPIcon name="ic:outline-description" size="18" color="currentColor" />
+                </div>
+                <div class="assistant-result-body">
+                  <strong>{{ result.title }}</strong>
+                  <span v-if="result.section" class="assistant-result-section">{{ result.section }}</span>
+                  <span v-if="result.content" class="assistant-result-snippet">{{ truncate(result.content) }}</span>
+                </div>
+                <VPIcon class="assistant-result-arrow" name="ic:round-open-in-new" size="15" color="currentColor" />
+              </a>
+            </div>
+
+            <div
+              v-if="message.role === 'assistant' && index === messages.length - 1 && message.suggestions?.length"
+              class="assistant-suggestions"
+              aria-label="Suggested follow-up questions"
             >
               <button
+                v-for="suggestion in message.suggestions"
+                :key="suggestion"
                 type="button"
-                title="Helpful"
-                aria-label="Helpful"
-                :aria-pressed="message.feedbackVote === 1"
-                :class="{ active: message.feedbackVote === 1 }"
-                :disabled="message.feedbackPending || message.feedbackVote !== undefined"
-                @click="submitFeedback(message, 1)"
+                :disabled="isLoading"
+                @click="submitSuggestedQuestion(suggestion)"
               >
-                <VPIcon name="ic:twotone-thumb-up" size="16" color="currentColor" />
-              </button>
-              <button
-                type="button"
-                title="Not helpful"
-                aria-label="Not helpful"
-                :aria-pressed="message.feedbackVote === 0"
-                :class="{ active: message.feedbackVote === 0 }"
-                :disabled="message.feedbackPending || message.feedbackVote !== undefined"
-                @click="submitFeedback(message, 0)"
-              >
-                <VPIcon name="ic:twotone-thumb-down" size="16" color="currentColor" />
+                <span>{{ suggestion }}</span>
+                <VPIcon name="ic:round-arrow-forward" size="15" color="currentColor" />
               </button>
             </div>
-            <p v-if="message.feedbackError" class="assistant-feedback-error" role="alert">
-              {{ message.feedbackError }}
-            </p>
           </div>
+
           <div v-if="isLoading" class="assistant-message assistant-loading" aria-label="AI is thinking">
             <i /><i /><i />
           </div>
@@ -443,7 +659,9 @@ onBeforeUnmount(() => requestController?.abort());
 .assistant-fab:focus-visible,
 .assistant-actions button:focus-visible,
 .assistant-form textarea:focus-visible,
-.assistant-form button:focus-visible {
+.assistant-form button:focus-visible,
+.assistant-suggestions button:focus-visible,
+.assistant-result-card:focus-visible {
   outline: 2px solid var(--vp-c-brand-1);
   outline-offset: 2px;
 }
@@ -458,8 +676,8 @@ onBeforeUnmount(() => requestController?.abort());
   right: 0;
   bottom: 56px;
   display: flex;
-  width: min(380px, calc(100vw - 32px));
-  height: min(570px, calc(100vh - 150px));
+  width: min(410px, calc(100vw - 32px));
+  height: min(620px, calc(100vh - 150px));
   overflow: hidden;
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
@@ -531,6 +749,21 @@ onBeforeUnmount(() => requestController?.abort());
   overscroll-behavior: contain;
 }
 
+.assistant-turn {
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assistant-turn.user {
+  align-items: flex-end;
+}
+
+.assistant-turn.assistant {
+  align-items: flex-start;
+}
+
 .assistant-message {
   max-width: 88%;
   padding: 10px 13px;
@@ -591,6 +824,19 @@ onBeforeUnmount(() => requestController?.abort());
   white-space: pre;
 }
 
+.assistant-message.assistant {
+  align-self: flex-start;
+  background: var(--vp-c-bg-soft);
+  border-bottom-left-radius: 4px;
+}
+
+.assistant-message.user {
+  align-self: flex-end;
+  color: var(--vp-c-white);
+  background: var(--vp-c-brand-1);
+  border-bottom-right-radius: 4px;
+}
+
 .assistant-message.user :deep(*) {
   color: inherit;
 }
@@ -601,6 +847,126 @@ onBeforeUnmount(() => requestController?.abort());
 
 .assistant-message.user :deep(code) {
   background: rgb(255 255 255 / 16%);
+}
+
+.assistant-results {
+  display: flex;
+  width: min(100%, 360px);
+  flex-direction: column;
+  gap: 6px;
+}
+
+.assistant-results-label {
+  padding: 0 2px;
+  color: var(--vp-c-text-3);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.assistant-result-card {
+  display: grid;
+  padding: 10px 10px;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 11px;
+  grid-template-columns: 28px minmax(0, 1fr) 18px;
+  align-items: start;
+  gap: 8px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.assistant-result-card:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-alt);
+  border-color: var(--vp-c-brand-1);
+}
+
+.assistant-result-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  border-radius: 7px;
+  place-items: center;
+}
+
+.assistant-result-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.assistant-result-body strong {
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assistant-result-section {
+  overflow: hidden;
+  color: var(--vp-c-text-2);
+  font-size: 11px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assistant-result-snippet {
+  display: -webkit-box;
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--vp-c-text-3);
+  font-size: 11px;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.assistant-result-arrow {
+  margin-top: 5px;
+  color: var(--vp-c-text-3);
+}
+
+.assistant-suggestions {
+  display: flex;
+  width: min(100%, 360px);
+  flex-direction: column;
+  gap: 6px;
+}
+
+.assistant-suggestions button {
+  display: flex;
+  width: 100%;
+  padding: 8px 10px;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.assistant-suggestions button:hover:not(:disabled) {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  border-color: var(--vp-c-brand-1);
+}
+
+.assistant-suggestions button:disabled {
+  cursor: default;
+  opacity: 0.5;
 }
 
 .assistant-feedback {
@@ -644,19 +1010,6 @@ onBeforeUnmount(() => requestController?.abort());
   color: var(--vp-c-danger-1);
   font-size: 11px;
   line-height: 1.35;
-}
-
-.assistant-message.assistant {
-  align-self: flex-start;
-  background: var(--vp-c-bg-soft);
-  border-bottom-left-radius: 4px;
-}
-
-.assistant-message.user {
-  align-self: flex-end;
-  color: var(--vp-c-white);
-  background: var(--vp-c-brand-1);
-  border-bottom-right-radius: 4px;
 }
 
 .assistant-loading {
@@ -799,6 +1152,7 @@ onBeforeUnmount(() => requestController?.abort());
 
 @media (prefers-reduced-motion: reduce) {
   .assistant-fab,
+  .assistant-result-card,
   .assistant-panel-enter-active,
   .assistant-panel-leave-active {
     transition: none;

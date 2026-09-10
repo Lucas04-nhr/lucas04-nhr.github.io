@@ -1,18 +1,15 @@
 ---
-title: Course Summary - Biological Sequence Analysis
+title: Pairwise Alignment and Database Search
 createTime: 2026/09/03 21:16:38
-permalink: /blog/ku-bsa-summary/
+permalink: /blog/ku-bsa-pairwise-alignment/
 tags:
   - KU
   - Biological Sequence Analysis
-outline: [2,3]
-password: 16e94e5a3702c27bde806930ea634ac9
-excerpt: This is the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum.
+password: 7d36dbf1546a727aa80d6d3d20ab603b
+excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about pairwise alignment and database search, including Needleman-Wunsch algorithm, Smith-Waterman algorithm, scoring system, substitution matrices, and BLAST.
 ---
 
-## Week 01 - Pairwise Alignment {#pairwise-alignment-01}
-
-### Core Mathematical Concepts {#core-mathematical-concepts}
+## Core Mathematical Concepts {#core-mathematical-concepts}
 
 - **==Alphabet==**: Set of allowed symbols, for example, in DNA sequences, the alphabet is `{A, C, G, T}`.
 - **==Probability==**: $0 \leqslant P \leqslant 1$, probability is a measure of the likelihood of an event occurring. The sum of probabilities of all possible events equals 1.
@@ -25,15 +22,15 @@ excerpt: This is the summary of the course Biological Sequence Analysis in KU, w
   $$
 - Algorithmic complexity describes how running time or memory grows with input size.
 
-### Basics of pairwise sequence alignment {#basics-of-pairwise-sequence-alignment}
+## Basics of pairwise sequence alignment {#basics-of-pairwise-sequence-alignment}
 
 - Goal: To find the best alignment between two sequences, which can be DNA, RNA, or protein sequences.
 - Main problem: The number of possible alignments grows extremely rapidly, so exhaustive enumeration is impractical.
 - Instead, dynamic programming is used to find the optimal alignment efficiently, by constructing larger optimal solutions from smaller optimal solutions.
 
-### Needleman-Wunsch Algorithm {#needleman-wunsch-algorithm}
+## Needleman-Wunsch Algorithm {#needleman-wunsch-algorithm}
 
-#### Background {#nwa-background}
+### Background {#nwa-background}
 
 The Needleman-Wunsch algorithm is a dynamic programming algorithm used for ==**global**== sequence alignment. It was developed by Saul Needleman and Christian Wunsch in 1970. The algorithm finds the optimal alignment between two sequences by filling a matrix and backtracking to find the actual alignment.
 
@@ -41,7 +38,7 @@ It aligns two sequences ==**end-to-end**==, meaning it considers the entire leng
 
 The algorithm is appropriate ==when sequenses are expected to be similar over their entire length==, such as when comparing homologous genes or proteins.
 
-#### Algorithm Steps {#nwa-steps}
+### Algorithm Steps {#nwa-steps}
 
 The algorithm uses the following dynamic programming recurrence relation to fill the scoring matrix:
 
@@ -80,19 +77,19 @@ $$
 
 :::
 
-#### Complexity Analysis {#nwa-complexity}
+### Complexity Analysis {#nwa-complexity}
 
 The time complexity of the Needleman-Wunsch algorithm is $O(mn)$, where $m$ and $n$ are the lengths of the two sequences. The space complexity is also $O(mn)$ due to the storage of the scoring matrix. However, optimizations can be made to reduce space complexity to $O(\min(m, n))$ by only storing two rows or columns at a time.
 
-### Smith-Waterman Algorithm {#smith-waterman-algorithm}
+## Smith-Waterman Algorithm {#smith-waterman-algorithm}
 
-#### Background {#swa-background}
+### Background {#swa-background}
 
 The Smith-Waterman algorithm is a dynamic programming algorithm used for ==**local**== sequence alignment. It was developed by Temple F. Smith and Michael S. Waterman in 1981. The algorithm finds the optimal local alignment between two sequences by filling a scoring matrix and backtracking to find the actual alignment.
 
 It finds the best matching ==**subsequences**==, rather than aligning the entire sequences. The algorithm is useful for detecting shared domains, motifs, or conserved regions between sequences that may not be similar over their entire length (a.k.a. **divergent evolution**).
 
-#### Algorithm Steps {#swa-steps}
+### Algorithm Steps {#swa-steps}
 
 The key modifation relative to the Needleman-Wunsch algorithm is the introduction of a zero in the recurrence relation, which allows for the possibility of starting a new alignment at any point in the sequences. The recurrence relation for the Smith-Waterman algorithm is as follows:
 
@@ -115,7 +112,7 @@ $$
 
 The traceback starts at the ==**highest-scoring cell**==, not necessarily the bottom-right cell, in the matrix and continues until a cell with a score of zero is reached. This allows for the identification of the best local alignment.
 
-#### Complexity Analysis {#swa-complexity}
+### Complexity Analysis {#swa-complexity}
 
 The time complexity of the Smith-Waterman algorithm is also $O(mn)$, where $m$ and $n$ are the lengths of the two sequences. The space complexity is $O(mn)$ due to the storage of the scoring matrix. Similar to Needleman-Wunsch, optimizations can be made to reduce space complexity to $O(\min(m, n))$ by only storing two rows or columns at a time.
 
@@ -140,7 +137,7 @@ flowchart LR
   class SW,SW1,SW2,SW3,SW4 local;
 ```
 
-### Alignment Scoring {#alignment-scoring}
+## Alignment Scoring {#alignment-scoring}
 
 The alignment quality mainly depends on the scoring system used, which includes ==**match scores, mismatch penalties, and gap penalties**==. The choice of scoring parameters can significantly affect the resulting alignment. 
 
@@ -148,7 +145,7 @@ For example, a large gap penalty may discourage gaps in the alignment, while a s
 
 Therefore, ==**changing scoring parameters can change both the score and the resulting alignment**==. It is important to choose scoring parameters that are appropriate for the specific sequences being aligned and the biological question being addressed.
 
-### Linear vs. Affine Gap Penalties {#linear-vs-affine-gap-penalties}
+## Linear vs. Affine Gap Penalties {#linear-vs-affine-gap-penalties}
 
 For gap penalties, there's a general idea: $g(k) = d + e (k-1)$, where $d$ is the penalty for opening a gap and $e$ is the penalty for extending it. We consider two types of gap penalties: linear and affine.
 
@@ -165,7 +162,7 @@ For affine gap penalties, the penalty for a gap $g(k)$ of length $k$ is given by
 
 In general, gap opening is much more expensive than extending a existing gap, that is, in biological motivations, one long indel event is generally more plausible than many independent short indels. Therefore, affine gap penalties are often preferred in biological sequence alignment.
 
-### Probabilistic Interpretion of Alignment Scores {#probabilistic-interpretation-of-alignment-scores}
+## Probabilistic Interpretion of Alignment Scores {#probabilistic-interpretation-of-alignment-scores}
 
 Here are some formulas for the probabilistic interpretation of alignment scores:
 
@@ -201,11 +198,11 @@ $$
 
 To summarize, a positive substitution score indicates that the aligned residues are more often to occur together than by chance, while a negative score suggests that they are less often to occur together.
 
-### Substitution Matrices {#substitution-matrices}
+## Substitution Matrices {#substitution-matrices}
 
 Substitution matrices are derived from observed substitutions in conserved/local protein alignments. The scores are log-odds scores, which are calculated based on the observed frequencies of amino acid substitutions in a set of aligned sequences. The most commonly used substitution matrices are PAM (Point Accepted Mutation) and BLOSUM (BLOcks SUbstitution Matrix).
 
-#### BLOSUM Matrices {#blosum-matrices}
+### BLOSUM Matrices {#blosum-matrices}
 
 BLOSUM matrices are derived from conserved regions of protein sequences, known as blocks. The BLOSUM matrices are constructed by analyzing the frequencies of amino acid substitutions in these blocks and calculating log-odds scores based on the observed substitution frequencies.
 
@@ -218,7 +215,7 @@ The higher BLOSUM number is, the more closely related the sequences are.
 
 For example, BLOSUM80 is used for aligning sequences that are more similar, while BLOSUM62 is used for aligning sequences that are more divergent.
 
-#### PAM Matrices {#pam-matrices}
+### PAM Matrices {#pam-matrices}
 
 PAM matrices are derived from observed substitutions in closely related protein sequences. The scores are also log-odds scores, which are calculated based on the observed frequencies of amino acid substitutions in a set of aligned sequences. 
 
@@ -229,7 +226,7 @@ The most commonly used PAM matrices are PAM1 and PAM250.
 
 For example, PAM1 is used for aligning sequences that are very similar, while PAM250 is used for aligning sequences that are more divergent.
 
-#### Summary of BLOSUM and PAM Matrices {#summary-of-blosum-and-pam-matrices}
+### Summary of BLOSUM and PAM Matrices {#summary-of-blosum-and-pam-matrices}
 
 PAM matrices were originally constructed from global alignments of closely related proteins. PAM1 represents a very small evolutionary distance, and matrices for larger distances are extrapolated from PAM1 using an evolutionary model. Therefore, a higher PAM number indicates a greater evolutionary distance and is generally used for more distantly related sequences.
 
@@ -245,19 +242,19 @@ $$
 \boxed{\text{BLOSUM number } \uparrow \;\Longrightarrow\; \text{evolutionary distance } \downarrow}
 $$
 
-### Sequence Identity and Similarity {#sequence-identity-and-similarity}
+## Sequence Identity and Similarity {#sequence-identity-and-similarity}
 
 The sequence identity is the percentage of ==**identical residues**== in the aligned sequences, while sequence similarity takes into account ==**both identical and similar residues**== based on the scoring matrix used.
 
 Identity has a straightforward definition; similarity depends on the scoring system/substitution matrix. Therefore, there's a relationship between the two: $\% \text{identity} \leqslant \% \text{similarity}$.
 
-### Database Search {#database-search}
+## Database Search {#database-search}
 
 A question is why database search cannot simply use dynamic programming everywhere. The answer is that:
 
 Comparing a query of length $l$ against a database length $L$ using full dynamic programming would cost approx. $O(lL)$. With huge sequence databases, performing optimal alignment against everything is computationally expensive. Therefore, **heuristic** methods are used to speed up the search process, such as ==**BLAST (Basic Local Alignment Search Tool)**== and ==**FASTA (Fast Alignment Search Tool)**==.
 
-#### Main database-search strategy {#main-database-search-strategy}
+### Main database-search strategy {#main-database-search-strategy}
 
 One common strategy is to replace one difficult approximate-matching problem with many fast short-string searches. The main steps are:
 
@@ -276,7 +273,7 @@ $$
 $$
 :::
 
-### k-mers & Words {#k-mers-and-words}
+## k-mers & Words {#k-mers-and-words}
 
 A k-mer is a substring of length $k$, and short words are used as **seeds* for finding potential alignments. There are some advantages as well as trade-offs in using k-mers:
 
@@ -291,7 +288,7 @@ A k-mer is a substring of length $k$, and short words are used as **seeds* for f
   + Longer $k$ → more specific but can miss true matches.
 :::
 
-#### Hash Tables {#hash-tables}
+### Hash Tables {#hash-tables}
 
 You can map a key to a table position using a hash function.
 
@@ -299,7 +296,7 @@ A good hash function distributes keys approx. uniformly across the table, minimi
 
 With a suitably sized hash table and few collisions, average lookup can be approx. $O(1)$, which is much faster than searching through a list of keys.
 
-#### Perfect Hasing of DNA k-mers {#perfect-hashing-of-dna-k-mers}
+### Perfect Hasing of DNA k-mers {#perfect-hashing-of-dna-k-mers}
 
 DNA alphabet has only 4 letters, so we can encode each letter as a 2-bit number:
 
@@ -332,7 +329,7 @@ $$
   4^3 \cdot 0 + 4^2 \cdot 1 + 4^1 \cdot 2 + 4^0 \cdot 3 = 27
 $$
 
-### Trees {#trees}
+## Trees {#trees}
 
 A tree is used to store words over an alphabet. Each node represents a character, and the path from the root to a leaf node represents a word. Trees are useful for storing and searching for words in a dictionary or a set of sequences.
 
@@ -347,7 +344,7 @@ Some important terms related to trees:
 - ==**Parent**==: A node that has one or more child nodes.
 - ==**Child**==: A node that has a parent node.
 
-### Suffix {#suffix}
+## Suffix {#suffix}
 
 A suffix starts at some sequences position and extends to the end.
 
@@ -355,15 +352,15 @@ A suffix tree is essentially a compressed prefix tree containing **all suffixes*
 
 Nodes with one incoming and one outgoing edge are compressed and leaves store suffix positions, the edge labels may contain multiple characters. The exact query search takes time approx. $O(m)$, where $m$ is the length of the query string, while reporting all matches additionally requires $O(k)$ time, where $k$ is the number of matches found.
 
-#### Suffix-tree Construction {#suffix-tree-construction}
+### Suffix-tree Construction {#suffix-tree-construction}
 
 A simple way to construct a suffix tree is to insert every suffix into a trie and then compress all non-branching paths. Since a sequence of length $n$ contains $n$ suffixes whose total length is proportional to $n^2$, this naïve construction can require $O(n^2)$ time in the worst case. More advanced algorithms can construct a suffix tree in $O(n)$ time.
 
-#### Generalized Suffix Trees {#generalized-suffix-trees}
+### Generalized Suffix Trees {#generalized-suffix-trees}
 
 A generalized suffix tree stores the suffixes of multiple sequences in a single tree. Different termination symbols are added to distinguish the sequences, and each leaf records both the sequence number and the starting position of its suffix. This makes it possible to search several sequences simultaneously and to identify substrings shared between them.
 
-### Suffix Arrays {#suffix-arrays}
+## Suffix Arrays {#suffix-arrays}
 
 A suffix array is a more memory-efficient alternative to a suffix tree. It contains the starting positions of all suffixes in ==**lexicographically sorted order**==. Once the suffixes have been sorted, an exact pattern can be found using binary search rather than direct tree traversal.
 
@@ -371,9 +368,7 @@ The main trade-off is that suffix trees provide fast, direct traversal but requi
 
 Modern read-mapping and alignment programs use data structures related to hash tables, suffix arrays, and the Burrows-Wheeler Transform. Their shared principle is that ==**expensive preprocessing and indexing enable much faster repeated searches**==.
 
-## Week 02 - Pairwise Alignment {#pairwise-alignment-02}
-
-### BLAST {#blast}
+## BLAST {#blast}
 
 BLAST is a ==**heuristic local sequence-search method**==. It does not run Smith-Waterman against every sequence in a database because that would be too computationally expensive. Instead, it uses short words to identify promising regions and performs more detailed calculations only around those hits.
 
@@ -390,13 +385,13 @@ The main BLAST workflow is:
 
 An important detail is that a database hit does not necessarily match the original query word exactly. In protein BLAST, the exact database match may instead be to a pre-generated ==**neighbourhood word**== containing biologically plausible substitutions. Candidate words are commonly scored using a matrix such as BLOSUM62, and only sufficiently high-scoring words are retained. This combines the speed of exact lookup with tolerance for evolutionary substitutions.
 
-### Seed-and-extend Principle {#seed-and-extend-principle}
+## Seed-and-extend Principle {#seed-and-extend-principle}
 
 A high-scoring word match provides a ==**seed**==. The algorithm extends the match in both directions to determine whether it belongs to a longer high-scoring local alignment. By restricting expensive alignment calculations to regions near promising seeds, the search space is dramatically reduced. Both FASTA and BLAST use variations of this general principle.
 
 A ==**High-Scoring Segment Pair (HSP)**== is a local region of strong similarity produced by extending a promising seed. A pair of sequences may contain several HSPs, representing separate locally similar regions with their own scores.
 
-### BLAST E-value {#blast-e-value}
+## BLAST E-value {#blast-e-value}
 
 The E-value is the ==**expected number of random database matches with a score at least as good as the observed score**==. It is not a probability and can therefore be greater than 1. 
 
@@ -421,8 +416,3 @@ $$
 $$
 
 When $E(S)$ is very small, $P(X>S) \approx E(S)$. Therefore, E-values and probabilities are numerically similar only in the small-value limit; they are not generally interchangeable.
-
-<!-- ---
-::: info
-That is the end of Week 02. The following weeks will be summarized afterwards.
-::: -->

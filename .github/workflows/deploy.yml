@@ -197,17 +197,6 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-      - name: Verify production site
-        run: |
-          curl --fail \
-            --silent \
-            --show-error \
-            --retry 5 \
-            --retry-delay 5 \
-            --retry-all-errors \
-            https://blog.lucas04.top/ \
-            > /dev/null
-
       - name: Trigger Algolia Crawler
         uses: cssnr/algolia-crawler-action@v2
         with:

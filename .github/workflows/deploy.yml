@@ -205,23 +205,12 @@ jobs:
             --retry 5 \
             --retry-delay 5 \
             --retry-all-errors \
-            https://lucas04.top/ \
+            https://blog.lucas04.top/ \
             > /dev/null
 
       - name: Trigger Algolia Crawler
-        env:
-          ALGOLIA_CRAWLER_ID: ${{ secrets.ALGOLIA_CRAWLER_ID }}
-          ALGOLIA_CRAWLER_USER_ID: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
-          ALGOLIA_CRAWLER_API_KEY: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
-        run: |
-          echo "Triggering Algolia Crawler..."
-
-          curl --fail-with-body \
-            --request POST \
-            --retry 3 \
-            --retry-delay 5 \
-            --retry-all-errors \
-            --user "${ALGOLIA_CRAWLER_USER_ID}:${ALGOLIA_CRAWLER_API_KEY}" \
-            "https://crawler.algolia.com/api/1/crawlers/${ALGOLIA_CRAWLER_ID}/reindex"
-
-          echo "Algolia crawl triggered successfully."
+        uses: cssnr/algolia-crawler-action@v2
+        with:
+          crawler_id: ${{ secrets.ALGOLIA_CRAWLER_ID }}
+          crawler_user_id: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
+          crawler_api_key: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}

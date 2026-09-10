@@ -31,6 +31,14 @@ interface AlgoliaErrorResponse {
   message?: string;
 }
 
+interface PageContext {
+  currentPage: string;
+  currentPageWithoutHash: string;
+  pagePath: string;
+  pageTitle: string;
+  locale: string;
+}
+
 const ALGOLIA_APPLICATION_ID = "74YMW3SD6Z";
 const ALGOLIA_SEARCH_API_KEY = "8452a5a75f5166abe464b8fe85d3b3cc";
 const ALGOLIA_AGENT_ID = "782ad8a9-dafa-4e57-90ef-3fc5e42ac9fd";
@@ -118,6 +126,25 @@ function completionText(response: CompletionResponse): string {
     .trim();
 }
 
+function getPageContext(): PageContext | null {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return null;
+  }
+
+  return {
+    currentPage: window.location.href,
+    currentPageWithoutHash: `${window.location.origin}${window.location.pathname}`,
+    pagePath: window.location.pathname,
+    pageTitle: document.title,
+    locale:
+      document.documentElement.lang || navigator.language || "en-US",
+  };
+}
+
+function formatPageContext(context: PageContext): string {
+  return `[Page context]\n${JSON.stringify(context)}\n\nUse this context only to identify what page the user is currently viewing. When the user refers to \"this page\", \"this article\", \"this post\", \"here\", \"it\", or similar expressions, use currentPageWithoutHash or pagePath as the strongest retrieval hint for the corresponding content in the configured Algolia index. Treat pageTitle as a secondary retrieval hint. Do not treat this metadata itself as authoritative page content.`;
+}
+
 async function submitFeedback(message: ChatMessage, vote: FeedbackVote) {
   if (
     !message.messageId ||
@@ -185,6 +212,9 @@ async function submitQuestion() {
   requestController = new AbortController();
 
   try {
+    const pageContext = getPageContext();
+    const conversationMessages = messages.value.slice(1);
+
     const response = await fetch(COMPLETIONS_URL, {
       method: "POST",
       headers: {
@@ -193,10 +223,21 @@ async function submitQuestion() {
         "x-algolia-api-key": ALGOLIA_SEARCH_API_KEY,
       },
       body: JSON.stringify({
-        messages: messages.value.slice(1).map((message) => ({
-          role: message.role,
-          parts: [{ type: "text", text: message.text }],
-        })),
+        messages: conversationMessages.map((message, index) => {
+          const isLatestUserMessage =
+            index === conversationMessages.length - 1 &&
+            message.role === "user";
+
+          return {
+            role: message.role,
+            parts: [
+              { type: "text", text: message.text },
+              ...(isLatestUserMessage && pageContext
+                ? [{ type: "text", text: formatPageContext(pageContext) }]
+                : []),
+            ],
+          };
+        }),
       }),
       signal: requestController.signal,
     });

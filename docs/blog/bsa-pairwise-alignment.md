@@ -300,7 +300,7 @@ With a suitably sized hash table and few collisions, average lookup can be appro
 
 DNA alphabet has only 4 letters, so we can encode each letter as a 2-bit number:
 
-::: flex center
+::: table align="center" copy="all"
 | **Letter** | **Encoding** |
 |:----------:|:------------:|
 | A          | $(00)_2$     |

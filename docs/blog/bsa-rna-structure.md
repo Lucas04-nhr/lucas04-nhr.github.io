@@ -131,7 +131,7 @@ Thus, tmRNA acts as a quality-control mechanism during translation.
 
 Two major snoRNA classes are:
 
-::: flex center
+::: table align="center" copy="all"
 | snoRNA class | Main function |
 | :---: | :---: |
 | **Box C/D** | $2'$-O-methylation |
@@ -594,7 +594,7 @@ Actual RNA stability depends on:
 
 Therefore, modern thermodynamic RNA folding replaces the simple maximization objective with ==**free-energy minimization**==.
 
-::: flex center
+::: table align="center" copy="all"
 | Property | Nussinov | MFE folding |
 | :---: | :---: | :---: |
 | Objective | Maximize number of base pairs | Minimize free energy |

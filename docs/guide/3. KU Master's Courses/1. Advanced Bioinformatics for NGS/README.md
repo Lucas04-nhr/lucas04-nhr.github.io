@@ -12,4 +12,5 @@ This section is used to have a better layout of the assignments uploaded in Absa
 
 ## Table of Contents
 
-- [Assignment 01](/docs/ku/advbinf/assignment01/)
+- [Assignment 01 Part 1](/docs/ku/advbinf/as01p1/)
+- [Assignment 01 Part 2](/docs/ku/advbinf/as01p2/)

@@ -21,15 +21,12 @@ copyright: false
 
 ---
 
-I'm a passionate undergraduate student at Huazhong University of Science and Technology (HUST), majoring in Bioinformatics at the College of Life Science and Technology.
-
-::: note
-I'm currently admitted to MSc. of Bioinformatics at Københavns Universitet (KU). Since Sept. 2026, I will be a graduate student at KU, and I will continue to pursue my passion for bioinformatics and contribute to the field with my knowledge and skills.
-:::
+I'm a passionate graduate student at Huazhong University of Copenhagen (Københavns Universitet, KU), majoring in Bioinformatics.
+`
 
 ## About Me {#basic}
 
-- 🎓 **Education:** Studying Bioinformatics at HUST.
+- 🎓 **Education:** Studying Bioinformatics at UCPH.
 - 💻 **Programming Languages:** Proficient in Python and C++, and actively engaged in crafting interesting projects.
 - 📊 **Data Analysis:** Utilizing R for in-depth analysis and visualization of biological data.
 - 🌐 **Web Development:** Experienced in JavaScript and contributed to building Wiki web pages for iGEM HUST-China [2023](https://2023.igem.wiki/hust-china), [2024](https://2024.igem.wiki/hust-china), also be an advisor to build Wiki web pages for iGEM HUST-China [2025](https://2025.igem.wiki/hust-china).

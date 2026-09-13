@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@12.3.4",
+  "packageManager": "pnpm@12.4.1",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "GPLv3",
   "scripts": {
@@ -36,7 +36,7 @@
     "dashjs": "^5.2.1",
     "echarts": "^6.1.0",
     "flowchart.ts": "^3.0.1",
-    "hls.js": "^1.7.2",
+    "hls.js": "^1.7.3",
     "markdown-it": "14.3.1",
     "mermaid": "^11.17.2",
     "mpegts.js": "^1.8.2",
@@ -46,7 +46,7 @@
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",
     "swiper": "^12.2.0",
-    "tm-grammars": "^1.32.16",
+    "tm-grammars": "^1.32.18",
     "tm-themes": "^1.12.11"
   }
 }

@@ -1,10 +1,10 @@
 ---
 title: EM Algorithm
 createTime: 2026/09/09 13:45:23
-permalink: /blogs/advbinf-em-algo/
+permalink: /blogs/ku-advbinf-em-algo/
 tags:
   - KU
-  - advBinf NGS
+  - Advanced Bioinformatics
 # password: f38907a17a67833f90d485872c4a6021
 excerpt: This is part of the summary of the course Advanced Bioinformatics for NGS in KU. The article introduces the Expectation-Maximization algorithm, including latent variables, likelihood, posterior probabilities, the E-step and M-step, Jensen's inequality, and the lower-bound interpretation of EM.
 ---

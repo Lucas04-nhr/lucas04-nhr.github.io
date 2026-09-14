@@ -5,7 +5,7 @@ permalink: /blog/ku-bsa-rna-structure/
 tags:
   - KU
   - Biological Sequence Analysis
-password: a91da7684f1bf21f7d5fb4dcbcf41886
+# password: a91da7684f1bf21f7d5fb4dcbcf41886
 excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about RNA structure and folding, including RNA secondary structure, RNA folding algorithms, and RNA structure prediction.
 ---
 

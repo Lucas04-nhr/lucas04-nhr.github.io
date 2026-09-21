@@ -28,6 +28,7 @@
     "node": "^20.6.0 || >=22.0.0"
   },
   "dependencies": {
+    "@embedpdf/vue-pdf-viewer": "^2.15.1",
     "@mathjax/src": "^4.1.3",
     "@simonwep/pickr": "^1.10.2",
     "@vuepress/shiki-twoslash": "2.0.0-rc.134",

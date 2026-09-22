@@ -21,6 +21,34 @@ export default defineUserConfig({
     googleAnalyticsPlugin({
       id: "G-DWLF5JZRCX", // 选项
     }),
+    {
+      name: "preview-watermark-frontmatter",
+      extendsPage(page) {
+        if (
+          page.frontmatter.preview === true &&
+          page.frontmatter.watermark === undefined
+        ) {
+          page.frontmatter.watermark = {
+            fullPage: true,
+            content: "PREVIEW",
+            contentType: "text",
+            layout: "grid",
+            gridLayoutOptions: {
+              cols: 2,
+              rows: 2,
+              gap: [24, 24],
+            },
+            width: 180,
+            height: 120,
+            rotate: 30,
+            fontSize: "28px",
+            fontWeight: "bold",
+            globalAlpha: 0.25,
+            backgroundRepeat: "repeat",
+          };
+        }
+      },
+    },
   ],
   lang: "en-US",
   locales: {

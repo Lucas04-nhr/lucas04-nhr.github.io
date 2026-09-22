@@ -212,7 +212,9 @@ export default defineUserConfig({
      * 水印
      * @see https://theme-plume.vuejs.press/guide/features/watermark/
      */
-    // watermark: true,
+    watermark: {
+      enabled: false,
+    },
 
     /**
      * 评论 comments

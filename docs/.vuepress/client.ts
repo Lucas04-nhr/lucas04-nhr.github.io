@@ -1,4 +1,4 @@
-import { h } from "vue";
+import { h, onMounted } from "vue";
 import CustomNotFound from "./components/customNotFound.vue";
 import CustomAside from "./components/customAside.vue";
 import ResponsiveImage from "./components/customResponseImage.vue";
@@ -37,6 +37,33 @@ import { initializeDebugPreference } from "./theme/utils/debugPreference";
 import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
 
 export default defineClientConfig({
+  setup() {
+    onMounted(() => {
+      setTimeout(() => {
+        type WatermarkInstance = {
+          changeOptions: (
+            options: Record<string, never>,
+            mode: "append",
+          ) => Promise<void>;
+        };
+        type WatermarkRoot = HTMLElement & {
+          __WATERMARK__INSTANCE__?: WatermarkInstance;
+        };
+
+        const watermarkRoot = Array.from(document.body.children).find(
+          (element) => "__WATERMARK__INSTANCE__" in element,
+        ) as WatermarkRoot | undefined;
+
+        // Plume updates the parent while watermark-js-plus is still creating
+        // its first grid canvas. Redraw once so hard refreshes are not blank.
+        void watermarkRoot?.__WATERMARK__INSTANCE__?.changeOptions(
+          {},
+          "append",
+        );
+      }, 0);
+    });
+  },
+
   layouts: {
     Layout: h(Layout, null, {
       "layout-top": () => h(ContentInteractionPreferenceSync),

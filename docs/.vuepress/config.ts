@@ -46,6 +46,7 @@ export default defineUserConfig({
             globalAlpha: 0.25,
             backgroundRepeat: "repeat",
           };
+          page.frontmatter.comment = false;
         }
       },
     },

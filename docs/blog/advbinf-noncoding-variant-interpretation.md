@@ -6,7 +6,6 @@ tags:
   - KU
   - Advanced Bioinformatics
 excerpt: This is part of the summary of the course Advanced Bioinformatics for NGS at KU. This article introduces the variant-to-function problem for non-coding genetic variation, linkage disequilibrium, GWAS, molecular QTLs and eQTLs, allele-specific expression, confounder correction, multiple testing, and the use of regulatory evidence to connect association signals to molecular mechanisms.
-preview: true
 ---
 
 A genome-wide association study can identify a genomic region associated with a disease or quantitative trait, but this is usually only the beginning of the biological interpretation.

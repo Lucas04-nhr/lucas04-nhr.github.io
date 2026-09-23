@@ -29,7 +29,7 @@ $$
 \text{trait or disease}.
 $$
 
-This article summarizes the first lecture on **non-coding variant interpretation**, focusing on the genetic basis of association signals, genome-wide association studies (GWAS), molecular quantitative trait loci (QTLs), and the statistical issues that arise when trying to connect variants to regulatory mechanisms.
+This article combines both lectures on **non-coding variant interpretation**. It begins with the genetic basis of association signals, GWAS, and molecular QTLs, then follows the analysis through colocalization, fine-mapping, regulatory annotation, enhancer-to-gene mapping, sequence-to-function prediction, and polygenic interpretation.
 
 ## The Variant-to-Function Problem {#variant-to-function-problem}
 
@@ -52,7 +52,7 @@ The lecture groups these strategies into four broad categories:
 3. prioritize variants using **functional annotations and predictive models**;
 4. validate candidate mechanisms experimentally.
 
-The first lecture focuses mainly on the first strategy: using molecular QTLs to bridge genetic association and regulatory function.
+The first lecture develops the molecular-QTL bridge from genotype to regulatory phenotype. The second asks how to refine the candidate variants, connect them to genes and cell types, and combine statistical and functional evidence.
 
 ## A Canonical Example: The FTO Obesity Locus {#fto-obesity-locus}
 
@@ -266,6 +266,7 @@ If the phenotype is molecular rather than organismal, we obtain a **molecular QT
 
 Examples include:
 
+::: table align="center" copy="all" title="Molecular QTLs and their associated phenotypes"
 | QTL | Molecular phenotype |
 | --- | --- |
 | **eQTL** | gene expression |
@@ -273,6 +274,7 @@ Examples include:
 | **caQTL** | chromatin accessibility |
 | **mQTL** | DNA methylation |
 | **pQTL** | protein abundance |
+:::
 
 The general idea is
 
@@ -763,100 +765,329 @@ $$
 
 This illustrates the value of molecular QTL data: the eQTL provides an intermediate molecular phenotype connecting a non-coding association signal to a specific gene and tissue.
 
-## Putting the Workflow Together {#putting-the-workflow-together}
+## Colocalization of GWAS and eQTL Signals {#colocalization}
 
-The logic of non-coding variant interpretation can be summarized as:
+Finding an eQTL in the same region as a GWAS association is a useful starting point, but it does not demonstrate that the two traits share a causal variant.
 
-```text
-GWAS
-  |
-  v
-associated locus
-  |
-  v
-LD block
-  |
-  v
-many correlated candidate variants
-  |
-  v
-molecular QTL evidence
-  |
-  v
-candidate regulatory effect / target gene
-  |
-  v
-fine-mapping + functional annotation
-  |
-  v
-candidate causal variant
-  |
-  v
-experimental validation
-  |
-  v
-molecular mechanism
-```
+The problem is again LD. One variant may affect the disease trait and a different nearby variant may affect expression. If the two variants are correlated, their association patterns can overlap even when the underlying causal variants differ. The relevant question is:
 
-The first major conceptual transition is therefore
+> Are the GWAS and eQTL association patterns across the locus compatible with the same underlying causal variant?
+
+The **coloc** framework expresses this as five hypotheses:
+
+::: table align="center" copy="all" title="Colocalization hypotheses and interpretations"
+
+| Hypothesis | Interpretation |
+| :---: | --- |
+| $H_0$ | Neither trait has an association in the region |
+| $H_1$ | Only trait 1 is associated |
+| $H_2$ | Only trait 2 is associated |
+| $H_3$ | Both traits are associated, but with different causal variants |
+| $H_4$ | Both traits are associated and share one causal variant |
+
+:::
+
+For a region containing $Q$ variants, the method considers possible causal configurations and combines them within each hypothesis. Bayesian model comparison gives posterior probabilities such as
 
 $$
-\text{statistical association}
+PP_4
+=
+P(H_4|\text{data}).
+$$
+
+A high $PP_4$ supports a shared variant under the model. All five probabilities still matter: a large $PP_3$ supports two distinct signals, while probability on $H_1$ or $H_2$ may show weak evidence for association in one dataset.
+
+::: warning Colocalization is not a comparison of lead SNPs
+The same lead SNP can appear in both studies because of LD, and different lead SNPs can still tag one shared signal. Colocalization evaluates the ==**locus-wide association patterns**==.
+:::
+
+The basic formulation assumes at most one causal variant for each trait in the region. Multiple signals may require conditioning or methods that support them directly. Results also depend on priors, comparable variant coverage, and adequate power. Even strong colocalization supports shared genetic control rather than proving that the molecular phenotype mediates the organism-level trait.
+
+## Why GWAS Hits and eQTLs Do Not Completely Overlap {#gwas-eqtl-differences}
+
+Less than half of trait-associated loci can typically be explained by a colocalizing eQTL in available datasets. Several factors contribute:
+
+- many eQTL studies have limited power for rare variants;
+- the relevant tissue, cell type, developmental stage, or stimulation state may be missing;
+- splicing, chromatin, methylation, or protein abundance may be more relevant than steady-state RNA;
+- detected eQTLs and GWAS variants occupy different regions of the effect-size space.
+
+The lecture introduces a simple model:
+
+$$
+\text{variant}
+\xrightarrow{\beta}
+\text{expression}
+\xrightarrow{\gamma}
+\text{phenotype}.
+$$
+
+An eQTL study mainly obtains power from expression variance related to $\beta^2$. The phenotypic association depends on the combined path and is related to $\beta^2\gamma^2$ in this simplified model. A small expression effect can therefore accompany a detectable phenotypic effect when the affected gene has a strong influence on the trait.
+
+Detected eQTLs are relatively enriched in promoters, whereas GWAS variants are strongly enriched in enhancers. Genes with detectable eQTLs also tend to tolerate loss-of-function variation better than some constrained disease-relevant genes.
+
+::: tip
+==**The absence of a detected eQTL does not show that a GWAS variant is non-regulatory.**== It may reflect limited power, an unmeasured context, another molecular phenotype, or a small regulatory effect on a phenotypically important gene.
+:::
+
+## Statistical Fine-Mapping {#statistical-fine-mapping}
+
+GWAS identifies an associated locus, while **statistical fine-mapping** asks which variants within it remain plausible causes after accounting for LD.
+
+Its main questions are:
+
+- which variants may be causal;
+- whether one or several causal signals occur;
+- how much posterior probability belongs to each variant;
+- what smallest set contains a causal effect with a chosen credibility.
+
+Fine-mapping can be written as a sparse variable-selection problem:
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\mathbf{b}
++
+\boldsymbol{\epsilon},
+$$
+
+where $\mathbf{X}$ is the genotype matrix and non-zero elements of $\mathbf{b}$ represent effects. LD makes columns of $\mathbf{X}$ highly correlated, while $\mathbf{b}$ is assumed to be sparse. Association strength alone cannot distinguish a causal variant from correlated neighbours. Fine-mapping therefore combines ==**association statistics and LD**==.
+
+### Posterior Inclusion Probabilities {#posterior-inclusion-probabilities}
+
+For variant $j$, the **posterior inclusion probability (PIP)** is
+
+$$
+\mathrm{PIP}_j
+=
+P(b_j\neq0|\text{data}).
+$$
+
+A larger PIP means that the fitted model gives more posterior support to variant $j$ having an effect. The value depends on the data, LD estimate, priors, and model assumptions.
+
+### Credible Sets {#credible-sets}
+
+A credible set is constructed to have at least a chosen posterior probability of containing a causal effect. For a 95% credible set $C$,
+
+$$
+P\left(
+\text{at least one causal variant is in } C
+\mid
+\text{data}
+\right)
+\geq 0.95.
+$$
+
+The set may contain one well-resolved variant or many variants that LD makes difficult to distinguish.
+
+::: warning A credible set is not a list of confirmed causal variants
+A 95% credible set does not give every member a 95% probability of causality. Its coverage is conditional on the fitted model, and the true variant can be missing because of incomplete coverage, incorrect LD, model misspecification, or sampling variation.
+:::
+
+## Multiple Causal Signals and SuSiE {#susie}
+
+A locus may contain several causal variants. Conditional analysis can search for a second signal after accounting for a lead variant. Joint methods model several variants at once. The lecture compares **CAVIAR**, **FINEMAP**, and **SuSiE**.
+
+**SuSiE**, or *Sum of Single Effects*, decomposes the total effect into $L$ components:
+
+$$
+\mathbf{b}
+=
+\sum_{\ell=1}^{L}
+\mathbf{b}_{\ell}.
+$$
+
+Each component acts as one slot for a causal signal and distributes probability across variants that might explain it. SuSiE is fitted with **Iterative Bayesian Stepwise Selection (IBSS)**:
+
+::: steps
+
+1. Initialize effect components and residuals.
+2. Remove the current contribution of component $\ell$.
+3. Calculate the residual left after the other components.
+4. Fit a single-effect regression to the residual.
+5. Update the variant probabilities and effect distribution for component $\ell$.
+6. Cycle through all components until the variational objective stabilizes.
+
+:::
+
+The output includes overall PIPs, one credible set for each supported signal, and posterior summaries of effect sizes. If several SNPs are in very high LD, the model can distribute probability among them instead of making a hard choice.
+
+::: note
+IBSS approximates the posterior. The number of components, LD accuracy, priors, missing variants, and sample size all affect the result. Several credible sets represent several ==**putative signals**==, rather than experimental confirmation.
+:::
+
+## From Fine-Mapped Variants to Function {#from-fine-mapping-to-function}
+
+Fine-mapping defines a statistical candidate set. Functional interpretation then asks:
+
+1. where the variant acts;
+2. which regulatory element is affected;
+3. which gene the element controls;
+4. which cell type or state is relevant;
+5. what molecular change the allele produces.
+
+These questions require different data types. A strong interpretation combines them rather than assigning causality from one annotation.
+
+## Mapping Regulatory Elements and Cell Types {#mapping-regulatory-elements}
+
+**ENCODE**, **Roadmap Epigenomics**, and related projects annotate chromatin accessibility, transcription-factor binding, and histone modifications. H3K27ac is commonly used as a marker of active regulatory regions.
+
+If fine-mapped variants from many disease loci are enriched in enhancers active in one tissue, that tissue becomes a plausible context for the trait. The analysis compares overlap with an appropriate background of common variants.
+
+::: caution
+Regulatory enrichment identifies shared architecture and relevant biological contexts across loci. It does not determine which SNP is causal at one locus.
+:::
+
+## Linking Enhancers to Target Genes {#enhancer-to-gene-mapping}
+
+An enhancer may regulate a distant gene, skip a nearby gene, or act only in a specific cellular state. The **Activity-by-Contact (ABC)** model scores enhancer–gene links using
+
+$$
+\text{ABC score}
+\propto
+\text{enhancer activity}
+\times
+\text{enhancer--promoter contact}.
+$$
+
+Activity can be estimated with H3K27ac and ATAC-seq, while contact can be estimated with Hi-C. An element that is both active and in contact with a promoter is a stronger candidate regulator.
+
+ABC-Max has connected inflammatory-bowel-disease variants to genes in specific cellular contexts, including evidence implicating PDGF signalling. The lecture also introduces **scE2G**, which uses single-cell regulatory information to predict enhancer–gene links.
+
+The reason for these models is that
+
+$$
+\text{enhancer}
 \rightarrow
-\text{molecular association}.
+\text{target gene}
 $$
 
-But even a molecular association is not automatically causal.
+depends on cell type and cellular state. Physical contact or a high score is supporting evidence, rather than direct proof that one nucleotide changes expression.
 
-An eQTL can nominate a candidate mechanism, but causal interpretation still requires additional evidence such as fine-mapping, regulatory annotation, predictive modelling, and experimental validation.
+## Variant Annotation and Sequence-to-Function Models {#sequence-to-function-models}
+
+The **Ensembl Variant Effect Predictor (VEP)** collects annotations describing potential consequences of a variant. Sequence-to-function models predict molecular signals directly from DNA. The lecture discusses **BPNet**, **ENCODE GRAMMAR**, and **AlphaGenome**.
+
+In **in silico mutagenesis**, the sequence window and context are held fixed, only the allele is changed, and the predicted difference is
+
+$$
+\Delta_{\text{predicted}}
+=
+f(S_{\mathrm{ALT}})
+-
+f(S_{\mathrm{REF}}).
+$$
+
+Both direction and magnitude should be inspected across relevant output tracks. This resembles a virtual allele-replacement experiment, but remains a model prediction.
+
+AlphaGenome takes a long DNA sequence as input and predicts many functional genomic tracks at high resolution. **AlphaGenome Variant Impact (AVI)** scores combine model outputs with features such as conservation and AlphaMissense-related information. Feature-attribution methods such as SHAP can indicate which predictions contributed to an impact score.
+
+::: warning Prediction is not validation
+VEP annotations, enhancer overlaps, sequence-model outputs, AVI scores, and feature attributions can prioritize variants and suggest mechanisms. They do not show that the effect occurs in the relevant tissue or causes the trait.
+:::
+
+## Polygenicity and Missing Heritability {#polygenicity}
+
+Most complex traits are **polygenic**. Even important loci usually have small effects, and genome-wide significant variants explain only a modest fraction of the predicted genetic variance. Many additional common variants can contribute effects too weak to cross the significance threshold.
+
+$$
+\text{complex trait}
+=
+\text{many weak genetic effects}
++
+\text{a smaller number of detectable loci}.
+$$
+
+**Missing heritability** describes the gap between heritability estimated from family or genome-wide data and the variance explained by individually significant associations. Polygenicity, rare and structural variants, imperfect tagging, and estimation differences can contribute.
+
+## Stratified LD Score Regression {#stratified-ld-score-regression}
+
+A SNP in LD with many variants tags more possible genetic effects and is expected to have a larger GWAS $\chi^2$ statistic on average. A simplified LD score is
+
+$$
+\ell_j
+=
+\sum_k r_{jk}^2.
+$$
+
+**Stratified LD score regression (S-LDSC)** partitions this quantity by annotations such as enhancers, promoters, coding regions, and cell-specific regulatory elements. If SNPs with high LD to one category show systematically larger association statistics, that category may be enriched for trait heritability.
+
+::: note
+S-LDSC asks which annotations carry disproportionate heritability across the genome. It does not fine-map an individual locus.
+:::
+
+## Integrating the Evidence {#integrating-the-evidence}
+
+The complete analysis can be organized as an evidence-integration workflow:
+
+::: steps
+
+1. Use **GWAS** to identify trait-associated loci.
+2. Use **LD** to understand why correlated variants share an association signal.
+3. Use **fine-mapping** to estimate PIPs and credible sets for one or more signals.
+4. Use **molecular QTLs and colocalization** to test candidate molecular links.
+5. Use **regulatory maps and enrichment** to identify plausible elements and cell types.
+6. Use **enhancer-to-gene models** to nominate target genes.
+7. Use **VEP and sequence-to-function models** to predict allele-specific molecular effects.
+8. Design experiments that distinguish the competing variants, genes, and mechanisms.
+
+:::
+
+These layers answer different questions:
+
+::: table align="center" copy="all" title="Evidence and its contribution to interpretation"
+
+| Evidence | Main contribution | Does not establish alone |
+| --- | --- | --- |
+| GWAS and LD | Associated locus and correlated variants | Functional variant or target gene |
+| Molecular QTLs | Candidate molecular phenotype | Shared causality with the trait |
+| Colocalization | Compatibility with a shared genetic signal | Mediation or molecular mechanism |
+| Fine-mapping | PIPs and credible sets | Experimental causality |
+| Regulatory maps | Candidate element and cell type | The causal SNP at one locus |
+| Enhancer-to-gene models | Candidate target gene | Direct regulatory validation |
+| Sequence models | Predicted REF-to-ALT effect | An observed effect in vivo |
+
+:::
+
+The final experiment should be chosen to separate the main alternatives. For example, candidate variants can be edited in the relevant cellular context, candidate enhancers can be perturbed, and the predicted target gene and molecular phenotype can be measured.
+
+::: caution
+==**Evidence convergence is stronger than any single annotation.**== GWAS significance, a high PIP, enhancer overlap, colocalization, or a sequence-model score can each prioritize a hypothesis. None is a complete demonstration of causality by itself.
+:::
 
 ## Key Takeaways {#key-takeaways}
 
-The most important concepts from this lecture are:
+- **GWAS identifies association rather than a complete mechanism.**
+- **LD makes the lead SNP an unreliable synonym for the causal variant.**
+- LD is population dependent, so ancestry-matched LD information matters for fine-mapping.
+- Molecular QTLs connect genotype to expression, splicing, accessibility, methylation, or protein abundance.
+- Local proximity does not prove a cis mechanism, and allele-specific analyses require control of mapping bias.
+- Population structure, batch effects, hidden factors, and multiple testing must be addressed in QTL studies.
+- Colocalization compares locus-wide association patterns and distinguishes a shared signal from two signals correlated through LD.
+- Fine-mapping produces probabilistic evidence: PIPs and credible sets.
+- SuSiE represents multiple putative signals as a sum of single-effect components fitted by IBSS.
+- Regulatory atlases and enrichment analyses nominate elements, tissues, and cell types.
+- ABC and single-cell E2G methods connect enhancers to candidate target genes.
+- VEP and sequence-to-function models predict molecular consequences that can guide experiments.
+- Complex traits are usually polygenic, and S-LDSC tests whether functional categories are enriched for heritability.
+- Experimental validation remains necessary to establish the molecular chain from variant to phenotype.
 
-- **GWAS identifies association, not necessarily causality.**
-- **LD means the lead SNP is often only a proxy for the causal variant.**
-- **LD structure is population dependent**, which matters for interpretation and fine-mapping.
-- Many disease-associated variants are non-coding and likely act through **gene regulation**.
-- **eQTL mapping** connects genotype to variation in gene expression.
-- Local proximity does not by itself prove a true **cis** mechanism.
-- **Allele-specific expression** can provide stronger evidence for cis regulation, but mapping bias must be controlled.
-- **WASP** removes reads whose mapping position depends on which allele they contain.
-- Molecular phenotypes extend beyond expression to splicing, chromatin accessibility, methylation, and protein abundance.
-- eQTL studies require careful treatment of **population structure, batch effects, known covariates, and hidden confounders**.
-- Large-scale QTL mapping creates a major **multiple-testing problem**.
-- Permutation-based methods and FDR procedures are important for obtaining interpretable significance thresholds.
-- Molecular QTL evidence is an important bridge from **GWAS locus** to **regulatory mechanism**, but it is only one part of a complete variant-to-function analysis.
-
-The conceptual progression to keep in mind is:
+The progression across the two lectures is:
 
 $$
 \boxed{
-\text{LD}
+\text{GWAS locus}
 \rightarrow
-\text{GWAS}
+\text{LD-aware fine-mapping}
 \rightarrow
-\text{lead SNP}\neq\text{causal SNP}
+\text{molecular association}
 \rightarrow
-\text{molecular QTL}
+\text{regulatory element}
 \rightarrow
-\text{regulatory effect}
+\text{target gene and cell type}
 \rightarrow
-\text{functional interpretation}
+\text{molecular mechanism}
+\rightarrow
+\text{experimental validation}
 }
 $$
-
-The next step is to move beyond molecular association and ask which variant within an associated locus is actually causal. That requires **statistical fine-mapping** and the integration of functional genomic evidence.
-
-## References {#references}
-
-The lecture material cites, among others:
-
-- Claussnitzer M. et al. *New England Journal of Medicine* — functional interpretation of the FTO obesity-associated locus.
-- Albert F.W. & Kruglyak L. *Nature Reviews Genetics* — genetics of gene expression.
-- Degner J.F. et al. *Bioinformatics* — mapping bias in allele-specific expression.
-- van de Geijn B. et al. *Nature Methods* — WASP for allele-specific mapping.
-- Price A.L. et al. *Nature Genetics* — PCA-based correction for population stratification.
-- Stegle O. et al. *PLoS Computational Biology* and *Nature Protocols* — PEER.
-- GTEx Consortium — large-scale human tissue eQTL analyses.
-- Musunuru K. et al. *Nature* — functional interpretation of the 1p13 SORT1 locus.

@@ -14,3 +14,5 @@ This section is used to have a better layout of the assignments uploaded in Absa
 
 - [Assignment 01 Part 1](/docs/ku/advbinf/as01p1/)
 - [Assignment 01 Part 2](/docs/ku/advbinf/as01p2/)
+- [Assignment 02 Part 1](/docs/ku/advbinf/as02p1/)
+- [Assignment 02 Part 2](/docs/ku/advbinf/as02p2/)

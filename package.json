@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@12.5.1",
+  "packageManager": "pnpm@12.8.1",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "GPLv3",
   "scripts": {
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/markdown-it": "14.2.0",
     "@vuepress/bundler-vite": "2.0.0-rc.31",
-    "@vuepress/plugin-google-analytics": "2.0.0-rc.134",
+    "@vuepress/plugin-google-analytics": "2.0.0-rc.135",
     "http-server": "^14.1.1",
     "typescript": "^5.9.3",
     "vue": "^3.5.43",
@@ -47,7 +47,7 @@
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",
     "swiper": "^12.2.0",
-    "tm-grammars": "^1.32.21",
-    "tm-themes": "^1.12.11"
+    "tm-grammars": "^1.32.22",
+    "tm-themes": "^1.12.12"
   }
 }

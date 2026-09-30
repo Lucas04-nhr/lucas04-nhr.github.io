@@ -276,7 +276,7 @@ Docker Hub 看到的是另一个 CERNET 段 IP （在 `42.247.113.0/24` 的 CIDR
 
 综合各站点测试结果，代理出口策略推断如下：
 
-:::table title="CERNET 国际学术资源访问专用通道出口策略" align="center" copy="all" hl-rows="notes:1"
+:::table align="center" title="CERNET 国际学术资源访问专用通道出口策略" align="center" copy="all" hl-rows="notes:1"
 | **条件** | **出口方式** |
 | -------- | ------------ |
 | 目标可经 CERNET 国际链路直达且不封锁教育网 IP | IP Spoofing 保留用户源地址，经 CERNET 国际出口直连 |
@@ -302,7 +302,9 @@ Docker Hub 看到的是另一个 CERNET 段 IP （在 `42.247.113.0/24` 的 CIDR
 ## 完整数据流 {#complete_data_flow}
 
 :::collapse
+
 - 查看流程图
+
   ```mermaid
   flowchart TD
     A[用户终端\n内置 Scholar Root CA v1 + DoH → doh.scholar.work] --> B[DNS 查询\nwww.google.com → 205.164.50.208]
@@ -331,7 +333,8 @@ Docker Hub 看到的是另一个 CERNET 段 IP （在 `42.247.113.0/24` 的 CIDR
 
     H -->|路径 D\n上游不可达| Q[ATS 返回 502\nCould Not Connect]
   ```
-:::
+
+  :::
 
 ## 总结 {#conclusion}
 

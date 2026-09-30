@@ -32,14 +32,14 @@ $$
 \lambda=(\pi,A,B).
 $$
 
-::: table title="Components of a discrete HMM"
+::: table align="center" title="Components of a discrete HMM"
 
-| Component | Definition | Ice-cream example |
-| :--- | :--- | :--- |
-| Hidden states | Possible values of $Z_t$ | HOT and COLD |
-| Initial distribution $\pi$ | $\pi_j=P(Z_1=j)$ | Weather probabilities on the first day |
-| Transition matrix $A$ | $a_{ij}=P(Z_t=j\mid Z_{t-1}=i)$ | Probability that the weather persists or changes |
-| Emission distribution $B$ | $b_j(o)=P(O_t=o\mid Z_t=j)$ | Probability of an ice-cream count under each weather state |
+| Component                  | Definition                      | Ice-cream example                                          |
+| :------------------------- | :------------------------------ | :--------------------------------------------------------- |
+| Hidden states              | Possible values of $Z_t$        | HOT and COLD                                               |
+| Initial distribution $\pi$ | $\pi_j=P(Z_1=j)$                | Weather probabilities on the first day                     |
+| Transition matrix $A$      | $a_{ij}=P(Z_t=j\mid Z_{t-1}=i)$ | Probability that the weather persists or changes           |
+| Emission distribution $B$  | $b_j(o)=P(O_t=o\mid Z_t=j)$     | Probability of an ice-cream count under each weather state |
 
 :::
 
@@ -63,14 +63,14 @@ With $N$ states and $T$ observations, there are $N^T$ possible paths. Dynamic pr
 
 ## Three inference problems {#three-inference-problems}
 
-::: table title="Likelihood, decoding and learning"
+::: table align="center" title="Likelihood, decoding and learning"
 
-| Problem | Question | Main algorithm |
-| :--- | :--- | :--- |
-| Likelihood | How probable is this observation sequence under the model? | Forward |
-| Path decoding | What is the most probable complete hidden-state sequence? | Viterbi |
+| Problem             | Question                                                                | Main algorithm   |
+| :------------------ | :---------------------------------------------------------------------- | :--------------- |
+| Likelihood          | How probable is this observation sequence under the model?              | Forward          |
+| Path decoding       | What is the most probable complete hidden-state sequence?               | Viterbi          |
 | Posterior inference | What is the state probability at each position, given all observations? | Forward–Backward |
-| Parameter learning | Which parameters best explain the observations? | Baum–Welch / EM |
+| Parameter learning  | Which parameters best explain the observations?                         | Baum–Welch / EM  |
 
 :::
 
@@ -257,12 +257,12 @@ The probability of never leaving $N$ is $e^{-ad}$. The probability of ending in 
 
 A **run of homozygosity (ROH)** is a long region with little heterozygosity, often reflecting inheritance of both copies from a shared ancestor. The lecture's illustrative emission model is
 
-::: table title="Toy ROH emissions"
+::: table align="center" title="Toy ROH emissions"
 
-| State | $P(\mathrm{het})$ | $P(\mathrm{hom})$ |
-| :--- | ---: | ---: |
-| Ordinary region $N$ | 0.50 | 0.50 |
-| ROH $R$ | 0.01 | 0.99 |
+| State               | $P(\mathrm{het})$ | $P(\mathrm{hom})$ |
+| :------------------ | ----------------: | ----------------: |
+| Ordinary region $N$ |              0.50 |              0.50 |
+| ROH $R$             |              0.01 |              0.99 |
 
 :::
 
@@ -381,16 +381,16 @@ A bottleneck increases the coalescence hazard during its time interval and conce
 
 Historical recombination causes local genealogies to vary along a chromosome. PSMC approximates this sequence of genealogies as a Markov process. This is a tractable approximation to the full ancestral recombination graph, not a claim that all genomic windows are independent.
 
-::: table title="The HMM inside PSMC"
+::: table align="center" title="The HMM inside PSMC"
 
-| Component | PSMC interpretation |
-| :--- | :--- |
-| Sequence coordinate | Position along the chromosome |
-| Hidden state | Local TMRCA, represented by a time interval in the fitted model |
-| Observation | Whether a sequence window contains a heterozygous site |
-| Transition | Recombination-driven changes in local genealogy |
-| Emission | Mutation-driven probability of observing heterozygosity |
-| Parameters | Population-size history and mutation/recombination scaling parameters |
+| Component           | PSMC interpretation                                                   |
+| :------------------ | :-------------------------------------------------------------------- |
+| Sequence coordinate | Position along the chromosome                                         |
+| Hidden state        | Local TMRCA, represented by a time interval in the fitted model       |
+| Observation         | Whether a sequence window contains a heterozygous site                |
+| Transition          | Recombination-driven changes in local genealogy                       |
+| Emission            | Mutation-driven probability of observing heterozygosity               |
+| Parameters          | Population-size history and mutation/recombination scaling parameters |
 
 :::
 
@@ -506,12 +506,12 @@ Global admixture analysis describes an individual's overall ancestry proportions
 
 After admixture, recombination produces a mosaic of ancestry tracts. Successive generations break these tracts into shorter pieces. Their spatial pattern therefore contains information about both ancestry and admixture history.
 
-::: table title="Global versus local ancestry"
+::: table align="center" title="Global versus local ancestry"
 
-| Analysis | Typical output | Question |
-| :--- | :--- | :--- |
-| Global ancestry | One ancestry-proportion vector per individual | How much ancestry comes from each component overall? |
-| Local ancestry | State probabilities or ancestry tracts along each chromosome | Which ancestry contributed each position? |
+| Analysis        | Typical output                                               | Question                                             |
+| :-------------- | :----------------------------------------------------------- | :--------------------------------------------------- |
+| Global ancestry | One ancestry-proportion vector per individual                | How much ancestry comes from each component overall? |
+| Local ancestry  | State probabilities or ancestry tracts along each chromosome | Which ancestry contributed each position?            |
 
 :::
 
@@ -598,14 +598,14 @@ An ancestry excess or association is a statistical signal requiring biological i
 
 ### Related methods introduced in the lecture {#local-ancestry-methods}
 
-::: table title="Different ways to obtain local ancestry evidence"
+::: table align="center" title="Different ways to obtain local ancestry evidence"
 
-| Method | Lecture emphasis |
-| :--- | :--- |
-| HAPMIX | A two-source model using phased reference haplotypes and recombination-based ancestry transitions |
-| RFMix | Random-forest classification combined with sequence smoothing; accommodates multiple source populations |
-| fatash | Uses haplotype clusters in windows as observations rather than requiring pre-labelled source panels |
-| hmmix | Detects archaic introgression without an archaic reference genome, using counts of variants absent from an outgroup |
+| Method | Lecture emphasis                                                                                                    |
+| :----- | :------------------------------------------------------------------------------------------------------------------ |
+| HAPMIX | A two-source model using phased reference haplotypes and recombination-based ancestry transitions                   |
+| RFMix  | Random-forest classification combined with sequence smoothing; accommodates multiple source populations             |
+| fatash | Uses haplotype clusters in windows as observations rather than requiring pre-labelled source panels                 |
+| hmmix  | Detects archaic introgression without an archaic reference genome, using counts of variants absent from an outgroup |
 
 :::
 
@@ -615,15 +615,15 @@ For the hmmix practical, the important shift is from observing individual allele
 
 ## A shared framework with different biological clocks {#shared-framework}
 
-::: table title="ROH, PSMC and local ancestry"
+::: table align="center" title="ROH, PSMC and local ancestry"
 
-| Feature | ROH model | PSMC | Local ancestry model |
-| :--- | :--- | :--- | :--- |
-| Hidden state | Ordinary region or ROH | Local TMRCA interval | Source ancestry or ancestry pair |
-| Observations | Homozygous and heterozygous SNPs | Heterozygosity in windows | Alleles, haplotypes or variant counts |
-| Transition mechanism | Entry and exit rates along distance | Historical recombination and re-coalescence | Recombination after admixture |
-| Main interpretation | Shared ancestral segments | Historical effective population size | Ancestry mosaics and admixture history |
-| Important uncertainty | Sparse markers and errors | Mutation scaling, time resolution and model assumptions | Source information, short tracts and admixture model |
+| Feature               | ROH model                           | PSMC                                                    | Local ancestry model                                 |
+| :-------------------- | :---------------------------------- | :------------------------------------------------------ | :--------------------------------------------------- |
+| Hidden state          | Ordinary region or ROH              | Local TMRCA interval                                    | Source ancestry or ancestry pair                     |
+| Observations          | Homozygous and heterozygous SNPs    | Heterozygosity in windows                               | Alleles, haplotypes or variant counts                |
+| Transition mechanism  | Entry and exit rates along distance | Historical recombination and re-coalescence             | Recombination after admixture                        |
+| Main interpretation   | Shared ancestral segments           | Historical effective population size                    | Ancestry mosaics and admixture history               |
+| Important uncertainty | Sparse markers and errors           | Mutation scaling, time resolution and model assumptions | Source information, short tracts and admixture model |
 
 :::
 

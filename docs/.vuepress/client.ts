@@ -85,6 +85,22 @@ export default defineClientConfig({
   },
 
   enhance({ app, router }) {
+    // Keep external links to old underscore-based permalinks working.
+    router.beforeEach((to) => {
+      if (!to.path.includes("_")) return;
+
+      const normalizePath = (path: string) => path.replace(/\/$/, "");
+      const pagePaths = new Set(
+        router.getRoutes().map((route) => normalizePath(route.path)),
+      );
+      if (pagePaths.has(normalizePath(to.path))) return;
+
+      const path = to.path.replace(/_/g, "-");
+      if (!pagePaths.has(normalizePath(path))) return;
+
+      return { path, query: to.query, hash: to.hash, replace: true };
+    });
+
     initializeScriptPreference();
     initializeThemeAppearancePreference();
     initializeInternalRuleBypassPreference();

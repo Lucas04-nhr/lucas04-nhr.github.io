@@ -110,3 +110,4 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 - For changes to equations, containers, Vue components, assets, or styles, inspect affected pages through the development server or build preview. A successful build alone does not confirm correct formula rendering, remote images, or interactions.
 - VuePress automatically fills in titles and creation times. After starting or building the site, check for unrelated Markdown changes. Handle only changes introduced by the task and preserve user edits.
 - Pushing to `main` currently triggers deployment. Keep commits, pushes, publishing, and dependency upgrades within the user's requested scope; completing a local edit does not itself authorize deployment.
+- When the user explicitly asks Codex to push changes, include `Co-authored-by: Codex <noreply@openai.com>` in the commits created for that push by default, unless the user requests otherwise.

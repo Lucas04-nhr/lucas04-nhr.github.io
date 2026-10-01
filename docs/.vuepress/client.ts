@@ -8,7 +8,7 @@ import ChinaMainlandUserCheck from "./components/chinaMainlandUserCheck.vue";
 import { applyPanguSpacingToDOM } from "./components/customPango.vue";
 import { Layout } from "vuepress-theme-plume/client";
 import { NotFound } from "vuepress-theme-plume/client";
-import { defineClientConfig } from "vuepress/client";
+import { defineClientConfig, resolveRoute } from "vuepress/client";
 import PageContextMenu from "vuepress-theme-plume/features/PageContextMenu.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import NpmBadge from "vuepress-theme-plume/features/NpmBadge.vue";
@@ -89,16 +89,18 @@ export default defineClientConfig({
     router.beforeEach((to) => {
       if (!to.path.includes("_")) return;
 
-      const normalizePath = (path: string) => path.replace(/\/$/, "");
-      const pagePaths = new Set(
-        router.getRoutes().map((route) => normalizePath(route.path)),
-      );
-      if (pagePaths.has(normalizePath(to.path))) return;
+      const resolvePage = (path: string) => {
+        const route = resolveRoute(path);
+        return route.notFound && !path.endsWith("/")
+          ? resolveRoute(`${path}/`)
+          : route;
+      };
+      if (!resolvePage(to.path).notFound) return;
 
-      const path = to.path.replace(/_/g, "-");
-      if (!pagePaths.has(normalizePath(path))) return;
+      const target = resolvePage(to.path.replace(/_/g, "-"));
+      if (target.notFound) return;
 
-      return { path, query: to.query, hash: to.hash, replace: true };
+      return { path: target.path, query: to.query, hash: to.hash, replace: true };
     });
 
     initializeScriptPreference();

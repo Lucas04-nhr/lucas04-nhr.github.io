@@ -22,6 +22,10 @@ export function parseRecordUrl(input: string, game: Game): URL {
   const cn = source.hostname === hosts[game][0] || source.hostname === "webstatic.mihoyo.com";
   const global = source.hostname === hosts[game][1] || source.hostname === "gs.hoyoverse.com";
   if (!cn && !global) throw new Error("The URL host does not match the selected game. Use an official history URL.");
+  // Authkeys use Base64: a literal '+' is part of the key, not a form-space.
+  // Normalize before URLSearchParams reads/re-serializes the query. Already
+  // percent-encoded keys remain unchanged and are decoded exactly once.
+  source.search = source.search.replace(/([?&]authkey=)([^&]*)/g, (_, prefix: string, value: string) => prefix + value.replace(/\+/g, "%2B"));
   if (!source.searchParams.get("authkey")) throw new Error("Missing authkey. Open the in-game history again and obtain a fresh URL.");
   const result = new URL(`https://${hosts[game][cn ? 0 : 1]}${paths[game]}`);
   // Preserve official authentication parameters, discard the webpage fragment.
@@ -105,7 +109,11 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
       url.searchParams.set("size", String(size));
       url.searchParams.set("end_id", cursor);
       const body = await fetchJson(url, signal, options.useHelper);
-      if (body.retcode !== 0) throw new Error(`Official API error ${String(body.retcode)}: ${typeof body.message === "string" ? body.message : "Refresh your URL and try again"}`);
+      if (body.retcode !== 0) {
+        const message = typeof body.message === "string" ? body.message : "Refresh your URL and try again";
+        const authError = /auth[ _-]?key/i.test(message) || body.retcode === -101;
+        throw new Error(`Official API error ${String(body.retcode)}: ${message}${authError ? ". Reopen the in-game history and copy a fresh URL for the selected game and server. An expired authkey cannot be renewed from this link alone." : ""}`);
+      }
       const data = body.data as { list?: unknown[] } | undefined;
       if (!data || !Array.isArray(data.list)) throw new Error("The official API did not return a record list.");
       if (!data.list.length) break;

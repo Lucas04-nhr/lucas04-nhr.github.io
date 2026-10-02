@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VPButton from "@theme/VPButton.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { exportLanguages, exportUigf, games, groupAccountKey, groupAccounts, inferredServer, mergeAccounts, parseUigf, poolKey, poolNames, recordRank, selectableGames, servers, statistics, type ExportLanguage, type GachaAccount, type GachaRecord, type Game, type Metadata, type SelectableGame, type ServerId } from "../theme/utils/gachaRecords";
 import { fetchGameRecords, fetchMetadata, prepareExportAccounts } from "../theme/utils/gachaFetch";
@@ -218,8 +219,6 @@ async function loadMetadata() {
 <template>
   <div class="gacha-manager" :aria-busy="busy">
     <section class="gacha-panel intro">
-      <div class="eyebrow">GACHA MANAGER · UIGF v4.2</div>
-      <h2>Every pull tells a story</h2>
       <p>Import a UIGF archive to organize your Genshin Impact, Honkai: Star Rail and Zenless Zone Zero records in your browser. Genshin accounts also include Miliastra Wonderland.</p>
       <div class="summary-line"><span>{{ displayAccounts.length }} accounts</span><span>{{ totalRecords.toLocaleString() }} records</span><span>Saved in this browser</span></div>
     </section>
@@ -228,7 +227,7 @@ async function loadMetadata() {
       <h3>Fetch records</h3>
       <div class="helper-status" role="status">
         <span>{{ helperState === 'available' ? 'Browser helper connected · requests stay on your device' : helperState === 'checking' ? 'Checking browser helper…' : 'Browser helper not detected · direct fetch may be blocked by CORS' }}</span>
-        <button type="button" :disabled="busy || helperState === 'checking'" @click="checkHelper">Check helper</button>
+        <VPButton theme="alt" type="button" :disabled="busy || helperState === 'checking'" @click="checkHelper">Check helper</VPButton>
       </div>
       <details :open="helperState === 'unavailable'">
         <summary>Set up the browser helper</summary>
@@ -247,8 +246,8 @@ async function loadMetadata() {
         <p v-if="game === 'hk4e'" class="muted">Genshin wishes and Miliastra Wonderland records are fetched together.</p>
         <label class="link-label">Gacha history URL<textarea v-model="link" rows="3" placeholder="https://…?authkey=…" autocomplete="off" spellcheck="false" :disabled="busy" /></label>
         <div class="actions">
-          <button class="primary" type="submit" :disabled="busy || !ready || helperState === 'checking' || !link.trim()">{{ busy ? 'Processing…' : 'Fetch gacha records' }}</button>
-          <button v-if="request" type="button" @click="request?.abort()">Stop fetching</button>
+          <VPButton theme="brand" type="button" @click="retrieve" :disabled="busy || !ready || helperState === 'checking' || !link.trim()">{{ busy ? 'Processing…' : 'Fetch gacha records' }}</VPButton>
+          <VPButton theme="alt" v-if="request" type="button" @click="request?.abort()">Stop fetching</VPButton>
           <label class="check"><input v-model="incremental" type="checkbox" :disabled="busy">Incremental fetch</label>
         </div>
       </form>
@@ -258,23 +257,23 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Import & export</h3>
-      <p v-if="!gachaFetchAllowed" class="notice">Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use a tool such as <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Starward</a> or <a href="https://github.com/pizza-studio/PizzaHelperUnited" target="_blank" rel="noopener noreferrer">Latte Helper</a> to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
+      <p v-if="!gachaFetchAllowed" class="hint-container note">Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use a tool such as <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Starward</a> or <a href="https://github.com/pizza-studio/PizzaHelperUnited" target="_blank" rel="noopener noreferrer">Latte Helper</a> to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
       <p class="muted">Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by game, UID and record ID. Exports use UIGF v4.2.</p>
       <label class="export-language">Export language<select v-model="exportLanguage" :disabled="exporting"><option value="original">Original record language</option><option v-for="(name, code) in exportLanguages" :key="code" :value="code">{{ name }}</option></select></label>
       <p class="muted">Choose one of the four backend languages to look up localized item names for export. Original-language export preserves the names of ordinary game records.</p>
-      <p class="notice">Due to upstream repository limitations, Miliastra Wonderland records are always exported in Simplified Chinese, regardless of the import or export language selected. Other records use your chosen export language.</p>
+      <p class="hint-container note">Due to upstream repository limitations, Miliastra Wonderland records are always exported in Simplified Chinese, regardless of the import or export language selected. Other records use your chosen export language.</p>
       <div class="actions">
         <label class="file-button">Import JSON<input type="file" accept=".json,application/json" multiple :disabled="busy || !ready" @change="importFiles"></label>
-        <button :disabled="!accounts.length || busy || exporting" @click="download(accounts, 'gacha-uigf-v4.2.json')">{{ exporting ? 'Preparing export…' : 'Export all accounts' }}</button>
-        <button :disabled="!selected || busy || exporting" @click="selected && download(selected.accounts, `gacha-${selected.game}-${selected.uid}.json`)">Export selected account</button>
+        <VPButton theme="alt" :disabled="!accounts.length || busy || exporting" @click="download(accounts, 'gacha-uigf-v4.2.json')">{{ exporting ? 'Preparing export…' : 'Export all accounts' }}</VPButton>
+        <VPButton theme="alt" :disabled="!selected || busy || exporting" @click="selected && download(selected.accounts, `gacha-${selected.game}-${selected.uid}.json`)">Export selected account</VPButton>
       </div>
-      <details v-if="accounts.length"><summary>Download per account</summary><p class="muted">Each download contains one UID for one game. Genshin includes wishes and Miliastra records in their respective UIGF fields.</p><div v-for="account in displayAccounts" :key="account.key" class="account-download"><span>{{ games[account.game] }} · {{ account.uid }} · {{ account.total }} pulls</span><button :disabled="busy || exporting" @click="download(account.accounts, `gacha-${account.game}-${account.uid}.json`)">Download JSON</button></div></details>
+      <details v-if="accounts.length"><summary>Download per account</summary><p class="muted">Each download contains one UID for one game. Genshin includes wishes and Miliastra records in their respective UIGF fields.</p><div v-for="account in displayAccounts" :key="account.key" class="account-download"><span>{{ games[account.game] }} · {{ account.uid }} · {{ account.total }} pulls</span><VPButton theme="alt" :disabled="busy || exporting" @click="download(account.accounts, `gacha-${account.game}-${account.uid}.json`)">Download JSON</VPButton></div></details>
       <p class="muted">Upgrade older UIGF / SRGF files with <a href="https://upgrader.uigf.org/" target="_blank" rel="noopener noreferrer">UIGF Upgrader</a>. Records are stored only in this browser. Export backups regularly.</p>
     </section>
 
-    <p v-if="status" class="notice" role="status" aria-live="polite">{{ status }}</p>
-    <p v-if="error" class="notice error" role="alert">{{ error }}</p>
-    <p v-if="storageError" class="notice error" role="alert">{{ storageError }}</p>
+    <p v-if="status" class="hint-container note" role="status" aria-live="polite">{{ status }}</p>
+    <p v-if="error" class="hint-container caution" role="alert">{{ error }}</p>
+    <p v-if="storageError" class="hint-container caution" role="alert">{{ storageError }}</p>
 
     <section v-if="!accounts.length" class="gacha-panel empty"><h3>Start with your first archive</h3><p>Import a UIGF file to view pull counts, five-star rates, pool statistics and five-star history.</p></section>
     <template v-if="selected">
@@ -283,9 +282,9 @@ async function loadMetadata() {
           <label>Account<select v-model="selectedKey"><option v-for="account in displayAccounts" :key="account.key" :value="account.key">{{ games[account.game] }} · {{ account.uid }}</option></select></label>
           <label>Pool<select v-model="selectedPool"><option value="all">All pools</option><option v-for="pool in pools" :key="pool" :value="pool">{{ displayPoolName(pool) }}</option></select></label>
         </div>
-        <div class="actions"><button :disabled="metadataBusy || busy" @click="loadMetadata">{{ metadataBusy ? 'Loading…' : 'Load item names & icons' }}</button><button :disabled="busy" @click="pendingDelete = !pendingDelete">Delete account</button></div>
+        <div class="actions"><VPButton theme="alt" :disabled="metadataBusy || busy" @click="loadMetadata">{{ metadataBusy ? 'Loading…' : 'Load item names & icons' }}</VPButton><VPButton theme="alt" :disabled="busy" @click="pendingDelete = !pendingDelete">Delete account</VPButton></div>
         <p v-if="metadataStatus" role="status" class="muted">{{ metadataStatus }}</p>
-        <div v-if="pendingDelete" class="notice error"><p>Delete all local records for {{ games[selected.game] }} · {{ selected.uid }}? Export a backup first.</p><div class="actions"><button :disabled="busy" @click="deleteAccount">Confirm deletion</button><button @click="pendingDelete = false">Cancel</button></div></div>
+        <div v-if="pendingDelete" class="hint-container caution"><p>Delete all local records for {{ games[selected.game] }} · {{ selected.uid }}? Export a backup first.</p><div class="actions"><VPButton theme="alt" :disabled="busy" @click="deleteAccount">Confirm deletion</VPButton><VPButton theme="alt" @click="pendingDelete = false">Cancel</VPButton></div></div>
         <p class="muted">Metadata queries send only the game, language and public item IDs. Your UID, URL and history are never sent to the metadata backend. Display metadata does not change your local archive.</p>
       </section>
 
@@ -300,7 +299,7 @@ async function loadMetadata() {
           <div><span>Pulls since last 5-star</span><strong>{{ selectedPool === 'all' || stats.unknown ? '—' : `${stats.hasGold ? '' : '≥ '}${stats.sinceGold}` }}<small> pulls</small></strong></div>
         </div>
         <p class="muted">Rate = known five-star (S-rank in ZZZ) records / all records. Each record counts as one pull; item count is not the number of pulls. These statistics describe saved history, not official probabilities.</p>
-        <p v-if="stats.unknown" class="notice">{{ stats.unknown }} records have unknown rarity. The five-star rate is a lower bound. Load metadata to fill missing ranks; intervals and pity counts are hidden until then.</p>
+        <p v-if="stats.unknown" class="hint-container note">{{ stats.unknown }} records have unknown rarity. The five-star rate is a lower bound. Load metadata to fill missing ranks; intervals and pity counts are hidden until then.</p>
         <p class="muted">Average intervals use only complete spans between known five-star pulls; history before the first may be missing. Pools are calculated separately, except Genshin character pools 301 / 400, which share a group. Miliastra is grouped by op_gacha_type without assuming shared pity.</p>
         <div class="table-scroll"><table><thead><tr><th>Pool</th><th>Pulls</th><th>5-star</th><th>5-star rate</th><th>Avg. interval</th><th>Pity / recorded</th></tr></thead><tbody><tr v-for="pool in poolStats" :key="pool.key"><td><button class="text-button" @click="selectedPool = pool.key">{{ pool.name }}</button></td><td>{{ pool.total }}</td><td class="gold">{{ pool.gold }}</td><td>{{ pool.unknown ? '≥ ' : '' }}{{ pool.goldRate.toFixed(2) }}%</td><td>{{ pool.unknown || pool.average === null ? '—' : pool.average.toFixed(1) }}</td><td>{{ pool.unknown ? '—' : `${pool.sinceGold}${pool.hasGold ? '' : ' (at least)'}` }}</td></tr></tbody></table></div>
       </section>
@@ -315,23 +314,20 @@ async function loadMetadata() {
         <h3>Record history</h3>
         <div class="controls"><label>Search items<input v-model="search" type="search" placeholder="Name or item ID"></label><label>Rarity<select v-model="rankFilter"><option value="all">All</option><option value="5">5-star / S-rank</option><option value="4">4-star / A-rank</option><option value="3">3-star / B-rank</option><option value="2">2-star</option><option value="1">1-star</option><option value="null">Unknown</option></select></label></div>
         <div class="table-scroll"><table><thead><tr><th>Item</th><th>Rarity</th><th>Pool</th><th>Server time</th></tr></thead><tbody><tr v-for="row in visible" :key="`${rowGame(row)}:${row.id}`"><td><span class="item"><img v-if="itemMetadata(row)?.icon" :src="itemMetadata(row)!.icon!" alt="" loading="lazy" referrerpolicy="no-referrer"><span :class="{ gold: rowRank(row) === 5 }">{{ itemName(row) }}<small>ID {{ row.item_id }}</small></span></span></td><td>{{ rowRank(row) ?? 'Unknown' }}</td><td>{{ displayPoolName(displayPoolKey(row)) }}</td><td>{{ serverName() }} · {{ row.time }}</td></tr><tr v-if="!visible.length"><td colspan="4">No matching records.</td></tr></tbody></table></div>
-        <div class="actions pagination"><button :disabled="page <= 1" @click="page--">Previous</button><span>{{ page }} / {{ pageCount }} · {{ filtered.length }} records</span><button :disabled="page >= pageCount" @click="page++">Next</button></div>
+        <div class="actions pagination"><VPButton theme="alt" :disabled="page <= 1" @click="page--">Previous</VPButton><span>{{ page }} / {{ pageCount }} · {{ filtered.length }} records</span><VPButton theme="alt" :disabled="page >= pageCount" @click="page++">Next</VPButton></div>
       </section>
     </template>
-    <p class="muted footer-note">Supports <a href="https://uigf.org/en/standards/uigf.html" target="_blank" rel="noopener noreferrer">UIGF data format</a> · <a href="/docs/gacha-manager/backend/">Metadata API docs</a> · <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Reference: Starward</a></p>
   </div>
 </template>
 
 <style scoped>
-.gacha-manager { --gacha-gold: #946500; display: grid; gap: 20px; margin-top: 24px; }
-:global(.dark) .gacha-manager { --gacha-gold: #efc66b; }
-.gacha-panel { padding: 24px; border: 1px solid var(--vp-c-divider); border-radius: 16px; background: var(--vp-c-bg-soft); min-width: 0; }
-.intro { background: linear-gradient(125deg, var(--vp-c-brand-soft), var(--vp-c-bg-soft)); }
+.gacha-manager { display: grid; gap: 24px; margin-top: 24px; }
+.gacha-panel { min-width: 0; }
+.gacha-panel + .gacha-panel { padding-top: 24px; border-top: 1px solid var(--vp-c-divider); }
 .gacha-manager h2, .gacha-manager h3 { margin: 0 0 16px; border: 0; padding: 0; }
-.eyebrow { font-size: 12px; letter-spacing: .1em; color: var(--vp-c-brand-1); margin-bottom: 16px; }
 .summary-line, .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .summary-line { font-size: 13px; color: var(--vp-c-text-2); }
-.summary-line span { border: 1px solid var(--vp-c-divider); border-radius: 24px; padding: 4px 12px; }
+
 .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .helper-status { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; padding: 12px; border-radius: 8px; background: var(--vp-c-brand-soft); font-size: 13px; margin-bottom: 16px; }
 form { margin-top: 20px; }
@@ -340,10 +336,10 @@ input, select, textarea { box-sizing: border-box; min-width: 0; width: 100%; pad
 textarea { resize: vertical; overflow-wrap: anywhere; }
 .link-label { margin-bottom: 16px; }
 .export-language { max-width: 360px; }
-button, .file-button { display: inline-flex; justify-content: center; padding: 9px 14px; border: 1px solid var(--vp-c-divider); border-radius: 8px; background: var(--vp-c-bg); color: var(--vp-c-text-1); font: inherit; font-size: 14px; cursor: pointer; }
-button:hover:not(:disabled), .file-button:hover { border-color: var(--vp-c-brand-1); }
-button:disabled { opacity: .5; cursor: not-allowed; }
-button.primary { background: var(--vp-c-brand-1); color: var(--vp-c-white); border-color: var(--vp-c-brand-1); }
+.file-button { display: inline-flex; justify-content: center; padding: 0 20px; line-height: 38px; border: 1px solid var(--vp-button-alt-border); border-radius: 20px; background: var(--vp-button-alt-bg); color: var(--vp-button-alt-text); font-size: 14px; font-weight: 600; cursor: pointer; }
+.file-button:hover { color: var(--vp-button-alt-hover-text); background: var(--vp-button-alt-hover-bg); border-color: var(--vp-button-alt-hover-border); }
+:deep(.vp-button:disabled) { opacity: .5; cursor: not-allowed; pointer-events: none; }
+.actions :deep(.vp-button + .vp-button) { margin-left: 0; }
 :is(button, input, select, textarea, summary):focus-visible, .file-button:focus-within { outline: 2px solid var(--vp-c-brand-1); outline-offset: 3px; }
 .file-button { position: relative; overflow: hidden; }
 .file-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
@@ -353,15 +349,14 @@ button.primary { background: var(--vp-c-brand-1); color: var(--vp-c-white); bord
 .muted { color: var(--vp-c-text-2); font-size: 13px; line-height: 1.7; }
 details { border-top: 1px solid var(--vp-c-divider); margin-top: 16px; padding-top: 12px; font-size: 14px; }
 summary { cursor: pointer; color: var(--vp-c-brand-1); }
-.notice { margin: 0; padding: 14px 18px; border-radius: 10px; background: var(--vp-c-brand-soft); overflow-wrap: anywhere; }
-.error { color: var(--vp-c-danger-1); background: var(--vp-c-danger-soft); }
+.hint-container { overflow-wrap: anywhere; }
 .empty { text-align: center; padding-block: 40px; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.metrics > div { background: var(--vp-c-bg); padding: 16px; border-radius: 10px; }
+.metrics > div { padding: 16px; background: var(--vp-c-bg-soft); border-radius: 8px; }
 .metrics span { display: block; font-size: 13px; color: var(--vp-c-text-2); }
 .metrics strong { display: block; margin-top: 8px; font-size: 28px; line-height: 1.3; font-variant-numeric: tabular-nums; }
 small { font-size: 12px; font-weight: normal; }
-.gold { color: var(--gacha-gold); }
+.gold { color: var(--vp-c-warning-1); }
 .table-scroll { overflow-x: auto; margin: 16px 0; }
 .table-scroll table { display: table; width: 100%; margin: 0; font-size: 13px; }
 th, td { white-space: nowrap; }
@@ -372,6 +367,5 @@ th, td { white-space: nowrap; }
 .gold-entry, .account-download { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--vp-c-divider); }
 .gold-entry > span { white-space: nowrap; }
 .pagination { justify-content: center; font-size: 13px; }
-.footer-note { text-align: center; margin: 0; }
-@media (max-width: 640px) { .gacha-panel { padding: 18px; } .controls { grid-template-columns: 1fr; } .metrics { grid-template-columns: repeat(2, 1fr); } .metrics strong { font-size: 24px; } .account-download { align-items: start; flex-direction: column; } }
+@media (max-width: 640px) { .controls { grid-template-columns: 1fr; } .metrics { grid-template-columns: repeat(2, 1fr); } .metrics strong { font-size: 24px; } .account-download { align-items: start; flex-direction: column; } }
 </style>

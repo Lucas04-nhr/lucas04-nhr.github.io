@@ -54,7 +54,7 @@ export const poolNames: Record<Game, Record<string, string>> = {
   hk4e: { "100": "Beginners' Wish", "200": "Standard Wish", "301": "Character Event Wish", "302": "Weapon Event Wish", "400": "Character Event Wish 2", "500": "Chronicled Wish" },
   hkrpg: { "1": "Stellar Warp", "2": "Departure Warp", "11": "Character Event Warp", "12": "Light Cone Event Warp", "21": "Character Collaboration Warp", "22": "Light Cone Collaboration Warp" },
   nap: { "1": "Stable Channel", "2": "Exclusive Channel", "3": "W-Engine Channel", "5": "Bangboo Channel" },
-  hk4e_ugc: { "1000": "Standard Evocation", "2000": "Event Evocation", "20011": "Event Evocation 20011", "20012": "Event Evocation 20012", "20021": "Event Evocation 20021", "20022": "Event Evocation 20022" },
+  hk4e_ugc: { "1000": "Standard Evocation", "2000": "Event Evocation", "20011": "Event Evocation", "20012": "Event Evocation", "20021": "Event Evocation", "20022": "Event Evocation" },
 };
 export interface GachaRecord {
   id: string;

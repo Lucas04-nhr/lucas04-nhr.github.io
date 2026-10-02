@@ -49,6 +49,7 @@ export function inferredServer(account: GachaAccount): string {
 }
 export const exportLanguages = { "en-us": "English", "zh-cn": "Simplified Chinese", "zh-tw": "Traditional Chinese", "ja-jp": "Japanese" } as const;
 export type ExportLanguage = keyof typeof exportLanguages;
+export const effectiveExportLanguage = (game: Game, language: ExportLanguage) => game === "hk4e_ugc" ? "zh-cn" : language;
 export const poolNames: Record<Game, Record<string, string>> = {
   hk4e: { "100": "Beginners' Wish", "200": "Standard Wish", "301": "Character Event Wish", "302": "Weapon Event Wish", "400": "Character Event Wish 2", "500": "Chronicled Wish" },
   hkrpg: { "1": "Stellar Warp", "2": "Departure Warp", "11": "Character Event Warp", "12": "Light Cone Event Warp", "21": "Character Collaboration Warp", "22": "Light Cone Collaboration Warp" },
@@ -196,6 +197,7 @@ const itemTypes: Record<ExportLanguage, Record<string, string>> = {
 
 // Work on a copy: export localization must never rewrite the saved archive.
 export function localizeAccount(account: GachaAccount, lang: ExportLanguage, metadata: Metadata): GachaAccount {
+  lang = effectiveExportLanguage(account.game, lang);
   return { ...account, lang, list: account.list.map(row => {
     const item = metadata[row.item_id];
     if (!item?.name) throw new Error(`Missing ${lang} metadata for ${games[account.game]} item ${row.item_id}. Use original-language export or choose another language.`);

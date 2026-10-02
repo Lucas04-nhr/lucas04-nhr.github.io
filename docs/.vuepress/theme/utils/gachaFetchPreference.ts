@@ -1,9 +1,14 @@
 import { ref } from "vue";
 
-// A page-scoped opt-in. Keep the query parameter in the URL and never persist
-// it in storage, so a normal visit always starts with link fetching hidden.
 export const gachaFetchAllowed = ref(false);
 
-export function applyGachaFetchPreference(allowed: boolean, url: URL): void {
-  gachaFetchAllowed.value = allowed && /^\/tool\/gacha-manager\/?$/.test(url.pathname);
+// URL values override the saved preference; only this tool can activate it.
+export function applyGachaFetchPreference(allowed: boolean | null, url: URL): void {
+  const isBrowser = typeof document !== "undefined";
+  if (allowed !== null && isBrowser) {
+    const secure = url.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `gachaFetchAllowed=${allowed}; path=/; max-age=31536000; SameSite=Lax${secure}`;
+  }
+  const saved = isBrowser && document.cookie.split(";").some(cookie => cookie.trim() === "gachaFetchAllowed=true");
+  gachaFetchAllowed.value = (allowed ?? saved) && /^\/tool\/gacha-manager\/?$/.test(url.pathname);
 }

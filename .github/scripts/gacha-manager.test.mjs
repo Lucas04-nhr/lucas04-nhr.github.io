@@ -15,7 +15,7 @@ const { exportUigf, groupAccounts, localizeAccount, mergeAccounts, parseUigf, po
 const transportUrl = moduleUrl("../../docs/.vuepress/theme/utils/gachaTransport.ts");
 const { detectGachaHelper, fetchWithGachaHelper } = await import(transportUrl);
 const { applyGachaFetchPreference, gachaFetchAllowed } = await import(moduleUrl("../../docs/.vuepress/theme/utils/gachaFetchPreference.ts", [['"vue"', JSON.stringify(import.meta.resolve("vue"))]]));
-const { fetchGameRecords, fetchMetadata, fetchRecords, parseRecordUrl } = await import(moduleUrl("../../docs/.vuepress/theme/utils/gachaFetch.ts", [['"./gachaRecords"', JSON.stringify(recordsUrl)], ['"./gachaTransport"', JSON.stringify(transportUrl)]]));
+const { fetchGameRecords, fetchMetadata, fetchRecords, parseRecordUrl, prepareExportAccounts } = await import(moduleUrl("../../docs/.vuepress/theme/utils/gachaFetch.ts", [['"./gachaRecords"', JSON.stringify(recordsUrl)], ['"./gachaTransport"', JSON.stringify(transportUrl)]]));
 const row = (id, rank = "3", overrides = {}) => ({ id: String(id), item_id: "10000003", time: "2026-10-02 12:00:00", gacha_type: "301", uigf_gacha_type: "301", rank_type: rank, ...overrides });
 const account = (list, overrides = {}) => ({ game: "hk4e", uid: "123456789", timezone: 8, lang: "en-us", list, ...overrides });
 const archive = (list) => exportUigf([account(list)]);
@@ -234,5 +234,45 @@ test("link fetching is hidden by default and the opt-in is limited to the tool r
   applyGachaFetchPreference(true, new URL("https://blog.lucas04.top/tools/"));
   assert.equal(gachaFetchAllowed.value, false);
   applyGachaFetchPreference(false, new URL("https://blog.lucas04.top/tool/gacha-manager/"));
+  assert.equal(gachaFetchAllowed.value, false);
+});
+
+ test("Miliastra always exports Chinese while other records use the selected language", async t => {
+  const queries = [];
+  t.mock.method(globalThis, "fetch", async url => {
+    queries.push(new URL(url));
+    return Response.json({items: [{item_id: "10000003", name: url.searchParams.get("game") === "hk4e_ugc" ? "中文装扮" : "Jean", rank: 5, type: url.searchParams.get("game") === "hk4e_ugc" ? "outfit" : "character", icon: null}]});
+  });
+  const miliastra = account([{id:"1", item_id:"10000003", item_type:"Outfit", item_name:"English outfit", rank_type:"5", schedule_id:"1",op_gacha_type:"20011",time:"2026-10-02 12:00:00"}], {game:"hk4e_ugc",lang:"en-us"});
+  const output = await prepareExportAccounts([account([row("1")]),miliastra], "en-us", new AbortController().signal);
+  assert.equal(output[0].lang,"en-us");
+  assert.equal(output[1].lang,"zh-cn");
+  assert.equal(output[1].list[0].item_name,"中文装扮");
+  assert.equal(miliastra.list[0].item_name,"English outfit");
+  assert.equal(queries.find(url => url.searchParams.get("game") === "hk4e_ugc").searchParams.get("lang"),"zh-cn");
+  const original = await prepareExportAccounts([miliastra], "original", new AbortController().signal);
+  assert.equal(original[0].lang,"zh-cn");
+  assert.equal(parseUigf(exportUigf(output))[1].lang,"zh-cn");
+});
+
+ test("online import remembers its cookie and explicit false disables it", t => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, "document");
+  let stored = "";
+  Object.defineProperty(globalThis, "document", { configurable: true, value: {
+    get cookie() { return stored.split(";")[0]; },
+    set cookie(value) { stored = value; },
+  } });
+  t.after(() => { if (previous) Object.defineProperty(globalThis, "document", previous); else delete globalThis.document; });
+  const tool = new URL("https://blog.lucas04.top/tool/gacha-manager/");
+  applyGachaFetchPreference(null, tool);
+  assert.equal(gachaFetchAllowed.value, false);
+  applyGachaFetchPreference(true, tool);
+  assert.match(stored, /max-age=31536000; SameSite=Lax; Secure/);
+  applyGachaFetchPreference(null, new URL("https://blog.lucas04.top/tools/"));
+  assert.equal(gachaFetchAllowed.value, false);
+  applyGachaFetchPreference(null, tool);
+  assert.equal(gachaFetchAllowed.value, true);
+  applyGachaFetchPreference(false, tool);
+  applyGachaFetchPreference(null, tool);
   assert.equal(gachaFetchAllowed.value, false);
 });

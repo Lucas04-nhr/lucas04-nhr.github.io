@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { exportLanguages, exportUigf, games, groupAccountKey, groupAccounts, inferredServer, localizeAccount, mergeAccounts, parseUigf, poolKey, poolNames, recordRank, selectableGames, servers, statistics, type ExportLanguage, type GachaAccount, type GachaRecord, type Game, type Metadata, type SelectableGame, type ServerId } from "../theme/utils/gachaRecords";
-import { fetchGameRecords, fetchMetadata } from "../theme/utils/gachaFetch";
+import { exportLanguages, exportUigf, games, groupAccountKey, groupAccounts, inferredServer, mergeAccounts, parseUigf, poolKey, poolNames, recordRank, selectableGames, servers, statistics, type ExportLanguage, type GachaAccount, type GachaRecord, type Game, type Metadata, type SelectableGame, type ServerId } from "../theme/utils/gachaRecords";
+import { fetchGameRecords, fetchMetadata, prepareExportAccounts } from "../theme/utils/gachaFetch";
 import { detectGachaHelper } from "../theme/utils/gachaTransport";
 import { applyGachaFetchPreference, gachaFetchAllowed } from "../theme/utils/gachaFetchPreference";
 
@@ -105,7 +105,8 @@ onMounted(() => {
   ready.value = true;
   const url = new URL(window.location.href);
   const wasEnabled = gachaFetchAllowed.value;
-  applyGachaFetchPreference(url.searchParams.get("gachaFetchAllowed")?.trim().toLowerCase() === "true", url);
+  const preference = url.searchParams.get("gachaFetchAllowed")?.trim().toLowerCase();
+  applyGachaFetchPreference(preference === "true" ? true : preference === "false" ? false : null, url);
   if (wasEnabled && gachaFetchAllowed.value) void checkHelper();
 });
 onBeforeUnmount(() => { ready.value = false; request?.abort(); metadataRequest?.abort(); exportRequest?.abort(); helperCheck?.abort(); });
@@ -170,15 +171,8 @@ async function download(selectedAccounts: GachaAccount[], filename: string) {
   exportRequest = controller;
   try {
     const lang = exportLanguage.value;
-    let outputAccounts = selectedAccounts;
-    if (lang !== "original") {
-      status.value = `Preparing ${exportLanguages[lang]} export…`;
-      const byGame: Partial<Record<Game, Metadata>> = {};
-      for (const currentGame of [...new Set(selectedAccounts.map(account => account.game))]) {
-        byGame[currentGame] = await fetchMetadata(currentGame, selectedAccounts.filter(account => account.game === currentGame).flatMap(account => account.list.map(row => row.item_id)), controller.signal, lang);
-      }
-      outputAccounts = selectedAccounts.map(account => localizeAccount(account, lang, byGame[account.game]!));
-    }
+    status.value = `Preparing ${lang === "original" ? "original-language" : exportLanguages[lang]} export…`;
+    const outputAccounts = await prepareExportAccounts(selectedAccounts, lang, controller.signal);
     controller.signal.throwIfAborted();
     const blob = new Blob([JSON.stringify(exportUigf(outputAccounts), null, 2)], { type: "application/json;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -210,7 +204,7 @@ async function loadMetadata() {
   try {
     let loaded = 0, missing = 0;
     for (const entry of account.accounts) {
-      const data = await fetchMetadata(entry.game, entry.list.map(row => row.item_id), controller.signal);
+      const data = await fetchMetadata(entry.game, entry.list.map(row => row.item_id), controller.signal, entry.game === "hk4e_ugc" ? "zh-cn" : "en-us");
       metadata.value = { ...metadata.value, [entry.game]: { ...metadata.value[entry.game], ...data } };
       loaded += Object.keys(data).length;
       missing += new Set(entry.list.filter(row => !data[row.item_id]).map(row => row.item_id)).size;
@@ -236,7 +230,15 @@ async function loadMetadata() {
         <span>{{ helperState === 'available' ? 'Browser helper connected · requests stay on your device' : helperState === 'checking' ? 'Checking browser helper…' : 'Browser helper not detected · direct fetch may be blocked by CORS' }}</span>
         <button type="button" :disabled="busy || helperState === 'checking'" @click="checkHelper">Check helper</button>
       </div>
-      <p class="muted">An independently installed Tampermonkey helper can make direct official API requests using extension permissions. This website does not distribute the helper. Without it, CORS may block fetching; import a UIGF archive instead.</p>
+      <details :open="helperState === 'unavailable'">
+        <summary>Set up the browser helper</summary>
+        <ol>
+          <li>Install <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">Tampermonkey</a> for your browser.</li>
+          <li>Open <a href="/script/gacha-manager-helper.user.js" target="_blank" rel="noopener noreferrer">Gacha Manager Helper</a> and install it. If it opens as text, paste its contents into a new script in the Tampermonkey dashboard.</li>
+          <li>Enable userscript execution and allow the listed official API hosts when requested. Reload this page and look for “Browser helper connected”.</li>
+        </ol>
+        <p class="muted">The helper sends requests from your device using extension permissions. It runs only on this tool page and can access only official gacha history endpoints. No relay, cookies or custom Origin header are used; authentication links are not saved.</p>
+      </details>
       <form @submit.prevent="retrieve">
         <div class="controls">
           <label>Game<select v-model="game" :disabled="busy"><option v-for="(name, key) in selectableGames" :key="key" :value="key">{{ name }}</option></select></label>
@@ -256,10 +258,11 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Import & export</h3>
-      <p class="notice">Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use a tool such as <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Starward</a> or <a href="https://github.com/pizza-studio/PizzaHelperUnited" target="_blank" rel="noopener noreferrer">Latte Helper</a> to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
+      <p v-if="!gachaFetchAllowed" class="notice">Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use a tool such as <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Starward</a> or <a href="https://github.com/pizza-studio/PizzaHelperUnited" target="_blank" rel="noopener noreferrer">Latte Helper</a> to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
       <p class="muted">Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by game, UID and record ID. Exports use UIGF v4.2.</p>
-      <label class="export-language">Export language<select v-model="exportLanguage" :disabled="exporting"><option value="original">Original record language (offline)</option><option v-for="(name, code) in exportLanguages" :key="code" :value="code">{{ name }}</option></select></label>
-      <p class="muted">Choose one of the four backend languages to look up localized item names for export. Missing translations stop that export; original-language export remains available offline. Miliastra metadata currently supports Simplified Chinese only.</p>
+      <label class="export-language">Export language<select v-model="exportLanguage" :disabled="exporting"><option value="original">Original record language</option><option v-for="(name, code) in exportLanguages" :key="code" :value="code">{{ name }}</option></select></label>
+      <p class="muted">Choose one of the four backend languages to look up localized item names for export. Original-language export preserves the names of ordinary game records.</p>
+      <p class="notice">Due to upstream repository limitations, Miliastra Wonderland records are always exported in Simplified Chinese, regardless of the import or export language selected. Other records use your chosen export language.</p>
       <div class="actions">
         <label class="file-button">Import JSON<input type="file" accept=".json,application/json" multiple :disabled="busy || !ready" @change="importFiles"></label>
         <button :disabled="!accounts.length || busy || exporting" @click="download(accounts, 'gacha-uigf-v4.2.json')">{{ exporting ? 'Preparing export…' : 'Export all accounts' }}</button>

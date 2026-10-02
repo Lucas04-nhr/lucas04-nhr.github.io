@@ -44,8 +44,8 @@ const unhandledResult: UrlQueryHandlerResult = {
 export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
   gachaFetchAllowed(value, { url }) {
     const preference = parseBooleanPreference(value);
-    applyGachaFetchPreference(preference === true, url);
-    return { handled: preference !== null, removeParam: false };
+    applyGachaFetchPreference(preference, url);
+    return { handled: preference !== null, removeParam: preference !== null };
   },
   locale(value) {
     const action = parseLocaleQueryAction(value);

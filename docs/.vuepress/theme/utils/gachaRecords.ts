@@ -9,7 +9,7 @@ export type Game = keyof typeof games;
 export type SelectableGame = Exclude<Game, "hk4e_ugc">;
 export const selectableGames = { hk4e: games.hk4e, hkrpg: games.hkrpg, nap: games.nap };
 export const servers = {
-  cn: { label: "Mainland China · Celestia / Irminsul", timezone: 8, overseas: false },
+  cn: { label: "Celestia / Irminsul", timezone: 8, overseas: false },
   asia: { label: "Asia", timezone: 8, overseas: true },
   europe: { label: "Europe", timezone: 1, overseas: true },
   america: { label: "America", timezone: -5, overseas: true },

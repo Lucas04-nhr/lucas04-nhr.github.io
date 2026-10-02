@@ -51,11 +51,15 @@ function displayPoolName(key: string) {
   const [namespace, type] = key.split(":") as [Game, string];
   return `${namespace === "hk4e_ugc" ? "Miliastra · " : ""}${poolNames[namespace][type] ?? type}`;
 }
+function serverAlias(game: SelectableGame) {
+  return game === "hkrpg" ? "Astral Express · Nameless" : game === "nap" ? "New Eridu" : "Celestia / Irminsul";
+}
 function serverName() {
   if (!selected.value) return "Server";
   const stored = serverByAccount.value[selected.value.key];
-  if (stored) return stored === "cn" && selected.value.game !== "hk4e" ? "Mainland China" : servers[stored].label;
-  return inferredServer(selected.value.accounts[0]);
+  if (stored === "cn") return serverAlias(selected.value.game);
+  const region = stored ? servers[stored].label : inferredServer(selected.value.accounts[0]);
+  return selected.value.game === "hk4e" ? region : `${region} · ${serverAlias(selected.value.game)}`;
 }
 const pools = computed(() => [...new Set(allRows.value.map(displayPoolKey))]);
 const rows = computed(() => allRows.value.filter(row => selectedPool.value === "all" || displayPoolKey(row) === selectedPool.value));
@@ -251,7 +255,7 @@ async function loadMetadata() {
       <form @submit.prevent="retrieve">
         <div class="controls">
           <label>Game<select v-model="game" :disabled="busy"><option v-for="(name, key) in selectableGames" :key="key" :value="key">{{ name }}</option></select></label>
-          <label>Server<select v-model="server" :disabled="busy"><optgroup label="Mainland China"><option value="cn">{{ game === 'hk4e' ? 'Mainland China · Celestia / Irminsul' : 'Mainland China' }}</option></optgroup><optgroup label="Overseas"><option v-for="id in (['asia', 'europe', 'america', 'tw'] as const)" :key="id" :value="id">{{ servers[id].label }}</option></optgroup></select></label>
+          <label>Server<select v-model="server" :disabled="busy"><optgroup label="Mainland China"><option value="cn">{{ serverAlias(game) }}</option></optgroup><optgroup label="Overseas"><option v-for="id in (['asia', 'europe', 'america', 'tw'] as const)" :key="id" :value="id">{{ servers[id].label }}</option></optgroup></select></label>
         </div>
         <p v-if="game === 'hk4e'" class="muted">Genshin wishes and Miliastra Wonderland records are fetched together.</p>
         <label class="link-label">Gacha history URL<textarea v-model="link" rows="3" placeholder="https://…?authkey=…" autocomplete="off" spellcheck="false" :disabled="busy" /></label>

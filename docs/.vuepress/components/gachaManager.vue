@@ -63,6 +63,7 @@ const metadata = ref<
 const rankFilter = ref("all");
 const search = ref("");
 const page = ref(1);
+const pageSize = ref(5);
 const pendingDelete = ref(false);
 const helperState = ref<"checking" | "available" | "unavailable">("checking");
 let helperCheck: AbortController | undefined;
@@ -174,10 +175,10 @@ const filtered = computed(() =>
     ),
 );
 const pageCount = computed(() =>
-  Math.max(1, Math.ceil(filtered.value.length / 50)),
+  Math.max(1, Math.ceil(filtered.value.length / pageSize.value)),
 );
 const visible = computed(() =>
-  filtered.value.slice((page.value - 1) * 50, page.value * 50),
+  filtered.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value),
 );
 const totalRecords = computed(() =>
   accounts.value.reduce((sum, account) => sum + account.list.length, 0),
@@ -186,7 +187,7 @@ watch(selectedKey, () => {
   selectedPool.value = "all";
   pendingDelete.value = false;
 });
-watch([selectedKey, selectedPool, rankFilter, search], () => {
+watch([selectedKey, selectedPool, rankFilter, search, pageSize], () => {
   page.value = 1;
 });
 watch(displayLanguage, () => {
@@ -960,6 +961,12 @@ async function loadMetadata() {
               <option value="4">4-star / A-rank</option>
               <option value="3">3-star / B-rank</option>
               <option value="null">Unknown</option>
+            </select></label
+          ><label
+            >Records per page<select v-model.number="pageSize">
+              <option v-for="size in [5, 10, 20, 50, 100]" :key="size" :value="size">
+                {{ size }}
+              </option>
             </select></label
           >
         </div>

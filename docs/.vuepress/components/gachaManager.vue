@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import VPButton from "@theme/VPButton.vue";
+import CardGrid from "@theme/global/VPCardGrid.vue";
+import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { exportLanguages, exportUigf, games, groupAccountKey, groupAccounts, inferredServer, mergeAccounts, parseUigf, poolKey, poolNames, recordRank, selectableGames, servers, statistics, type ExportLanguage, type GachaAccount, type GachaRecord, type Game, type Metadata, type SelectableGame, type ServerId } from "../theme/utils/gachaRecords";
 import { fetchGameRecords, fetchMetadata, prepareExportAccounts } from "../theme/utils/gachaFetch";
@@ -257,11 +259,18 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Import & export</h3>
-      <p v-if="!gachaFetchAllowed" class="hint-container note">Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use a tool such as <a href="https://github.com/Scighost/Starward" target="_blank" rel="noopener noreferrer">Starward</a> or <a href="https://github.com/pizza-studio/PizzaHelperUnited" target="_blank" rel="noopener noreferrer">Latte Helper</a> to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
+      <div v-if="!gachaFetchAllowed" class="hint-container note">
+        <p class="hint-container-title">Note</p>
+        <p>Browser cross-origin restrictions (CORS) prevent this page from fetching gacha history through a link. Use Starward or Latte Helper to obtain your records, export a UIGF JSON file, then import it here to organize and analyze your history.</p>
+        <CardGrid :cols="2">
+          <RepoCard repo="Scighost/Starward" />
+          <RepoCard repo="pizza-studio/PizzaHelperUnited" />
+        </CardGrid>
+      </div>
       <p class="muted">Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by game, UID and record ID. Exports use UIGF v4.2.</p>
       <label class="export-language">Export language<select v-model="exportLanguage" :disabled="exporting"><option value="original">Original record language</option><option v-for="(name, code) in exportLanguages" :key="code" :value="code">{{ name }}</option></select></label>
       <p class="muted">Choose one of the four backend languages to look up localized item names for export. Original-language export preserves the names of ordinary game records.</p>
-      <p class="hint-container note">Due to upstream repository limitations, Miliastra Wonderland records are always exported in Simplified Chinese, regardless of the import or export language selected. Other records use your chosen export language.</p>
+      <div class="hint-container note"><p class="hint-container-title">Note</p><p>Due to upstream repository limitations, Miliastra Wonderland records are always exported in Simplified Chinese, regardless of the import or export language selected. Other records use your chosen export language.</p></div>
       <div class="actions">
         <label class="file-button">Import JSON<input type="file" accept=".json,application/json" multiple :disabled="busy || !ready" @change="importFiles"></label>
         <VPButton theme="alt" :disabled="!accounts.length || busy || exporting" @click="download(accounts, 'gacha-uigf-v4.2.json')">{{ exporting ? 'Preparing export…' : 'Export all accounts' }}</VPButton>

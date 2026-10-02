@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import VPButton from "@theme/VPButton.vue";
-import CardGrid from "@theme/global/VPCardGrid.vue";
+import VPButton from "vuepress-theme-plume/components/VPButton.vue";
+import CardGrid from "vuepress-theme-plume/components/global/VPCardGrid.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { exportLanguages, exportUigf, games, groupAccountKey, groupAccounts, inferredServer, mergeAccounts, parseUigf, poolKey, poolNames, recordRank, selectableGames, servers, statistics, type ExportLanguage, type GachaAccount, type GachaRecord, type Game, type Metadata, type SelectableGame, type ServerId } from "../theme/utils/gachaRecords";

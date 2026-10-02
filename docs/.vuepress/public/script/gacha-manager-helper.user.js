@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         Gacha Manager by Lucas
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.0.1
+// @version      1.1.0
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
 // @author       Lucas
 // @license      GPL-3.0-only
-// @match        https://blog.lucas04.top/tool/gacha-manager/*
-// @match        http://localhost:*/tool/gacha-manager/*
-// @match        http://127.0.0.1:*/tool/gacha-manager/*
-// @match        http://192.168.31.11:*/tool/gacha-manager/*
+// @match        https://blog.lucas04.top/tool/gacha-manager/
+// @match        http://localhost:*/tool/gacha-manager/
+// @match        http://127.0.0.1:*/tool/gacha-manager/
+// @match        http://192.168.31.11:*/tool/gacha-manager/
 // @grant        GM_xmlhttpRequest
 // @connect      public-operation-hk4e.mihoyo.com
 // @connect      public-operation-hk4e-sg.hoyoverse.com

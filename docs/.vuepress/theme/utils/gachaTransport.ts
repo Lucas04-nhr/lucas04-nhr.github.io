@@ -10,17 +10,22 @@ function helperRequest(action: "probe" | "fetch", signal: AbortSignal, url?: str
   return new Promise((resolve, reject) => {
     const cleanup = () => {
       clearTimeout(timer);
-      window.removeEventListener("message", receive);
+      clearInterval(retry);
+      document.removeEventListener(RESPONSE, receive);
       signal.removeEventListener("abort", cancel);
     };
     const cancel = () => {
       cleanup();
-      window.postMessage({ type: REQUEST, protocol: PROTOCOL, id, action: "cancel" }, window.location.origin);
+      send("cancel");
       reject(new DOMException("Cancelled", "AbortError"));
     };
-    const receive = (event: MessageEvent) => {
-      if (event.source !== window || event.origin !== window.location.origin) return;
-      const message = event.data;
+    // String event details cross userscript sandboxes without sharing JS objects.
+    const send = (requestAction: "probe" | "fetch" | "cancel" = action) => {
+      document.dispatchEvent(new CustomEvent(REQUEST, { detail: JSON.stringify({ type: REQUEST, protocol: PROTOCOL, id, action: requestAction, ...(url ? { url } : {}) }) }));
+    };
+    const receive = (event: Event) => {
+      let message;
+      try { message = JSON.parse((event as CustomEvent<string>).detail); } catch { return; }
       if (!message || message.type !== RESPONSE || message.protocol !== PROTOCOL || message.id !== id) return;
       cleanup();
       if (message.error) reject(new Error(typeof message.error === "string" ? message.error : "Browser helper request failed."));
@@ -28,13 +33,14 @@ function helperRequest(action: "probe" | "fetch", signal: AbortSignal, url?: str
     };
     const timer = setTimeout(() => {
       cleanup();
-      if (action === "fetch") window.postMessage({ type: REQUEST, protocol: PROTOCOL, id, action: "cancel" }, window.location.origin);
+      if (action === "fetch") send("cancel");
       reject(new Error(action === "probe" ? "Browser helper not detected." : "Browser helper request timed out. Check Tampermonkey permissions and try again."));
-    }, action === "probe" ? 1000 : 25000);
+    }, action === "probe" ? 3000 : 25000);
+    const retry = action === "probe" ? setInterval(() => send(), 250) : undefined;
     if (signal.aborted) { cancel(); return; }
-    window.addEventListener("message", receive);
+    document.addEventListener(RESPONSE, receive);
     signal.addEventListener("abort", cancel, { once: true });
-    window.postMessage({ type: REQUEST, protocol: PROTOCOL, id, action, ...(url ? { url } : {}) }, window.location.origin);
+    send();
   });
 }
 

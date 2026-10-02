@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gacha Manager by Lucas
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.1.1
+// @version      1.2.0
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
@@ -18,6 +18,7 @@
 // @connect      public-operation-hkrpg-sg.hoyoverse.com
 // @connect      public-operation-nap.mihoyo.com
 // @connect      public-operation-nap-sg.hoyoverse.com
+// @sandbox      DOM
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -39,11 +40,10 @@
   const reply = (id, result, error) => {
     window.postMessage({ type: RESPONSE, protocol: 1, id, ...(error ? { error } : { result }) }, window.location.origin);
   };
-  window.addEventListener("message", (event) => {
-    if (event.source !== window || event.origin !== window.location.origin || !/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
-    const message = event.data;
+  const handle = (message, respond) => {
+    if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { reply(message.id, { version: "1.1.1" }); return; }
+    if (message.action === "probe") { respond(message.id, { version: "1.2.0" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;
@@ -51,9 +51,9 @@
       if (typeof message.url !== "string" || message.url.length > 8192) throw new Error();
       url = new URL(message.url);
       if (!validUrl(url) || !url.searchParams.get("authkey")) throw new Error();
-    } catch { reply(message.id, null, "The helper only accepts official gacha history endpoints with authkey."); return; }
-    if (pending.size >= 2 || pending.has(message.id)) { reply(message.id, null, "Too many helper requests. Stop the current fetch and try again."); return; }
-    const finish = (result, error) => { pending.delete(message.id); reply(message.id, result, error); };
+    } catch { respond(message.id, null, "The helper only accepts official gacha history endpoints with authkey."); return; }
+    if (pending.size >= 2 || pending.has(message.id)) { respond(message.id, null, "Too many helper requests. Stop the current fetch and try again."); return; }
+    const finish = (result, error) => { pending.delete(message.id); respond(message.id, result, error); };
     try {
       const request = GM_xmlhttpRequest({
         method: "GET",
@@ -77,6 +77,20 @@
       });
       pending.set(message.id, request);
     } catch { finish(null, "Tampermonkey could not start the request. Check the helper permissions."); }
+  };
+  // DOM events with string details work across isolated userscript worlds.
+  document.addEventListener(REQUEST, (event) => {
+    if (typeof event.detail !== "string" || event.detail.length > 10000) return;
+    let message;
+    try { message = JSON.parse(event.detail); } catch { return; }
+    handle(message, (id, result, error) => {
+      document.dispatchEvent(new CustomEvent(RESPONSE, { detail: JSON.stringify({ type: RESPONSE, protocol: 1, id, ...(error ? { error } : { result }) }) }));
+    });
+  });
+  // Keep compatibility with pages using the previous postMessage transport.
+  window.addEventListener("message", (event) => {
+    if (event.source !== window || event.origin !== window.location.origin) return;
+    handle(event.data, reply);
   });
   window.addEventListener("pagehide", () => { for (const request of pending.values()) request.abort(); pending.clear(); });
 })();

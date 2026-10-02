@@ -27,7 +27,8 @@ const metadataStatus = ref("");
 const exportLanguage = ref<ExportLanguage | "original">("original");
 const exporting = ref(false);
 let exportRequest: AbortController | undefined;
-const metadata = ref<Partial<Record<Game, Metadata>>>({});
+const displayLanguage = ref<ExportLanguage | "original">("original");
+const metadata = ref<Partial<Record<ExportLanguage, Partial<Record<Game, Metadata>>>>>({});
 const rankFilter = ref("all");
 const search = ref("");
 const page = ref(1);
@@ -40,9 +41,10 @@ const displayAccounts = computed(() => groupAccounts(accounts.value));
 const selected = computed(() => displayAccounts.value.find(account => account.key === selectedKey.value));
 const allRows = computed(() => selected.value?.accounts.flatMap(account => account.list.map(row => ({ ...row, __game: account.game, __timezone: account.timezone }))) ?? []);
 function rowGame(row: GachaRecord): Game { return row.__game as Game; }
-function rowMetadata(row: GachaRecord): Metadata { return metadata.value[rowGame(row)] ?? {}; }
+function rowMetadata(row: GachaRecord): Metadata { return metadata.value[effectiveDisplayLanguage(rowGame(row))]?.[rowGame(row)] ?? {}; }
 function itemMetadata(row: GachaRecord) { return rowMetadata(row)[row.item_id]; }
-function itemName(row: GachaRecord) { return itemMetadata(row)?.name ?? row.name ?? row.item_name ?? row.item_id; }
+function effectiveDisplayLanguage(game: Game): ExportLanguage { return game === "hk4e_ugc" ? "zh-cn" : displayLanguage.value === "original" ? "en-us" : displayLanguage.value; }
+function itemName(row: GachaRecord) { return (displayLanguage.value === "original" ? undefined : itemMetadata(row)?.name) ?? row.name ?? row.item_name ?? row.item_id; }
 function rowRank(row: GachaRecord) { return recordRank(row, rowGame(row), rowMetadata(row)); }
 function displayPoolKey(row: GachaRecord) { return `${rowGame(row)}:${poolKey(row, rowGame(row))}`; }
 function displayPoolName(key: string) {
@@ -61,13 +63,15 @@ const calculateStats = (list: GachaRecord[]) => statistics(list, selected.value?
 const stats = computed(() => calculateStats(rows.value));
 const poolStats = computed(() => pools.value.map(key => ({ key, name: displayPoolName(key), ...calculateStats(allRows.value.filter(row => displayPoolKey(row) === key)) })));
 const filtered = computed(() => [...rows.value].sort((a, b) => b.time.localeCompare(a.time) || (BigInt(a.id) < BigInt(b.id) ? 1 : -1)).filter(row =>
-  (rankFilter.value === "all" || String(rowRank(row)) === rankFilter.value) && `${itemName(row)} ${row.item_id}`.toLowerCase().includes(search.value.toLowerCase())
+  (rankFilter.value === "all" || String(rowRank(row)) === String(rankFilter.value)) && `${itemName(row)} ${row.item_id}`.toLowerCase().includes(search.value.toLowerCase())
 ));
 const pageCount = computed(() => Math.max(1, Math.ceil(filtered.value.length / 50)));
 const visible = computed(() => filtered.value.slice((page.value - 1) * 50, page.value * 50));
 const totalRecords = computed(() => accounts.value.reduce((sum, account) => sum + account.list.length, 0));
 watch(selectedKey, () => { selectedPool.value = "all"; pendingDelete.value = false; });
 watch([selectedKey, selectedPool, rankFilter, search], () => { page.value = 1; });
+watch(displayLanguage, () => { page.value = 1; void loadMetadata(); });
+watch(selectedKey, () => { void loadMetadata(); });
 watch(pageCount, count => { page.value = Math.min(page.value, count); });
 watch(gachaFetchAllowed, allowed => {
   if (allowed && ready.value) void checkHelper();
@@ -198,23 +202,27 @@ function deleteAccount() {
   status.value = "Local records for the selected account deleted.";
 }
 async function loadMetadata() {
-  if (!selected.value || metadataBusy.value) return;
+  if (!selected.value) return;
+  metadataRequest?.abort();
   metadataBusy.value = true;
   metadataStatus.value = "Loading item metadata…";
   const account = selected.value;
   const controller = new AbortController();
+  const language = displayLanguage.value;
   metadataRequest = controller;
   try {
     let loaded = 0, missing = 0;
     for (const entry of account.accounts) {
-      const data = await fetchMetadata(entry.game, entry.list.map(row => row.item_id), controller.signal, entry.game === "hk4e_ugc" ? "zh-cn" : "en-us");
-      metadata.value = { ...metadata.value, [entry.game]: { ...metadata.value[entry.game], ...data } };
+      const lang = effectiveDisplayLanguage(entry.game);
+      const data = await fetchMetadata(entry.game, entry.list.map(row => row.item_id), controller.signal, lang);
+      controller.signal.throwIfAborted();
+      metadata.value = { ...metadata.value, [lang]: { ...metadata.value[lang], [entry.game]: { ...metadata.value[lang]?.[entry.game], ...data } } };
       loaded += Object.keys(data).length;
       missing += new Set(entry.list.filter(row => !data[row.item_id]).map(row => row.item_id)).size;
     }
-    metadataStatus.value = `Loaded ${loaded} items${missing ? `; ${missing} items are missing English metadata and keep their original display` : ""}.`;
+    metadataStatus.value = `Loaded ${loaded} items (${language === "original" ? "original names retained" : exportLanguages[language]}; Miliastra uses Simplified Chinese)${missing ? `; ${missing} items are missing requested-language metadata and keep their original display` : ""}.`;
   } catch { if (!controller.signal.aborted) metadataStatus.value = "Metadata lookup failed. Original names and ranks remain available. Try again later."; }
-  finally { metadataBusy.value = false; metadataRequest = undefined; }
+  finally { if (metadataRequest === controller) { metadataBusy.value = false; metadataRequest = undefined; } }
 }
 </script>
 
@@ -236,7 +244,7 @@ async function loadMetadata() {
         <ol>
           <li>Install <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">Tampermonkey</a> for your browser.</li>
           <li>Open <a href="/script/gacha-manager-helper.user.js" target="_blank" rel="noopener noreferrer">Gacha Manager by Lucas</a> and install it. If it opens as text, paste its contents into a new script in the Tampermonkey dashboard.</li>
-          <li>Enable userscript execution and allow the listed official API hosts when requested. Reload this page and look for “Browser helper connected”.</li>
+          <li>Update the helper to version 1.2.0 or later, enable userscript execution and allow the listed official API hosts when requested. Reload this page and look for “Browser helper connected”.</li>
         </ol>
         <p class="muted">The helper sends requests from your device using extension permissions. It runs only on this tool page and can access only official gacha history endpoints. No relay, cookies or custom Origin header are used; authentication links are not saved.</p>
       </details>
@@ -289,6 +297,7 @@ async function loadMetadata() {
       <section class="gacha-panel">
         <div class="controls">
           <label>Account<select v-model="selectedKey"><option v-for="account in displayAccounts" :key="account.key" :value="account.key">{{ games[account.game] }} · {{ account.uid }}</option></select></label>
+          <label>Display language<select v-model="displayLanguage"><option value="original">Original record language</option><option v-for="(name, code) in exportLanguages" :key="code" :value="code">{{ name }}</option></select></label>
           <label>Pool<select v-model="selectedPool"><option value="all">All pools</option><option v-for="pool in pools" :key="pool" :value="pool">{{ displayPoolName(pool) }}</option></select></label>
         </div>
         <div class="actions"><VPButton theme="alt" :disabled="metadataBusy || busy" @click="loadMetadata">{{ metadataBusy ? 'Loading…' : 'Load item names & icons' }}</VPButton><VPButton theme="alt" :disabled="busy" @click="pendingDelete = !pendingDelete">Delete account</VPButton></div>
@@ -321,7 +330,7 @@ async function loadMetadata() {
 
       <section class="gacha-panel">
         <h3>Record history</h3>
-        <div class="controls"><label>Search items<input v-model="search" type="search" placeholder="Name or item ID"></label><label>Rarity<select v-model="rankFilter"><option value="all">All</option><option value="5">5-star / S-rank</option><option value="4">4-star / A-rank</option><option value="3">3-star / B-rank</option><option value="2">2-star</option><option value="1">1-star</option><option value="null">Unknown</option></select></label></div>
+        <div class="controls"><label>Search items<input v-model="search" type="search" placeholder="Name or item ID"></label><label>Rarity<select v-model="rankFilter"><option value="all">All</option><option value="5">5-star / S-rank</option><option value="4">4-star / A-rank</option><option value="3">3-star / B-rank</option><option value="null">Unknown</option></select></label></div>
         <div class="table-scroll"><table><thead><tr><th>Item</th><th>Rarity</th><th>Pool</th><th>Server time</th></tr></thead><tbody><tr v-for="row in visible" :key="`${rowGame(row)}:${row.id}`"><td><span class="item"><img v-if="itemMetadata(row)?.icon" :src="itemMetadata(row)!.icon!" alt="" loading="lazy" referrerpolicy="no-referrer"><span :class="{ gold: rowRank(row) === 5 }">{{ itemName(row) }}<small>ID {{ row.item_id }}</small></span></span></td><td>{{ rowRank(row) ?? 'Unknown' }}</td><td>{{ displayPoolName(displayPoolKey(row)) }}</td><td>{{ serverName() }} · {{ row.time }}</td></tr><tr v-if="!visible.length"><td colspan="4">No matching records.</td></tr></tbody></table></div>
         <div class="actions pagination"><VPButton theme="alt" :disabled="page <= 1" @click="page--">Previous</VPButton><span>{{ page }} / {{ pageCount }} · {{ filtered.length }} records</span><VPButton theme="alt" :disabled="page >= pageCount" @click="page++">Next</VPButton></div>
       </section>

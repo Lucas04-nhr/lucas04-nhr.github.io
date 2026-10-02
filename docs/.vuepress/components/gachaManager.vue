@@ -123,14 +123,13 @@ function serverAlias(game: SelectableGame) {
 }
 function serverName() {
   if (!selected.value) return "Server";
+  if (selected.value.game !== "hk4e") return serverAlias(selected.value.game);
   const stored = serverByAccount.value[selected.value.key];
   if (stored === "cn") return serverAlias(selected.value.game);
   const region = stored
     ? servers[stored].label
     : inferredServer(selected.value.accounts[0]);
-  return selected.value.game === "hk4e"
-    ? region
-    : `${region} · ${serverAlias(selected.value.game)}`;
+  return region;
 }
 const pools = computed(() => [...new Set(allRows.value.map(displayPoolKey))]);
 const rows = computed(() =>
@@ -647,7 +646,7 @@ async function loadMetadata() {
     </section>
 
     <section class="gacha-panel">
-      <h3>Import & export</h3>
+      <h3>Import</h3>
       <p
         v-if="status"
         class="hint-container note"
@@ -675,8 +674,40 @@ async function loadMetadata() {
       </div>
       <p class="muted">
         Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by
-        game, UID and record ID. Exports use UIGF v4.2.
+        game, UID and record ID.
       </p>
+      <label
+        class="json-drop-zone"
+        :class="{ dragging: dragDepth > 0, disabled: busy || !ready }"
+        @dragenter.prevent="dragEnter"
+        @dragover.prevent="dragOver"
+        @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1)"
+        @drop.prevent="dropFiles"
+      >
+        <strong>{{ busy ? 'Import unavailable while processing' : 'Drop JSON files here' }}</strong>
+        <span>or click to select files · UIGF v4.0–v4.2 · up to 50 MiB per file</span>
+        <input
+            type="file"
+            accept=".json,application/json"
+            multiple
+            :disabled="busy || !ready"
+            @change="importFiles"
+        />
+      </label>
+      <p class="muted">
+        Upgrade older UIGF / SRGF files with
+        <a
+          href="https://upgrader.uigf.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >UIGF Upgrader</a
+        >.
+      </p>
+    </section>
+
+    <section class="gacha-panel">
+      <h3>Export</h3>
+      <p class="muted">Exports use UIGF v4.2.</p>
       <label class="export-language"
         >Export language<select v-model="exportLanguage" :disabled="exporting">
           <option
@@ -702,24 +733,6 @@ async function loadMetadata() {
           language.
         </p>
       </div>
-      <label
-        class="json-drop-zone"
-        :class="{ dragging: dragDepth > 0, disabled: busy || !ready }"
-        @dragenter.prevent="dragEnter"
-        @dragover.prevent="dragOver"
-        @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1)"
-        @drop.prevent="dropFiles"
-      >
-        <strong>{{ busy ? 'Import unavailable while processing' : 'Drop JSON files here' }}</strong>
-        <span>or click to select files · UIGF v4.0–v4.2 · up to 50 MiB per file</span>
-        <input
-            type="file"
-            accept=".json,application/json"
-            multiple
-            :disabled="busy || !ready"
-            @change="importFiles"
-        />
-      </label>
       <div class="actions">
         <VPButton
           theme="alt"
@@ -753,13 +766,7 @@ async function loadMetadata() {
         </div>
       </details>
       <p class="muted">
-        Upgrade older UIGF / SRGF files with
-        <a
-          href="https://upgrader.uigf.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          >UIGF Upgrader</a
-        >. Records are stored only in this browser. Export backups regularly.
+        Records are stored only in this browser. Export backups regularly.
       </p>
     </section>
 
@@ -782,17 +789,6 @@ async function loadMetadata() {
                 :value="account.key"
               >
                 {{ games[account.game] }} · {{ account.uid }}
-              </option>
-            </select></label
-          >
-          <label
-            >Display language<select v-model="overviewLanguage">
-              <option
-                v-for="(name, code) in exportLanguages"
-                :key="code"
-                :value="code"
-              >
-                {{ name }}
               </option>
             </select></label
           >
@@ -1043,6 +1039,17 @@ async function loadMetadata() {
             </tbody>
           </table>
         </div>
+        <p class="muted">
+          Server labels use Celestia / Irminsul or the detected region for
+          Genshin, Astral Express · Nameless for Honkai: Star Rail, and New
+          Eridu for Zenless Zone Zero. Star Rail and ZZZ labels do not identify
+          the account's server region. Timestamps retain the archive's server
+          timezone (UTC{{ selected.accounts[0].timezone >= 0 ? '+' : '' }}{{ selected.accounts[0].timezone }}),
+          without conversion to your device timezone or daylight saving time.
+          Fetched records use UTC+8 for China / Asia / TW-HK-MO, UTC+1 for
+          Europe, and UTC−5 for America. Imported records keep their archive's
+          timezone; UTC+8 alone cannot distinguish China, Asia and TW-HK-MO.
+        </p>
         <div class="actions pagination">
           <VPButton theme="alt" :disabled="page <= 1" @click="page--"
             >Previous</VPButton

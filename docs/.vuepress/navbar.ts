@@ -23,7 +23,7 @@ export const enNavbar = defineNavbarConfig([
       { text: 'R for Bioinformatics Cookbook', link: '/docs/r-course/' },
       { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
       { text: 'KU Master\'s Courses', link: '/docs/ku/' },
-      { text: 'Gacha Manager', link: '/docs/gacha-manager/' },
+      { text: 'Gacha Manager by Lucas', link: '/docs/gacha-manager/' },
     ]
   },
   {

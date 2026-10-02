@@ -11,5 +11,5 @@ comments: false
 - [R for Bioinformatics Cookbook](/docs/r-course/)
 - [HUST Graduation Project Template Usage Guide](/docs/hust-gp-template/)
 - [KU Master's Courses](/docs/ku/)
-- [Gacha Manager](/docs/gacha-manager/)
+- [Gacha Manager by Lucas](/docs/gacha-manager/)
 - [StayUP Schedule](/docs/stayup-schedule/)

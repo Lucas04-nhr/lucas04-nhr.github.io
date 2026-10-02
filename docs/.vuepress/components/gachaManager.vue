@@ -235,7 +235,7 @@ async function loadMetadata() {
         <summary>Set up the browser helper</summary>
         <ol>
           <li>Install <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">Tampermonkey</a> for your browser.</li>
-          <li>Open <a href="/script/gacha-manager-helper.user.js" target="_blank" rel="noopener noreferrer">Gacha Manager Helper</a> and install it. If it opens as text, paste its contents into a new script in the Tampermonkey dashboard.</li>
+          <li>Open <a href="/script/gacha-manager-helper.user.js" target="_blank" rel="noopener noreferrer">Gacha Manager by Lucas</a> and install it. If it opens as text, paste its contents into a new script in the Tampermonkey dashboard.</li>
           <li>Enable userscript execution and allow the listed official API hosts when requested. Reload this page and look for “Browser helper connected”.</li>
         </ol>
         <p class="muted">The helper sends requests from your device using extension permissions. It runs only on this tool page and can access only official gacha history endpoints. No relay, cookies or custom Origin header are used; authentication links are not saved.</p>

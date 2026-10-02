@@ -1,8 +1,10 @@
 // ==UserScript==
-// @name         Lucas Gacha Manager Helper
+// @name         Gacha Manager by Lucas
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.0.0
-// @description  Fetch official gacha history locally for Lucas Gacha Manager, without a relay server.
+// @version      1.0.1
+// @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
+// @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
+// @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
 // @author       Lucas
 // @license      GPL-3.0-only
 // @match        https://blog.lucas04.top/tool/gacha-manager/*
@@ -41,7 +43,7 @@
     if (event.source !== window || event.origin !== window.location.origin || window.location.pathname !== "/tool/gacha-manager/") return;
     const message = event.data;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { reply(message.id, { version: "1.0.0" }); return; }
+    if (message.action === "probe") { reply(message.id, { version: "1.0.1" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;

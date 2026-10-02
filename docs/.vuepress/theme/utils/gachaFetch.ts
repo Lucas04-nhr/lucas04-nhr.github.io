@@ -5,7 +5,7 @@ const hosts: Record<Game, [string, string]> = {
   hk4e: ["public-operation-hk4e.mihoyo.com", "public-operation-hk4e-sg.hoyoverse.com"],
   hk4e_ugc: ["public-operation-hk4e.mihoyo.com", "public-operation-hk4e-sg.hoyoverse.com"],
   hkrpg: ["public-operation-hkrpg.mihoyo.com", "public-operation-hkrpg-sg.hoyoverse.com"],
-  nap: ["public-operation-nap.mihoyo.com", "public-operation-nap-sg.hoyoverse.com"],
+  nap: ["public-operation-common.mihoyo.com", "public-operation-nap-sg.hoyoverse.com"],
 };
 const paths: Record<Game, string> = {
   hk4e: "/gacha_info/api/getGachaLog",
@@ -19,7 +19,8 @@ export function parseRecordUrl(input: string, game: Game): URL {
   let source: URL;
   try { source = new URL(input.trim()); } catch { throw new Error("Enter a complete HTTPS gacha history URL."); }
   if (source.protocol !== "https:" || source.username || source.password) throw new Error("Only official HTTPS gacha history URLs are accepted.");
-  const cn = source.hostname === hosts[game][0] || source.hostname === "webstatic.mihoyo.com";
+  const legacyZzzCn = game === "nap" && source.hostname === "public-operation-nap.mihoyo.com";
+  const cn = source.hostname === hosts[game][0] || source.hostname === "webstatic.mihoyo.com" || legacyZzzCn;
   const global = source.hostname === hosts[game][1] || source.hostname === "gs.hoyoverse.com";
   if (!cn && !global) throw new Error("The URL host does not match the selected game. Use an official history URL.");
   // Authkeys use Base64: a literal '+' is part of the key, not a form-space.

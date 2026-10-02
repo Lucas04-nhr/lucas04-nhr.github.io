@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gacha Manager by Lucas
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.2.0
+// @version      1.2.1
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
@@ -16,6 +16,7 @@
 // @connect      public-operation-hk4e-sg.hoyoverse.com
 // @connect      public-operation-hkrpg.mihoyo.com
 // @connect      public-operation-hkrpg-sg.hoyoverse.com
+// @connect      public-operation-common.mihoyo.com
 // @connect      public-operation-nap.mihoyo.com
 // @connect      public-operation-nap-sg.hoyoverse.com
 // @sandbox      DOM
@@ -32,6 +33,7 @@
     ["public-operation-hk4e-sg.hoyoverse.com", ["/gacha_info/api/getGachaLog", "/gacha_info/api/getBeyondGachaLog"]],
     ["public-operation-hkrpg.mihoyo.com", ["/common/hkrpg_gacha_record/api/getGachaLog", "/common/hkrpg_gacha_record/api/getLdGachaLog"]],
     ["public-operation-hkrpg-sg.hoyoverse.com", ["/common/hkrpg_gacha_record/api/getGachaLog", "/common/hkrpg_gacha_record/api/getLdGachaLog"]],
+    ["public-operation-common.mihoyo.com", ["/common/gacha_record/api/getGachaLog"]],
     ["public-operation-nap.mihoyo.com", ["/common/gacha_record/api/getGachaLog"]],
     ["public-operation-nap-sg.hoyoverse.com", ["/common/gacha_record/api/getGachaLog"]],
   ]);
@@ -43,7 +45,7 @@
   const handle = (message, respond) => {
     if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { respond(message.id, { version: "1.2.0" }); return; }
+    if (message.action === "probe") { respond(message.id, { version: "1.2.1" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;

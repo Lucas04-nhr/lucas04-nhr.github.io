@@ -283,16 +283,37 @@ async function checkHelper() {
     helperState.value = available ? "available" : "unavailable";
 }
 
+const dragDepth = ref(0);
+
 async function importFiles(event: Event) {
   const input = event.target as HTMLInputElement;
-  const files = [...(input.files ?? [])];
-  if (!files.length) return;
+  try { await importJsonFiles([...(input.files ?? [])]); }
+  finally { input.value = ""; }
+}
+
+function dragEnter(event: DragEvent) {
+  if (event.dataTransfer?.types.includes("Files")) dragDepth.value++;
+}
+
+function dragOver(event: DragEvent) {
+  if (event.dataTransfer) event.dataTransfer.dropEffect = busy.value || !ready.value ? "none" : "copy";
+}
+
+async function dropFiles(event: DragEvent) {
+  dragDepth.value = 0;
+  await importJsonFiles([...(event.dataTransfer?.files ?? [])]);
+}
+
+async function importJsonFiles(files: File[]) {
+  if (!files.length || busy.value || !ready.value) return;
   error.value = "";
+  status.value = "Importing JSON files…";
   busy.value = true;
   try {
     // Parse all files first, so one invalid file cannot cause a partial import.
     const incoming: GachaAccount[] = [];
     for (const file of files) {
+      if (!/\.json$/i.test(file.name)) throw new Error(`${file.name} is not a JSON file.`);
       if (file.size > 50 * 1024 * 1024)
         throw new Error(
           `${file.name} exceeds 50 MiB. Split the file before importing.`,
@@ -303,10 +324,10 @@ async function importFiles(event: Event) {
     const result = merge(incoming);
     status.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
   } catch (err) {
+    status.value = "";
     error.value = err instanceof Error ? err.message : "Import failed.";
   } finally {
     busy.value = false;
-    input.value = "";
   }
 }
 
@@ -359,7 +380,7 @@ async function retrieve() {
   }
 }
 
-async function download(selectedAccounts: GachaAccount[], filename: string) {
+async function download(selectedAccounts: GachaAccount[]) {
   if (exporting.value) return;
   error.value = "";
   exporting.value = true;
@@ -381,7 +402,7 @@ async function download(selectedAccounts: GachaAccount[], filename: string) {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = filename.replace(/\.json$/, `-${lang}.json`);
+    anchor.download = "UIGFv4_GachaManager.json";
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     status.value = "Export ready. Your saved records have not been changed.";
@@ -517,7 +538,7 @@ async function loadMetadata() {
             script in the Tampermonkey dashboard.
           </li>
           <li>
-            Update the helper to version 1.2.0 or later, enable userscript
+            Update the helper to version 1.2.1 or later, enable userscript
             execution and allow the listed official API hosts when requested.
             Reload this page and look for “Browser helper connected”.
           </li>
@@ -681,19 +702,29 @@ async function loadMetadata() {
           language.
         </p>
       </div>
-      <div class="actions">
-        <label class="file-button"
-          >Import JSON<input
+      <label
+        class="json-drop-zone"
+        :class="{ dragging: dragDepth > 0, disabled: busy || !ready }"
+        @dragenter.prevent="dragEnter"
+        @dragover.prevent="dragOver"
+        @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1)"
+        @drop.prevent="dropFiles"
+      >
+        <strong>{{ busy ? 'Import unavailable while processing' : 'Drop JSON files here' }}</strong>
+        <span>or click to select files · UIGF v4.0–v4.2 · up to 50 MiB per file</span>
+        <input
             type="file"
             accept=".json,application/json"
             multiple
             :disabled="busy || !ready"
             @change="importFiles"
-        /></label>
+        />
+      </label>
+      <div class="actions">
         <VPButton
           theme="alt"
           :disabled="!accounts.length || busy || exporting"
-          @click="download(accounts, 'gacha-uigf-v4.2.json')"
+          @click="download(accounts)"
           >{{
             exporting ? "Preparing export…" : "Export all accounts"
           }}</VPButton
@@ -716,12 +747,7 @@ async function loadMetadata() {
           ><VPButton
             theme="alt"
             :disabled="busy || exporting"
-            @click="
-              download(
-                account.accounts,
-                `gacha-${account.game}-${account.uid}.json`,
-              )
-            "
+            @click="download(account.accounts)"
             >Download JSON</VPButton
           >
         </div>
@@ -1115,24 +1141,23 @@ textarea {
 .export-language {
   max-width: 360px;
 }
-.file-button {
-  display: inline-flex;
-  justify-content: center;
-  padding: 0 20px;
-  line-height: 38px;
-  border: 1px solid var(--vp-button-alt-border);
-  border-radius: 20px;
-  background: var(--vp-button-alt-bg);
-  color: var(--vp-button-alt-text);
-  font-size: 14px;
-  font-weight: 600;
+.json-drop-zone {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 16px;
+  margin-bottom: 16px;
+  border: 2px dashed var(--vp-c-divider);
+  border-radius: 12px;
+  text-align: center;
+  background: var(--vp-c-bg-soft);
   cursor: pointer;
 }
-.file-button:hover {
-  color: var(--vp-button-alt-hover-text);
-  background: var(--vp-button-alt-hover-bg);
-  border-color: var(--vp-button-alt-hover-border);
+.json-drop-zone span { font-size: 13px; }
+.json-drop-zone:hover, .json-drop-zone.dragging {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
 }
+.json-drop-zone.disabled { opacity: 0.5; cursor: not-allowed; }
 :deep(.vp-button:disabled) {
   opacity: 0.5;
   cursor: not-allowed;
@@ -1142,22 +1167,20 @@ textarea {
   margin-left: 0;
 }
 :is(button, input, select, textarea, summary):focus-visible,
-.file-button:focus-within {
+.json-drop-zone:focus-within {
   outline: 2px solid var(--vp-c-brand-1);
   outline-offset: 3px;
 }
-.file-button {
+.json-drop-zone {
   position: relative;
   overflow: hidden;
 }
-.file-button input {
+.json-drop-zone input {
   position: absolute;
   inset: 0;
   opacity: 0;
-  cursor: pointer;
-}
-.file-button:has(input:disabled) {
-  opacity: 0.5;
+  height: 100%;
+  cursor: inherit;
 }
 .check {
   display: flex;

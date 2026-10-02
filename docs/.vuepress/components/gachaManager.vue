@@ -680,20 +680,6 @@ async function loadMetadata() {
           language.
         </p>
       </div>
-      <label v-if="displayAccounts.length" class="export-account"
-        >Account to export<select
-          v-model="selectedKey"
-          :disabled="busy || exporting"
-        >
-          <option
-            v-for="account in displayAccounts"
-            :key="account.key"
-            :value="account.key"
-          >
-            {{ games[account.game] }} · {{ account.uid }}
-          </option>
-        </select></label
-      >
       <div class="actions">
         <label class="file-button"
           >Import JSON<input
@@ -710,18 +696,6 @@ async function loadMetadata() {
           >{{
             exporting ? "Preparing export…" : "Export all accounts"
           }}</VPButton
-        >
-        <VPButton
-          theme="alt"
-          :disabled="!selected || busy || exporting"
-          @click="
-            selected &&
-            download(
-              selected.accounts,
-              `gacha-${selected.game}-${selected.uid}.json`,
-            )
-          "
-          >Export selected account</VPButton
         >
       </div>
       <details v-if="accounts.length">
@@ -1122,10 +1096,6 @@ textarea {
 }
 .export-language {
   max-width: 360px;
-}
-.export-account {
-  max-width: 360px;
-  margin-bottom: 16px;
 }
 .file-button {
   display: inline-flex;

@@ -41,7 +41,7 @@ function helperRequest(action: "probe" | "fetch", signal: AbortSignal, url?: str
 export async function detectGachaHelper(signal: AbortSignal): Promise<boolean> {
   try {
     const result = await helperRequest("probe", signal);
-    return !!result && typeof result === "object" && "version" in result && result.version === "1.0.0";
+    return !!result && typeof result === "object" && "version" in result && typeof result.version === "string" && /^1\.\d+\.\d+$/.test(result.version);
   } catch { return false; }
 }
 

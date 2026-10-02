@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         Gacha Manager by Lucas
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
 // @author       Lucas
 // @license      GPL-3.0-only
-// @match        https://blog.lucas04.top/tool/gacha-manager/
-// @match        http://localhost:*/tool/gacha-manager/
-// @match        http://127.0.0.1:*/tool/gacha-manager/
-// @match        http://192.168.31.11:*/tool/gacha-manager/
+// @match        https://blog.lucas04.top/*
+// @match        http://localhost:*/*
+// @match        http://127.0.0.1:*/*
+// @match        http://192.168.31.11:*/*
 // @grant        GM_xmlhttpRequest
 // @connect      public-operation-hk4e.mihoyo.com
 // @connect      public-operation-hk4e-sg.hoyoverse.com
@@ -40,10 +40,10 @@
     window.postMessage({ type: RESPONSE, protocol: 1, id, ...(error ? { error } : { result }) }, window.location.origin);
   };
   window.addEventListener("message", (event) => {
-    if (event.source !== window || event.origin !== window.location.origin || window.location.pathname !== "/tool/gacha-manager/") return;
+    if (event.source !== window || event.origin !== window.location.origin || !/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     const message = event.data;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { reply(message.id, { version: "1.0.1" }); return; }
+    if (message.action === "probe") { reply(message.id, { version: "1.1.1" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;

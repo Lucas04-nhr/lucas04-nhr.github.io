@@ -19,6 +19,7 @@ import {
   applyAndPersistDebugAllowedPreference,
   parseDebugAllowedPreference,
 } from "./debugPreference";
+import { applyGachaFetchPreference } from "./gachaFetchPreference";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -41,6 +42,11 @@ const unhandledResult: UrlQueryHandlerResult = {
 
 // Register all query handlers here (existing and future).
 export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
+  gachaFetchAllowed(value, { url }) {
+    const preference = parseBooleanPreference(value);
+    applyGachaFetchPreference(preference === true, url);
+    return { handled: preference !== null, removeParam: false };
+  },
   locale(value) {
     const action = parseLocaleQueryAction(value);
     if (!action) return unhandledResult;

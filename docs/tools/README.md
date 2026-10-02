@@ -48,25 +48,36 @@ The following tools are not only hosted on this site. Some external tools behind
 :::
 
 <LinkCard
+  title="Gacha Manager"
+  icon="mdi:cards-outline"
+  href="/tool/gacha-manager/">
+Import and export UIGF JSON, merge archives, and view account and pool statistics.
+</LinkCard>
+
+<LinkCard
   title="Connection Info"
   icon="mdi:connection"
   href="/tools/connection-info/">
+Display information about the current network connection.
 </LinkCard>
 
 <LinkCard
   title="Region Detection"
   icon="mdi:map-marker-question-outline"
   href="/tools/region-detect/">
+Detect the region of the current network connection.
 </LinkCard>
 
 <LinkCard
   title="VERT Image Converter"
   icon="mdi:image-edit-outline"
   href="https://vert.lucas04.top/">
+Convert images to different formats.
 </LinkCard>
 
 <LinkCard
   title="Bento PDF Toolbox"
   icon="streamline-plump:convert-pdf-1"
   href="https://pdf.lucas04.top/">
+Convert PDF files to different formats.
 </LinkCard>

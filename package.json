@@ -31,7 +31,7 @@
     "@embedpdf/vue-pdf-viewer": "^2.15.1",
     "@mathjax/src": "^4.1.3",
     "@simonwep/pickr": "^1.10.2",
-    "@vuepress/shiki-twoslash": "2.0.0-rc.134",
+    "@vuepress/shiki-twoslash": "2.0.0-rc.135",
     "artplayer": "^5.4.0",
     "chart.js": "^4.5.1",
     "dashjs": "^5.2.1",

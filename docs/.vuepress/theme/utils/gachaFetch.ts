@@ -175,12 +175,11 @@ export async function fetchMetadata(game: Game, ids: string[], signal: AbortSign
   return result;
 }
 
-export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage | "original", signal: AbortSignal): Promise<GachaAccount[]> {
+export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal): Promise<GachaAccount[]> {
   const byGame: Partial<Record<Game, Metadata>> = {};
-  const needsTranslation = (account: GachaAccount) => language !== "original" || (account.game === "hk4e_ugc" && account.lang !== "zh-cn");
-  for (const game of [...new Set(accounts.filter(needsTranslation).map(account => account.game))]) {
-    const lang = effectiveExportLanguage(game, language === "original" ? "zh-cn" : language);
-    byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game && needsTranslation(account)).flatMap(account => account.list.map(row => row.item_id)), signal, lang);
+  for (const game of [...new Set(accounts.map(account => account.game))]) {
+    const lang = effectiveExportLanguage(game, language);
+    byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game).flatMap(account => account.list.map(row => row.item_id)), signal, lang);
   }
-  return accounts.map(account => needsTranslation(account) ? localizeAccount(account, effectiveExportLanguage(account.game, language === "original" ? "zh-cn" : language), byGame[account.game]!) : account);
+  return accounts.map(account => localizeAccount(account, effectiveExportLanguage(account.game, language), byGame[account.game]!));
 }

@@ -4,6 +4,7 @@ import CardGrid from "vuepress-theme-plume/components/global/VPCardGrid.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import {
+  compactAccounts,
   exportLanguages,
   exportUigf,
   games,
@@ -53,10 +54,11 @@ const status = ref("");
 const error = ref("");
 const storageError = ref("");
 const metadataStatus = ref("");
-const exportLanguage = ref<ExportLanguage | "original">("original");
+const exportLanguage = ref<ExportLanguage>("en-us");
 const exporting = ref(false);
 let exportRequest: AbortController | undefined;
-const displayLanguage = ref<ExportLanguage | "original">("original");
+const displayLanguage = ref<ExportLanguage>("en-us");
+const overviewLanguage = ref<ExportLanguage>("en-us");
 const metadata = ref<
   Partial<Record<ExportLanguage, Partial<Record<Game, Metadata>>>>
 >({});
@@ -86,30 +88,21 @@ const allRows = computed(
 function rowGame(row: GachaRecord): Game {
   return row.__game as Game;
 }
-function rowMetadata(row: GachaRecord): Metadata {
+function rowMetadata(row: GachaRecord, language = displayLanguage.value): Metadata {
   return (
-    metadata.value[effectiveDisplayLanguage(rowGame(row))]?.[rowGame(row)] ?? {}
+    metadata.value[effectiveDisplayLanguage(rowGame(row), language)]?.[rowGame(row)] ?? {}
   );
 }
-function itemMetadata(row: GachaRecord) {
-  return rowMetadata(row)[row.item_id];
+function itemMetadata(row: GachaRecord, language = displayLanguage.value) {
+  return rowMetadata(row, language)[row.item_id];
 }
-function effectiveDisplayLanguage(game: Game): ExportLanguage {
+function effectiveDisplayLanguage(game: Game, language = displayLanguage.value): ExportLanguage {
   return game === "hk4e_ugc"
     ? "zh-cn"
-    : displayLanguage.value === "original"
-      ? "en-us"
-      : displayLanguage.value;
+    : language;
 }
-function itemName(row: GachaRecord) {
-  return (
-    (displayLanguage.value === "original"
-      ? undefined
-      : itemMetadata(row)?.name) ??
-    row.name ??
-    row.item_name ??
-    row.item_id
-  );
+function itemName(row: GachaRecord, language = displayLanguage.value) {
+  return itemMetadata(row, language)?.name ?? row.item_id;
 }
 function rowRank(row: GachaRecord) {
   return recordRank(row, rowGame(row), rowMetadata(row));
@@ -194,6 +187,9 @@ watch(displayLanguage, () => {
   page.value = 1;
   void loadMetadata();
 });
+watch(overviewLanguage, () => {
+  void loadMetadata();
+});
 watch(selectedKey, () => {
   void loadMetadata();
 });
@@ -215,7 +211,7 @@ function save() {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
-        archive: exportUigf(accounts.value),
+        archive: exportUigf(compactAccounts(accounts.value)),
         servers: serverByAccount.value,
       }),
     );
@@ -227,7 +223,7 @@ function save() {
 }
 function merge(incoming: GachaAccount[]) {
   const result = mergeAccounts(accounts.value, incoming);
-  accounts.value = result.accounts;
+  accounts.value = compactAccounts(result.accounts);
   if (!selectedKey.value && incoming.length)
     selectedKey.value = groupAccountKey(incoming[0]);
   save();
@@ -246,7 +242,7 @@ onMounted(() => {
         }
       }
       if (Object.keys(games).some((key) => archive[key]?.length))
-        accounts.value = parseUigf(archive);
+        accounts.value = compactAccounts(parseUigf(archive));
       selectedKey.value = accounts.value[0]
         ? groupAccountKey(accounts.value[0])
         : "";
@@ -256,6 +252,7 @@ onMounted(() => {
       "Could not read the local archive. It has not been overwritten. Check browser storage or import a backup.";
   }
   ready.value = true;
+  if (accounts.value.length) save();
   const url = new URL(window.location.href);
   const wasEnabled = gachaFetchAllowed.value;
   const preference = url.searchParams
@@ -370,7 +367,7 @@ async function download(selectedAccounts: GachaAccount[], filename: string) {
   exportRequest = controller;
   try {
     const lang = exportLanguage.value;
-    status.value = `Preparing ${lang === "original" ? "original-language" : exportLanguages[lang]} export…`;
+    status.value = `Preparing ${exportLanguages[lang]} export…`;
     const outputAccounts = await prepareExportAccounts(
       selectedAccounts,
       lang,
@@ -416,39 +413,43 @@ async function loadMetadata() {
   metadataStatus.value = "Loading item metadata…";
   const account = selected.value;
   const controller = new AbortController();
-  const language = displayLanguage.value;
   metadataRequest = controller;
   try {
     let loaded = 0,
       missing = 0;
     for (const entry of account.accounts) {
-      const lang = effectiveDisplayLanguage(entry.game);
-      const data = await fetchMetadata(
-        entry.game,
-        entry.list.map((row) => row.item_id),
-        controller.signal,
-        lang,
-      );
-      controller.signal.throwIfAborted();
-      metadata.value = {
-        ...metadata.value,
-        [lang]: {
-          ...metadata.value[lang],
-          [entry.game]: { ...metadata.value[lang]?.[entry.game], ...data },
-        },
-      };
-      loaded += Object.keys(data).length;
-      missing += new Set(
-        entry.list
-          .filter((row) => !data[row.item_id])
-          .map((row) => row.item_id),
-      ).size;
+      const languages = new Set([
+        effectiveDisplayLanguage(entry.game, overviewLanguage.value),
+        effectiveDisplayLanguage(entry.game, displayLanguage.value),
+      ]);
+      for (const lang of languages) {
+        const data = await fetchMetadata(
+          entry.game,
+          entry.list.map((row) => row.item_id),
+          controller.signal,
+          lang,
+        );
+        controller.signal.throwIfAborted();
+        metadata.value = {
+          ...metadata.value,
+          [lang]: {
+            ...metadata.value[lang],
+            [entry.game]: { ...metadata.value[lang]?.[entry.game], ...data },
+          },
+        };
+        loaded += Object.keys(data).length;
+        missing += new Set(
+          entry.list
+            .filter((row) => !data[row.item_id])
+            .map((row) => row.item_id),
+        ).size;
+      }
     }
-    metadataStatus.value = `Loaded ${loaded} items (${language === "original" ? "original names retained" : exportLanguages[language]}; Miliastra uses Simplified Chinese)${missing ? `; ${missing} items are missing requested-language metadata and keep their original display` : ""}.`;
+    metadataStatus.value = `Loaded ${loaded} items (selected display languages; Miliastra uses Simplified Chinese)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
   } catch {
     if (!controller.signal.aborted)
       metadataStatus.value =
-        "Metadata lookup failed. Original names and ranks remain available. Try again later.";
+        "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
   } finally {
     if (metadataRequest === controller) {
       metadataBusy.value = false;
@@ -657,7 +658,6 @@ async function loadMetadata() {
       </p>
       <label class="export-language"
         >Export language<select v-model="exportLanguage" :disabled="exporting">
-          <option value="original">Original record language</option>
           <option
             v-for="(name, code) in exportLanguages"
             :key="code"
@@ -669,8 +669,8 @@ async function loadMetadata() {
       >
       <p class="muted">
         Choose one of the four backend languages to look up localized item names
-        for export. Original-language export preserves the names of ordinary
-        game records.
+        for export. Local storage keeps IDs and record details without names or
+        source-language information.
       </p>
       <div class="hint-container note">
         <p class="hint-container-title">Note</p>
@@ -747,7 +747,7 @@ async function loadMetadata() {
     </section>
     <template v-if="selected">
       <section class="gacha-panel">
-        <div class="controls">
+        <div class="controls account-controls">
           <label
             >Account<select v-model="selectedKey">
               <option
@@ -760,8 +760,7 @@ async function loadMetadata() {
             </select></label
           >
           <label
-            >Display language<select v-model="displayLanguage">
-              <option value="original">Original record language</option>
+            >Display language<select v-model="overviewLanguage">
               <option
                 v-for="(name, code) in exportLanguages"
                 :key="code"
@@ -935,7 +934,7 @@ async function loadMetadata() {
           class="gold-entry"
         >
           <div>
-            <strong class="gold">{{ itemName(entry.record) }}</strong
+            <strong class="gold">{{ itemName(entry.record, overviewLanguage) }}</strong
             ><small>{{ serverName() }} · {{ entry.record.time }}</small>
           </div>
           <span>{{
@@ -948,7 +947,7 @@ async function loadMetadata() {
 
       <section class="gacha-panel">
         <h3>Record history</h3>
-        <div class="controls">
+        <div class="controls record-controls">
           <label
             >Search items<input
               v-model="search"
@@ -962,7 +961,19 @@ async function loadMetadata() {
               <option value="3">3-star / B-rank</option>
               <option value="null">Unknown</option>
             </select></label
-          ><label
+          >
+          <label
+            >Display language<select v-model="displayLanguage">
+              <option
+                v-for="(name, code) in exportLanguages"
+                :key="code"
+                :value="code"
+              >
+                {{ name }}
+              </option>
+            </select></label
+          >
+          <label
             >Records per page<select v-model.number="pageSize">
               <option v-for="size in [5, 10, 20, 50, 100]" :key="size" :value="size">
                 {{ size }}
@@ -1053,7 +1064,7 @@ async function loadMetadata() {
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -1263,6 +1274,9 @@ td {
   .controls,
   .account-controls {
     grid-template-columns: 1fr;
+  }
+  .record-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .metrics {
     grid-template-columns: repeat(2, 1fr);

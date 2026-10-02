@@ -110,7 +110,7 @@ export function validateRecord(value: unknown, game: Game): GachaRecord {
     if (row[field] !== undefined && typeof row[field] !== "string") throw new Error(`${field} must be a string.`);
   }
   if (game === "hk4e_ugc") {
-    for (const field of ["schedule_id", "item_type", "item_name", "rank_type", "op_gacha_type"]) {
+    for (const field of ["schedule_id", "rank_type", "op_gacha_type"]) {
       if (typeof row[field] !== "string") throw new Error(`Miliastra record is missing ${field}.`);
     }
     if (!/^\d+$/.test(row.schedule_id as string) || !/^\d+$/.test(row.rank_type as string) || !poolNames[game][row.op_gacha_type as string]) throw new Error("Invalid Miliastra pool, rank or schedule ID.");
@@ -145,6 +145,15 @@ export function parseUigf(value: unknown): GachaAccount[] {
   }
   if (!accounts.length) throw new Error("No supported game accounts found in this file.");
   return mergeAccounts([], accounts).accounts;
+}
+
+// Store language-independent record data; names and item types come from metadata.
+export function compactAccounts(accounts: GachaAccount[]): GachaAccount[] {
+  const fields = ["id", "item_id", "time", "gacha_type", "uigf_gacha_type", "gacha_id", "count", "rank_type", "schedule_id", "op_gacha_type"];
+  return accounts.map(({ game, uid, timezone, list }) => ({
+    game, uid, timezone,
+    list: list.map(row => Object.fromEntries(fields.filter(field => row[field] !== undefined).map(field => [field, row[field]])) as GachaRecord),
+  }));
 }
 
 export const accountKey = (account: GachaAccount) => `${account.game}:${account.uid}`;
@@ -200,7 +209,7 @@ export function localizeAccount(account: GachaAccount, lang: ExportLanguage, met
   lang = effectiveExportLanguage(account.game, lang);
   return { ...account, lang, list: account.list.map(row => {
     const item = metadata[row.item_id];
-    if (!item?.name) throw new Error(`Missing ${lang} metadata for ${games[account.game]} item ${row.item_id}. Use original-language export or choose another language.`);
+    if (!item?.name) throw new Error(`Missing ${lang} metadata for ${games[account.game]} item ${row.item_id}. Choose another language or retry the metadata lookup.`);
     const copy = { ...row };
     delete copy.name;
     delete copy.item_name;
@@ -209,7 +218,7 @@ export function localizeAccount(account: GachaAccount, lang: ExportLanguage, met
     else copy.name = item.name;
     const type = item.type ? itemTypes[lang][item.type] : undefined;
     if (type) copy.item_type = type;
-    else if (account.game === "hk4e_ugc") throw new Error(`Missing item type for Miliastra item ${row.item_id}. Use original-language export.`);
+    else if (account.game === "hk4e_ugc") throw new Error(`Missing item type for Miliastra item ${row.item_id}. Retry the metadata lookup.`);
     if (!copy.rank_type && item.rank !== null) copy.rank_type = String(account.game === "nap" ? item.rank - 1 : item.rank);
     return validateRecord(copy, account.game);
   }) };

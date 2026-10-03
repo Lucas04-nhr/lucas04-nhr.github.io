@@ -49,7 +49,6 @@ export function inferredServer(account: GachaAccount): string {
 }
 export const exportLanguages = { "en-us": "English", "zh-cn": "Simplified Chinese", "zh-tw": "Traditional Chinese", "ja-jp": "Japanese" } as const;
 export type ExportLanguage = keyof typeof exportLanguages;
-export const effectiveExportLanguage = (game: Game, language: ExportLanguage) => game === "hk4e_ugc" ? "zh-cn" : language;
 export const poolNames: Record<Game, Record<string, string>> = {
   hk4e: { "100": "Beginners' Wish", "200": "Standard Wish", "301": "Character Event Wish", "302": "Weapon Event Wish", "400": "Character Event Wish 2", "500": "Chronicled Wish" },
   hkrpg: { "1": "Stellar Warp", "2": "Departure Warp", "11": "Character Event Warp", "12": "Light Cone Event Warp", "21": "Character Collaboration Warp", "22": "Light Cone Collaboration Warp" },
@@ -206,7 +205,6 @@ const itemTypes: Record<ExportLanguage, Record<string, string>> = {
 
 // Work on a copy: export localization must never rewrite the saved archive.
 export function localizeAccount(account: GachaAccount, lang: ExportLanguage, metadata: Metadata): GachaAccount {
-  lang = effectiveExportLanguage(account.game, lang);
   return { ...account, lang, list: account.list.map(row => {
     const item = metadata[row.item_id];
     if (!item?.name) throw new Error(`Missing ${lang} metadata for ${games[account.game]} item ${row.item_id}. Choose another language or retry the metadata lookup.`);
@@ -237,7 +235,7 @@ export function recordRank(row: GachaRecord, game: Game, metadata: Metadata = {}
   }
   return metadata[row.item_id]?.rank ?? null;
 }
-export function statistics(rows: GachaRecord[], game: Game, metadata: Metadata = {}, rankFor: (row: GachaRecord) => number | null = row => recordRank(row, game, metadata)) {
+export function statistics(rows: GachaRecord[], game: Game, metadata: Metadata = {}, rankFor: (row: GachaRecord) => number | null = row => recordRank(row, game, metadata), topRank = 5) {
   const ordered = [...rows].sort((a, b) => compareIds(a.id, b.id));
   let gold = 0, purple = 0, unknown = 0, sinceGold = 0;
   let previousGold = false;
@@ -247,8 +245,8 @@ export function statistics(rows: GachaRecord[], game: Game, metadata: Metadata =
     const rank = rankFor(row);
     sinceGold++;
     if (rank === null) unknown++;
-    if (rank === 4) purple++;
-    if (rank === 5) {
+    if (rank === topRank - 1) purple++;
+    if (rank === topRank) {
       gold++;
       goldHistory.push({ record: row, pulls: sinceGold, partial: !previousGold });
       if (previousGold) intervals.push(sinceGold);

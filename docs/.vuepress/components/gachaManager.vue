@@ -93,16 +93,11 @@ function rowGame(row: GachaRecord): Game {
 }
 function rowMetadata(row: GachaRecord, language = displayLanguage.value): Metadata {
   return (
-    metadata.value[effectiveDisplayLanguage(rowGame(row), language)]?.[rowGame(row)] ?? {}
+    metadata.value[language]?.[rowGame(row)] ?? {}
   );
 }
 function itemMetadata(row: GachaRecord, language = displayLanguage.value) {
   return rowMetadata(row, language)[row.item_id];
-}
-function effectiveDisplayLanguage(game: Game, language = displayLanguage.value): ExportLanguage {
-  return game === "hk4e_ugc"
-    ? "zh-cn"
-    : language;
 }
 function itemName(row: GachaRecord, language = displayLanguage.value) {
   return itemMetadata(row, language)?.name ?? row.item_id;
@@ -142,8 +137,25 @@ const rows = computed(() =>
       displayPoolKey(row) === selectedPool.value,
   ),
 );
-const calculateStats = (list: GachaRecord[]) =>
-  statistics(list, selected.value?.game ?? game.value, {}, rowRank);
+function poolTopRank(key: string) {
+  return key === "hk4e_ugc:1000" ? 4 : 5;
+}
+const topRank = computed(() => poolTopRank(selectedPool.value));
+const rarityOptions = computed(() =>
+  selectedPool.value === "hk4e_ugc:1000" ? [4, 3, 2] :
+    rows.value.some((row) => rowGame(row) === "hk4e_ugc") ? [5, 4, 3, 2] : [5, 4, 3],
+);
+function rarityLabel(rank: number) {
+  return selected.value?.game === "nap"
+    ? `${rank}-star / ${rank === 5 ? "S" : rank === 4 ? "A" : "B"}-rank`
+    : `${rank}-star`;
+}
+watch(rarityOptions, (options) => {
+  if (rankFilter.value !== "all" && rankFilter.value !== "null" &&
+      !options.includes(Number(rankFilter.value))) rankFilter.value = "all";
+});
+const calculateStats = (list: GachaRecord[], rank = topRank.value) =>
+  statistics(list, selected.value?.game ?? game.value, {}, rowRank, rank);
 const stats = computed(() => calculateStats(rows.value));
 const goldPageCount = computed(() =>
   Math.max(1, Math.ceil(stats.value.goldHistory.length / goldPageSize.value)),
@@ -166,6 +178,7 @@ const poolStats = computed(() =>
     name: displayPoolName(key),
     ...calculateStats(
       allRows.value.filter((row) => displayPoolKey(row) === key),
+      poolTopRank(key),
     ),
   })),
 );
@@ -454,8 +467,8 @@ async function loadMetadata() {
       missing = 0;
     for (const entry of account.accounts) {
       const languages = new Set([
-        effectiveDisplayLanguage(entry.game, overviewLanguage),
-        effectiveDisplayLanguage(entry.game, displayLanguage.value),
+        overviewLanguage,
+        displayLanguage.value,
       ]);
       for (const lang of languages) {
         const data = await fetchMetadata(
@@ -480,7 +493,7 @@ async function loadMetadata() {
         ).size;
       }
     }
-    metadataStatus.value = `Loaded ${loaded} items (selected display languages; Miliastra uses Simplified Chinese)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
+    metadataStatus.value = `Loaded ${loaded} items (selected display languages)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
   } catch {
     if (!controller.signal.aborted)
       metadataStatus.value =
@@ -739,15 +752,6 @@ async function loadMetadata() {
         for export. Local storage keeps IDs and record details without names or
         source-language information.
       </p>
-      <div class="hint-container note">
-        <p class="hint-container-title">Note</p>
-        <p>
-          Due to upstream repository limitations, Miliastra Wonderland records
-          are always exported in Simplified Chinese, regardless of the import or
-          export language selected. Other records use your chosen export
-          language.
-        </p>
-      </div>
       <div class="actions">
         <VPButton
           theme="alt"
@@ -859,17 +863,17 @@ async function loadMetadata() {
             ><strong>{{ stats.total.toLocaleString() }}</strong>
           </div>
           <div class="gold">
-            <span>5-star / S-rank</span><strong>{{ stats.gold }}</strong>
+            <span>{{ rarityLabel(topRank) }}</span><strong>{{ stats.gold }}</strong>
           </div>
           <div class="gold">
             <span>5-star rate</span
             ><strong>{{ stats.goldRate.toFixed(2) }}<small>%</small></strong>
           </div>
           <div>
-            <span>4-star / A-rank</span><strong>{{ stats.purple }}</strong>
+            <span>{{ rarityLabel(topRank - 1) }}</span><strong>{{ stats.purple }}</strong>
           </div>
           <div>
-            <span>Average 5-star interval</span
+            <span>Average {{ topRank }}-star interval</span
             ><strong
               >{{
                 selectedPool === "all" ||
@@ -881,7 +885,7 @@ async function loadMetadata() {
             >
           </div>
           <div>
-            <span>Pulls since last 5-star</span
+            <span>Pulls since last {{ topRank }}-star</span
             ><strong
               >{{
                 selectedPool === "all" || stats.unknown
@@ -892,21 +896,21 @@ async function loadMetadata() {
           </div>
         </div>
         <p class="muted">
-          Rate = known five-star (S-rank in ZZZ) records / all records. Each
+          Rate = known {{ topRank }}-star (S-rank in ZZZ) records / all records. Each
           record counts as one pull; item count is not the number of pulls.
           These statistics describe saved history, not official probabilities.
         </p>
         <p v-if="stats.unknown" class="hint-container note">
-          {{ stats.unknown }} records have unknown rarity. The five-star rate is
+          {{ stats.unknown }} records have unknown rarity. The {{ topRank }}-star rate is
           a lower bound. Load metadata to fill missing ranks; intervals and pity
           counts are hidden until then.
         </p>
         <p class="muted">
-          Average intervals use only complete spans between known five-star
+          Average intervals use only complete spans between known {{ topRank }}-star
           pulls; history before the first may be missing. Pools are calculated
           separately, except Genshin character pools 301 / 400, which share a
           group. Miliastra is grouped by op_gacha_type without assuming shared
-          pity.
+          pity. Standard Evocation uses 4-star records; other pools use 5-star records.
         </p>
         <div class="table-scroll">
           <table>
@@ -914,8 +918,8 @@ async function loadMetadata() {
               <tr>
                 <th>Pool</th>
                 <th>Pulls</th>
-                <th>5-star</th>
-                <th>5-star rate</th>
+                <th>Top rarity</th>
+                <th>Top rarity rate</th>
                 <th>Avg. interval</th>
                 <th>Pity / recorded</th>
               </tr>
@@ -928,7 +932,7 @@ async function loadMetadata() {
                   </button>
                 </td>
                 <td>{{ pool.total }}</td>
-                <td class="gold">{{ pool.gold }}</td>
+                <td class="gold">{{ pool.gold }} ({{ poolTopRank(pool.key) }}-star)</td>
                 <td>
                   {{ pool.unknown ? "≥ " : "" }}{{ pool.goldRate.toFixed(2) }}%
                 </td>
@@ -956,10 +960,9 @@ async function loadMetadata() {
         v-if="selectedPool !== 'all' && stats.goldHistory.length"
         class="gacha-panel"
       >
-        <h3>5-star history</h3>
+        <h3>{{ topRank }}-star history</h3>
         <p class="muted">
-          Names are shown in English; Miliastra metadata is available only in
-          Simplified Chinese. The first interval is a lower bound if earlier
+          Names are shown in English. The first interval is a lower bound if earlier
           history is missing. Intervals are hidden when any records have unknown
           rarity.
         </p>
@@ -991,7 +994,7 @@ async function loadMetadata() {
           <span class="pagination-info">
             {{ goldPage }} / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
           </span>
-          <nav class="pagination-links" aria-label="5-star history pagination">
+          <nav class="pagination-links" :aria-label="`${topRank}-star history pagination`">
             <button
               type="button"
               class="text-button"
@@ -1020,9 +1023,9 @@ async function loadMetadata() {
           ><label
             >Rarity<select v-model="rankFilter">
               <option value="all">All</option>
-              <option value="5">5-star / S-rank</option>
-              <option value="4">4-star / A-rank</option>
-              <option value="3">3-star / B-rank</option>
+              <option v-for="rank in rarityOptions" :key="rank" :value="String(rank)">
+                {{ rarityLabel(rank) }}
+              </option>
               <option value="null">Unknown</option>
             </select></label
           >

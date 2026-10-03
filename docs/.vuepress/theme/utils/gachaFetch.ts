@@ -176,12 +176,21 @@ export async function fetchMetadata(game: Game, ids: string[], signal: AbortSign
   return result;
 }
 
-export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal, includeItemNames = true): Promise<GachaAccount[]> {
+export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal, includeItemNames = true): Promise<{ accounts: GachaAccount[]; missingNames: GachaAccount[] }> {
   signal.throwIfAborted();
-  if (!includeItemNames) return compactAccounts(accounts);
+  if (!includeItemNames) return { accounts: compactAccounts(accounts), missingNames: [] };
   const byGame: Partial<Record<Game, Metadata>> = {};
   for (const game of [...new Set(accounts.map(account => account.game))]) {
     byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game).flatMap(account => account.list.map(row => row.item_id)), signal, language);
   }
-  return accounts.map(account => localizeAccount(account, language, byGame[account.game]!));
+  const missingNames: GachaAccount[] = [];
+  const output = accounts.map(account => {
+    const metadata = byGame[account.game]!;
+    if (account.list.some(row => !metadata[row.item_id]?.name?.trim())) {
+      missingNames.push(account);
+      return compactAccounts([account])[0];
+    }
+    return localizeAccount(account, language, metadata);
+  });
+  return { accounts: output, missingNames };
 }

@@ -129,11 +129,24 @@ const importStatus = ref("");
 const importError = ref("");
 const exportStatus = ref("");
 const exportError = ref("");
+const exportWarning = ref("");
 const includeItemNames = ref(true);
 const exportAccountKeys = ref<string[]>([]);
 const exportSelectedAccounts = computed(() =>
   accounts.value.filter(account => exportAccountKeys.value.includes(accountKey(account))),
 );
+const exportAccountOrder: Game[] = ["hk4e", "hk4e_ugc", "hkrpg", "nap"];
+const exportAccounts = computed(() => [...accounts.value].sort((a, b) =>
+  exportAccountOrder.indexOf(a.game) - exportAccountOrder.indexOf(b.game),
+));
+const exportAllAccounts = computed(() =>
+  !exportSelectedAccounts.value.length || exportSelectedAccounts.value.length === accounts.value.length,
+);
+const exportTargets = computed(() => exportAllAccounts.value ? accounts.value : exportSelectedAccounts.value);
+const exportButtonLabel = computed(() => {
+  if (exportAllAccounts.value) return accounts.value.length === 1 ? "Export account" : "Export all accounts";
+  return exportSelectedAccounts.value.length === 1 ? "Export selected account" : "Export selected accounts";
+});
 watch(() => accounts.value.map(accountKey), keys => {
   exportAccountKeys.value = exportAccountKeys.value.filter(key => keys.includes(key));
 });
@@ -514,24 +527,32 @@ async function retrieve() {
   }
 }
 
-const exportFilePrefixes: Record<Game, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ", hk4e_ugc: "Miliastra" };
+const exportFilePrefixes: Record<Game, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ", hk4e_ugc: "GIMW" };
+const exportFilename = computed(() => {
+  if (exportTargets.value.length === 1) {
+    const account = exportTargets.value[0];
+    return `${exportFilePrefixes[account.game]}_${account.uid}.json`;
+  }
+  return exportAllAccounts.value ? "UIGFv4_GachaManager.json" : "UIGFv4_GachaManager_selected.json";
+});
 
 async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_GachaManager.json") {
   if (exporting.value) return;
   exportError.value = "";
+  exportWarning.value = "";
   exporting.value = true;
   const controller = new AbortController();
   exportRequest = controller;
   try {
     const lang = exportLanguage.value;
     exportStatus.value = includeItemNames.value ? `Preparing ${exportLanguages[lang]} export…` : "Preparing export without item names…";
-    const [outputAccounts, appVersion] = await Promise.all([
+    const [prepared, appVersion] = await Promise.all([
       prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value),
       fetchGachaVersion(controller.signal),
     ]);
     controller.signal.throwIfAborted();
     const blob = new Blob(
-      [JSON.stringify(exportUigf(outputAccounts, appVersion), null, 2)],
+      [JSON.stringify(exportUigf(prepared.accounts, appVersion), null, 2)],
       { type: "application/json;charset=utf-8" },
     );
     const url = URL.createObjectURL(blob);
@@ -541,6 +562,10 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     exportStatus.value = "Export ready. Your saved records have not been changed.";
+    if (prepared.missingNames.length) {
+      const affected = prepared.missingNames.map(account => `${account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game]} · ${account.uid}`).join("; ");
+      exportWarning.value = `Some ${exportLanguages[lang]} item names are missing for: ${affected}. All records in each affected game account were exported without name / item_name fields. Other accounts retain localized names.`;
+    }
   } catch (err) {
     exportStatus.value = "";
     exportError.value = err instanceof Error ? `${err.message}${includeItemNames.value ? " To export without localized names, turn off Include item names and retry." : ""}` : "Export failed.";
@@ -904,11 +929,11 @@ async function loadMetadata() {
       <div v-if="accounts.length">
         <h4>Download per account</h4>
         <p class="muted">
-          Select one or more accounts to export together, or download each separately.
+          Select one or more accounts, then use the export button below.
           Genshin wishes and Miliastra records are listed separately.
         </p>
         <div
-          v-for="account in accounts"
+          v-for="account in exportAccounts"
           :key="accountKey(account)"
           class="account-download"
         >
@@ -919,33 +944,22 @@ async function loadMetadata() {
               :value="accountKey(account)"
               :disabled="busy || exporting"
             />
-            {{ games[account.game] }} · {{ account.uid }} ·
+            {{ account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game] }} · {{ account.uid }} ·
             {{ account.list.length }} pulls
           </label>
-          <VPButton
-            theme="alt"
-            :disabled="busy || exporting"
-            @click="download([account], `${exportFilePrefixes[account.game]}_${account.uid}.json`)"
-            >Download JSON</VPButton
-          >
         </div>
       </div>
-      <div class="actions">
+      <div class="actions export-actions">
         <VPButton
           theme="alt"
           :disabled="!accounts.length || busy || exporting"
-          @click="download(accounts)"
-          >Export all accounts</VPButton
-        >
-        <VPButton
-          theme="alt"
-          :disabled="!exportSelectedAccounts.length || busy || exporting"
-          @click="download(exportSelectedAccounts, 'UIGFv4_GachaManager_selected.json')"
-          >Export selected account</VPButton
+          @click="download(exportTargets, exportFilename)"
+          >{{ exportButtonLabel }}</VPButton
         >
       </div>
-      <p v-if="accounts.length" class="muted">{{ exportSelectedAccounts.length }} accounts selected for export.</p>
+      <p v-if="accounts.length" class="muted">{{ exportSelectedAccounts.length }} {{ exportSelectedAccounts.length === 1 ? 'account' : 'accounts' }} selected. {{ exportAllAccounts ? (accounts.length === 1 ? 'The stored account will be exported.' : 'All stored accounts will be exported.') : 'Only selected accounts will be exported.' }}</p>
       <p v-if="exportStatus" class="hint-container note" role="status" aria-live="polite">{{ exportStatus }}</p>
+      <p v-if="exportWarning" class="hint-container warning" role="status" aria-live="polite">{{ exportWarning }}</p>
       <p v-if="exportError" class="hint-container caution" role="alert">{{ exportError }}</p>
       <p class="muted">
         Records are saved in this browser; personal synchronization is optional. Export backups regularly.
@@ -1339,6 +1353,9 @@ async function loadMetadata() {
 }
 .connection-memory {
   margin-top: 24px;
+}
+.export-actions {
+  margin-top: 16px;
 }
 .remote-service-form .actions {
   margin-top: 16px;

@@ -6,6 +6,7 @@ excerpt: Import, merge and back up gacha archives in your browser. View pull cou
 pageLayout: doc
 aside: false
 readingTime: false
+comments: false
 ---
 
 ::: info Disclaimer

@@ -1,4 +1,4 @@
-import { accountKey, compareIds, localizeAccount, poolKey, poolNames, servers, validateRecord, type ExportLanguage, type GachaAccount, type Game, type ItemMetadata, type Metadata, type SelectableGame, type ServerId } from "./gachaRecords";
+import { compactAccounts, accountKey, compareIds, localizeAccount, poolKey, poolNames, servers, validateRecord, type ExportLanguage, type GachaAccount, type Game, type ItemMetadata, type Metadata, type SelectableGame, type ServerId } from "./gachaRecords";
 import { fetchWithGachaHelper } from "./gachaTransport";
 
 const hosts: Record<Game, [string, string]> = {
@@ -176,7 +176,9 @@ export async function fetchMetadata(game: Game, ids: string[], signal: AbortSign
   return result;
 }
 
-export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal): Promise<GachaAccount[]> {
+export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal, includeItemNames = true): Promise<GachaAccount[]> {
+  signal.throwIfAborted();
+  if (!includeItemNames) return compactAccounts(accounts);
   const byGame: Partial<Record<Game, Metadata>> = {};
   for (const game of [...new Set(accounts.map(account => account.game))]) {
     byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game).flatMap(account => account.list.map(row => row.item_id)), signal, language);

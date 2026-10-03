@@ -4,6 +4,7 @@ import CardGrid from "vuepress-theme-plume/components/global/VPCardGrid.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import {
+  accountKey,
   compactAccounts,
   deviceRecordTime,
   exportLanguages,
@@ -124,6 +125,18 @@ const status = ref("");
 const error = ref("");
 const storageError = ref("");
 const metadataStatus = ref("");
+const importStatus = ref("");
+const importError = ref("");
+const exportStatus = ref("");
+const exportError = ref("");
+const includeItemNames = ref(true);
+const exportAccountKeys = ref<string[]>([]);
+const exportSelectedAccounts = computed(() =>
+  accounts.value.filter(account => exportAccountKeys.value.includes(accountKey(account))),
+);
+watch(() => accounts.value.map(accountKey), keys => {
+  exportAccountKeys.value = exportAccountKeys.value.filter(key => keys.includes(key));
+});
 const exportLanguage = ref<ExportLanguage>("en-us");
 const exporting = ref(false);
 let exportRequest: AbortController | undefined;
@@ -427,8 +440,8 @@ async function dropFiles(event: DragEvent) {
 
 async function importJsonFiles(files: File[]) {
   if (!files.length || busy.value || !ready.value) return;
-  error.value = "";
-  status.value = "Importing JSON files…";
+  importError.value = "";
+  importStatus.value = "Importing JSON files…";
   busy.value = true;
   try {
     // Parse all files first, so one invalid file cannot cause a partial import.
@@ -443,10 +456,10 @@ async function importJsonFiles(files: File[]) {
     }
     if (!ready.value) return;
     const result = merge(incoming);
-    status.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
+    importStatus.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
   } catch (err) {
-    status.value = "";
-    error.value = err instanceof Error ? err.message : "Import failed.";
+    importStatus.value = "";
+    importError.value = err instanceof Error ? err.message : "Import failed.";
   } finally {
     busy.value = false;
   }
@@ -501,19 +514,19 @@ async function retrieve() {
   }
 }
 
-const exportFilePrefixes: Record<SelectableGame, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ" };
+const exportFilePrefixes: Record<Game, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ", hk4e_ugc: "Miliastra" };
 
 async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_GachaManager.json") {
   if (exporting.value) return;
-  error.value = "";
+  exportError.value = "";
   exporting.value = true;
   const controller = new AbortController();
   exportRequest = controller;
   try {
     const lang = exportLanguage.value;
-    status.value = `Preparing ${exportLanguages[lang]} export…`;
+    exportStatus.value = includeItemNames.value ? `Preparing ${exportLanguages[lang]} export…` : "Preparing export without item names…";
     const [outputAccounts, appVersion] = await Promise.all([
-      prepareExportAccounts(selectedAccounts, lang, controller.signal),
+      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value),
       fetchGachaVersion(controller.signal),
     ]);
     controller.signal.throwIfAborted();
@@ -527,10 +540,10 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     anchor.download = filename;
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    status.value = "Export ready. Your saved records have not been changed.";
+    exportStatus.value = "Export ready. Your saved records have not been changed.";
   } catch (err) {
-    status.value = "";
-    error.value = err instanceof Error ? err.message : "Export failed.";
+    exportStatus.value = "";
+    exportError.value = err instanceof Error ? `${err.message}${includeItemNames.value ? " To export without localized names, turn off Include item names and retry." : ""}` : "Export failed.";
   } finally {
     exporting.value = false;
     exportRequest = undefined;
@@ -746,6 +759,15 @@ async function loadMetadata() {
         used only for this fetch, is never saved, and is cleared afterwards.
         Keep URLs containing authkey private.
       </p>
+      <p
+        v-if="status"
+        class="hint-container note"
+        role="status"
+        aria-live="polite"
+      >
+        {{ status }}
+      </p>
+      <p v-if="error" class="hint-container caution" role="alert">{{ error }}</p>
       <details>
         <summary>URLs, servers and browser access</summary>
         <p>
@@ -770,15 +792,6 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Import</h3>
-      <p
-        v-if="status"
-        class="hint-container note"
-        role="status"
-        aria-live="polite"
-      >
-        {{ status }}
-      </p>
-      <p v-if="error" class="hint-container caution" role="alert">{{ error }}</p>
       <p v-if="storageError" class="hint-container caution" role="alert">
         {{ storageError }}
       </p>
@@ -817,6 +830,16 @@ async function loadMetadata() {
             @change="importFiles"
         />
       </label>
+      <p
+        v-if="importStatus"
+        class="hint-container note"
+        role="status"
+        aria-live="polite"
+      >
+        {{ importStatus }}
+      </p>
+      <p v-if="importError" class="hint-container caution" role="alert">{{ importError }}</p>
+
       <p class="muted">
         Upgrade older UIGF / SRGF files with
         <a
@@ -861,7 +884,7 @@ async function loadMetadata() {
       <h3>Export</h3>
       <p class="muted">Exports use UIGF v4.2.</p>
       <label class="export-language"
-        >Export language<select v-model="exportLanguage" :disabled="exporting">
+        >Export language<select v-model="exportLanguage" :disabled="exporting || !includeItemNames">
           <option
             v-for="(name, code) in exportLanguages"
             :key="code"
@@ -871,43 +894,59 @@ async function loadMetadata() {
           </option>
         </select></label
       >
+      <label class="check"><input v-model="includeItemNames" type="checkbox" :disabled="exporting" />Include item names</label>
       <p class="muted">
+        Turn off Include item names to export without name / item_name fields or metadata lookups.
         Choose one of the four backend languages to look up localized item names
         for export. Local storage keeps IDs and record details without names or
         source-language information.
       </p>
+      <div v-if="accounts.length">
+        <h4>Download per account</h4>
+        <p class="muted">
+          Select one or more accounts to export together, or download each separately.
+          Genshin wishes and Miliastra records are listed separately.
+        </p>
+        <div
+          v-for="account in accounts"
+          :key="accountKey(account)"
+          class="account-download"
+        >
+          <label class="check">
+            <input
+              v-model="exportAccountKeys"
+              type="checkbox"
+              :value="accountKey(account)"
+              :disabled="busy || exporting"
+            />
+            {{ games[account.game] }} · {{ account.uid }} ·
+            {{ account.list.length }} pulls
+          </label>
+          <VPButton
+            theme="alt"
+            :disabled="busy || exporting"
+            @click="download([account], `${exportFilePrefixes[account.game]}_${account.uid}.json`)"
+            >Download JSON</VPButton
+          >
+        </div>
+      </div>
       <div class="actions">
         <VPButton
           theme="alt"
           :disabled="!accounts.length || busy || exporting"
           @click="download(accounts)"
-          >{{
-            exporting ? "Preparing export…" : "Export all accounts"
-          }}</VPButton
+          >Export all accounts</VPButton
+        >
+        <VPButton
+          theme="alt"
+          :disabled="!exportSelectedAccounts.length || busy || exporting"
+          @click="download(exportSelectedAccounts, 'UIGFv4_GachaManager_selected.json')"
+          >Export selected account</VPButton
         >
       </div>
-      <details v-if="accounts.length">
-        <summary>Download per account</summary>
-        <p class="muted">
-          Each download contains one UID for one game. Genshin includes wishes
-          and Miliastra records in their respective UIGF fields.
-        </p>
-        <div
-          v-for="account in displayAccounts"
-          :key="account.key"
-          class="account-download"
-        >
-          <span
-            >{{ games[account.game] }} · {{ account.uid }} ·
-            {{ account.total }} pulls</span
-          ><VPButton
-            theme="alt"
-            :disabled="busy || exporting"
-            @click="download(account.accounts, `${exportFilePrefixes[account.game]}_${account.uid}.json`)"
-            >Download JSON</VPButton
-          >
-        </div>
-      </details>
+      <p v-if="accounts.length" class="muted">{{ exportSelectedAccounts.length }} accounts selected for export.</p>
+      <p v-if="exportStatus" class="hint-container note" role="status" aria-live="polite">{{ exportStatus }}</p>
+      <p v-if="exportError" class="hint-container caution" role="alert">{{ exportError }}</p>
       <p class="muted">
         Records are saved in this browser; personal synchronization is optional. Export backups regularly.
       </p>

@@ -39,6 +39,7 @@ import {
 
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
+import { gachaApiError } from "../theme/utils/gachaApiError";
 import { personalApiBase, synchronizePersonal, validateSyncToken } from "../theme/utils/gachaSync";
 
 import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "../theme/utils/gachaConnection";
@@ -81,25 +82,30 @@ const updatingMetadata = ref(false);
 let updateRequest: AbortController | undefined;
 const ownsWorker = ref(false);
 const syncing = ref(false);
+const personalSyncStatus = ref("");
+const personalSyncError = ref("");
+const metadataUpdateStatus = ref("");
+const metadataUpdateError = ref("");
 let syncRequest: AbortController | undefined;
 
 async function syncPersonal() {
   if (busy.value || !ready.value || !ownsWorker.value) return;
   busy.value = true;
-  error.value = "";
+  personalSyncError.value = "";
+  personalSyncStatus.value = "Reading remote accounts…";
   const controller = new AbortController();
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { status.value = message; });
+    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; });
     controller.signal.throwIfAborted();
     accounts.value = synced;
     if (!selectedKey.value && synced.length) selectedKey.value = groupAccountKey(synced[0]);
     save();
-    status.value = "Personal sync complete. Local and remote records merged; deletions are not propagated.";
+    personalSyncStatus.value = "Personal sync complete. Local and remote records merged; deletions are not propagated.";
   } catch (err) {
-    status.value = "";
-    error.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
+    personalSyncStatus.value = "";
+    personalSyncError.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
   } finally {
     busy.value = false;
     syncRequest = undefined;
@@ -109,8 +115,8 @@ async function syncPersonal() {
 
 async function updateRemoteMetadata() {
   if (busy.value || !ready.value) return;
-  error.value = "";
-  status.value = "Updating upstream metadata…";
+  metadataUpdateError.value = "";
+  metadataUpdateStatus.value = "Updating upstream metadata…";
   busy.value = true;
   updatingMetadata.value = true;
   const controller = new AbortController();
@@ -123,14 +129,14 @@ async function updateRemoteMetadata() {
       headers: { Authorization: `Bearer ${updateToken.value}` },
       signal: AbortSignal.any([controller.signal, AbortSignal.timeout(180000)]),
     });
-    if (!response.ok) throw new Error(`Metadata update failed (HTTP ${response.status}). Successful upstream tasks may already be committed.`);
+    if (!response.ok) throw await gachaApiError(response, "Metadata update");
     const result = await response.json();
     controller.signal.throwIfAborted();
     if (!Number.isSafeInteger(result.updated) || result.updated < 0 || !Number.isSafeInteger(result.sources) || result.sources < 0) throw new Error("Invalid metadata update response.");
-    status.value = `Metadata updated: ${result.updated} items from ${result.sources} sources. Public query caches may take five minutes to expire.`;
+    metadataUpdateStatus.value = `Metadata updated: ${result.updated} items from ${result.sources} sources. Public query caches may take five minutes to expire.`;
   } catch (err) {
-    status.value = "";
-    error.value = controller.signal.aborted ? "Request cancelled. The backend update may still finish." : err instanceof TypeError ? "Cannot reach the metadata admin API. Allow this frontend origin, POST and Authorization in backend CORS, and check your network. The backend update may already have started." : err instanceof Error ? err.message : "Metadata update failed.";
+    metadataUpdateStatus.value = "";
+    metadataUpdateError.value = controller.signal.aborted ? "Request cancelled. The backend update may still finish." : err instanceof TypeError ? "Cannot reach the metadata admin API. Allow this frontend origin, POST and Authorization in backend CORS, and check your network. The backend update may already have started." : err instanceof Error ? err.message : "Metadata update failed.";
   } finally {
     updatingMetadata.value = false;
     busy.value = false;
@@ -858,6 +864,8 @@ async function loadMetadata() {
           <VPButton @click="updateRemoteMetadata" text="Update metadata" :disabled="busy || !ready || !personalWorker || !updateToken" />
           <VPButton v-if="updatingMetadata" text="Cancel request" theme="alt" @click="updateRequest?.abort()" />
         </div>
+        <p v-if="metadataUpdateStatus" class="hint-container note" role="status" aria-live="polite">{{ metadataUpdateStatus }}</p>
+        <p v-if="metadataUpdateError" class="hint-container caution" role="alert">{{ metadataUpdateError }}</p>
       </form>
       <h4>Personal remote synchronization</h4>
       <p class="muted">
@@ -875,6 +883,8 @@ async function loadMetadata() {
           <VPButton @click="syncPersonal" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
         </div>
+        <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
+        <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
       </form>
       <div class="connection-memory">
         <p class="muted">Remember the Worker URL and both tokens for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>

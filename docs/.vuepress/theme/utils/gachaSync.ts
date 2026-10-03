@@ -1,8 +1,15 @@
+import { gachaApiError } from "./gachaApiError";
 import { compactAccounts, exportUigf, mergeAccounts, parseUigf, type GachaAccount } from "./gachaRecords";
 
 export function personalApiBase(value: string): string {
   const url = new URL(value);
-  if ((url.protocol !== "https:" && !(url.protocol === "http:" && ["localhost", "127.0.0.1"].includes(url.hostname))) || url.username || url.password || url.search || url.hash || url.pathname !== "/")
+  const octets = url.hostname.split(".").map(Number);
+  const localIpv4 = octets.length === 4 && octets.every(octet => Number.isInteger(octet) && octet >= 0 && octet <= 255)
+    && (octets[0] === 10 || octets[0] === 127
+      || (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31)
+      || (octets[0] === 192 && octets[1] === 168));
+  const localHost = url.hostname === "localhost" || localIpv4;
+  if ((url.protocol !== "https:" && !(url.protocol === "http:" && localHost)) || url.username || url.password || url.search || url.hash || url.pathname !== "/")
     throw new Error("Enter your own Worker HTTPS origin (HTTP is allowed for localhost only).");
   return url.origin;
 }
@@ -22,9 +29,10 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify(body), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
     });
-    if (!response.ok) throw new Error(response.status === 409
-      ? "Remote data changed. Sync stopped; reconcile again before retrying. Earlier batches may already be saved."
-      : `Personal sync failed (HTTP ${response.status}). Check your token, migrations and allowed frontend origin. Earlier batches may already be saved.`);
+    if (!response.ok) {
+      const error = await gachaApiError(response, "Personal sync");
+      throw new Error(`${error.message} Sync stopped; earlier upload batches may already be saved. Retry only after reading and reconciling again.`);
+    }
     const result = await response.json();
     if (!result || !Number.isSafeInteger(result.revision) || result.revision < 0) throw new Error("Invalid sync response.");
     return result;

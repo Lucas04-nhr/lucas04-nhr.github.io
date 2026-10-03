@@ -987,14 +987,25 @@ async function loadMetadata() {
               : `${entry.partial ? "At least " : ""}${entry.pulls} pulls`
           }}</span>
         </div>
-        <div class="actions pagination">
-          <VPButton theme="alt" :disabled="goldPage <= 1" @click="goldPage--"
-            >Previous</VPButton
-          ><span
-            >{{ goldPage }} / {{ goldPageCount }} · {{ stats.goldHistory.length }} records</span
-          ><VPButton theme="alt" :disabled="goldPage >= goldPageCount" @click="goldPage++"
-            >Next</VPButton
-          >
+        <div class="pagination">
+          <span class="pagination-info">
+            {{ goldPage }} / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
+          </span>
+          <nav class="pagination-links" aria-label="5-star history pagination">
+            <button
+              type="button"
+              class="text-button"
+              :disabled="goldPage <= 1"
+              @click="goldPage--"
+            >&lt; Previous</button>
+            <span aria-hidden="true">·</span>
+            <button
+              type="button"
+              class="text-button"
+              :disabled="goldPage >= goldPageCount"
+              @click="goldPage++"
+            >Next &gt;</button>
+          </nav>
         </div>
       </section>
 
@@ -1080,14 +1091,25 @@ async function loadMetadata() {
           Europe, and UTC−5 for America. Imported records keep their archive's
           timezone; UTC+8 alone cannot distinguish China, Asia and TW-HK-MO.
         </p>
-        <div class="actions pagination">
-          <VPButton theme="alt" :disabled="page <= 1" @click="page--"
-            >Previous</VPButton
-          ><span
-            >{{ page }} / {{ pageCount }} · {{ filtered.length }} records</span
-          ><VPButton theme="alt" :disabled="page >= pageCount" @click="page++"
-            >Next</VPButton
-          >
+        <div class="pagination">
+          <span class="pagination-info">
+            {{ page }} / {{ pageCount }} · {{ filtered.length }} records
+          </span>
+          <nav class="pagination-links" aria-label="Record history pagination">
+            <button
+              type="button"
+              class="text-button"
+              :disabled="page <= 1"
+              @click="page--"
+            >&lt; Previous</button>
+            <span aria-hidden="true">·</span>
+            <button
+              type="button"
+              class="text-button"
+              :disabled="page >= pageCount"
+              @click="page++"
+            >Next &gt;</button>
+          </nav>
         </div>
       </section>
     </template>
@@ -1326,11 +1348,34 @@ td {
 .gold-entry > span {
   white-space: nowrap;
 }
-.gacha-manager .actions.pagination {
+.gacha-manager .pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   margin: 0;
   padding-top: 24px;
-  justify-content: center;
   font-size: 13px;
+}
+.pagination-info,
+.pagination-links {
+  white-space: nowrap;
+}
+.pagination-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pagination-links .text-button {
+  font: inherit;
+  cursor: pointer;
+}
+.pagination-links .text-button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+.pagination-links .text-button:disabled {
+  color: var(--vp-c-text-3);
+  cursor: default;
 }
 @media (max-width: 640px) {
   .controls,

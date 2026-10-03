@@ -919,7 +919,7 @@ async function loadMetadata() {
           </option>
         </select></label
       >
-      <label class="check"><input v-model="includeItemNames" type="checkbox" :disabled="exporting" />Include item names</label>
+      <label class="check export-item-names"><input v-model="includeItemNames" type="checkbox" :disabled="exporting" />Include item names</label>
       <p class="muted">
         Turn off Include item names to export without name / item_name fields or metadata lookups.
         Choose one of the four backend languages to look up localized item names
@@ -1354,6 +1354,7 @@ async function loadMetadata() {
 .connection-memory {
   margin-top: 24px;
 }
+.export-item-names,
 .export-actions {
   margin-top: 16px;
 }

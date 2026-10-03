@@ -39,6 +39,74 @@ import {
 
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
+import { personalApiBase, synchronizePersonal, validateSyncToken } from "../theme/utils/gachaSync";
+
+const personalWorker = ref("");
+const personalToken = ref("");
+const updateToken = ref("");
+const updatingMetadata = ref(false);
+let updateRequest: AbortController | undefined;
+const ownsWorker = ref(false);
+const syncing = ref(false);
+let syncRequest: AbortController | undefined;
+
+async function syncPersonal() {
+  if (busy.value || !ready.value || !ownsWorker.value) return;
+  busy.value = true;
+  error.value = "";
+  const controller = new AbortController();
+  syncRequest = controller;
+  syncing.value = true;
+  try {
+    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { status.value = message; });
+    controller.signal.throwIfAborted();
+    accounts.value = synced;
+    if (!selectedKey.value && synced.length) selectedKey.value = groupAccountKey(synced[0]);
+    save();
+    status.value = "Personal sync complete. Local and remote records merged; deletions are not propagated.";
+  } catch (err) {
+    status.value = "";
+    error.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
+  } finally {
+    personalToken.value = "";
+    busy.value = false;
+    syncRequest = undefined;
+    syncing.value = false;
+  }
+}
+
+async function updateRemoteMetadata() {
+  if (busy.value || !ready.value) return;
+  error.value = "";
+  status.value = "Updating upstream metadata…";
+  busy.value = true;
+  updatingMetadata.value = true;
+  const controller = new AbortController();
+  updateRequest = controller;
+  try {
+    const base = personalApiBase(personalWorker.value);
+    validateSyncToken(updateToken.value);
+    const response = await fetch(`${base}/api/v1/admin/sync`, {
+      method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
+      headers: { Authorization: `Bearer ${updateToken.value}` },
+      signal: AbortSignal.any([controller.signal, AbortSignal.timeout(180000)]),
+    });
+    if (!response.ok) throw new Error(`Metadata update failed (HTTP ${response.status}). Successful upstream tasks may already be committed.`);
+    const result = await response.json();
+    controller.signal.throwIfAborted();
+    if (!Number.isSafeInteger(result.updated) || result.updated < 0 || !Number.isSafeInteger(result.sources) || result.sources < 0) throw new Error("Invalid metadata update response.");
+    status.value = `Metadata updated: ${result.updated} items from ${result.sources} sources. Public query caches may take five minutes to expire.`;
+  } catch (err) {
+    status.value = "";
+    error.value = controller.signal.aborted ? "Request cancelled. The backend update may still finish." : err instanceof TypeError ? "Cannot reach the metadata admin API. Allow this frontend origin, POST and Authorization in backend CORS, and check your network. The backend update may already have started." : err instanceof Error ? err.message : "Metadata update failed.";
+  } finally {
+    updateToken.value = "";
+    updatingMetadata.value = false;
+    busy.value = false;
+    updateRequest = undefined;
+  }
+}
+
 const STORAGE_KEY = "lucas-gacha-manager-uigf-v4";
 const accounts = ref<GachaAccount[]>([]);
 const selectedKey = ref("");
@@ -295,6 +363,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   ready.value = false;
   request?.abort();
+  syncRequest?.abort();
+  updateRequest?.abort();
+  updateToken.value = "";
+  personalToken.value = "";
   metadataRequest?.abort();
   exportRequest?.abort();
   helperCheck?.abort();
@@ -442,7 +514,7 @@ async function download(selectedAccounts: GachaAccount[]) {
   }
 }
 function deleteAccount() {
-  if (!selected.value) return;
+  if (busy.value || !selected.value) return;
   delete serverByAccount.value[selectedKey.value];
   accounts.value = accounts.value.filter(
     (account) => groupAccountKey(account) !== selectedKey.value,
@@ -731,6 +803,38 @@ async function loadMetadata() {
           >UIGF Upgrader</a
         >.
       </p>
+      <h4>Remote service</h4>
+      <label>Worker URL<input v-model="personalWorker" type="url" placeholder="https://your-worker.example.com" :disabled="busy" /></label>
+      <h4>Metadata updates</h4>
+      <p class="muted">
+        Update upstream item metadata on your Worker. Backend v1.2.1 supports
+        browser requests from origins in its CORS allowlist.
+        METADATA_UPDATE_TOKEN is used only for this request and cleared afterwards.
+      </p>
+      <form class="remote-service-form" @submit.prevent="updateRemoteMetadata">
+        <label>METADATA_UPDATE_TOKEN<input v-model="updateToken" type="password" autocomplete="off" :disabled="busy" required /></label>
+        <div class="actions">
+          <VPButton @click="updateRemoteMetadata" text="Update metadata" :disabled="busy || !ready || !personalWorker || !updateToken" />
+          <VPButton v-if="updatingMetadata" text="Cancel request" theme="alt" @click="updateRequest?.abort()" />
+        </div>
+      </form>
+      <h4>Personal remote synchronization</h4>
+      <p class="muted">
+        Sync only to your own Worker and D1 database. Its operator and anyone
+        holding the token can read, modify or delete all remote records.
+        Sync merges saved records in both directions; local deletions are not propagated.
+        Each upload batch commits separately. Tokens are kept only for this operation and cleared afterwards.
+      </p>
+      <form class="remote-service-form" @submit.prevent="syncPersonal">
+        <div class="controls">
+          <label>PERSONAL_SYNC_TOKEN<input v-model="personalToken" type="password" autocomplete="off" :disabled="busy" required /></label>
+        </div>
+        <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
+        <div class="actions">
+          <VPButton @click="syncPersonal" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
+          <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
+        </div>
+      </form>
     </section>
 
     <section class="gacha-panel">
@@ -785,7 +889,7 @@ async function loadMetadata() {
         </div>
       </details>
       <p class="muted">
-        Records are stored only in this browser. Export backups regularly.
+        Records are saved in this browser; personal synchronization is optional. Export backups regularly.
       </p>
     </section>
 
@@ -1144,6 +1248,9 @@ async function loadMetadata() {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+}
+.remote-service-form .actions {
+  margin-top: 16px;
 }
 .summary-line {
   font-size: 13px;

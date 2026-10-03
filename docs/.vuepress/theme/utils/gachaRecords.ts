@@ -188,7 +188,7 @@ export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[]
 }
 
 export function exportUigf(accounts: GachaAccount[]) {
-  const output: Record<string, unknown> = { info: { export_timestamp: Math.floor(Date.now() / 1000), export_app: "Gacha Manager Demo by Lucas", export_app_version: "1.2.0", version: "v4.2" } };
+  const output: Record<string, unknown> = { info: { export_timestamp: Math.floor(Date.now() / 1000), export_app: "Gacha Manager Demo by Lucas", export_app_version: "1.2.1", version: "v4.2" } };
   for (const game of Object.keys(games) as Game[]) {
     const selected = accounts.filter(account => account.game === game);
     if (selected.length) output[game] = selected.map(({ game: _game, ...account }) => ({ ...account, list: account.list.map(row => validateRecord(row, game)) }));

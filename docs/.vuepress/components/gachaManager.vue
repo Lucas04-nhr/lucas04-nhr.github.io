@@ -119,7 +119,7 @@ function displayPoolName(key: string, language = overviewLanguage) {
 }
 function serverAlias(game: SelectableGame) {
   return game === "hkrpg"
-    ? "Astral Express · Nameless"
+    ? "Astral Express / Nameless"
     : game === "nap"
       ? "New Eridu"
       : "Celestia / Irminsul";
@@ -546,7 +546,7 @@ async function loadMetadata() {
               href="/script/gacha-manager-helper.user.js"
               target="_blank"
               rel="noopener noreferrer"
-              >Gacha Manager by Lucas</a
+              >Gacha Manager Helper</a
             >
             and install it. If it opens as text, paste its contents into a new
             script in the Tampermonkey dashboard.

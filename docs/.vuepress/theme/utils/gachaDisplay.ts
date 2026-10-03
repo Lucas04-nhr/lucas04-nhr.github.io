@@ -22,9 +22,9 @@ const translatedPools: Record<Exclude<ExportLanguage, "en-us">, Record<Game, Rec
 };
 const labels: Record<ExportLanguage, Record<string, string>> = {
   "en-us": { miliastra: "Miliastra", all: "All pools" },
-  "zh-cn": { miliastra: "千星奇域", all: "全部卡池", "Celestia / Irminsul": "天空岛 / 世界树", "Astral Express · Nameless": "星穹列车 · 无名客", "New Eridu": "新艾利都", Asia: "亚洲", Europe: "欧洲", America: "美洲", "TW / HK / MO": "台 / 港 / 澳", "China / Asia / TW-HK-MO": "中国大陆 / 亚洲 / 台港澳", Server: "服务器" },
-  "zh-tw": { miliastra: "千星奇域", all: "全部卡池", "Celestia / Irminsul": "天空島 / 世界樹", "Astral Express · Nameless": "星穹列車 · 無名客", "New Eridu": "新艾利都", Asia: "亞洲", Europe: "歐洲", America: "美洲", "TW / HK / MO": "台 / 港 / 澳", "China / Asia / TW-HK-MO": "中國大陸 / 亞洲 / 台港澳", Server: "伺服器" },
-  "ja-jp": { miliastra: "星々の幻境", all: "すべてのガチャ", "Celestia / Irminsul": "天空島 / 世界樹", "Astral Express · Nameless": "星穹列車 · ナナシビト", "New Eridu": "新エリー都", Asia: "アジア", Europe: "ヨーロッパ", America: "アメリカ", "TW / HK / MO": "台湾 / 香港 / マカオ", "China / Asia / TW-HK-MO": "中国 / アジア / 台湾・香港・マカオ", Server: "サーバー" },
+  "zh-cn": { miliastra: "千星奇域", all: "全部卡池", "Celestia / Irminsul": "天空岛 / 世界树", "Astral Express / Nameless": "星穹列车 / 无名客", "New Eridu": "新艾利都", Asia: "亚洲", Europe: "欧洲", America: "美洲", "TW / HK / MO": "台 / 港 / 澳", "China / Asia / TW-HK-MO": "中国大陆 / 亚洲 / 台港澳", Server: "服务器" },
+  "zh-tw": { miliastra: "千星奇域", all: "全部卡池", "Celestia / Irminsul": "天空島 / 世界樹", "Astral Express / Nameless": "星穹列車 / 無名客", "New Eridu": "新艾利都", Asia: "亞洲", Europe: "歐洲", America: "美洲", "TW / HK / MO": "台 / 港 / 澳", "China / Asia / TW-HK-MO": "中國大陸 / 亞洲 / 台港澳", Server: "伺服器" },
+  "ja-jp": { miliastra: "星々の幻境", all: "すべてのガチャ", "Celestia / Irminsul": "天空島 / 世界樹", "Astral Express / Nameless": "星穹列車 / ナナシビト", "New Eridu": "新エリー都", Asia: "アジア", Europe: "ヨーロッパ", America: "アメリカ", "TW / HK / MO": "台湾 / 香港 / マカオ", "China / Asia / TW-HK-MO": "中国 / アジア / 台湾・香港・マカオ", Server: "サーバー" },
 };
 export function displayLabel(label: string, language: ExportLanguage): string {
   if (label.startsWith("Server UTC")) return `${labels[language].Server ?? "Server"} ${label.slice(7)}`;

@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         Gacha Manager by Lucas
+// @name         Gacha Manager Helper
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.2.1
+// @version      1.2.2
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
-// @description  Fetch official gacha history locally for Gacha Manager by Lucas, without a relay server.
+// @description  Fetch official gacha history locally for Gacha Manager Demo, without a relay server.
 // @author       Lucas
 // @license      GPL-3.0-only
 // @match        https://blog.lucas04.top/*

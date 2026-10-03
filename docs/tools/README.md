@@ -48,7 +48,7 @@ The following tools are not only hosted on this site. Some external tools behind
 :::
 
 <LinkCard
-  title="Gacha Manager by Lucas"
+  title="Gacha Manager"
   icon="mdi:cards-outline"
   href="/tool/gacha-manager/">
 Import and export UIGF JSON, merge archives, and view account and pool statistics.

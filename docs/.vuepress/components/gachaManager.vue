@@ -1051,7 +1051,7 @@ async function loadMetadata() {
             <tbody>
               <tr v-for="pool in poolStats" :key="pool.key">
                 <td>
-                  <button class="text-button" @click="selectedPool = pool.key">
+                  <button class="text-button" @click="selectedPool = selectedPool === pool.key ? 'all' : pool.key">
                     {{ pool.name }}
                   </button>
                 </td>
@@ -1080,13 +1080,18 @@ async function loadMetadata() {
         </div>
       </section>
 
-      <section
+      <details
         v-if="selectedPool !== 'all' && stats.goldHistory.length"
+        :key="`${selectedKey}:${selectedPool}`"
         class="gacha-panel"
+        open
       >
-        <h3>{{ topRank }}-star history</h3>
+        <summary>{{ topRank }}-star history</summary>
         <p class="muted">
-          Names are shown in English. The first interval is a lower bound if earlier
+          Names are shown in English and times are shown in local timezone.
+        </p>
+        <p class="muted">
+          The first interval is a lower bound if earlier
           history is missing. Intervals are hidden when any records have unknown
           rarity.
         </p>
@@ -1106,7 +1111,7 @@ async function loadMetadata() {
         >
           <div>
             <strong class="gold">{{ itemName(entry.record, overviewLanguage) }}</strong
-            ><small>{{ serverName() }} · {{ displayTime(entry.record) }}</small>
+            ><small>{{ displayTime(entry.record) }}</small>
           </div>
           <span>{{
             stats.unknown
@@ -1144,7 +1149,7 @@ async function loadMetadata() {
             >Next &gt;</button>
           </nav>
         </div>
-      </section>
+      </details>
 
       <section class="gacha-panel">
         <h3>Record history</h3>
@@ -1190,6 +1195,7 @@ async function loadMetadata() {
                 <th>Rarity</th>
                 <th>Pool</th>
                 <th>Device time</th>
+                <th>{{ serverName("en-us") }} local time</th>
               </tr>
             </thead>
             <tbody>
@@ -1210,10 +1216,11 @@ async function loadMetadata() {
                 </td>
                 <td>{{ rowRank(row) ?? "Unknown" }}</td>
                 <td>{{ displayPoolName(displayPoolKey(row), displayLanguage) }}</td>
-                <td>{{ serverName(displayLanguage) }} · {{ displayTime(row) }}</td>
+                <td>{{ displayTime(row) }}</td>
+                <td>{{ row.time }}</td>
               </tr>
               <tr v-if="!visible.length">
-                <td colspan="4">No matching records.</td>
+                <td colspan="5">No matching records.</td>
               </tr>
             </tbody>
           </table>
@@ -1249,7 +1256,7 @@ async function loadMetadata() {
           </nav>
         </div>
         <p class="muted">
-          Displayed timestamps use your device timezone, including daylight
+          Device timestamps use your device timezone, including daylight
           saving time at the record date. Storage, synchronization and exports
           retain server-local timestamps.
         </p>

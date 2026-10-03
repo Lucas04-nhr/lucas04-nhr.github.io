@@ -7,7 +7,7 @@ export interface GachaConnection {
 }
 const COOKIE = "lucas-gacha-connection-v1";
 const KEY = "lucas-gacha-connection-key-v1";
-const AGE = 60 * 60 * 24 * 30;
+const AGE = 60 * 60 * 24 * 365;
 const encode = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes));
 const decode = (value: string) => Uint8Array.from(atob(value), char => char.charCodeAt(0));
 const attributes = () => `Path=/; SameSite=Strict${location.protocol === "https:" ? "; Secure" : ""}`;

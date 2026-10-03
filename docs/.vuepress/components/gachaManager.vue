@@ -54,7 +54,7 @@ async function rememberConnection() {
     if (personalToken.value) validateSyncToken(personalToken.value);
     if (updateToken.value) validateSyncToken(updateToken.value);
     await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value, updateToken: updateToken.value });
-    connectionStatus.value = "Connection details remembered for 30 days in this browser.";
+    connectionStatus.value = "Connection details remembered for 1 year in this browser.";
   } catch (err) {
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
   } finally {
@@ -877,7 +877,7 @@ async function loadMetadata() {
         </div>
       </form>
       <div class="connection-memory">
-        <p class="muted">Remember the Worker URL and both tokens for 30 days. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+        <p class="muted">Remember the Worker URL and both tokens for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
         <div class="actions">
           <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
           <VPButton text="Clear saved details" theme="alt" :disabled="busy || !ready || connectionBusy" @click="forgetConnection" />

@@ -304,6 +304,17 @@ watch(gachaFetchAllowed, (allowed) => {
   }
 });
 
+function jumpToPage(event: Event, gold = false) {
+  const input = event.target as HTMLInputElement;
+  const target = gold ? goldPage : page;
+  const count = gold ? goldPageCount.value : pageCount.value;
+  const value = Number(input.value);
+  if (input.value.trim() && Number.isInteger(value)) {
+    target.value = Math.min(count, Math.max(1, value));
+  }
+  input.value = String(target.value);
+}
+
 function save() {
   if (!ready.value) return;
   try {
@@ -490,7 +501,9 @@ async function retrieve() {
   }
 }
 
-async function download(selectedAccounts: GachaAccount[]) {
+const exportFilePrefixes: Record<SelectableGame, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ" };
+
+async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_GachaManager.json") {
   if (exporting.value) return;
   error.value = "";
   exporting.value = true;
@@ -511,7 +524,7 @@ async function download(selectedAccounts: GachaAccount[]) {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "UIGFv4_GachaManager.json";
+    anchor.download = filename;
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     status.value = "Export ready. Your saved records have not been changed.";
@@ -890,7 +903,7 @@ async function loadMetadata() {
           ><VPButton
             theme="alt"
             :disabled="busy || exporting"
-            @click="download(account.accounts)"
+            @click="download(account.accounts, `${exportFilePrefixes[account.game]}_${account.uid}.json`)"
             >Download JSON</VPButton
           >
         </div>
@@ -1103,7 +1116,17 @@ async function loadMetadata() {
         </div>
         <div class="pagination">
           <span class="pagination-info">
-            {{ goldPage }} / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
+            <input
+              class="page-input"
+              type="number"
+              :value="goldPage"
+              min="1"
+              :max="goldPageCount"
+              step="1"
+              :aria-label="`${topRank}-star history page number`"
+              @change="jumpToPage($event, true)"
+              @keydown.enter.prevent="jumpToPage($event, true)"
+            /> / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
           </span>
           <nav class="pagination-links" :aria-label="`${topRank}-star history pagination`">
             <button
@@ -1197,7 +1220,17 @@ async function loadMetadata() {
         </div>
         <div class="pagination">
           <span class="pagination-info">
-            {{ page }} / {{ pageCount }} · {{ filtered.length }} records
+            <input
+              class="page-input"
+              type="number"
+              :value="page"
+              min="1"
+              :max="pageCount"
+              step="1"
+              aria-label="Record history page number"
+              @change="jumpToPage($event)"
+              @keydown.enter.prevent="jumpToPage($event)"
+            /> / {{ pageCount }} · {{ filtered.length }} records
           </span>
           <nav class="pagination-links" aria-label="Record history pagination">
             <button
@@ -1482,6 +1515,12 @@ td {
 .pagination-info,
 .pagination-links {
   white-space: nowrap;
+}
+.pagination-info .page-input {
+  width: 72px;
+  padding: 4px 8px;
+  font: inherit;
+  text-align: center;
 }
 .pagination-links {
   display: flex;

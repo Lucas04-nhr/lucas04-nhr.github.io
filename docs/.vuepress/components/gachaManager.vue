@@ -1071,12 +1071,11 @@ async function loadMetadata() {
           </table>
         </div>
         <p class="muted">
-          Server labels use Celestia / Irminsul or the detected region for
-          Genshin, Astral Express · Nameless for Honkai: Star Rail, and New
-          Eridu for Zenless Zone Zero. Star Rail and ZZZ labels do not identify
-          the account's server region. Timestamps retain the archive's server
+          Timestamps retain the archive's server
           timezone (UTC{{ selected.accounts[0].timezone >= 0 ? '+' : '' }}{{ selected.accounts[0].timezone }}),
           without conversion to your device timezone or daylight saving time.
+        </p>
+        <p class="muted">
           Fetched records use UTC+8 for China / Asia / TW-HK-MO, UTC+1 for
           Europe, and UTC−5 for America. Imported records keep their archive's
           timezone; UTC+8 alone cannot distinguish China, Asia and TW-HK-MO.
@@ -1328,6 +1327,7 @@ td {
   white-space: nowrap;
 }
 .pagination {
+  margin-top: 16px;
   justify-content: center;
   font-size: 13px;
 }

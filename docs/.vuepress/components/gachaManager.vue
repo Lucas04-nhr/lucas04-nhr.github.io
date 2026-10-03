@@ -1326,8 +1326,9 @@ td {
 .gold-entry > span {
   white-space: nowrap;
 }
-.pagination {
-  margin-top: 16px;
+.gacha-manager .actions.pagination {
+  margin: 0;
+  padding-top: 24px;
   justify-content: center;
   font-size: 13px;
 }

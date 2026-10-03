@@ -41,6 +41,39 @@ import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
 import { personalApiBase, synchronizePersonal, validateSyncToken } from "../theme/utils/gachaSync";
 
+import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "../theme/utils/gachaConnection";
+
+const connectionStatus = ref("");
+const connectionBusy = ref(false);
+
+async function rememberConnection() {
+  if (connectionBusy.value) return;
+  connectionBusy.value = true;
+  try {
+    if (personalWorker.value) personalApiBase(personalWorker.value);
+    if (personalToken.value) validateSyncToken(personalToken.value);
+    if (updateToken.value) validateSyncToken(updateToken.value);
+    await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value, updateToken: updateToken.value });
+    connectionStatus.value = "Connection details remembered for 30 days in this browser.";
+  } catch (err) {
+    connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
+  } finally {
+    connectionBusy.value = false;
+  }
+}
+function forgetConnection() {
+  try {
+    clearGachaConnection();
+    personalWorker.value = "";
+    personalToken.value = "";
+    updateToken.value = "";
+    ownsWorker.value = false;
+    connectionStatus.value = "Saved connection details cleared.";
+  } catch {
+    connectionStatus.value = "Could not clear saved details. Clear this site’s cookies and storage in your browser.";
+  }
+}
+
 const personalWorker = ref("");
 const personalToken = ref("");
 const updateToken = ref("");
@@ -68,7 +101,6 @@ async function syncPersonal() {
     status.value = "";
     error.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
   } finally {
-    personalToken.value = "";
     busy.value = false;
     syncRequest = undefined;
     syncing.value = false;
@@ -100,7 +132,6 @@ async function updateRemoteMetadata() {
     status.value = "";
     error.value = controller.signal.aborted ? "Request cancelled. The backend update may still finish." : err instanceof TypeError ? "Cannot reach the metadata admin API. Allow this frontend origin, POST and Authorization in backend CORS, and check your network. The backend update may already have started." : err instanceof Error ? err.message : "Metadata update failed.";
   } finally {
-    updateToken.value = "";
     updatingMetadata.value = false;
     busy.value = false;
     updateRequest = undefined;
@@ -346,6 +377,16 @@ onMounted(() => {
     storageError.value =
       "Could not read the local archive. It has not been overwritten. Check browser storage or import a backup.";
   }
+  void loadGachaConnection().then(connection => {
+    if (!ready.value || !connection) return;
+    // Preserve any values entered while decryption was in progress.
+    if (!personalWorker.value) personalWorker.value = connection.worker;
+    if (!personalToken.value) personalToken.value = connection.personalToken;
+    if (!updateToken.value) updateToken.value = connection.updateToken;
+    connectionStatus.value = "Saved connection details restored.";
+  }).catch(() => {
+    if (ready.value) connectionStatus.value = "Could not restore saved details. Clear them and save again.";
+  });
   ready.value = true;
   if (accounts.value.length) save();
   const url = new URL(window.location.href);
@@ -809,7 +850,7 @@ async function loadMetadata() {
       <p class="muted">
         Update upstream item metadata on your Worker. Backend v1.2.1 supports
         browser requests from origins in its CORS allowlist.
-        METADATA_UPDATE_TOKEN is used only for this request and cleared afterwards.
+        METADATA_UPDATE_TOKEN is separate from the personal synchronization token.
       </p>
       <form class="remote-service-form" @submit.prevent="updateRemoteMetadata">
         <label>METADATA_UPDATE_TOKEN<input v-model="updateToken" type="password" autocomplete="off" :disabled="busy" required /></label>
@@ -823,7 +864,7 @@ async function loadMetadata() {
         Sync only to your own Worker and D1 database. Its operator and anyone
         holding the token can read, modify or delete all remote records.
         Sync merges saved records in both directions; local deletions are not propagated.
-        Each upload batch commits separately. Tokens are kept only for this operation and cleared afterwards.
+        Each upload batch commits separately.
       </p>
       <form class="remote-service-form" @submit.prevent="syncPersonal">
         <div class="controls">
@@ -835,6 +876,14 @@ async function loadMetadata() {
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
         </div>
       </form>
+      <div class="connection-memory">
+        <p class="muted">Remember the Worker URL and both tokens for 30 days. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+        <div class="actions">
+          <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
+          <VPButton text="Clear saved details" theme="alt" :disabled="busy || !ready || connectionBusy" @click="forgetConnection" />
+        </div>
+        <p v-if="connectionStatus" class="muted" role="status" aria-live="polite">{{ connectionStatus }}</p>
+      </div>
     </section>
 
     <section class="gacha-panel">
@@ -1248,6 +1297,9 @@ async function loadMetadata() {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+}
+.connection-memory {
+  margin-top: 24px;
 }
 .remote-service-form .actions {
   margin-top: 16px;

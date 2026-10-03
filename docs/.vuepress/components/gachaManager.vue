@@ -14,7 +14,6 @@ import {
   mergeAccounts,
   parseUigf,
   poolKey,
-  poolNames,
   recordRank,
   selectableGames,
   servers,
@@ -38,6 +37,8 @@ import {
   gachaFetchAllowed,
 } from "../theme/utils/gachaFetchPreference";
 
+import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
+
 const STORAGE_KEY = "lucas-gacha-manager-uigf-v4";
 const accounts = ref<GachaAccount[]>([]);
 const selectedKey = ref("");
@@ -58,7 +59,9 @@ const exportLanguage = ref<ExportLanguage>("en-us");
 const exporting = ref(false);
 let exportRequest: AbortController | undefined;
 const displayLanguage = ref<ExportLanguage>("en-us");
-const overviewLanguage = ref<ExportLanguage>("en-us");
+const overviewLanguage: ExportLanguage = "en-us";
+const goldPage = ref(1);
+const goldPageSize = ref(5);
 const metadata = ref<
   Partial<Record<ExportLanguage, Partial<Record<Game, Metadata>>>>
 >({});
@@ -110,9 +113,9 @@ function rowRank(row: GachaRecord) {
 function displayPoolKey(row: GachaRecord) {
   return `${rowGame(row)}:${poolKey(row, rowGame(row))}`;
 }
-function displayPoolName(key: string) {
+function displayPoolName(key: string, language = overviewLanguage) {
   const [namespace, type] = key.split(":") as [Game, string];
-  return `${namespace === "hk4e_ugc" ? "Miliastra · " : ""}${poolNames[namespace][type] ?? type}`;
+  return localizedPoolName(namespace, type, language);
 }
 function serverAlias(game: SelectableGame) {
   return game === "hkrpg"
@@ -121,15 +124,15 @@ function serverAlias(game: SelectableGame) {
       ? "New Eridu"
       : "Celestia / Irminsul";
 }
-function serverName() {
-  if (!selected.value) return "Server";
-  if (selected.value.game !== "hk4e") return serverAlias(selected.value.game);
+function serverName(language = overviewLanguage) {
+  if (!selected.value) return displayLabel("Server", language);
+  if (selected.value.game !== "hk4e") return displayLabel(serverAlias(selected.value.game), language);
   const stored = serverByAccount.value[selected.value.key];
-  if (stored === "cn") return serverAlias(selected.value.game);
+  if (stored === "cn") return displayLabel(serverAlias(selected.value.game), language);
   const region = stored
     ? servers[stored].label
     : inferredServer(selected.value.accounts[0]);
-  return region;
+  return displayLabel(region, language);
 }
 const pools = computed(() => [...new Set(allRows.value.map(displayPoolKey))]);
 const rows = computed(() =>
@@ -142,6 +145,21 @@ const rows = computed(() =>
 const calculateStats = (list: GachaRecord[]) =>
   statistics(list, selected.value?.game ?? game.value, {}, rowRank);
 const stats = computed(() => calculateStats(rows.value));
+const goldPageCount = computed(() =>
+  Math.max(1, Math.ceil(stats.value.goldHistory.length / goldPageSize.value)),
+);
+const visibleGoldHistory = computed(() =>
+  stats.value.goldHistory.slice(
+    (goldPage.value - 1) * goldPageSize.value,
+    goldPage.value * goldPageSize.value,
+  ),
+);
+watch([selectedKey, selectedPool, goldPageSize], () => {
+  goldPage.value = 1;
+});
+watch(goldPageCount, (count) => {
+  goldPage.value = Math.min(goldPage.value, count);
+});
 const poolStats = computed(() =>
   pools.value.map((key) => ({
     key,
@@ -184,9 +202,6 @@ watch([selectedKey, selectedPool, rankFilter, search, pageSize], () => {
 });
 watch(displayLanguage, () => {
   page.value = 1;
-  void loadMetadata();
-});
-watch(overviewLanguage, () => {
   void loadMetadata();
 });
 watch(selectedKey, () => {
@@ -439,7 +454,7 @@ async function loadMetadata() {
       missing = 0;
     for (const entry of account.accounts) {
       const languages = new Set([
-        effectiveDisplayLanguage(entry.game, overviewLanguage.value),
+        effectiveDisplayLanguage(entry.game, overviewLanguage),
         effectiveDisplayLanguage(entry.game, displayLanguage.value),
       ]);
       for (const lang of languages) {
@@ -780,6 +795,7 @@ async function loadMetadata() {
     </section>
     <template v-if="selected">
       <section class="gacha-panel">
+        <h3>Overview</h3>
         <div class="controls account-controls">
           <label
             >Account<select v-model="selectedKey">
@@ -794,7 +810,7 @@ async function loadMetadata() {
           >
           <label
             >Pool<select v-model="selectedPool">
-              <option value="all">All pools</option>
+              <option value="all">{{ displayLabel("all", overviewLanguage) }}</option>
               <option v-for="pool in pools" :key="pool" :value="pool">
                 {{ displayPoolName(pool) }}
               </option>
@@ -837,10 +853,6 @@ async function loadMetadata() {
           Your UID, URL and history are never sent to the metadata backend.
           Display metadata does not change your local archive.
         </p>
-      </section>
-
-      <section class="gacha-panel">
-        <h3>Overview</h3>
         <div class="metrics">
           <div>
             <span>Total pulls</span
@@ -946,12 +958,22 @@ async function loadMetadata() {
       >
         <h3>5-star history</h3>
         <p class="muted">
-          Showing the latest 50 five-star pulls. The first interval is a lower
-          bound if earlier history is missing. Intervals are hidden when any
-          records have unknown rarity.
+          Names are shown in English; Miliastra metadata is available only in
+          Simplified Chinese. The first interval is a lower bound if earlier
+          history is missing. Intervals are hidden when any records have unknown
+          rarity.
         </p>
+        <div class="controls">
+          <label
+            >Records per page<select v-model.number="goldPageSize">
+              <option v-for="size in [5, 10, 20, 50, 100]" :key="size" :value="size">
+                {{ size }}
+              </option>
+            </select></label
+          >
+        </div>
         <div
-          v-for="entry in stats.goldHistory.slice(0, 50)"
+          v-for="entry in visibleGoldHistory"
           :key="`${rowGame(entry.record)}:${entry.record.id}`"
           class="gold-entry"
         >
@@ -964,6 +986,15 @@ async function loadMetadata() {
               ? "—"
               : `${entry.partial ? "At least " : ""}${entry.pulls} pulls`
           }}</span>
+        </div>
+        <div class="actions pagination">
+          <VPButton theme="alt" :disabled="goldPage <= 1" @click="goldPage--"
+            >Previous</VPButton
+          ><span
+            >{{ goldPage }} / {{ goldPageCount }} · {{ stats.goldHistory.length }} records</span
+          ><VPButton theme="alt" :disabled="goldPage >= goldPageCount" @click="goldPage++"
+            >Next</VPButton
+          >
         </div>
       </section>
 
@@ -1030,8 +1061,8 @@ async function loadMetadata() {
                   >
                 </td>
                 <td>{{ rowRank(row) ?? "Unknown" }}</td>
-                <td>{{ displayPoolName(displayPoolKey(row)) }}</td>
-                <td>{{ serverName() }} · {{ row.time }}</td>
+                <td>{{ displayPoolName(displayPoolKey(row), displayLanguage) }}</td>
+                <td>{{ serverName(displayLanguage) }} · {{ row.time }}</td>
               </tr>
               <tr v-if="!visible.length">
                 <td colspan="4">No matching records.</td>

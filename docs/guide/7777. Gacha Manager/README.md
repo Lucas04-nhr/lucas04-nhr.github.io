@@ -17,9 +17,9 @@ Gacha Manager aims to handle importing, merging, viewing and backing up records 
 The project currently consists of a web frontend and a metadata service:
 
 - **Web frontend**: imports and merges UIGF archives, displays records and basic statistics by game, account and pool, and exports backups. It supports Genshin Impact, Honkai: Star Rail and Zenless Zone Zero, including Genshin Impact's Miliastra Wonderland records.
-- **Metadata service**: runs on Cloudflare Workers and D1, retrieves and updates public item metadata, and provides names, rarity, types and icons for the frontend. Data can be synchronized from upstream sources or supplemented and updated manually.
+- **Metadata service**: runs on Cloudflare Workers and D1, retrieves and updates public item metadata, and provides names, rarity, types and icons for the frontend. Public metadata is synchronized by GitHub Actions or local maintenance commands, and can be supplemented manually.
 
-The metadata service handles public item information and does not store users' UIDs or pull histories. Self-hosting requires configuring the frontend and metadata service separately; deployment and update instructions are linked below.
+Public metadata queries contain no UIDs or pull histories. Optional personal synchronization stores those records separately in a user's own Worker and D1 database. Self-hosting requires configuring the frontend and metadata service separately; deployment and update instructions are linked below.
 
 ## Demo status {#demo-status}
 

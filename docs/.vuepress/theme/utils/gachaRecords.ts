@@ -1,3 +1,4 @@
+import { fallbackGachaVersion } from "./gachaVersion";
 // UIGF v4.2: keep record IDs as strings and server-local timestamps intact.
 export const games = {
   hk4e: "Genshin Impact",
@@ -139,7 +140,8 @@ export function parseUigf(value: unknown): GachaAccount[] {
       if (!Number.isInteger(account.timezone) || Number(account.timezone) < -12 || Number(account.timezone) > 14) throw new Error(`${uid} requires a valid integer timezone.`);
       if (account.lang !== undefined && (typeof account.lang !== "string" || !languages.has(account.lang))) throw new Error(`Invalid language code for ${uid}.`);
       if (!Array.isArray(account.list)) throw new Error(`The list for ${uid} must be an array.`);
-      accounts.push({ game, uid, timezone: account.timezone as number, ...(account.lang === undefined ? {} : { lang: account.lang as string }), list: account.list.map(row => validateRecord(row, game)) });
+      // Legacy ZZZ archives incorrectly marked server-local UTC+8 times as UTC+0.
+      accounts.push({ game, uid, timezone: game === "nap" && account.timezone === 0 ? 8 : account.timezone as number, ...(account.lang === undefined ? {} : { lang: account.lang as string }), list: account.list.map(row => validateRecord(row, game)) });
     }
   }
   if (!accounts.length) throw new Error("No supported game accounts found in this file.");
@@ -187,8 +189,8 @@ export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[]
   return { accounts: [...result.values()], added, duplicates };
 }
 
-export function exportUigf(accounts: GachaAccount[]) {
-  const output: Record<string, unknown> = { info: { export_timestamp: Math.floor(Date.now() / 1000), export_app: "Gacha Manager Demo by Lucas", export_app_version: "1.2.1", version: "v4.2" } };
+export function exportUigf(accounts: GachaAccount[], appVersion = fallbackGachaVersion) {
+  const output: Record<string, unknown> = { info: { export_timestamp: Math.floor(Date.now() / 1000), export_app: "Gacha Manager Demo by Lucas", export_app_version: appVersion, version: "v4.2" } };
   for (const game of Object.keys(games) as Game[]) {
     const selected = accounts.filter(account => account.game === game);
     if (selected.length) output[game] = selected.map(({ game: _game, ...account }) => ({ ...account, list: account.list.map(row => validateRecord(row, game)) }));
@@ -220,6 +222,16 @@ export function localizeAccount(account: GachaAccount, lang: ExportLanguage, met
     if (!copy.rank_type && item.rank !== null) copy.rank_type = String(account.game === "nap" ? item.rank - 1 : item.rank);
     return validateRecord(copy, account.game);
   }) };
+}
+
+// Interpret the stored wall clock using its fixed server offset. The device's
+// timezone (including daylight saving time at that instant) is display-only.
+export function deviceRecordTime(time: string, timezone: number): string {
+  const offset = `${timezone >= 0 ? "+" : "-"}${String(Math.abs(timezone)).padStart(2, "0")}:00`;
+  const date = new Date(`${time.replace(" ", "T")}${offset}`);
+  if (Number.isNaN(date.getTime())) return time;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 export function poolKey(row: GachaRecord, game: Game): string {

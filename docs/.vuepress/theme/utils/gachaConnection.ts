@@ -3,7 +3,6 @@
 export interface GachaConnection {
   worker: string;
   personalToken: string;
-  updateToken: string;
 }
 const COOKIE = "gacha-attr-token";
 const KEY = "lucas-gacha-connection-key-v1";
@@ -42,7 +41,7 @@ export async function saveGachaConnection(
   const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     secret,
-    new TextEncoder().encode(JSON.stringify(connection)),
+    new TextEncoder().encode(JSON.stringify({ worker: connection.worker, personalToken: connection.personalToken })),
   );
   const value = `${encode(iv)}.${encode(new Uint8Array(encrypted))}`;
   if (value.length > 3800)
@@ -73,12 +72,18 @@ export async function loadGachaConnection(): Promise<
   const value = JSON.parse(new TextDecoder().decode(decrypted));
   if (
     !value ||
-    ["worker", "personalToken", "updateToken"].some(
+    ["worker", "personalToken"].some(
       (field) => typeof value[field] !== "string",
     )
   )
     throw new Error("Invalid saved connection details.");
-  return value;
+  const connection = { worker: value.worker, personalToken: value.personalToken };
+  if (Object.hasOwn(value, "updateToken")) {
+    // Remove the legacy admin token before rewriting personal connection details.
+    document.cookie = `${COOKIE}=; Max-Age=0; ${attributes()}`;
+    await saveGachaConnection(connection);
+  }
+  return connection;
 }
 
 export function clearGachaConnection(): void {

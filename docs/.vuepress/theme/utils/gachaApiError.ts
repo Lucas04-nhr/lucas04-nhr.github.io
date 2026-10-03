@@ -2,13 +2,11 @@
 // not hide the original HTTP status. Never display raw HTML or request secrets.
 export async function gachaApiError(response: Response, operation: string): Promise<Error> {
   const reasons: Record<string, string> = {
-    UPDATES_DISABLED: "The deployed Worker has no valid METADATA_UPDATE_TOKEN secret.",
     PERSONAL_SYNC_DISABLED: "The deployed Worker has no valid PERSONAL_SYNC_TOKEN secret.",
     DATABASE_UNAVAILABLE: "The Worker could not complete a database operation; check its runtime logs, D1 binding and migrations.",
     UNAUTHORIZED: "The token was rejected by the Worker.",
     ORIGIN_NOT_ALLOWED: "This frontend origin is not in the Worker CORS allowlist.",
     SYNC_CONFLICT: "Remote data changed. Read and reconcile again before retrying.",
-    SYNC_FAILED: "An upstream metadata task failed; successful tasks may already be committed.",
     INVALID_SYNC: "The Worker rejected the personal sync payload; check required record fields and limits.",
   };
   let detail = "The server returned an empty response.";

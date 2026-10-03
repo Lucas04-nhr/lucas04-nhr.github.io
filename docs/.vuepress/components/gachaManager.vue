@@ -5,6 +5,7 @@ import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import {
   compactAccounts,
+  deviceRecordTime,
   exportLanguages,
   exportUigf,
   games,
@@ -37,9 +38,10 @@ import {
   gachaFetchAllowed,
 } from "../theme/utils/gachaFetchPreference";
 
+import { fetchGachaVersion } from "../theme/utils/gachaVersion";
+
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
-import { gachaApiError } from "../theme/utils/gachaApiError";
 import { personalApiBase, synchronizePersonal, validateSyncToken } from "../theme/utils/gachaSync";
 
 import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "../theme/utils/gachaConnection";
@@ -53,8 +55,7 @@ async function rememberConnection() {
   try {
     if (personalWorker.value) personalApiBase(personalWorker.value);
     if (personalToken.value) validateSyncToken(personalToken.value);
-    if (updateToken.value) validateSyncToken(updateToken.value);
-    await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value, updateToken: updateToken.value });
+    await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value });
     connectionStatus.value = "Connection details remembered for 1 year in this browser.";
   } catch (err) {
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
@@ -67,7 +68,6 @@ function forgetConnection() {
     clearGachaConnection();
     personalWorker.value = "";
     personalToken.value = "";
-    updateToken.value = "";
     ownsWorker.value = false;
     connectionStatus.value = "Saved connection details cleared.";
   } catch {
@@ -77,15 +77,10 @@ function forgetConnection() {
 
 const personalWorker = ref("");
 const personalToken = ref("");
-const updateToken = ref("");
-const updatingMetadata = ref(false);
-let updateRequest: AbortController | undefined;
 const ownsWorker = ref(false);
 const syncing = ref(false);
 const personalSyncStatus = ref("");
 const personalSyncError = ref("");
-const metadataUpdateStatus = ref("");
-const metadataUpdateError = ref("");
 let syncRequest: AbortController | undefined;
 
 async function syncPersonal() {
@@ -110,37 +105,6 @@ async function syncPersonal() {
     busy.value = false;
     syncRequest = undefined;
     syncing.value = false;
-  }
-}
-
-async function updateRemoteMetadata() {
-  if (busy.value || !ready.value) return;
-  metadataUpdateError.value = "";
-  metadataUpdateStatus.value = "Updating upstream metadata…";
-  busy.value = true;
-  updatingMetadata.value = true;
-  const controller = new AbortController();
-  updateRequest = controller;
-  try {
-    const base = personalApiBase(personalWorker.value);
-    validateSyncToken(updateToken.value);
-    const response = await fetch(`${base}/api/v1/admin/sync`, {
-      method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
-      headers: { Authorization: `Bearer ${updateToken.value}` },
-      signal: AbortSignal.any([controller.signal, AbortSignal.timeout(180000)]),
-    });
-    if (!response.ok) throw await gachaApiError(response, "Metadata update");
-    const result = await response.json();
-    controller.signal.throwIfAborted();
-    if (!Number.isSafeInteger(result.updated) || result.updated < 0 || !Number.isSafeInteger(result.sources) || result.sources < 0) throw new Error("Invalid metadata update response.");
-    metadataUpdateStatus.value = `Metadata updated: ${result.updated} items from ${result.sources} sources. Public query caches may take five minutes to expire.`;
-  } catch (err) {
-    metadataUpdateStatus.value = "";
-    metadataUpdateError.value = controller.signal.aborted ? "Request cancelled. The backend update may still finish." : err instanceof TypeError ? "Cannot reach the metadata admin API. Allow this frontend origin, POST and Authorization in backend CORS, and check your network. The backend update may already have started." : err instanceof Error ? err.message : "Metadata update failed.";
-  } finally {
-    updatingMetadata.value = false;
-    busy.value = false;
-    updateRequest = undefined;
   }
 }
 
@@ -193,6 +157,9 @@ const allRows = computed(
       })),
     ) ?? [],
 );
+function displayTime(row: GachaRecord): string {
+  return deviceRecordTime(row.time, Number(row.__timezone));
+}
 function rowGame(row: GachaRecord): Game {
   return row.__game as Game;
 }
@@ -388,7 +355,6 @@ onMounted(() => {
     // Preserve any values entered while decryption was in progress.
     if (!personalWorker.value) personalWorker.value = connection.worker;
     if (!personalToken.value) personalToken.value = connection.personalToken;
-    if (!updateToken.value) updateToken.value = connection.updateToken;
     connectionStatus.value = "Saved connection details restored.";
   }).catch(() => {
     if (ready.value) connectionStatus.value = "Could not restore saved details. Clear them and save again.";
@@ -411,8 +377,6 @@ onBeforeUnmount(() => {
   ready.value = false;
   request?.abort();
   syncRequest?.abort();
-  updateRequest?.abort();
-  updateToken.value = "";
   personalToken.value = "";
   metadataRequest?.abort();
   exportRequest?.abort();
@@ -535,14 +499,13 @@ async function download(selectedAccounts: GachaAccount[]) {
   try {
     const lang = exportLanguage.value;
     status.value = `Preparing ${exportLanguages[lang]} export…`;
-    const outputAccounts = await prepareExportAccounts(
-      selectedAccounts,
-      lang,
-      controller.signal,
-    );
+    const [outputAccounts, appVersion] = await Promise.all([
+      prepareExportAccounts(selectedAccounts, lang, controller.signal),
+      fetchGachaVersion(controller.signal),
+    ]);
     controller.signal.throwIfAborted();
     const blob = new Blob(
-      [JSON.stringify(exportUigf(outputAccounts), null, 2)],
+      [JSON.stringify(exportUigf(outputAccounts, appVersion), null, 2)],
       { type: "application/json;charset=utf-8" },
     );
     const url = URL.createObjectURL(blob);
@@ -778,8 +741,8 @@ async function loadMetadata() {
           China combines Celestia and Irminsul; overseas servers are listed
           separately. Server time is assigned automatically: China / Asia /
           TW-HK-MO use UTC+8, Europe UTC+1 and America UTC−5, independently of
-          your device timezone or daylight saving time. Original timestamps are
-          preserved.
+          your device timezone or daylight saving time. Storage and exports preserve
+          server timestamps; displayed times use your device timezone.
         </p>
         <p>
           Without the helper, normal browser requests may automatically include
@@ -852,21 +815,6 @@ async function loadMetadata() {
       </p>
       <h4>Remote service</h4>
       <label>Worker URL<input v-model="personalWorker" type="url" placeholder="https://your-worker.example.com" :disabled="busy" /></label>
-      <h4>Metadata updates</h4>
-      <p class="muted">
-        Update upstream item metadata on your Worker. Backend v1.2.1 supports
-        browser requests from origins in its CORS allowlist.
-        METADATA_UPDATE_TOKEN is separate from the personal synchronization token.
-      </p>
-      <form class="remote-service-form" @submit.prevent="updateRemoteMetadata">
-        <label>METADATA_UPDATE_TOKEN<input v-model="updateToken" type="password" autocomplete="off" :disabled="busy" required /></label>
-        <div class="actions">
-          <VPButton @click="updateRemoteMetadata" text="Update metadata" :disabled="busy || !ready || !personalWorker || !updateToken" />
-          <VPButton v-if="updatingMetadata" text="Cancel request" theme="alt" @click="updateRequest?.abort()" />
-        </div>
-        <p v-if="metadataUpdateStatus" class="hint-container note" role="status" aria-live="polite">{{ metadataUpdateStatus }}</p>
-        <p v-if="metadataUpdateError" class="hint-container caution" role="alert">{{ metadataUpdateError }}</p>
-      </form>
       <h4>Personal remote synchronization</h4>
       <p class="muted">
         Sync only to your own Worker and D1 database. Its operator and anyone
@@ -887,7 +835,7 @@ async function loadMetadata() {
         <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
       </form>
       <div class="connection-memory">
-        <p class="muted">Remember the Worker URL and both tokens for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+        <p class="muted">Remember the Worker URL and personal-sync token for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
         <div class="actions">
           <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
           <VPButton text="Clear saved details" theme="alt" :disabled="busy || !ready || connectionBusy" @click="forgetConnection" />
@@ -1145,7 +1093,7 @@ async function loadMetadata() {
         >
           <div>
             <strong class="gold">{{ itemName(entry.record, overviewLanguage) }}</strong
-            ><small>{{ serverName() }} · {{ entry.record.time }}</small>
+            ><small>{{ serverName() }} · {{ displayTime(entry.record) }}</small>
           </div>
           <span>{{
             stats.unknown
@@ -1218,7 +1166,7 @@ async function loadMetadata() {
                 <th>Item</th>
                 <th>Rarity</th>
                 <th>Pool</th>
-                <th>Server time</th>
+                <th>Device time</th>
               </tr>
             </thead>
             <tbody>
@@ -1239,7 +1187,7 @@ async function loadMetadata() {
                 </td>
                 <td>{{ rowRank(row) ?? "Unknown" }}</td>
                 <td>{{ displayPoolName(displayPoolKey(row), displayLanguage) }}</td>
-                <td>{{ serverName(displayLanguage) }} · {{ row.time }}</td>
+                <td>{{ serverName(displayLanguage) }} · {{ displayTime(row) }}</td>
               </tr>
               <tr v-if="!visible.length">
                 <td colspan="4">No matching records.</td>
@@ -1247,16 +1195,6 @@ async function loadMetadata() {
             </tbody>
           </table>
         </div>
-        <p class="muted">
-          Timestamps retain the archive's server
-          timezone (UTC{{ selected.accounts[0].timezone >= 0 ? '+' : '' }}{{ selected.accounts[0].timezone }}),
-          without conversion to your device timezone or daylight saving time.
-        </p>
-        <p class="muted">
-          Fetched records use UTC+8 for China / Asia / TW-HK-MO, UTC+1 for
-          Europe, and UTC−5 for America. Imported records keep their archive's
-          timezone; UTC+8 alone cannot distinguish China, Asia and TW-HK-MO.
-        </p>
         <div class="pagination">
           <span class="pagination-info">
             {{ page }} / {{ pageCount }} · {{ filtered.length }} records
@@ -1277,6 +1215,18 @@ async function loadMetadata() {
             >Next &gt;</button>
           </nav>
         </div>
+        <p class="muted">
+          Displayed timestamps use your device timezone, including daylight
+          saving time at the record date. Storage, synchronization and exports
+          retain server-local timestamps.
+        </p>
+        <p class="muted">
+          Fetched records use UTC+8 for China / Asia, UTC+1 for
+          Europe, and UTC−5 for America. Imported records keep their archive's
+          server timezone. Legacy ZZZ UTC+0 labels are corrected to UTC+8
+          without changing record timestamps; UTC+8 alone cannot distinguish
+          China, Asia and TW-HK-MO.
+        </p>
       </section>
     </template>
   </div>

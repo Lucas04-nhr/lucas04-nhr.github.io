@@ -57,7 +57,8 @@ const connectionBusy = ref(false);
 let connectionRequest: AbortController | undefined;
 
 async function rememberConnection() {
-  if (connectionBusy.value || busy.value || !ready.value || !ownsWorker.value) return;
+  if (connectionBusy.value || busy.value || !ready.value) return;
+  if (!requireWorkerOwnership()) return;
   connectionBusy.value = true;
   const controller = new AbortController();
   connectionRequest = controller;
@@ -116,6 +117,22 @@ function workerUrlKeydown(event: KeyboardEvent) {
 }
 const personalToken = ref("");
 const ownsWorker = ref(false);
+const ownershipRow = ref<HTMLElement>();
+let ownershipAnimation: Animation | undefined;
+function requireWorkerOwnership() {
+  if (ownsWorker.value) return true;
+  ownershipAnimation?.cancel();
+  ownershipRow.value?.scrollIntoView({ block: "nearest" });
+  ownershipRow.value?.querySelector("input")?.focus({ preventScroll: true });
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    ownershipAnimation = ownershipRow.value?.animate(
+      [0, -8, 8, -6, 6, -3, 3, 0].map(x => ({ transform: `translateX(${x}px)` })),
+      { duration: 450, easing: "ease-in-out" },
+    );
+  }
+  return false;
+}
+watch(ownsWorker, () => ownershipAnimation?.cancel());
 const syncing = ref(false);
 const preferLocalTimes = ref(false);
 const personalSyncStatus = ref("");
@@ -123,7 +140,8 @@ const personalSyncError = ref("");
 let syncRequest: AbortController | undefined;
 
 async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
-  if (busy.value || !ready.value || !ownsWorker.value) return false;
+  if (busy.value || !ready.value) return false;
+  if (!requireWorkerOwnership()) return false;
   busy.value = true;
   gachaLog(mode === "merge" ? "info" : "warning", `Sync started: ${mode}`);
   personalSyncError.value = "";
@@ -479,6 +497,7 @@ onBeforeUnmount(() => {
   ready.value = false;
   clearTimeout(deletedPreviewTimer);
   connectionRequest?.abort();
+  ownershipAnimation?.cancel();
   request?.abort();
   syncRequest?.abort();
   personalToken.value = "";
@@ -994,11 +1013,11 @@ async function loadMetadata() {
         <div class="controls">
           <GachaSecretInput v-model="personalToken" :disabled="busy" />
         </div>
-        <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
+        <label ref="ownershipRow" class="check ownership-check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
         <div class="connection-memory">
           <p class="muted">Remember the Worker URL and personal-sync token for 1 year after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
           <div class="actions">
-            <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || !ownsWorker || connectionBusy || !personalWorker" @click="rememberConnection" />
+            <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || (ownsWorker && !personalWorker)" @click="rememberConnection" />
             <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
           </div>
           <p v-if="connectionStatus" class="hint-container" :class="connectionFeedback" :role="connectionFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">{{ connectionStatus }}</p>
@@ -1013,9 +1032,9 @@ async function loadMetadata() {
         </p>
         <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
         <div class="actions">
-          <VPButton @click="syncPersonal()" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
-          <GachaConfirmButton :action="() => syncPersonal('pull')" success-text="Pulled" :context="personalWorker + personalToken" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Pull and replace local" />
-          <GachaConfirmButton :action="() => syncPersonal('push')" success-text="Pushed" :context="personalWorker + personalToken" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Push and replace remote" />
+          <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" @click="syncPersonal()" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Sync personal records" />
+          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Pull and replace local" />
+          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Push and replace remote" />
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
         </div>
         <p class="muted destructive-hint">For replacement and clearing saved details, click once, then press and hold to confirm.</p>
@@ -1454,6 +1473,12 @@ async function loadMetadata() {
   gap: 12px;
   align-items: center;
 }
+.actions :deep(.ownership-disabled),
+.actions :deep(.ownership-disabled:hover) {
+  cursor: not-allowed;
+  opacity: .5;
+}
+.ownership-check { width: fit-content; }
 .worker-url-field { display: flex; align-items: stretch; margin-top: 4px; }
 .worker-url-prefix { display: flex; align-items: center; padding: 10px 12px; border: 1px solid var(--vp-c-divider); border-right: 0; border-radius: 8px 0 0 8px; background: var(--vp-c-bg-soft); color: var(--vp-c-text-2); }
 .worker-url-field input { border-radius: 0 8px 8px 0; }

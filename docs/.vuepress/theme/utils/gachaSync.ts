@@ -16,7 +16,7 @@ export function personalApiBase(value: string): string {
 }
 
 export function validateSyncToken(token: string) {
-  if (!/^\S{32,64}$/.test(token)) throw new Error("Use a token of 32–64 non-whitespace characters.");
+  if (!/^[\x21-\x7E]{32,64}$/.test(token)) throw new Error("Use a token of 32–64 characters containing only uppercase or lowercase English letters, digits and ASCII symbols, without spaces.");
 }
 
 export type PersonalSyncMode = "merge" | "pull" | "push";

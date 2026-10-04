@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from "vue";
 
-const props = defineProps<{ text: string; disabled?: boolean; context?: string; action: () => boolean | Promise<boolean>; successText: string }>();
+const props = defineProps<{ text: string; disabled?: boolean; context?: string; action: () => boolean | Promise<boolean>; successText: string; beforeArm?: () => boolean; blocked?: boolean }>();
 const executing = ref(false);
 const succeeded = ref(false);
 let feedback: ReturnType<typeof setTimeout> | undefined;
@@ -32,6 +32,7 @@ function waitForHold() {
 function click() {
   if (suppressClick) { suppressClick = false; return; }
   if (props.disabled || executing.value || succeeded.value || armed.value) return;
+  if (props.beforeArm && !props.beforeArm()) return;
   armed.value = true;
   waitForHold();
 }
@@ -88,7 +89,7 @@ onBeforeUnmount(() => { mounted = false; reset(); clearTimeout(feedback); });
 </script>
 
 <template>
-  <button type="button" class="gacha-confirm-button" :class="{ armed: armed || succeeded, holding, succeeded }" :disabled="disabled || executing || succeeded"
+  <button type="button" class="gacha-confirm-button" :class="{ armed: armed || succeeded, holding, succeeded, blocked }" :aria-disabled="disabled || blocked || executing || succeeded" :disabled="disabled || executing || succeeded"
     :aria-label="succeeded ? successText : armed ? `${text}: Confirm? Press and hold to confirm` : text"
     @click="click" @pointerdown="pointerDown" @pointerup="pointerEnd"
     @pointercancel="pointerEnd" @lostpointercapture="pointerEnd"
@@ -121,6 +122,7 @@ onBeforeUnmount(() => { mounted = false; reset(); clearTimeout(feedback); });
 }
 .gacha-confirm-button:hover { background: var(--vp-button-alt-hover-bg); }
 .gacha-confirm-button:focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 3px; }
+.gacha-confirm-button.blocked, .gacha-confirm-button.blocked:hover { cursor: not-allowed; opacity: .5; background: var(--vp-button-alt-bg); }
 .gacha-confirm-button:disabled { cursor: not-allowed; opacity: .5; }
 .gacha-confirm-button.succeeded:disabled { opacity: 1; }
 .sizing, .label { grid-area: 1 / 1; }

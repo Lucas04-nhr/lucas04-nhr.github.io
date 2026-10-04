@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { gachaLog } from "../theme/utils/gachaLog";
+import { checkGachaHealth } from "../theme/utils/gachaHealth";
 import GachaSecretInput from "./gachaSecretInput.vue";
 import GachaConfirmButton from "./gachaConfirmButton.vue";
 import VPButton from "vuepress-theme-plume/components/VPButton.vue";
@@ -52,20 +53,30 @@ import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "
 
 const connectionStatus = ref("");
 const connectionBusy = ref(false);
+let connectionRequest: AbortController | undefined;
 
 async function rememberConnection() {
-  if (connectionBusy.value) return;
+  if (connectionBusy.value || busy.value || !ready.value) return;
   connectionBusy.value = true;
+  const controller = new AbortController();
+  connectionRequest = controller;
   try {
     if (!personalWorker.value) throw new Error("Enter a Worker HTTPS domain before remembering connection details.");
     const worker = workerHttpsOrigin();
-    validateSyncToken(personalToken.value);
-    await saveGachaConnection({ worker, personalToken: personalToken.value });
+    const token = personalToken.value;
+    validateSyncToken(token);
+    connectionStatus.value = "Checking Worker health…";
+    await checkGachaHealth(worker, controller.signal);
+    controller.signal.throwIfAborted();
+    if (!ready.value || worker !== workerHttpsOrigin() || token !== personalToken.value)
+      throw new Error("Connection details changed during verification. Try remembering them again.");
+    await saveGachaConnection({ worker, personalToken: token });
     connectionStatus.value = "Connection details remembered for 1 year in this browser.";
   } catch (err) {
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
   } finally {
     connectionBusy.value = false;
+    connectionRequest = undefined;
   }
 }
 function forgetConnection() {
@@ -457,6 +468,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   ready.value = false;
   clearTimeout(deletedPreviewTimer);
+  connectionRequest?.abort();
   request?.abort();
   syncRequest?.abort();
   personalToken.value = "";
@@ -971,7 +983,7 @@ async function loadMetadata() {
         </div>
         <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
         <div class="connection-memory">
-          <p class="muted">Remember the Worker URL and personal-sync token for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+          <p class="muted">Remember the Worker URL and personal-sync token for 1 year after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
           <div class="actions">
             <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
             <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />

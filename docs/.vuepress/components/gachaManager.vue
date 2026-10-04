@@ -57,9 +57,10 @@ async function rememberConnection() {
   if (connectionBusy.value) return;
   connectionBusy.value = true;
   try {
-    if (personalWorker.value) workerHttpsOrigin();
-    if (personalToken.value) validateSyncToken(personalToken.value);
-    await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value });
+    if (!personalWorker.value) throw new Error("Enter a Worker HTTPS domain before remembering connection details.");
+    const worker = workerHttpsOrigin();
+    validateSyncToken(personalToken.value);
+    await saveGachaConnection({ worker, personalToken: personalToken.value });
     connectionStatus.value = "Connection details remembered for 1 year in this browser.";
   } catch (err) {
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";

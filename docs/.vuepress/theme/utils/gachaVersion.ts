@@ -17,7 +17,12 @@ export async function fetchGachaVersion(signal: AbortSignal): Promise<string> {
     if (release.draft !== false || release.prerelease !== false || typeof release.tag_name !== "string") throw new Error("Invalid release.");
     const match = /^v?(\d+\.\d+\.\d+)$/.exec(release.tag_name);
     if (!match) throw new Error("Invalid release version.");
-    cachedVersion = { value: match[1], expires: Date.now() + 5 * 60 * 1000 };
+    // A stale GitHub release must not downgrade the version shipped with this page.
+    const latest = match[1].split(".").map(Number);
+    const bundled = fallbackGachaVersion.split(".").map(Number);
+    const differing = latest.findIndex((part, index) => part !== bundled[index]);
+    const value = differing >= 0 && latest[differing] < bundled[differing] ? fallbackGachaVersion : match[1];
+    cachedVersion = { value, expires: Date.now() + 5 * 60 * 1000 };
     return cachedVersion.value;
   } catch {
     signal.throwIfAborted();

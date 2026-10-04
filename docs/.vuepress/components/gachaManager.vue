@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { gachaLog } from "../theme/utils/gachaLog";
+import GachaSecretInput from "./gachaSecretInput.vue";
+import GachaConfirmButton from "./gachaConfirmButton.vue";
 import VPButton from "vuepress-theme-plume/components/VPButton.vue";
 import CardGrid from "vuepress-theme-plume/components/global/VPCardGrid.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
@@ -55,7 +57,7 @@ async function rememberConnection() {
   if (connectionBusy.value) return;
   connectionBusy.value = true;
   try {
-    if (personalWorker.value) personalApiBase(personalWorker.value);
+    if (personalWorker.value) workerHttpsOrigin();
     if (personalToken.value) validateSyncToken(personalToken.value);
     await saveGachaConnection({ worker: personalWorker.value, personalToken: personalToken.value });
     connectionStatus.value = "Connection details remembered for 1 year in this browser.";
@@ -72,12 +74,29 @@ function forgetConnection() {
     personalToken.value = "";
     ownsWorker.value = false;
     connectionStatus.value = "Saved connection details cleared.";
+    return true;
   } catch {
     connectionStatus.value = "Could not clear saved details. Clear this site’s cookies and storage in your browser.";
+    return false;
   }
 }
 
 const personalWorker = ref("");
+const workerHost = computed({
+  get: () => personalWorker.value.replace(/^https:\/\//i, ""),
+  set: (value: string) => {
+    const host = value.trim().replace(/^https:\/\//i, "");
+    personalWorker.value = host ? `https://${host}` : "";
+  },
+});
+function workerHttpsOrigin() {
+  const origin = personalApiBase(personalWorker.value);
+  if (!origin.startsWith("https://")) throw new Error("The Worker URL requires HTTPS.");
+  return origin;
+}
+function workerUrlKeydown(event: KeyboardEvent) {
+  if (event.key === "/") event.stopPropagation();
+}
 const personalToken = ref("");
 const ownsWorker = ref(false);
 const syncing = ref(false);
@@ -87,7 +106,7 @@ const personalSyncError = ref("");
 let syncRequest: AbortController | undefined;
 
 async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
-  if (busy.value || !ready.value || !ownsWorker.value) return;
+  if (busy.value || !ready.value || !ownsWorker.value) return false;
   busy.value = true;
   gachaLog(mode === "merge" ? "info" : "warning", `Sync started: ${mode}`);
   personalSyncError.value = "";
@@ -96,7 +115,7 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
+    const synced = await synchronizePersonal(workerHttpsOrigin(), personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
     controller.signal.throwIfAborted();
     accounts.value = synced;
     if (!synced.some(account => groupAccountKey(account) === selectedKey.value))
@@ -112,10 +131,12 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
       : mode === "push"
         ? "Remote records replaced with the local archive, including account and record deletions."
         : "Personal sync complete. Local and remote records merged; deletions are not propagated.";
+    return !storageError.value;
   } catch (err) {
     gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Sync cancelled; earlier batches may be saved" : "Sync failed");
     personalSyncStatus.value = "";
     personalSyncError.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
+    return false;
   } finally {
     busy.value = false;
     syncRequest = undefined;
@@ -179,14 +200,15 @@ const rankFilter = ref("all");
 const search = ref("");
 const page = ref(1);
 const pageSize = ref(5);
-const pendingDelete = ref(false);
 const helperState = ref<"checking" | "available" | "unavailable">("checking");
 let helperCheck: AbortController | undefined;
 let request: AbortController | undefined;
 let metadataRequest: AbortController | undefined;
 const displayAccounts = computed(() => groupAccounts(accounts.value));
+const deletedPreview = ref<ReturnType<typeof groupAccounts>[number]>();
+let deletedPreviewTimer: ReturnType<typeof setTimeout> | undefined;
 const selected = computed(() =>
-  displayAccounts.value.find((account) => account.key === selectedKey.value),
+  displayAccounts.value.find((account) => account.key === selectedKey.value) ?? deletedPreview.value,
 );
 const allRows = computed(
   () =>
@@ -321,7 +343,6 @@ const totalRecords = computed(() =>
 );
 watch(selectedKey, () => {
   selectedPool.value = "all";
-  pendingDelete.value = false;
 });
 watch([selectedKey, selectedPool, rankFilter, search, pageSize], () => {
   page.value = 1;
@@ -434,6 +455,7 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
   ready.value = false;
+  clearTimeout(deletedPreviewTimer);
   request?.abort();
   syncRequest?.abort();
   personalToken.value = "";
@@ -611,7 +633,8 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
   }
 }
 function deleteAccount() {
-  if (busy.value || !selected.value) return;
+  if (busy.value || !selected.value) return false;
+  const preview = { ...selected.value, accounts: selected.value.accounts.map(account => ({ ...account, list: [] })) };
   gachaLog("warning", "Local account records deleted", { records: selected.value.accounts.reduce((total, account) => total + account.list.length, 0) });
   delete serverByAccount.value[selectedKey.value];
   accounts.value = accounts.value.filter(
@@ -620,9 +643,13 @@ function deleteAccount() {
   selectedKey.value = accounts.value[0]
     ? groupAccountKey(accounts.value[0])
     : "";
-  pendingDelete.value = false;
   save();
+  if (!accounts.value.length && !storageError.value) {
+    deletedPreview.value = preview;
+    deletedPreviewTimer = setTimeout(() => { deletedPreview.value = undefined; }, 1500);
+  }
   status.value = "Local records for the selected account deleted.";
+  return !storageError.value;
 }
 async function loadMetadata() {
   if (!selected.value) return;
@@ -925,7 +952,11 @@ async function loadMetadata() {
         >.
       </p>
       <h4>Remote service</h4>
-      <label>Worker URL<input v-model="personalWorker" type="url" placeholder="https://your-worker.example.com" :disabled="busy" /></label>
+      <label for="worker-host">Worker URL (require HTTPS)</label>
+      <div class="worker-url-field">
+        <span class="worker-url-prefix" aria-hidden="true">https://</span>
+        <input id="worker-host" v-model="workerHost" type="text" inputmode="url" placeholder="your-worker.example.com" :disabled="busy" autocomplete="url" spellcheck="false" aria-description="HTTPS prefix is added automatically." @keydown="workerUrlKeydown" />
+      </div>
       <h4>Personal remote synchronization</h4>
       <p class="muted">
         Sync only to your own Worker and D1 database. Its operator and anyone
@@ -935,7 +966,7 @@ async function loadMetadata() {
       </p>
       <form class="remote-service-form" @submit.prevent="syncPersonal()">
         <div class="controls">
-          <label>PERSONAL_SYNC_TOKEN<input v-model="personalToken" type="password" autocomplete="off" :disabled="busy" required /></label>
+          <GachaSecretInput v-model="personalToken" :disabled="busy" />
         </div>
         <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
         <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
@@ -949,10 +980,11 @@ async function loadMetadata() {
         </p>
         <div class="actions">
           <VPButton @click="syncPersonal()" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
-          <VPButton @click="syncPersonal('pull')" theme="alt" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Pull and replace local" />
-          <VPButton @click="syncPersonal('push')" theme="alt" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Push and replace remote" />
+          <GachaConfirmButton :action="() => syncPersonal('pull')" success-text="Pulled" :context="personalWorker + personalToken" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Pull and replace local" />
+          <GachaConfirmButton :action="() => syncPersonal('push')" success-text="Pushed" :context="personalWorker + personalToken" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Push and replace remote" />
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
         </div>
+        <p class="muted destructive-hint">For replacement and clearing saved details, click once, then press and hold to confirm.</p>
         <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
         <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
       </form>
@@ -960,7 +992,7 @@ async function loadMetadata() {
         <p class="muted">Remember the Worker URL and personal-sync token for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
         <div class="actions">
           <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
-          <VPButton text="Clear saved details" theme="alt" :disabled="busy || !ready || connectionBusy" @click="forgetConnection" />
+          <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
         </div>
         <p v-if="connectionStatus" class="muted" role="status" aria-live="polite">{{ connectionStatus }}</p>
       </div>
@@ -1067,29 +1099,12 @@ async function loadMetadata() {
             >{{
               metadataBusy ? "Loading…" : "Load item names & icons"
             }}</VPButton
-          ><VPButton
-            theme="alt"
-            :disabled="busy"
-            @click="pendingDelete = !pendingDelete"
-            >Delete account</VPButton
-          >
+          ><GachaConfirmButton text="Delete account" :context="selectedKey" :disabled="busy || !!deletedPreview" :action="deleteAccount" success-text="Deleted" />
         </div>
         <p v-if="metadataStatus" role="status" class="muted">
           {{ metadataStatus }}
         </p>
-        <div v-if="pendingDelete" class="hint-container caution">
-          <p>
-            Delete all local records for {{ games[selected.game] }} ·
-            {{ selected.uid }}? Export a backup first.
-          </p>
-          <div class="actions">
-            <VPButton theme="alt" :disabled="busy" @click="deleteAccount"
-              >Confirm deletion</VPButton
-            ><VPButton theme="alt" @click="pendingDelete = false"
-              >Cancel</VPButton
-            >
-          </div>
-        </div>
+        <p class="muted destructive-hint">Delete account removes this account’s local records. Export a backup first. Click once, then press and hold to confirm.</p>
         <p class="muted">
           Metadata queries send only the game, language and public item IDs.
           Your UID, URL and history are never sent to the metadata backend.
@@ -1412,6 +1427,9 @@ async function loadMetadata() {
   gap: 12px;
   align-items: center;
 }
+.worker-url-field { display: flex; align-items: stretch; margin-top: 4px; }
+.worker-url-prefix { display: flex; align-items: center; padding: 10px 12px; border: 1px solid var(--vp-c-divider); border-right: 0; border-radius: 8px 0 0 8px; background: var(--vp-c-bg-soft); color: var(--vp-c-text-2); }
+.worker-url-field input { border-radius: 0 8px 8px 0; }
 .connection-memory {
   margin-top: 24px;
 }
@@ -1419,8 +1437,8 @@ async function loadMetadata() {
 .export-actions {
   margin-top: 16px;
 }
-.remote-service-form .actions {
-  margin-top: 16px;
+.actions {
+  margin-block: 16px;
 }
 .summary-line {
   font-size: 13px;
@@ -1530,6 +1548,7 @@ textarea {
   width: auto;
 }
 .muted {
+  margin-block: 16px;
   color: var(--vp-c-text-2);
   font-size: 13px;
   line-height: 1.7;

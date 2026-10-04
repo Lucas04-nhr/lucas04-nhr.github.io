@@ -142,7 +142,10 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
       }
       const data = body.data as { list?: unknown[] } | undefined;
       if (!data || !Array.isArray(data.list)) throw new Error("The official API did not return a record list.");
-      if (!data.list.length) break;
+      if (!data.list.length) {
+        gachaLog("info", "Official pool exhausted", { page, pool: Number(type), recordsRead: total });
+        break;
+      }
       if (game === "hk4e" && !genshinItemIds && data.list.some(value => {
         const row = value as Record<string, unknown> | null;
         return row && (row.item_id === "" || row.item_id === undefined || row.item_id === null || row.item_id === "0" || row.item_id === 0);
@@ -181,10 +184,15 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
       const previous = existing?.list.filter(row => game === "hk4e_ugc" ? (type === "1000" ? row.op_gacha_type === "1000" : row.op_gacha_type !== "1000") : poolKey(row, game) === poolKey(rows[0], game));
       const newest = previous?.reduce<string | undefined>((max, row) => !max || compareIds(row.id, max) > 0 ? row.id : max, undefined);
       options.onPage(account);
-      gachaLog("info", "Official record page saved", { page, records: rows.length });
+      gachaLog("info", "Official record page saved", { page, pool: Number(type), records: rows.length });
       total += rows.length;
       const next = rows[rows.length - 1].id;
-      if (rows.length < size || (canStop && newest && rows.some(row => compareIds(row.id, newest) <= 0))) break;
+      // A server may cap the returned page size below the requested size.
+      // Only an empty page proves exhaustion; a short page must advance too.
+      if (canStop && newest && rows.some(row => compareIds(row.id, newest) <= 0)) {
+        gachaLog("info", "Incremental fetch reached saved records", { page, pool: Number(type), recordsRead: total });
+        break;
+      }
       if (seen.has(next) || compareIds(next, cursor) >= 0 && cursor !== "0") throw new Error("The pagination cursor did not advance. Fetching stopped; fetched records are retained.");
       if (page === 10000) throw new Error("Page limit exceeded; fetching stopped.");
       seen.add(next);

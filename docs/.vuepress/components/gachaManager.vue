@@ -510,7 +510,7 @@ async function retrieve() {
       link: link.value,
       server: fetchServer,
       existing: accounts.value,
-      incremental: incremental.value && !repairTimes,
+      incremental: incremental.value,
       useHelper: helperState.value === "available",
       signal: controller.signal,
       progress: (message) => {
@@ -805,7 +805,7 @@ async function loadMetadata() {
             ><input
               v-model="incremental"
               type="checkbox"
-              :disabled="busy || correctTimes"
+              :disabled="busy"
             />Incremental fetch</label
           >
           <label class="check"><input v-model="correctTimes" type="checkbox" :disabled="busy" />Correct saved record times</label>
@@ -845,11 +845,13 @@ async function loadMetadata() {
           fetch.
         </p>
         <p>
-          Correct saved record times performs a full fetch and replaces saved timestamps
+          Correct saved record times replaces saved timestamps
           with the current official timestamps for matching game, UID and record ID.
           Use it after a game update corrects historical server times. Only records
           still available from the official API can be corrected; item and pool
-          conflicts still stop the fetch. Each completed page is saved immediately.
+          conflicts still stop the fetch. Incremental fetch independently controls
+          when fetching stops; disable it to check all available historical records.
+          Each completed page is saved immediately.
         </p>
       </details>
     </section>

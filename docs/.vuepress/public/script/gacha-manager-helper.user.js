@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gacha Manager Helper
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.2.2
+// @version      1.3.0
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager Demo, without a relay server.
@@ -19,6 +19,8 @@
 // @connect      public-operation-common.mihoyo.com
 // @connect      public-operation-nap.mihoyo.com
 // @connect      public-operation-nap-sg.hoyoverse.com
+// @connect      api-takumi.mihoyo.com
+// @connect      sg-public-api.hoyolab.com
 // @sandbox      DOM
 // @run-at       document-start
 // @noframes
@@ -38,22 +40,27 @@
     ["public-operation-nap-sg.hoyoverse.com", ["/common/gacha_record/api/getGachaLog"]],
   ]);
   const pending = new Map();
-  const validUrl = (url) => url.protocol === "https:" && !url.username && !url.password && !url.port && allowed.get(url.hostname)?.includes(url.pathname);
+  const dictionaryUrl = (url) => {
+    const entries = [...url.searchParams];
+    return (url.hostname === "api-takumi.mihoyo.com" && url.pathname === "/event/platsimulator/config" && entries.length === 2 && url.searchParams.get("gids") === "2" && url.searchParams.get("game") === "hk4e")
+      || (url.hostname === "sg-public-api.hoyolab.com" && url.pathname === "/event/simulatoros/config" && entries.length === 1 && url.searchParams.get("lang") === "en-us");
+  };
+  const validUrl = (url) => url.protocol === "https:" && !url.username && !url.password && !url.port && (allowed.get(url.hostname)?.includes(url.pathname) || dictionaryUrl(url));
   const reply = (id, result, error) => {
     window.postMessage({ type: RESPONSE, protocol: 1, id, ...(error ? { error } : { result }) }, window.location.origin);
   };
   const handle = (message, respond) => {
     if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { respond(message.id, { version: "1.2.1" }); return; }
+    if (message.action === "probe") { respond(message.id, { version: "1.3.0" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;
     try {
       if (typeof message.url !== "string" || message.url.length > 8192) throw new Error();
       url = new URL(message.url);
-      if (!validUrl(url) || !url.searchParams.get("authkey")) throw new Error();
-    } catch { respond(message.id, null, "The helper only accepts official gacha history endpoints with authkey."); return; }
+      if (!validUrl(url) || (!dictionaryUrl(url) && !url.searchParams.get("authkey"))) throw new Error();
+    } catch { respond(message.id, null, "The helper only accepts official gacha history endpoints with authkey or approved public item dictionaries."); return; }
     if (pending.size >= 2 || pending.has(message.id)) { respond(message.id, null, "Too many helper requests. Stop the current fetch and try again."); return; }
     const finish = (result, error) => { pending.delete(message.id); respond(message.id, result, error); };
     try {

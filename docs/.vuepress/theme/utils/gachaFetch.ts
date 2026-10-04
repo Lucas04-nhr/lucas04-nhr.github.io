@@ -67,6 +67,28 @@ export interface FetchOptions {
   onPage: (account: GachaAccount) => void;
 }
 
+// Starward's GenshinGachaService.UpdateGachaItemId joins official records
+// with the same-language simulator dictionary by name when item_id is empty.
+async function fetchGenshinItemIds(cn: boolean, signal: AbortSignal, useHelper: boolean): Promise<Map<string, string>> {
+  const url = new URL(cn
+    ? "https://api-takumi.mihoyo.com/event/platsimulator/config?gids=2&game=hk4e"
+    : "https://sg-public-api.hoyolab.com/event/simulatoros/config?lang=en-us");
+  const body = await fetchJson(url, signal, useHelper);
+  const data = body.data as Record<string, unknown> | undefined;
+  if (body.retcode !== 0 || !data || !Array.isArray(data.all_avatar) || !Array.isArray(data.all_weapon)) throw new Error("Cannot load the official Genshin item dictionary. Update the browser helper and retry.");
+  const ids = new Map<string, string>();
+  for (const value of [...data.all_avatar, ...data.all_weapon]) {
+    if (!value || typeof value !== "object") continue;
+    const item = value as Record<string, unknown>;
+    if (typeof item.name !== "string" || !item.name || (typeof item.id !== "string" && !(typeof item.id === "number" && Number.isSafeInteger(item.id)))) continue;
+    const id = String(item.id);
+    if (!/^\d+$/.test(id) || BigInt(id) === 0n) continue;
+    // An ambiguous name must never silently select a different item.
+    ids.set(item.name, ids.has(item.name) && ids.get(item.name) !== id ? "" : id);
+  }
+  return ids;
+}
+
 export async function fetchGameRecords(options: Omit<FetchOptions, "game" | "timezone"> & { game: SelectableGame; server: ServerId }): Promise<number> {
   const config = servers[options.server];
   const url = parseRecordUrl(options.link, options.game);
@@ -89,7 +111,8 @@ export async function fetchGameRecords(options: Omit<FetchOptions, "game" | "tim
 export async function fetchRecords(options: FetchOptions): Promise<number> {
   const { game, signal } = options;
   const base = parseRecordUrl(options.link, game);
-  const lang = "en-us";
+  const cn = base.hostname.endsWith("mihoyo.com");
+  const lang = game === "hk4e" && cn ? "zh-cn" : "en-us";
   base.searchParams.set("lang", lang);
   const size = game === "hk4e_ugc" ? 5 : 20;
   const queryTypes = game === "hk4e_ugc" ? ["1000", "2000"] : game === "hk4e" ? ["100", "200", "301", "302", "500"] : Object.keys(poolNames[game]);
@@ -97,6 +120,7 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
   if (game === "nap") queryTypes.push("102", "103");
   let total = 0;
   let sessionUid: string | undefined;
+  let genshinItemIds: Map<string, string> | undefined;
   for (const type of queryTypes) {
     let cursor = "0";
     const seen = new Set<string>();
@@ -118,6 +142,10 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
       const data = body.data as { list?: unknown[] } | undefined;
       if (!data || !Array.isArray(data.list)) throw new Error("The official API did not return a record list.");
       if (!data.list.length) break;
+      if (game === "hk4e" && !genshinItemIds && data.list.some(value => {
+        const row = value as Record<string, unknown> | null;
+        return row && (row.item_id === "" || row.item_id === undefined || row.item_id === null || row.item_id === "0" || row.item_id === 0);
+      })) genshinItemIds = await fetchGenshinItemIds(cn, signal, !!options.useHelper);
       let uid = "";
       const rows = data.list.map(value => {
         if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid official record format.");
@@ -134,6 +162,11 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
         if (uid && uid !== raw.uid) throw new Error("Multiple accounts returned; fetching stopped.");
         uid = raw.uid;
         delete raw.uid;
+        if (game === "hk4e" && (raw.item_id === "" || raw.item_id === undefined || raw.item_id === null || raw.item_id === "0")) {
+          const id = typeof raw.name === "string" ? genshinItemIds?.get(raw.name) : undefined;
+          if (!id) throw new Error("Cannot resolve a Genshin item ID from the official dictionary. No records from this page were saved. Retry after the dictionary is updated.");
+          raw.item_id = id;
+        }
         if (game === "hk4e") raw.uigf_gacha_type = raw.gacha_type === "400" ? "301" : raw.gacha_type;
         return validateRecord(raw, game);
       });

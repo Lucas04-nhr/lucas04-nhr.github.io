@@ -969,7 +969,14 @@ async function loadMetadata() {
           <GachaSecretInput v-model="personalToken" :disabled="busy" />
         </div>
         <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
-        <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
+        <div class="connection-memory">
+          <p class="muted">Remember the Worker URL and personal-sync token for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+          <div class="actions">
+            <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
+            <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
+          </div>
+          <p v-if="connectionStatus" class="muted" role="status" aria-live="polite">{{ connectionStatus }}</p>
+        </div>
         <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
         <p class="muted">
           Sync personal records merges local and remote archives; deletions are not propagated.
@@ -978,6 +985,7 @@ async function loadMetadata() {
           The timestamp conflict option applies only to merging. Remote writes commit in separate batches; cancellation or failure can leave a partial replacement.
           <strong>Export a backup of your data before important operations, especially either replacement operation.</strong>
         </p>
+        <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
         <div class="actions">
           <VPButton @click="syncPersonal()" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
           <GachaConfirmButton :action="() => syncPersonal('pull')" success-text="Pulled" :context="personalWorker + personalToken" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Pull and replace local" />
@@ -988,14 +996,7 @@ async function loadMetadata() {
         <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
         <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
       </form>
-      <div class="connection-memory">
-        <p class="muted">Remember the Worker URL and personal-sync token for 1 year. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
-        <div class="actions">
-          <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
-          <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
-        </div>
-        <p v-if="connectionStatus" class="muted" role="status" aria-live="polite">{{ connectionStatus }}</p>
-      </div>
+
     </section>
 
     <section class="gacha-panel">

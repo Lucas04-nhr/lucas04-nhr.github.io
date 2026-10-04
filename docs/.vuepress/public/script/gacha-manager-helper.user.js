@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gacha Manager Helper
 // @namespace    https://blog.lucas04.top/tool/gacha-manager/
-// @version      1.3.0
+// @version      1.3.1
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Gacha Manager Demo, without a relay server.
@@ -52,7 +52,7 @@
   const handle = (message, respond) => {
     if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
-    if (message.action === "probe") { respond(message.id, { version: "1.3.0" }); return; }
+    if (message.action === "probe") { respond(message.id, { version: "1.3.1" }); return; }
     if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;

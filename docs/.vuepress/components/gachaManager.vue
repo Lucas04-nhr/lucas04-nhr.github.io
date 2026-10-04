@@ -118,6 +118,7 @@ const link = ref("");
 const server = ref<ServerId>("cn");
 const serverByAccount = ref<Record<string, ServerId>>({});
 const incremental = ref(true);
+const correctTimes = ref(false);
 const busy = ref(false);
 const metadataBusy = ref(false);
 const ready = ref(false);
@@ -357,8 +358,8 @@ function save() {
       "Browser storage is unavailable or full. Records remain in memory. Export a backup now; refreshing may lose recent changes.";
   }
 }
-function merge(incoming: GachaAccount[]) {
-  const result = mergeAccounts(accounts.value, incoming);
+function merge(incoming: GachaAccount[], correctTimes = false) {
+  const result = mergeAccounts(accounts.value, incoming, correctTimes);
   accounts.value = compactAccounts(result.accounts);
   if (!selectedKey.value && incoming.length)
     selectedKey.value = groupAccountKey(incoming[0]);
@@ -484,7 +485,8 @@ async function retrieve() {
   error.value = "";
   const controller = new AbortController();
   request = controller;
-  let added = 0;
+  let added = 0, corrected = 0;
+  const repairTimes = correctTimes.value;
   try {
     const fetchServer = server.value;
     const total = await fetchGameRecords({
@@ -492,23 +494,25 @@ async function retrieve() {
       link: link.value,
       server: fetchServer,
       existing: accounts.value,
-      incremental: incremental.value,
+      incremental: incremental.value && !repairTimes,
       useHelper: helperState.value === "available",
       signal: controller.signal,
       progress: (message) => {
         status.value = message;
       },
       onPage: (account) => {
-        added += merge([account]).added;
+        const result = merge([account], repairTimes);
+        added += result.added;
+        corrected += result.corrected;
         selectedKey.value = groupAccountKey(account);
         serverByAccount.value[selectedKey.value] = fetchServer;
         save();
       },
     });
-    status.value = `Finished: ${total} records read, ${added} added. ${total === 0 ? "No available records returned." : ""}`;
+    status.value = `Finished: ${total} records read, ${added} added, ${corrected} timestamps corrected. ${total === 0 ? "No available records returned." : ""}`;
   } catch (err) {
     if (controller.signal.aborted)
-      status.value = `Stopped. ${added} new records retained.`;
+      status.value = `Stopped. ${added} new records retained, ${corrected} timestamps corrected.`;
     else {
       const message =
         err instanceof TypeError
@@ -518,7 +522,7 @@ async function retrieve() {
             : err instanceof Error
               ? err.message
               : "Fetching failed.";
-      error.value = `${message} ${added} new records retained.`;
+      error.value = `${message} ${added} new records retained, ${corrected} timestamps corrected.`;
     }
   } finally {
     link.value = "";
@@ -774,9 +778,10 @@ async function loadMetadata() {
             ><input
               v-model="incremental"
               type="checkbox"
-              :disabled="busy"
+              :disabled="busy || correctTimes"
             />Incremental fetch</label
           >
+          <label class="check"><input v-model="correctTimes" type="checkbox" :disabled="busy" />Correct saved record times</label>
         </div>
       </form>
       <p class="muted">
@@ -811,6 +816,13 @@ async function loadMetadata() {
           also available. Incremental fetching stops at your newest saved
           record. Disable it when filling gaps or recovering an interrupted
           fetch.
+        </p>
+        <p>
+          Correct saved record times performs a full fetch and replaces saved timestamps
+          with the current official timestamps for matching game, UID and record ID.
+          Use it after a game update corrects historical server times. Only records
+          still available from the official API can be corrected; item and pool
+          conflicts still stop the fetch. Each completed page is saved immediately.
         </p>
       </details>
     </section>

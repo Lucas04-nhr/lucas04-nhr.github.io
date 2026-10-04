@@ -162,9 +162,9 @@ export function compareIds(a: string, b: string): number {
   const left = BigInt(a), right = BigInt(b);
   return left < right ? -1 : left > right ? 1 : 0;
 }
-export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[]) {
+export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[], correctTimes = false) {
   const result = new Map(existing.map(account => [accountKey(account), { ...account, list: [...account.list] }]));
-  let added = 0, duplicates = 0;
+  let added = 0, duplicates = 0, corrected = 0;
   for (const account of incoming) {
     const key = accountKey(account);
     const target = result.get(key);
@@ -174,10 +174,11 @@ export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[]
       const id = BigInt(row.id).toString();
       const prior = rows.get(id);
       if (prior) {
-        if (prior.item_id !== row.item_id || prior.time !== row.time || poolKey(prior, account.game) !== poolKey(row, account.game)) throw new Error(`Conflicting record ${row.id}. Nothing was merged.`);
+        if (prior.item_id !== row.item_id || (!correctTimes && prior.time !== row.time) || poolKey(prior, account.game) !== poolKey(row, account.game)) throw new Error(`Conflicting record ${row.id}. Nothing was merged.`);
         duplicates++;
         // Retain existing optional information when the incoming row omits it.
-        rows.set(id, { ...row, ...prior });
+        if (correctTimes && prior.time !== row.time) corrected++;
+        rows.set(id, { ...row, ...prior, time: correctTimes ? row.time : prior.time });
       } else { rows.set(id, { ...row }); added++; }
     }
     const merged = { ...(target ?? account), list: [...rows.values()].sort((a, b) => compareIds(a.id, b.id)) };
@@ -186,7 +187,7 @@ export function mergeAccounts(existing: GachaAccount[], incoming: GachaAccount[]
     if (target && target.lang !== account.lang) delete merged.lang;
     result.set(key, merged);
   }
-  return { accounts: [...result.values()], added, duplicates };
+  return { accounts: [...result.values()], added, duplicates, corrected };
 }
 
 export function exportUigf(accounts: GachaAccount[], appVersion = fallbackGachaVersion) {

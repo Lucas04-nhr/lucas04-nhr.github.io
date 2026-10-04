@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { gachaLog } from "../theme/utils/gachaLog";
 import VPButton from "vuepress-theme-plume/components/VPButton.vue";
 import CardGrid from "vuepress-theme-plume/components/global/VPCardGrid.vue";
 import RepoCard from "vuepress-theme-plume/features/RepoCard.vue";
@@ -80,6 +81,7 @@ const personalWorker = ref("");
 const personalToken = ref("");
 const ownsWorker = ref(false);
 const syncing = ref(false);
+const preferLocalTimes = ref(false);
 const personalSyncStatus = ref("");
 const personalSyncError = ref("");
 let syncRequest: AbortController | undefined;
@@ -87,19 +89,22 @@ let syncRequest: AbortController | undefined;
 async function syncPersonal() {
   if (busy.value || !ready.value || !ownsWorker.value) return;
   busy.value = true;
+  gachaLog("info", "Sync started");
   personalSyncError.value = "";
   personalSyncStatus.value = "Reading remote accounts…";
   const controller = new AbortController();
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; });
+    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value);
     controller.signal.throwIfAborted();
     accounts.value = synced;
     if (!selectedKey.value && synced.length) selectedKey.value = groupAccountKey(synced[0]);
     save();
+    gachaLog("info", "Sync completed");
     personalSyncStatus.value = "Personal sync complete. Local and remote records merged; deletions are not propagated.";
   } catch (err) {
+    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Sync cancelled; earlier batches may be saved" : "Sync failed");
     personalSyncStatus.value = "";
     personalSyncError.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
   } finally {
@@ -353,13 +358,18 @@ function save() {
       }),
     );
     storageError.value = "";
+    gachaLog("info", "Records saved locally", { accounts: accounts.value.length });
   } catch {
+    gachaLog("error", "Local record save failed");
     storageError.value =
       "Browser storage is unavailable or full. Records remain in memory. Export a backup now; refreshing may lose recent changes.";
   }
 }
 function merge(incoming: GachaAccount[], correctTimes = false) {
-  const result = mergeAccounts(accounts.value, incoming, correctTimes);
+  let result: ReturnType<typeof mergeAccounts>;
+  try { result = mergeAccounts(accounts.value, incoming, correctTimes); }
+  catch (err) { gachaLog("error", "Record merge rejected due to a conflict"); throw err; }
+  gachaLog(result.corrected ? "warning" : "info", "Records merged", { added: result.added, duplicates: result.duplicates, corrected: result.corrected });
   accounts.value = compactAccounts(result.accounts);
   if (!selectedKey.value && incoming.length)
     selectedKey.value = groupAccountKey(incoming[0]);
@@ -380,11 +390,13 @@ onMounted(() => {
       }
       if (Object.keys(games).some((key) => archive[key]?.length))
         accounts.value = compactAccounts(parseUigf(archive));
+      gachaLog("info", "Local archive restored", { accounts: accounts.value.length });
       selectedKey.value = accounts.value[0]
         ? groupAccountKey(accounts.value[0])
         : "";
     }
   } catch {
+    gachaLog("error", "Local archive restore failed");
     storageError.value =
       "Could not read the local archive. It has not been overwritten. Check browser storage or import a backup.";
   }
@@ -454,6 +466,7 @@ async function dropFiles(event: DragEvent) {
 
 async function importJsonFiles(files: File[]) {
   if (!files.length || busy.value || !ready.value) return;
+  gachaLog("info", "Import started");
   importError.value = "";
   importStatus.value = "Importing JSON files…";
   busy.value = true;
@@ -470,8 +483,10 @@ async function importJsonFiles(files: File[]) {
     }
     if (!ready.value) return;
     const result = merge(incoming);
+    gachaLog("info", "Import completed", { files: files.length, added: result.added, duplicates: result.duplicates });
     importStatus.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
   } catch (err) {
+    gachaLog("error", "Import failed");
     importStatus.value = "";
     importError.value = err instanceof Error ? err.message : "Import failed.";
   } finally {
@@ -482,6 +497,7 @@ async function importJsonFiles(files: File[]) {
 async function retrieve() {
   if (busy.value || !ready.value || !gachaFetchAllowed.value) return;
   busy.value = true;
+  gachaLog("info", "Fetch started");
   error.value = "";
   const controller = new AbortController();
   request = controller;
@@ -499,6 +515,7 @@ async function retrieve() {
       signal: controller.signal,
       progress: (message) => {
         status.value = message;
+        gachaLog("info", "Fetch progress");
       },
       onPage: (account) => {
         const result = merge([account], repairTimes);
@@ -509,8 +526,10 @@ async function retrieve() {
         save();
       },
     });
+    gachaLog("info", "Fetch completed", { read: total, added, corrected });
     status.value = `Finished: ${total} records read, ${added} added, ${corrected} timestamps corrected. ${total === 0 ? "No available records returned." : ""}`;
   } catch (err) {
+    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Fetch cancelled" : "Fetch failed", { added, corrected });
     if (controller.signal.aborted)
       status.value = `Stopped. ${added} new records retained, ${corrected} timestamps corrected.`;
     else {
@@ -542,6 +561,7 @@ const exportFilename = computed(() => {
 
 async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_GachaManager.json") {
   if (exporting.value) return;
+  gachaLog("info", "Export started");
   exportError.value = "";
   exportWarning.value = "";
   exporting.value = true;
@@ -565,12 +585,15 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     anchor.download = filename;
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    gachaLog("info", "Export prepared", { accounts: prepared.accounts.length });
     exportStatus.value = "Export ready. Your saved records have not been changed.";
     if (prepared.missingNames.length) {
+      gachaLog("warning", "Export omitted unavailable item names", { accounts: prepared.missingNames.length });
       const affected = prepared.missingNames.map(account => `${account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game]} · ${account.uid}`).join("; ");
       exportWarning.value = `Some ${exportLanguages[lang]} item names are missing for: ${affected}. All records in each affected game account were exported without name / item_name fields. Other accounts retain localized names.`;
     }
   } catch (err) {
+    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Export cancelled" : "Export failed");
     exportStatus.value = "";
     exportError.value = err instanceof Error ? `${err.message}${includeItemNames.value ? " To export without localized names, turn off Include item names and retry." : ""}` : "Export failed.";
   } finally {
@@ -580,6 +603,7 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
 }
 function deleteAccount() {
   if (busy.value || !selected.value) return;
+  gachaLog("warning", "Local account records deleted", { records: selected.value.accounts.reduce((total, account) => total + account.list.length, 0) });
   delete serverByAccount.value[selectedKey.value];
   accounts.value = accounts.value.filter(
     (account) => groupAccountKey(account) !== selectedKey.value,
@@ -595,6 +619,7 @@ async function loadMetadata() {
   if (!selected.value) return;
   metadataRequest?.abort();
   metadataBusy.value = true;
+  gachaLog("info", "Metadata lookup started");
   metadataStatus.value = "Loading item metadata…";
   const account = selected.value;
   const controller = new AbortController();
@@ -630,8 +655,10 @@ async function loadMetadata() {
         ).size;
       }
     }
+    gachaLog(missing ? "warning" : "info", "Metadata lookup completed", { loaded, missing });
     metadataStatus.value = `Loaded ${loaded} items (selected display languages)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
   } catch {
+    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Metadata lookup cancelled" : "Metadata lookup failed");
     if (!controller.signal.aborted)
       metadataStatus.value =
         "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
@@ -900,6 +927,8 @@ async function loadMetadata() {
           <label>PERSONAL_SYNC_TOKEN<input v-model="personalToken" type="password" autocomplete="off" :disabled="busy" required /></label>
         </div>
         <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
+        <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
+        <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
         <div class="actions">
           <VPButton @click="syncPersonal" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />

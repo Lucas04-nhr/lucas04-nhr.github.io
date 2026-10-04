@@ -1,3 +1,4 @@
+import { gachaLog } from "./gachaLog";
 import { compactAccounts, accountKey, compareIds, localizeAccount, poolKey, poolNames, servers, validateRecord, type ExportLanguage, type GachaAccount, type Game, type ItemMetadata, type Metadata, type SelectableGame, type ServerId } from "./gachaRecords";
 import { fetchWithGachaHelper } from "./gachaTransport";
 
@@ -180,6 +181,7 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
       const previous = existing?.list.filter(row => game === "hk4e_ugc" ? (type === "1000" ? row.op_gacha_type === "1000" : row.op_gacha_type !== "1000") : poolKey(row, game) === poolKey(rows[0], game));
       const newest = previous?.reduce<string | undefined>((max, row) => !max || compareIds(row.id, max) > 0 ? row.id : max, undefined);
       options.onPage(account);
+      gachaLog("info", "Official record page saved", { page, records: rows.length });
       total += rows.length;
       const next = rows[rows.length - 1].id;
       if (rows.length < size || (canStop && newest && rows.some(row => compareIds(row.id, newest) <= 0))) break;

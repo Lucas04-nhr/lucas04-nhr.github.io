@@ -40,6 +40,10 @@
     ["public-operation-nap-sg.hoyoverse.com", ["/common/gacha_record/api/getGachaLog"]],
   ]);
   const pending = new Map();
+  const log = (level, message) => {
+    const write = level === "warning" ? console.warn : level === "error" ? console.error : console.info;
+    write.call(console, `[Gacha Manager Helper] [${level}] ${message}`);
+  };
   const dictionaryUrl = (url) => {
     const entries = [...url.searchParams];
     return (url.hostname === "api-takumi.mihoyo.com" && url.pathname === "/event/platsimulator/config" && entries.length === 2 && url.searchParams.get("gids") === "2" && url.searchParams.get("game") === "hk4e")
@@ -53,7 +57,7 @@
     if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
     if (!message || message.type !== REQUEST || message.protocol !== 1 || typeof message.id !== "string" || message.id.length > 100) return;
     if (message.action === "probe") { respond(message.id, { version: "1.3.1" }); return; }
-    if (message.action === "cancel") { pending.get(message.id)?.abort(); pending.delete(message.id); return; }
+    if (message.action === "cancel") { log("warning", "Request cancelled"); pending.get(message.id)?.abort(); pending.delete(message.id); return; }
     if (message.action !== "fetch") return;
     let url;
     try {
@@ -62,8 +66,9 @@
       if (!validUrl(url) || (!dictionaryUrl(url) && !url.searchParams.get("authkey"))) throw new Error();
     } catch { respond(message.id, null, "The helper only accepts official gacha history endpoints with authkey or approved public item dictionaries."); return; }
     if (pending.size >= 2 || pending.has(message.id)) { respond(message.id, null, "Too many helper requests. Stop the current fetch and try again."); return; }
-    const finish = (result, error) => { pending.delete(message.id); respond(message.id, result, error); };
+    const finish = (result, error) => { log(error ? "error" : "info", error ? "Request failed" : "Request completed"); pending.delete(message.id); respond(message.id, result, error); };
     try {
+      log("info", "Official API request started");
       const request = GM_xmlhttpRequest({
         method: "GET",
         url: url.href,

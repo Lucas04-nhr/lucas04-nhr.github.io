@@ -52,11 +52,12 @@ import { personalApiBase, synchronizePersonal, validateSyncToken } from "../them
 import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "../theme/utils/gachaConnection";
 
 const connectionStatus = ref("");
+const connectionFeedback = ref<"note" | "caution">("note");
 const connectionBusy = ref(false);
 let connectionRequest: AbortController | undefined;
 
 async function rememberConnection() {
-  if (connectionBusy.value || busy.value || !ready.value) return;
+  if (connectionBusy.value || busy.value || !ready.value || !ownsWorker.value) return;
   connectionBusy.value = true;
   const controller = new AbortController();
   connectionRequest = controller;
@@ -65,14 +66,16 @@ async function rememberConnection() {
     const worker = workerHttpsOrigin();
     const token = personalToken.value;
     validateSyncToken(token);
+    connectionFeedback.value = "note";
     connectionStatus.value = "Checking Worker health…";
     await checkGachaHealth(worker, controller.signal);
     controller.signal.throwIfAborted();
-    if (!ready.value || worker !== workerHttpsOrigin() || token !== personalToken.value)
+    if (!ready.value || !ownsWorker.value || worker !== workerHttpsOrigin() || token !== personalToken.value)
       throw new Error("Connection details changed during verification. Try remembering them again.");
     await saveGachaConnection({ worker, personalToken: token });
     connectionStatus.value = "Connection details remembered for 1 year in this browser.";
   } catch (err) {
+    connectionFeedback.value = "caution";
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
   } finally {
     connectionBusy.value = false;
@@ -85,9 +88,11 @@ function forgetConnection() {
     personalWorker.value = "";
     personalToken.value = "";
     ownsWorker.value = false;
+    connectionFeedback.value = "note";
     connectionStatus.value = "Saved connection details cleared.";
     return true;
   } catch {
+    connectionFeedback.value = "caution";
     connectionStatus.value = "Could not clear saved details. Clear this site’s cookies and storage in your browser.";
     return false;
   }
@@ -173,6 +178,7 @@ const status = ref("");
 const error = ref("");
 const storageError = ref("");
 const metadataStatus = ref("");
+const metadataFeedback = ref<"note" | "warning" | "caution">("note");
 const importStatus = ref("");
 const importError = ref("");
 const exportStatus = ref("");
@@ -447,9 +453,13 @@ onMounted(() => {
     // Preserve any values entered while decryption was in progress.
     if (!personalWorker.value) personalWorker.value = connection.worker;
     if (!personalToken.value) personalToken.value = connection.personalToken;
+    connectionFeedback.value = "note";
     connectionStatus.value = "Saved connection details restored.";
   }).catch(() => {
-    if (ready.value) connectionStatus.value = "Could not restore saved details. Clear them and save again.";
+    if (ready.value) {
+      connectionFeedback.value = "caution";
+      connectionStatus.value = "Could not restore saved details. Clear them and save again.";
+    }
   });
   ready.value = true;
   if (accounts.value.length) save();
@@ -669,6 +679,7 @@ async function loadMetadata() {
   metadataRequest?.abort();
   metadataBusy.value = true;
   gachaLog("info", "Metadata lookup started");
+  metadataFeedback.value = "note";
   metadataStatus.value = "Loading item metadata…";
   const account = selected.value;
   const controller = new AbortController();
@@ -705,12 +716,14 @@ async function loadMetadata() {
       }
     }
     gachaLog(missing ? "warning" : "info", "Metadata lookup completed", { loaded, missing });
+    metadataFeedback.value = missing ? "warning" : "note";
     metadataStatus.value = `Loaded ${loaded} items (selected display languages)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
   } catch {
     gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Metadata lookup cancelled" : "Metadata lookup failed");
-    if (!controller.signal.aborted)
-      metadataStatus.value =
-        "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
+    if (!controller.signal.aborted) {
+      metadataFeedback.value = "caution";
+      metadataStatus.value = "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
+    }
   } finally {
     if (metadataRequest === controller) {
       metadataBusy.value = false;
@@ -985,10 +998,10 @@ async function loadMetadata() {
         <div class="connection-memory">
           <p class="muted">Remember the Worker URL and personal-sync token for 1 year after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
           <div class="actions">
-            <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || !personalWorker" @click="rememberConnection" />
+            <VPButton text="Remember connection details" theme="alt" :disabled="busy || !ready || !ownsWorker || connectionBusy || !personalWorker" @click="rememberConnection" />
             <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
           </div>
-          <p v-if="connectionStatus" class="muted" role="status" aria-live="polite">{{ connectionStatus }}</p>
+          <p v-if="connectionStatus" class="hint-container" :class="connectionFeedback" :role="connectionFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">{{ connectionStatus }}</p>
         </div>
         <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
         <p class="muted">
@@ -1115,7 +1128,7 @@ async function loadMetadata() {
             }}</VPButton
           ><GachaConfirmButton text="Delete account" :context="selectedKey" :disabled="busy || !!deletedPreview" :action="deleteAccount" success-text="Deleted" />
         </div>
-        <p v-if="metadataStatus" role="status" class="muted">
+        <p v-if="metadataStatus" class="hint-container" :class="metadataFeedback" :role="metadataFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">
           {{ metadataStatus }}
         </p>
         <p class="muted destructive-hint">Delete account removes this account’s local records. Export a backup first. Click once, then press and hold to confirm.</p>

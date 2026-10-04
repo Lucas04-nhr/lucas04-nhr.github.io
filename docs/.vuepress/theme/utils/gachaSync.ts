@@ -1,6 +1,6 @@
 import { gachaLog } from "./gachaLog";
 import { gachaApiError } from "./gachaApiError";
-import { compactAccounts, exportUigf, mergeAccounts, parseUigf, type GachaAccount } from "./gachaRecords";
+import { accountKey, compactAccounts, exportUigf, mergeAccounts, parseUigf, type GachaAccount } from "./gachaRecords";
 
 export function personalApiBase(value: string): string {
   const url = new URL(value);
@@ -19,9 +19,11 @@ export function validateSyncToken(token: string) {
   if (!/^\S{32,512}$/.test(token)) throw new Error("Use a token of 32–512 non-whitespace characters.");
 }
 
+export type PersonalSyncMode = "merge" | "pull" | "push";
+
 // Read a consistent snapshot before reconciliation. Each write is a separate
 // transaction; conflicts stop immediately and are never retried blindly.
-export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string) => void, preferLocalTimes = false): Promise<GachaAccount[]> {
+export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge"): Promise<GachaAccount[]> {
   base = personalApiBase(base);
   validateSyncToken(token);
   const post = async (body: Record<string, unknown>) => {
@@ -67,8 +69,16 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
     } while (after);
   }
   const validated = remote.length ? parseUigf(exportUigf(remote)) : [];
+  if (mode === "pull") {
+    signal.throwIfAborted();
+    gachaLog("warning", "Remote snapshot replaces all local records", { accounts: validated.length });
+    return compactAccounts(validated);
+  }
+  const localValidated = local.length ? parseUigf(exportUigf(local)) : [];
   // Local timestamps are authoritative only when explicitly requested after correction.
-  const reconciliation = preferLocalTimes
+  const reconciliation = mode === "push"
+    ? { accounts: localValidated, corrected: 0 }
+    : preferLocalTimes
     ? mergeAccounts(validated, local, true)
     : mergeAccounts(local, validated);
   if (reconciliation.corrected) gachaLog("warning", "Sync time conflicts resolved using local timestamps", { corrected: reconciliation.corrected });
@@ -82,6 +92,23 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
         list: account.list.slice(offset, offset + 500).map(row => ({ ...row, id: BigInt(row.id).toString(), item_id: BigInt(row.item_id).toString() })) };
       if (new TextEncoder().encode(JSON.stringify({ ...body, revision: Number.MAX_SAFE_INTEGER })).length > 1024 * 1024) throw new Error("Sync batch exceeds 1 MiB.");
       batches.push(body);
+    }
+  }
+  if (mode === "push") {
+    gachaLog("warning", "Local snapshot replaces all remote records", { accounts: merged.length });
+    const localByKey = new Map(merged.map(account => [accountKey(account), account]));
+    for (const account of validated) {
+      const replacement = localByKey.get(accountKey(account));
+      if (!replacement) {
+        batches.push({ action: "delete_account", game: account.game, uid: BigInt(account.uid).toString() });
+        continue;
+      }
+      const ids = new Set(replacement.list.map(row => BigInt(row.id).toString()));
+      const deletes = account.list.filter(row => !ids.has(BigInt(row.id).toString())).map(row => BigInt(row.id).toString());
+      for (let offset = 0; offset < deletes.length; offset += 500) {
+        batches.push({ action: "write", game: account.game, uid: BigInt(account.uid).toString(), timezone: replacement.timezone,
+          list: [], delete_ids: deletes.slice(offset, offset + 500) });
+      }
     }
   }
   for (const [index, body] of batches.entries()) {

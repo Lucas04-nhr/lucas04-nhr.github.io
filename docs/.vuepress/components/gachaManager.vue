@@ -86,23 +86,32 @@ const personalSyncStatus = ref("");
 const personalSyncError = ref("");
 let syncRequest: AbortController | undefined;
 
-async function syncPersonal() {
+async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   if (busy.value || !ready.value || !ownsWorker.value) return;
   busy.value = true;
-  gachaLog("info", "Sync started");
+  gachaLog(mode === "merge" ? "info" : "warning", `Sync started: ${mode}`);
   personalSyncError.value = "";
   personalSyncStatus.value = "Reading remote accounts…";
   const controller = new AbortController();
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value);
+    const synced = await synchronizePersonal(personalWorker.value, personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
     controller.signal.throwIfAborted();
     accounts.value = synced;
-    if (!selectedKey.value && synced.length) selectedKey.value = groupAccountKey(synced[0]);
+    if (!synced.some(account => groupAccountKey(account) === selectedKey.value))
+      selectedKey.value = synced.length ? groupAccountKey(synced[0]) : "";
+    if (mode === "pull") {
+      const keys = new Set(synced.map(groupAccountKey));
+      serverByAccount.value = Object.fromEntries(Object.entries(serverByAccount.value).filter(([key]) => keys.has(key)));
+    }
     save();
     gachaLog("info", "Sync completed");
-    personalSyncStatus.value = "Personal sync complete. Local and remote records merged; deletions are not propagated.";
+    personalSyncStatus.value = mode === "pull"
+      ? "Remote records downloaded. All local records replaced; remote data unchanged."
+      : mode === "push"
+        ? "Remote records replaced with the local archive, including account and record deletions."
+        : "Personal sync complete. Local and remote records merged; deletions are not propagated.";
   } catch (err) {
     gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Sync cancelled; earlier batches may be saved" : "Sync failed");
     personalSyncStatus.value = "";
@@ -924,15 +933,24 @@ async function loadMetadata() {
         Sync merges saved records in both directions; local deletions are not propagated.
         Each upload batch commits separately.
       </p>
-      <form class="remote-service-form" @submit.prevent="syncPersonal">
+      <form class="remote-service-form" @submit.prevent="syncPersonal()">
         <div class="controls">
           <label>PERSONAL_SYNC_TOKEN<input v-model="personalToken" type="password" autocomplete="off" :disabled="busy" required /></label>
         </div>
         <label class="check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
         <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
         <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
+        <p class="muted">
+          Sync personal records merges local and remote archives; deletions are not propagated.
+          Pull and replace local replaces the entire local archive with remote records, including an empty remote archive.
+          Push and replace remote replaces the entire remote archive with local records and removes remote accounts and records absent locally, including clearing remote records when the local archive is empty.
+          The timestamp conflict option applies only to merging. Remote writes commit in separate batches; cancellation or failure can leave a partial replacement.
+          <strong>Export a backup of your data before important operations, especially either replacement operation.</strong>
+        </p>
         <div class="actions">
-          <VPButton @click="syncPersonal" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
+          <VPButton @click="syncPersonal()" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Sync personal records" />
+          <VPButton @click="syncPersonal('pull')" theme="alt" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Pull and replace local" />
+          <VPButton @click="syncPersonal('push')" theme="alt" :disabled="busy || !ready || !ownsWorker || !personalWorker || !personalToken" text="Push and replace remote" />
           <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
         </div>
         <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>

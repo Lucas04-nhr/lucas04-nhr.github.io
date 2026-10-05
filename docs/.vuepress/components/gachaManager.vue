@@ -1568,6 +1568,10 @@ label {
   font-size: 14px;
   color: var(--vp-c-text-2);
 }
+label[for="worker-host"] {
+  color: var(--vp-c-text-1);
+  font-size: inherit;
+}
 input,
 select,
 textarea {

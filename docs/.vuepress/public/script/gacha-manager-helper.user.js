@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Gacha Manager Helper
+// @name         Helios Assistant Helper
 // @namespace    https://blog.lucas04.top/tool/helios-assistant/
 // @version      1.3.1
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
@@ -74,7 +74,7 @@
         : level === "error"
           ? console.error
           : console.info;
-    write.call(console, `[Gacha Manager Helper] [${level}] ${message}`);
+    write.call(console, `[Helios Assistant Helper] [${level}] ${message}`);
   };
   const dictionaryUrl = (url) => {
     const entries = [...url.searchParams];

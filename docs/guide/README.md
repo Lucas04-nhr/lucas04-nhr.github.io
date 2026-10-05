@@ -11,5 +11,5 @@ comments: false
 - [R for Bioinformatics Cookbook](/docs/r-course/)
 - [HUST Graduation Project Template Usage Guide](/docs/hust-gp-template/)
 - [KU Master's Courses](/docs/ku/)
-- [Gacha Manager](/docs/helios-assistant/)
+- [Helios Assistant](/docs/helios-assistant/)
 - [StayUP Schedule](/docs/stayup-schedule/)

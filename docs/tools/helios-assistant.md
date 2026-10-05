@@ -14,14 +14,14 @@ copyright: false
   <LinkCard
   icon="mdi:toolbox-outline"
   title="User Guide"
-  href="/docs/helios-assistant/frontend/">
+  href="/docs/helios-assistant/userguide/">
     See the documentation for Helios Assistant.
   </LinkCard>
 
 <LinkCard
   icon="mdi:api"
   title="Backend API"
-  href="/docs/helios-assistant/backend/">
+  href="/docs/helios-assistant/gacha-metadata-api/">
 See the documentation for the Gacha Metadata API.
 </LinkCard>
 </CardGrid>

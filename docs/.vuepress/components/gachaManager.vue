@@ -47,29 +47,54 @@ import { fetchGachaVersion } from "../theme/utils/gachaVersion";
 
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
-import { personalApiBase, synchronizePersonal, validateSyncToken } from "../theme/utils/gachaSync";
+import {
+  personalApiBase,
+  synchronizePersonal,
+  validateSyncToken,
+} from "../theme/utils/gachaSync";
 
-import { clearGachaConnection, loadGachaConnection, saveGachaConnection } from "../theme/utils/gachaConnection";
+import {
+  clearGachaConnection,
+  loadGachaConnection,
+  saveGachaConnection,
+} from "../theme/utils/gachaConnection";
 
 const connectionStatus = ref("");
 const connectionFeedback = ref<"note" | "caution">("note");
 const connectionBusy = ref(false);
 let connectionRequest: AbortController | undefined;
-const savedConnection = ref<{ worker: string; personalToken: string; enableSync: boolean }>();
+const savedConnection = ref<{
+  worker: string;
+  personalToken: string;
+  enableSync: boolean;
+}>();
 const connectionConfigured = computed(() => !!savedConnection.value);
-const syncEnabled = computed(() => !!savedConnection.value?.enableSync && !!savedConnection.value.personalToken);
+const syncEnabled = computed(
+  () =>
+    !!savedConnection.value?.enableSync &&
+    !!savedConnection.value.personalToken,
+);
 function activeWorkerOrigin() {
-  if (!savedConnection.value) throw new Error("Save remote service settings before using this feature.");
+  if (!savedConnection.value)
+    throw new Error("Save remote service settings before using this feature.");
   return savedConnection.value.worker;
 }
 
 async function rememberConnection() {
-  if (connectionBusy.value || busy.value || exporting.value || metadataBusy.value || !ready.value) return;
+  if (
+    connectionBusy.value ||
+    busy.value ||
+    exporting.value ||
+    metadataBusy.value ||
+    !ready.value
+  )
+    return;
   connectionBusy.value = true;
   const controller = new AbortController();
   connectionRequest = controller;
   try {
-    if (!personalWorker.value) throw new Error("Enter a Worker HTTPS domain before saving settings.");
+    if (!personalWorker.value)
+      throw new Error("Enter a Worker HTTPS domain before saving settings.");
     const worker = workerHttpsOrigin();
     const token = personalToken.value;
     const enableSync = ownsWorker.value;
@@ -78,8 +103,15 @@ async function rememberConnection() {
     connectionStatus.value = "Checking Worker health…";
     await checkGachaHealth(worker, controller.signal);
     controller.signal.throwIfAborted();
-    if (!ready.value || enableSync !== ownsWorker.value || worker !== workerHttpsOrigin() || token !== personalToken.value)
-      throw new Error("Connection details changed during verification. Save settings again.");
+    if (
+      !ready.value ||
+      enableSync !== ownsWorker.value ||
+      worker !== workerHttpsOrigin() ||
+      token !== personalToken.value
+    )
+      throw new Error(
+        "Connection details changed during verification. Save settings again.",
+      );
     await saveGachaConnection({ worker, personalToken: token, enableSync });
     controller.signal.throwIfAborted();
     if (!ready.value) return;
@@ -87,7 +119,8 @@ async function rememberConnection() {
     connectionStatus.value = "Settings saved";
   } catch (err) {
     connectionFeedback.value = "caution";
-    connectionStatus.value = err instanceof Error ? err.message : "Could not save settings.";
+    connectionStatus.value =
+      err instanceof Error ? err.message : "Could not save settings.";
   } finally {
     connectionBusy.value = false;
     connectionRequest = undefined;
@@ -101,11 +134,13 @@ function forgetConnection() {
     personalToken.value = "";
     ownsWorker.value = false;
     connectionFeedback.value = "note";
-    connectionStatus.value = "Saved settings cleared. Save a valid remote service to show archive features again.";
+    connectionStatus.value =
+      "Saved settings cleared. Save a valid remote service to show archive features again.";
     return true;
   } catch {
     connectionFeedback.value = "caution";
-    connectionStatus.value = "Could not clear saved details. Clear this site’s cookies and storage in your browser.";
+    connectionStatus.value =
+      "Could not clear saved details. Clear this site’s cookies and storage in your browser.";
     return false;
   }
 }
@@ -120,11 +155,16 @@ const workerHost = computed({
 });
 function workerHttpsOrigin() {
   const origin = personalApiBase(personalWorker.value);
-  if (!origin.startsWith("https://")) throw new Error("The Worker URL requires HTTPS.");
+  if (!origin.startsWith("https://"))
+    throw new Error("The Worker URL requires HTTPS.");
   return origin;
 }
 const remoteServiceReady = computed(() => {
-  try { return !!workerHttpsOrigin(); } catch { return false; }
+  try {
+    return !!workerHttpsOrigin();
+  } catch {
+    return false;
+  }
 });
 function workerUrlKeydown(event: KeyboardEvent) {
   if (event.key === "/") event.stopPropagation();
@@ -140,7 +180,9 @@ function requireWorkerOwnership() {
   ownershipRow.value?.querySelector("input")?.focus({ preventScroll: true });
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     ownershipAnimation = ownershipRow.value?.animate(
-      [0, -8, 8, -6, 6, -3, 3, 0].map(x => ({ transform: `translateX(${x}px)` })),
+      [0, -8, 8, -6, 6, -3, 3, 0].map((x) => ({
+        transform: `translateX(${x}px)`,
+      })),
       { duration: 450, easing: "ease-in-out" },
     );
   }
@@ -164,27 +206,54 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(activeWorkerOrigin(), savedConnection.value!.personalToken, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
+    const synced = await synchronizePersonal(
+      activeWorkerOrigin(),
+      savedConnection.value!.personalToken,
+      accounts.value,
+      controller.signal,
+      (message) => {
+        personalSyncStatus.value = message;
+        gachaLog("info", "Sync progress");
+      },
+      preferLocalTimes.value,
+      mode,
+    );
     controller.signal.throwIfAborted();
     accounts.value = synced;
-    if (!synced.some(account => groupAccountKey(account) === selectedKey.value))
+    if (
+      !synced.some((account) => groupAccountKey(account) === selectedKey.value)
+    )
       selectedKey.value = synced.length ? groupAccountKey(synced[0]) : "";
     if (mode === "pull") {
       const keys = new Set(synced.map(groupAccountKey));
-      serverByAccount.value = Object.fromEntries(Object.entries(serverByAccount.value).filter(([key]) => keys.has(key)));
+      serverByAccount.value = Object.fromEntries(
+        Object.entries(serverByAccount.value).filter(([key]) => keys.has(key)),
+      );
     }
     save();
     gachaLog("info", "Sync completed");
-    personalSyncStatus.value = mode === "pull"
-      ? "Remote records downloaded. All local records replaced; remote data unchanged."
-      : mode === "push"
-        ? "Remote records replaced with the local archive, including account and record deletions."
-        : "Personal sync complete. Local and remote records merged; deletions are not propagated.";
+    personalSyncStatus.value =
+      mode === "pull"
+        ? "Remote records downloaded. All local records replaced; remote data unchanged."
+        : mode === "push"
+          ? "Remote records replaced with the local archive, including account and record deletions."
+          : "Personal sync complete. Local and remote records merged; deletions are not propagated.";
     return !storageError.value;
   } catch (err) {
-    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Sync cancelled; earlier batches may be saved" : "Sync failed");
+    gachaLog(
+      controller.signal.aborted ? "warning" : "error",
+      controller.signal.aborted
+        ? "Sync cancelled; earlier batches may be saved"
+        : "Sync failed",
+    );
     personalSyncStatus.value = "";
-    personalSyncError.value = controller.signal.aborted ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile." : err instanceof TypeError ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS." : err instanceof Error ? err.message : "Personal sync failed.";
+    personalSyncError.value = controller.signal.aborted
+      ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile."
+      : err instanceof TypeError
+        ? "Cannot reach your Worker. Check its address, network and ALLOWED_ORIGINS."
+        : err instanceof Error
+          ? err.message
+          : "Personal sync failed.";
     return false;
   } finally {
     busy.value = false;
@@ -219,23 +288,42 @@ const exportWarning = ref("");
 const includeItemNames = ref(true);
 const exportAccountKeys = ref<string[]>([]);
 const exportSelectedAccounts = computed(() =>
-  accounts.value.filter(account => exportAccountKeys.value.includes(accountKey(account))),
+  accounts.value.filter((account) =>
+    exportAccountKeys.value.includes(accountKey(account)),
+  ),
 );
 const exportAccountOrder: Game[] = ["hk4e", "hk4e_ugc", "hkrpg", "nap"];
-const exportAccounts = computed(() => [...accounts.value].sort((a, b) =>
-  exportAccountOrder.indexOf(a.game) - exportAccountOrder.indexOf(b.game),
-));
-const exportAllAccounts = computed(() =>
-  !exportSelectedAccounts.value.length || exportSelectedAccounts.value.length === accounts.value.length,
+const exportAccounts = computed(() =>
+  [...accounts.value].sort(
+    (a, b) =>
+      exportAccountOrder.indexOf(a.game) - exportAccountOrder.indexOf(b.game),
+  ),
 );
-const exportTargets = computed(() => exportAllAccounts.value ? accounts.value : exportSelectedAccounts.value);
+const exportAllAccounts = computed(
+  () =>
+    !exportSelectedAccounts.value.length ||
+    exportSelectedAccounts.value.length === accounts.value.length,
+);
+const exportTargets = computed(() =>
+  exportAllAccounts.value ? accounts.value : exportSelectedAccounts.value,
+);
 const exportButtonLabel = computed(() => {
-  if (exportAllAccounts.value) return accounts.value.length === 1 ? "Export account" : "Export all accounts";
-  return exportSelectedAccounts.value.length === 1 ? "Export selected account" : "Export selected accounts";
+  if (exportAllAccounts.value)
+    return accounts.value.length === 1
+      ? "Export account"
+      : "Export all accounts";
+  return exportSelectedAccounts.value.length === 1
+    ? "Export selected account"
+    : "Export selected accounts";
 });
-watch(() => accounts.value.map(accountKey), keys => {
-  exportAccountKeys.value = exportAccountKeys.value.filter(key => keys.includes(key));
-});
+watch(
+  () => accounts.value.map(accountKey),
+  (keys) => {
+    exportAccountKeys.value = exportAccountKeys.value.filter((key) =>
+      keys.includes(key),
+    );
+  },
+);
 const exportLanguage = ref<ExportLanguage>("en-us");
 const exporting = ref(false);
 let exportRequest: AbortController | undefined;
@@ -257,8 +345,11 @@ let metadataRequest: AbortController | undefined;
 const displayAccounts = computed(() => groupAccounts(accounts.value));
 const deletedPreview = ref<ReturnType<typeof groupAccounts>[number]>();
 let deletedPreviewTimer: ReturnType<typeof setTimeout> | undefined;
-const selected = computed(() =>
-  displayAccounts.value.find((account) => account.key === selectedKey.value) ?? deletedPreview.value,
+const selected = computed(
+  () =>
+    displayAccounts.value.find(
+      (account) => account.key === selectedKey.value,
+    ) ?? deletedPreview.value,
 );
 const allRows = computed(
   () =>
@@ -276,10 +367,11 @@ function displayTime(row: GachaRecord): string {
 function rowGame(row: GachaRecord): Game {
   return row.__game as Game;
 }
-function rowMetadata(row: GachaRecord, language = displayLanguage.value): Metadata {
-  return (
-    metadata.value[language]?.[rowGame(row)] ?? {}
-  );
+function rowMetadata(
+  row: GachaRecord,
+  language = displayLanguage.value,
+): Metadata {
+  return metadata.value[language]?.[rowGame(row)] ?? {};
 }
 function itemMetadata(row: GachaRecord, language = displayLanguage.value) {
   return rowMetadata(row, language)[row.item_id];
@@ -306,9 +398,11 @@ function serverAlias(game: SelectableGame) {
 }
 function serverName(language = overviewLanguage) {
   if (!selected.value) return displayLabel("Server", language);
-  if (selected.value.game !== "hk4e") return displayLabel(serverAlias(selected.value.game), language);
+  if (selected.value.game !== "hk4e")
+    return displayLabel(serverAlias(selected.value.game), language);
   const stored = serverByAccount.value[selected.value.key];
-  if (stored === "cn") return displayLabel(serverAlias(selected.value.game), language);
+  if (stored === "cn")
+    return displayLabel(serverAlias(selected.value.game), language);
   const region = stored
     ? servers[stored].label
     : inferredServer(selected.value.accounts[0]);
@@ -327,8 +421,11 @@ function poolTopRank(key: string) {
 }
 const topRank = computed(() => poolTopRank(selectedPool.value));
 const rarityOptions = computed(() =>
-  selectedPool.value === "hk4e_ugc:1000" ? [4, 3, 2] :
-    rows.value.some((row) => rowGame(row) === "hk4e_ugc") ? [5, 4, 3, 2] : [5, 4, 3],
+  selectedPool.value === "hk4e_ugc:1000"
+    ? [4, 3, 2]
+    : rows.value.some((row) => rowGame(row) === "hk4e_ugc")
+      ? [5, 4, 3, 2]
+      : [5, 4, 3],
 );
 function rarityLabel(rank: number) {
   return selected.value?.game === "nap"
@@ -336,8 +433,12 @@ function rarityLabel(rank: number) {
     : `${rank}-star`;
 }
 watch(rarityOptions, (options) => {
-  if (rankFilter.value !== "all" && rankFilter.value !== "null" &&
-      !options.includes(Number(rankFilter.value))) rankFilter.value = "all";
+  if (
+    rankFilter.value !== "all" &&
+    rankFilter.value !== "null" &&
+    !options.includes(Number(rankFilter.value))
+  )
+    rankFilter.value = "all";
 });
 const calculateStats = (list: GachaRecord[], rank = topRank.value) =>
   statistics(list, selected.value?.game ?? game.value, {}, rowRank, rank);
@@ -386,7 +487,10 @@ const pageCount = computed(() =>
   Math.max(1, Math.ceil(filtered.value.length / pageSize.value)),
 );
 const visible = computed(() =>
-  filtered.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value),
+  filtered.value.slice(
+    (page.value - 1) * pageSize.value,
+    page.value * pageSize.value,
+  ),
 );
 const totalRecords = computed(() =>
   accounts.value.reduce((sum, account) => sum + account.list.length, 0),
@@ -438,7 +542,9 @@ function save() {
       }),
     );
     storageError.value = "";
-    gachaLog("info", "Records saved locally", { accounts: accounts.value.length });
+    gachaLog("info", "Records saved locally", {
+      accounts: accounts.value.length,
+    });
   } catch {
     gachaLog("error", "Local record save failed");
     storageError.value =
@@ -447,9 +553,17 @@ function save() {
 }
 function merge(incoming: GachaAccount[], correctTimes = false) {
   let result: ReturnType<typeof mergeAccounts>;
-  try { result = mergeAccounts(accounts.value, incoming, correctTimes); }
-  catch (err) { gachaLog("error", "Record merge rejected due to a conflict"); throw err; }
-  gachaLog(result.corrected ? "warning" : "info", "Records merged", { added: result.added, duplicates: result.duplicates, corrected: result.corrected });
+  try {
+    result = mergeAccounts(accounts.value, incoming, correctTimes);
+  } catch (err) {
+    gachaLog("error", "Record merge rejected due to a conflict");
+    throw err;
+  }
+  gachaLog(result.corrected ? "warning" : "info", "Records merged", {
+    added: result.added,
+    duplicates: result.duplicates,
+    corrected: result.corrected,
+  });
   accounts.value = compactAccounts(result.accounts);
   if (!selectedKey.value && incoming.length)
     selectedKey.value = groupAccountKey(incoming[0]);
@@ -470,7 +584,9 @@ onMounted(() => {
       }
       if (Object.keys(games).some((key) => archive[key]?.length))
         accounts.value = compactAccounts(parseUigf(archive));
-      gachaLog("info", "Local archive restored", { accounts: accounts.value.length });
+      gachaLog("info", "Local archive restored", {
+        accounts: accounts.value.length,
+      });
       selectedKey.value = accounts.value[0]
         ? groupAccountKey(accounts.value[0])
         : "";
@@ -483,32 +599,42 @@ onMounted(() => {
   const restoreController = new AbortController();
   connectionRequest = restoreController;
   connectionBusy.value = true;
-  void loadGachaConnection().then(async connection => {
-    if (!ready.value || !connection) return;
-    if (personalWorker.value || personalToken.value || ownsWorker.value) return;
-    personalWorker.value = connection.worker;
-    personalToken.value = connection.personalToken;
-    ownsWorker.value = connection.enableSync === true;
-    const worker = workerHttpsOrigin();
-    if (personalToken.value) validateSyncToken(personalToken.value);
-    connectionStatus.value = "Verifying saved remote service…";
-    await checkGachaHealth(worker, restoreController.signal);
-    restoreController.signal.throwIfAborted();
-    if (!ready.value) return;
-    savedConnection.value = { worker, personalToken: connection.personalToken, enableSync: connection.enableSync === true };
-    connectionFeedback.value = "note";
-    connectionStatus.value = "Saved settings restored and remote service verified.";
-  }).catch(() => {
-    if (ready.value) {
-      connectionFeedback.value = "caution";
-      connectionStatus.value = "Could not verify saved settings. Check the Worker URL and network, then save settings again.";
-    }
-  }).finally(() => {
-    if (connectionRequest === restoreController) {
-      connectionBusy.value = false;
-      connectionRequest = undefined;
-    }
-  });
+  void loadGachaConnection()
+    .then(async (connection) => {
+      if (!ready.value || !connection) return;
+      if (personalWorker.value || personalToken.value || ownsWorker.value)
+        return;
+      personalWorker.value = connection.worker;
+      personalToken.value = connection.personalToken;
+      ownsWorker.value = connection.enableSync === true;
+      const worker = workerHttpsOrigin();
+      if (personalToken.value) validateSyncToken(personalToken.value);
+      connectionStatus.value = "Verifying saved remote service…";
+      await checkGachaHealth(worker, restoreController.signal);
+      restoreController.signal.throwIfAborted();
+      if (!ready.value) return;
+      savedConnection.value = {
+        worker,
+        personalToken: connection.personalToken,
+        enableSync: connection.enableSync === true,
+      };
+      connectionFeedback.value = "note";
+      connectionStatus.value =
+        "Saved settings restored and remote service verified.";
+    })
+    .catch(() => {
+      if (ready.value) {
+        connectionFeedback.value = "caution";
+        connectionStatus.value =
+          "Could not verify saved settings. Check the Worker URL and network, then save settings again.";
+      }
+    })
+    .finally(() => {
+      if (connectionRequest === restoreController) {
+        connectionBusy.value = false;
+        connectionRequest = undefined;
+      }
+    });
   ready.value = true;
   if (accounts.value.length) save();
   const url = new URL(window.location.href);
@@ -550,8 +676,11 @@ const dragDepth = ref(0);
 
 async function importFiles(event: Event) {
   const input = event.target as HTMLInputElement;
-  try { await importJsonFiles([...(input.files ?? [])]); }
-  finally { input.value = ""; }
+  try {
+    await importJsonFiles([...(input.files ?? [])]);
+  } finally {
+    input.value = "";
+  }
 }
 
 function dragEnter(event: DragEvent) {
@@ -559,7 +688,9 @@ function dragEnter(event: DragEvent) {
 }
 
 function dragOver(event: DragEvent) {
-  if (event.dataTransfer) event.dataTransfer.dropEffect = busy.value || !ready.value ? "none" : "copy";
+  if (event.dataTransfer)
+    event.dataTransfer.dropEffect =
+      busy.value || !ready.value ? "none" : "copy";
 }
 
 async function dropFiles(event: DragEvent) {
@@ -568,7 +699,13 @@ async function dropFiles(event: DragEvent) {
 }
 
 async function importJsonFiles(files: File[]) {
-  if (!files.length || busy.value || !ready.value || !connectionConfigured.value) return;
+  if (
+    !files.length ||
+    busy.value ||
+    !ready.value ||
+    !connectionConfigured.value
+  )
+    return;
   gachaLog("info", "Import started");
   importError.value = "";
   importStatus.value = "Importing JSON files…";
@@ -577,7 +714,8 @@ async function importJsonFiles(files: File[]) {
     // Parse all files first, so one invalid file cannot cause a partial import.
     const incoming: GachaAccount[] = [];
     for (const file of files) {
-      if (!/\.json$/i.test(file.name)) throw new Error(`${file.name} is not a JSON file.`);
+      if (!/\.json$/i.test(file.name))
+        throw new Error(`${file.name} is not a JSON file.`);
       if (file.size > 50 * 1024 * 1024)
         throw new Error(
           `${file.name} exceeds 50 MiB. Split the file before importing.`,
@@ -586,7 +724,11 @@ async function importJsonFiles(files: File[]) {
     }
     if (!ready.value) return;
     const result = merge(incoming);
-    gachaLog("info", "Import completed", { files: files.length, added: result.added, duplicates: result.duplicates });
+    gachaLog("info", "Import completed", {
+      files: files.length,
+      added: result.added,
+      duplicates: result.duplicates,
+    });
     importStatus.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
   } catch (err) {
     gachaLog("error", "Import failed");
@@ -598,9 +740,16 @@ async function importJsonFiles(files: File[]) {
 }
 
 async function retrieve() {
-  if (busy.value || !ready.value || !gachaFetchAllowed.value || !connectionConfigured.value) return;
+  if (
+    busy.value ||
+    !ready.value ||
+    !gachaFetchAllowed.value ||
+    !connectionConfigured.value
+  )
+    return;
   if (!connectionConfigured.value) {
-    error.value = "Enter a valid Worker HTTPS URL in Remote service before fetching records.";
+    error.value =
+      "Enter a valid Worker HTTPS URL in Remote service before fetching records.";
     return;
   }
   busy.value = true;
@@ -608,7 +757,8 @@ async function retrieve() {
   error.value = "";
   const controller = new AbortController();
   request = controller;
-  let added = 0, corrected = 0;
+  let added = 0,
+    corrected = 0;
   const repairTimes = correctTimes.value;
   try {
     const fetchServer = server.value;
@@ -636,7 +786,11 @@ async function retrieve() {
     gachaLog("info", "Fetch completed", { read: total, added, corrected });
     status.value = `Finished: ${total} records read, ${added} added, ${corrected} timestamps corrected. ${total === 0 ? "No available records returned." : ""}`;
   } catch (err) {
-    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Fetch cancelled" : "Fetch failed", { added, corrected });
+    gachaLog(
+      controller.signal.aborted ? "warning" : "error",
+      controller.signal.aborted ? "Fetch cancelled" : "Fetch failed",
+      { added, corrected },
+    );
     if (controller.signal.aborted)
       status.value = `Stopped. ${added} new records retained, ${corrected} timestamps corrected.`;
     else {
@@ -657,16 +811,26 @@ async function retrieve() {
   }
 }
 
-const exportFilePrefixes: Record<Game, string> = { hk4e: "GI", hkrpg: "HSR", nap: "ZZZ", hk4e_ugc: "GIMW" };
+const exportFilePrefixes: Record<Game, string> = {
+  hk4e: "GI",
+  hkrpg: "HSR",
+  nap: "ZZZ",
+  hk4e_ugc: "GIMW",
+};
 const exportFilename = computed(() => {
   if (exportTargets.value.length === 1) {
     const account = exportTargets.value[0];
     return `${exportFilePrefixes[account.game]}_${account.uid}.json`;
   }
-  return exportAllAccounts.value ? "UIGFv4_GachaManager.json" : "UIGFv4_GachaManager_selected.json";
+  return exportAllAccounts.value
+    ? "UIGFv4_GachaManager.json"
+    : "UIGFv4_GachaManager_selected.json";
 });
 
-async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_GachaManager.json") {
+async function download(
+  selectedAccounts: GachaAccount[],
+  filename = "UIGFv4_GachaManager.json",
+) {
   if (exporting.value || !connectionConfigured.value) return;
   gachaLog("info", "Export started");
   exportError.value = "";
@@ -676,9 +840,17 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
   exportRequest = controller;
   try {
     const lang = exportLanguage.value;
-    exportStatus.value = includeItemNames.value ? `Preparing ${exportLanguages[lang]} export…` : "Preparing export without item names…";
+    exportStatus.value = includeItemNames.value
+      ? `Preparing ${exportLanguages[lang]} export…`
+      : "Preparing export without item names…";
     const [prepared, appVersion] = await Promise.all([
-      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value, includeItemNames.value ? activeWorkerOrigin() : undefined),
+      prepareExportAccounts(
+        selectedAccounts,
+        lang,
+        controller.signal,
+        includeItemNames.value,
+        includeItemNames.value ? activeWorkerOrigin() : undefined,
+      ),
       fetchGachaVersion(controller.signal),
     ]);
     controller.signal.throwIfAborted();
@@ -693,16 +865,30 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     gachaLog("info", "Export prepared", { accounts: prepared.accounts.length });
-    exportStatus.value = "Export ready. Your saved records have not been changed.";
+    exportStatus.value =
+      "Export ready. Your saved records have not been changed.";
     if (prepared.missingNames.length) {
-      gachaLog("warning", "Export omitted unavailable item names", { accounts: prepared.missingNames.length });
-      const affected = prepared.missingNames.map(account => `${account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game]} · ${account.uid}`).join("; ");
+      gachaLog("warning", "Export omitted unavailable item names", {
+        accounts: prepared.missingNames.length,
+      });
+      const affected = prepared.missingNames
+        .map(
+          (account) =>
+            `${account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game]} · ${account.uid}`,
+        )
+        .join("; ");
       exportWarning.value = `Some ${exportLanguages[lang]} item names are missing for: ${affected}. All records in each affected game account were exported without name / item_name fields. Other accounts retain localized names.`;
     }
   } catch (err) {
-    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Export cancelled" : "Export failed");
+    gachaLog(
+      controller.signal.aborted ? "warning" : "error",
+      controller.signal.aborted ? "Export cancelled" : "Export failed",
+    );
     exportStatus.value = "";
-    exportError.value = err instanceof Error ? `${err.message}${includeItemNames.value ? " To export without localized names, turn off Include item names and retry." : ""}` : "Export failed.";
+    exportError.value =
+      err instanceof Error
+        ? `${err.message}${includeItemNames.value ? " To export without localized names, turn off Include item names and retry." : ""}`
+        : "Export failed.";
   } finally {
     exporting.value = false;
     exportRequest = undefined;
@@ -710,8 +896,19 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
 }
 function deleteAccount() {
   if (busy.value || !selected.value) return false;
-  const preview = { ...selected.value, accounts: selected.value.accounts.map(account => ({ ...account, list: [] })) };
-  gachaLog("warning", "Local account records deleted", { records: selected.value.accounts.reduce((total, account) => total + account.list.length, 0) });
+  const preview = {
+    ...selected.value,
+    accounts: selected.value.accounts.map((account) => ({
+      ...account,
+      list: [],
+    })),
+  };
+  gachaLog("warning", "Local account records deleted", {
+    records: selected.value.accounts.reduce(
+      (total, account) => total + account.list.length,
+      0,
+    ),
+  });
   delete serverByAccount.value[selectedKey.value];
   accounts.value = accounts.value.filter(
     (account) => groupAccountKey(account) !== selectedKey.value,
@@ -722,7 +919,9 @@ function deleteAccount() {
   save();
   if (!accounts.value.length && !storageError.value) {
     deletedPreview.value = preview;
-    deletedPreviewTimer = setTimeout(() => { deletedPreview.value = undefined; }, 1500);
+    deletedPreviewTimer = setTimeout(() => {
+      deletedPreview.value = undefined;
+    }, 1500);
   }
   status.value = "Local records for the selected account deleted.";
   return !storageError.value;
@@ -741,10 +940,7 @@ async function loadMetadata() {
     let loaded = 0,
       missing = 0;
     for (const entry of account.accounts) {
-      const languages = new Set([
-        overviewLanguage,
-        displayLanguage.value,
-      ]);
+      const languages = new Set([overviewLanguage, displayLanguage.value]);
       for (const lang of languages) {
         const data = await fetchMetadata(
           entry.game,
@@ -769,14 +965,23 @@ async function loadMetadata() {
         ).size;
       }
     }
-    gachaLog(missing ? "warning" : "info", "Metadata lookup completed", { loaded, missing });
+    gachaLog(missing ? "warning" : "info", "Metadata lookup completed", {
+      loaded,
+      missing,
+    });
     metadataFeedback.value = missing ? "warning" : "note";
     metadataStatus.value = `Loaded ${loaded} items (selected display languages)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
   } catch {
-    gachaLog(controller.signal.aborted ? "warning" : "error", controller.signal.aborted ? "Metadata lookup cancelled" : "Metadata lookup failed");
+    gachaLog(
+      controller.signal.aborted ? "warning" : "error",
+      controller.signal.aborted
+        ? "Metadata lookup cancelled"
+        : "Metadata lookup failed",
+    );
     if (!controller.signal.aborted) {
       metadataFeedback.value = "caution";
-      metadataStatus.value = "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
+      metadataStatus.value =
+        "Metadata lookup failed. Item IDs and saved ranks remain available. Try again later.";
     }
   } finally {
     if (metadataRequest === controller) {
@@ -804,53 +1009,176 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Remote service</h3>
-      <p class="muted">Enter a Worker HTTPS URL and save settings. The backend health endpoint must pass verification before Import, Export and record views appear. Edits take effect only after Save settings succeeds. Until then, features continue using the last saved settings.</p>
+      <p class="muted">
+        Enter a Worker HTTPS URL and save settings. The backend health endpoint
+        must pass verification before Import, Export and record views appear.
+        Edits take effect only after Save settings succeeds. Until then,
+        features continue using the last saved settings.
+      </p>
       <label for="worker-host">Worker URL (required · HTTPS)</label>
       <div class="worker-url-field">
         <span class="worker-url-prefix" aria-hidden="true">https://</span>
-        <input id="worker-host" v-model="workerHost" type="text" required aria-required="true" inputmode="url" placeholder="your-worker.example.com" :disabled="busy || connectionBusy" autocomplete="url" spellcheck="false" aria-description="HTTPS prefix is added automatically." @keydown="workerUrlKeydown" />
+        <input
+          id="worker-host"
+          v-model="workerHost"
+          type="text"
+          required
+          aria-required="true"
+          inputmode="url"
+          placeholder="your-worker.example.com"
+          :disabled="busy || connectionBusy"
+          autocomplete="url"
+          spellcheck="false"
+          aria-description="HTTPS prefix is added automatically."
+          @keydown="workerUrlKeydown"
+        />
       </div>
       <form class="remote-service-form" @submit.prevent="rememberConnection()">
         <div class="controls">
-          <GachaSecretInput v-model="personalToken" :disabled="busy || connectionBusy" />
+          <GachaSecretInput
+            v-model="personalToken"
+            :disabled="busy || connectionBusy"
+          />
         </div>
-        <label ref="ownershipRow" class="check ownership-check"><input v-model="ownsWorker" type="checkbox" :disabled="busy || connectionBusy" />I own and manage this Worker and D1 database and enable syncing</label>
+        <label ref="ownershipRow" class="check ownership-check"
+          ><input
+            v-model="ownsWorker"
+            type="checkbox"
+            :disabled="busy || connectionBusy"
+          />I own and manage this Worker and D1 database and enable
+          syncing</label
+        >
         <div class="connection-memory">
-          <p class="muted">Save the Worker URL with an optional personal-sync token.</p>
+          <p class="muted">
+            Save the Worker URL with an optional personal-sync token.
+          </p>
           <div class="actions">
-            <VPButton text="Save settings" theme="brand" type="button" :disabled="busy || exporting || metadataBusy || !ready || connectionBusy || !remoteServiceReady" @click="rememberConnection" />
-            <GachaConfirmButton text="Clear saved settings" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
+            <VPButton
+              text="Save settings"
+              theme="brand"
+              type="button"
+              :disabled="
+                busy ||
+                exporting ||
+                metadataBusy ||
+                !ready ||
+                connectionBusy ||
+                !remoteServiceReady
+              "
+              @click="rememberConnection"
+            />
+            <GachaConfirmButton
+              text="Clear saved settings"
+              :disabled="busy || !ready || connectionBusy"
+              :action="forgetConnection"
+              success-text="Deleted"
+            />
           </div>
-          <p class="muted">To clear saved settings, click once, then press and hold to confirm.</p>
+          <p class="muted">
+            To clear saved settings, click once, then press and hold to confirm.
+          </p>
 
-          <p v-if="connectionStatus" class="hint-container" :class="connectionFeedback" :role="connectionFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">{{ connectionStatus }}</p>
+          <p
+            v-if="connectionStatus"
+            class="hint-container"
+            :class="connectionFeedback"
+            :role="connectionFeedback === 'caution' ? 'alert' : 'status'"
+            aria-live="polite"
+          >
+            {{ connectionStatus }}
+          </p>
         </div>
         <div v-if="syncEnabled">
           <h4>Personal remote synchronization</h4>
-          <p class="muted">Sync only to your own Worker and D1 database. Its operator and anyone holding the token can read, modify or delete all remote records.</p>
-          <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
           <p class="muted">
-            Sync personal records merges local and remote archives; deletions are not propagated.
-            Pull and replace local replaces the entire local archive with remote records, including an empty remote archive.
-            Push and replace remote replaces the entire remote archive with local records and removes remote accounts and records absent locally, including clearing remote records when the local archive is empty.
-            The timestamp conflict option applies only to merging. Remote writes commit in separate batches; cancellation or failure can leave a partial replacement.
-            <strong>Export a backup of your data before important operations, especially either replacement operation.</strong>
+            Sync only to your own Worker and D1 database. Its operator and
+            anyone holding the token can read, modify or delete all remote
+            records.
           </p>
-          <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
+          <p class="muted">
+            Enable after correcting records from the official API. Matching
+            record IDs use local timestamps and update the remote copy. Item,
+            pool and account timezone conflicts still stop synchronization.
+          </p>
+          <p class="muted">
+            Sync personal records merges local and remote archives; deletions
+            are not propagated. Pull and replace local replaces the entire local
+            archive with remote records, including an empty remote archive. Push
+            and replace remote replaces the entire remote archive with local
+            records and removes remote accounts and records absent locally,
+            including clearing remote records when the local archive is empty.
+            The timestamp conflict option applies only to merging. Remote writes
+            commit in separate batches; cancellation or failure can leave a
+            partial replacement.
+            <strong
+              >Export a backup of your data before important operations,
+              especially either replacement operation.</strong
+            >
+          </p>
+          <label class="check"
+            ><input
+              v-model="preferLocalTimes"
+              type="checkbox"
+              :disabled="busy"
+            />Use local timestamps for sync conflicts</label
+          >
           <div class="actions">
-            <VPButton @click="syncPersonal()" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Sync personal records" />
-            <GachaConfirmButton :blocked="!syncEnabled" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Pull and replace local" />
-            <GachaConfirmButton :blocked="!syncEnabled" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Push and replace remote" />
-            <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
+            <VPButton
+              @click="syncPersonal()"
+              :disabled="busy || !ready || connectionBusy || !syncEnabled"
+              text="Sync personal records"
+            />
+            <GachaConfirmButton
+              :blocked="!syncEnabled"
+              :before-arm="requireWorkerOwnership"
+              :action="() => syncPersonal('pull')"
+              success-text="Pulled"
+              :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
+              :disabled="busy || !ready || connectionBusy || !syncEnabled"
+              text="Pull and replace local"
+            />
+            <GachaConfirmButton
+              :blocked="!syncEnabled"
+              :before-arm="requireWorkerOwnership"
+              :action="() => syncPersonal('push')"
+              success-text="Pushed"
+              :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
+              :disabled="busy || !ready || connectionBusy || !syncEnabled"
+              text="Push and replace remote"
+            />
+            <VPButton
+              v-if="syncing"
+              text="Cancel sync"
+              theme="alt"
+              @click="syncRequest?.abort()"
+            />
           </div>
-          <p class="muted destructive-hint">For replacement, click once, then press and hold to confirm.</p>
-          <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
-          <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
+          <p class="muted destructive-hint">
+            For replacement, click once, then press and hold to confirm.
+          </p>
+          <p
+            v-if="personalSyncStatus"
+            class="hint-container note"
+            role="status"
+            aria-live="polite"
+          >
+            {{ personalSyncStatus }}
+          </p>
+          <p
+            v-if="personalSyncError"
+            class="hint-container caution"
+            role="alert"
+          >
+            {{ personalSyncError }}
+          </p>
         </div>
       </form>
     </section>
 
-    <section v-if="gachaFetchAllowed && connectionConfigured" class="gacha-panel">
+    <section
+      v-if="gachaFetchAllowed && connectionConfigured"
+      class="gacha-panel"
+    >
       <h3>Fetch records</h3>
       <div class="helper-status" role="status">
         <span>{{
@@ -887,7 +1215,7 @@ async function loadMetadata() {
               href="/script/gacha-manager-helper.user.js"
               target="_blank"
               rel="noopener noreferrer"
-              >Gacha Manager Helper</a
+              >Helios Assistant Helper</a
             >
             and install it. If it opens as text, paste its contents into a new
             script in the Tampermonkey dashboard.
@@ -954,7 +1282,11 @@ async function loadMetadata() {
             type="button"
             @click="retrieve"
             :disabled="
-              busy || !ready || !connectionConfigured || helperState === 'checking' || !link.trim()
+              busy ||
+              !ready ||
+              !connectionConfigured ||
+              helperState === 'checking' ||
+              !link.trim()
             "
             >{{ busy ? "Processing…" : "Fetch gacha records" }}</VPButton
           >
@@ -972,7 +1304,13 @@ async function loadMetadata() {
               :disabled="busy"
             />Incremental fetch</label
           >
-          <label class="check"><input v-model="correctTimes" type="checkbox" :disabled="busy" />Correct saved record times</label>
+          <label class="check"
+            ><input
+              v-model="correctTimes"
+              type="checkbox"
+              :disabled="busy"
+            />Correct saved record times</label
+          >
         </div>
       </form>
       <p class="muted">
@@ -988,7 +1326,9 @@ async function loadMetadata() {
       >
         {{ status }}
       </p>
-      <p v-if="error" class="hint-container caution" role="alert">{{ error }}</p>
+      <p v-if="error" class="hint-container caution" role="alert">
+        {{ error }}
+      </p>
       <details>
         <summary>URLs, servers and browser access</summary>
         <p>
@@ -997,8 +1337,8 @@ async function loadMetadata() {
           China combines Celestia and Irminsul; overseas servers are listed
           separately. Server time is assigned automatically: China / Asia /
           TW-HK-MO use UTC+8, Europe UTC+1 and America UTC−5, independently of
-          your device timezone or daylight saving time. Storage and exports preserve
-          server timestamps; displayed times use your device timezone.
+          your device timezone or daylight saving time. Storage and exports
+          preserve server timestamps; displayed times use your device timezone.
         </p>
         <p>
           Without the helper, normal browser requests may automatically include
@@ -1009,481 +1349,598 @@ async function loadMetadata() {
           fetch.
         </p>
         <p>
-          Correct saved record times replaces saved timestamps
-          with the current official timestamps for matching game, UID and record ID.
-          Use it after a game update corrects historical server times. Only records
-          still available from the official API can be corrected; item and pool
-          conflicts still stop the fetch. Incremental fetch independently controls
-          when fetching stops; disable it to check all available historical records.
-          Each completed page is saved immediately.
+          Correct saved record times replaces saved timestamps with the current
+          official timestamps for matching game, UID and record ID. Use it after
+          a game update corrects historical server times. Only records still
+          available from the official API can be corrected; item and pool
+          conflicts still stop the fetch. Incremental fetch independently
+          controls when fetching stops; disable it to check all available
+          historical records. Each completed page is saved immediately.
         </p>
       </details>
     </section>
 
     <template v-if="connectionConfigured">
-    <section class="gacha-panel">
-      <h3>Import</h3>
-      <p v-if="storageError" class="hint-container caution" role="alert">
-        {{ storageError }}
-      </p>
-      <div v-if="!gachaFetchAllowed" class="hint-container note">
-        <p class="hint-container-title">Note</p>
-        <p>
-          Browser cross-origin restrictions (CORS) prevent this page from
-          fetching gacha history through a link. Use Starward or Latte Helper to
-          obtain your records, export a UIGF JSON file, then import it here to
-          organize and analyze your history.
+      <section class="gacha-panel">
+        <h3>Import</h3>
+        <p v-if="storageError" class="hint-container caution" role="alert">
+          {{ storageError }}
         </p>
-        <CardGrid :cols="2">
-          <RepoCard repo="Scighost/Starward" />
-          <RepoCard repo="pizza-studio/PizzaHelperUnited" />
-        </CardGrid>
-      </div>
-      <p class="muted">
-        Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by
-        game, UID and record ID.
-      </p>
-      <label
-        class="json-drop-zone"
-        :class="{ dragging: dragDepth > 0, disabled: busy || !ready }"
-        @dragenter.prevent="dragEnter"
-        @dragover.prevent="dragOver"
-        @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1)"
-        @drop.prevent="dropFiles"
-      >
-        <strong>{{ busy ? 'Import unavailable while processing' : 'Drop JSON files here' }}</strong>
-        <span>or click to select files · UIGF v4.0–v4.2 · up to 50 MiB per file</span>
-        <input
+        <div v-if="!gachaFetchAllowed" class="hint-container note">
+          <p class="hint-container-title">Note</p>
+          <p>
+            Browser cross-origin restrictions (CORS) prevent this page from
+            fetching gacha history through a link. Use Starward or Latte Helper
+            to obtain your records, export a UIGF JSON file, then import it here
+            to organize and analyze your history.
+          </p>
+          <CardGrid :cols="2">
+            <RepoCard repo="Scighost/Starward" />
+            <RepoCard repo="pizza-studio/PizzaHelperUnited" />
+          </CardGrid>
+        </div>
+        <p class="muted">
+          Import multiple UIGF v4.0–v4.2 JSON files together. Records merge by
+          game, UID and record ID.
+        </p>
+        <label
+          class="json-drop-zone"
+          :class="{ dragging: dragDepth > 0, disabled: busy || !ready }"
+          @dragenter.prevent="dragEnter"
+          @dragover.prevent="dragOver"
+          @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1)"
+          @drop.prevent="dropFiles"
+        >
+          <strong>{{
+            busy
+              ? "Import unavailable while processing"
+              : "Drop JSON files here"
+          }}</strong>
+          <span
+            >or click to select files · UIGF v4.0–v4.2 · up to 50 MiB per
+            file</span
+          >
+          <input
             type="file"
             accept=".json,application/json"
             multiple
             :disabled="busy || !ready"
             @change="importFiles"
-        />
-      </label>
-      <p
-        v-if="importStatus"
-        class="hint-container note"
-        role="status"
-        aria-live="polite"
-      >
-        {{ importStatus }}
-      </p>
-      <p v-if="importError" class="hint-container caution" role="alert">{{ importError }}</p>
-
-      <p class="muted">
-        Upgrade older UIGF / SRGF files with
-        <a
-          href="https://upgrader.uigf.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          >UIGF Upgrader</a
-        >.
-      </p>
-
-
-    </section>
-
-    <section class="gacha-panel">
-      <h3>Export</h3>
-      <p class="muted">Exports use UIGF v4.2.</p>
-      <label class="export-language"
-        >Export language<select v-model="exportLanguage" :disabled="exporting || !includeItemNames">
-          <option
-            v-for="(name, code) in exportLanguages"
-            :key="code"
-            :value="code"
-          >
-            {{ name }}
-          </option>
-        </select></label
-      >
-      <label class="check export-item-names"><input v-model="includeItemNames" type="checkbox" :disabled="exporting" />Include item names</label>
-      <p class="muted">
-        Turn off Include item names to export without name / item_name fields or metadata lookups.
-        Choose one of the four backend languages to look up localized item names
-        for export. Local storage keeps IDs and record details without names or
-        source-language information.
-      </p>
-      <div v-if="accounts.length">
-        <h4>Download per account</h4>
-        <p class="muted">
-          Select one or more accounts, then use the export button below.
-          Genshin wishes and Miliastra records are listed separately.
+          />
+        </label>
+        <p
+          v-if="importStatus"
+          class="hint-container note"
+          role="status"
+          aria-live="polite"
+        >
+          {{ importStatus }}
         </p>
-        <div
-          v-for="account in exportAccounts"
-          :key="accountKey(account)"
-          class="account-download"
-        >
-          <label class="check">
-            <input
-              v-model="exportAccountKeys"
-              type="checkbox"
-              :value="accountKey(account)"
-              :disabled="busy || exporting"
-            />
-            {{ account.game === "hk4e_ugc" ? "Genshin Impact - Miliastra Wonderland" : account.game === "hk4e" ? "Genshin Impact (without UGC)" : games[account.game] }} · {{ account.uid }} ·
-            {{ account.list.length }} pulls
-          </label>
-        </div>
-      </div>
-      <div class="actions export-actions">
-        <VPButton
-          theme="alt"
-          :disabled="!accounts.length || busy || exporting || (includeItemNames && !connectionConfigured)"
-          @click="download(exportTargets, exportFilename)"
-          >{{ exportButtonLabel }}</VPButton
-        >
-      </div>
-      <p v-if="accounts.length" class="muted">{{ exportSelectedAccounts.length }} {{ exportSelectedAccounts.length === 1 ? 'account' : 'accounts' }} selected. {{ exportAllAccounts ? (accounts.length === 1 ? 'The stored account will be exported.' : 'All stored accounts will be exported.') : 'Only selected accounts will be exported.' }}</p>
-      <p v-if="exportStatus" class="hint-container note" role="status" aria-live="polite">{{ exportStatus }}</p>
-      <p v-if="exportWarning" class="hint-container warning" role="status" aria-live="polite">{{ exportWarning }}</p>
-      <p v-if="exportError" class="hint-container caution" role="alert">{{ exportError }}</p>
-      <p class="muted">
-        Records are saved in this browser; personal synchronization is optional. Export backups regularly.
-      </p>
-    </section>
+        <p v-if="importError" class="hint-container caution" role="alert">
+          {{ importError }}
+        </p>
 
+        <p class="muted">
+          Upgrade older UIGF / SRGF files with
+          <a
+            href="https://upgrader.uigf.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >UIGF Upgrader</a
+          >.
+        </p>
+      </section>
 
-    <section v-if="!accounts.length" class="gacha-panel empty">
-      <h3>Start with your first archive</h3>
-      <p>
-        Import a UIGF file to view pull counts, five-star rates, pool statistics
-        and five-star history.
-      </p>
-    </section>
-    <template v-if="selected">
       <section class="gacha-panel">
-        <h3>Overview</h3>
-        <div class="controls account-controls">
-          <label
-            >Account<select v-model="selectedKey">
-              <option
-                v-for="account in displayAccounts"
-                :key="account.key"
-                :value="account.key"
-              >
-                {{ games[account.game] }} · {{ account.uid }}
-              </option>
-            </select></label
+        <h3>Export</h3>
+        <p class="muted">Exports use UIGF v4.2.</p>
+        <label class="export-language"
+          >Export language<select
+            v-model="exportLanguage"
+            :disabled="exporting || !includeItemNames"
           >
-          <label
-            >Pool<select v-model="selectedPool">
-              <option value="all">{{ displayLabel("all", overviewLanguage) }}</option>
-              <option v-for="pool in pools" :key="pool" :value="pool">
-                {{ displayPoolName(pool) }}
-              </option>
-            </select></label
+            <option
+              v-for="(name, code) in exportLanguages"
+              :key="code"
+              :value="code"
+            >
+              {{ name }}
+            </option>
+          </select></label
+        >
+        <label class="check export-item-names"
+          ><input
+            v-model="includeItemNames"
+            type="checkbox"
+            :disabled="exporting"
+          />Include item names</label
+        >
+        <p class="muted">
+          Turn off Include item names to export without name / item_name fields
+          or metadata lookups. Choose one of the four backend languages to look
+          up localized item names for export. Local storage keeps IDs and record
+          details without names or source-language information.
+        </p>
+        <div v-if="accounts.length">
+          <h4>Download per account</h4>
+          <p class="muted">
+            Select one or more accounts, then use the export button below.
+            Genshin wishes and Miliastra records are listed separately.
+          </p>
+          <div
+            v-for="account in exportAccounts"
+            :key="accountKey(account)"
+            class="account-download"
           >
+            <label class="check">
+              <input
+                v-model="exportAccountKeys"
+                type="checkbox"
+                :value="accountKey(account)"
+                :disabled="busy || exporting"
+              />
+              {{
+                account.game === "hk4e_ugc"
+                  ? "Genshin Impact - Miliastra Wonderland"
+                  : account.game === "hk4e"
+                    ? "Genshin Impact (without UGC)"
+                    : games[account.game]
+              }}
+              · {{ account.uid }} · {{ account.list.length }} pulls
+            </label>
+          </div>
         </div>
-        <div class="actions">
+        <div class="actions export-actions">
           <VPButton
             theme="alt"
-            :disabled="metadataBusy || busy || !connectionConfigured"
-            @click="loadMetadata"
-            >{{
-              metadataBusy ? "Loading…" : "Load item names & icons"
-            }}</VPButton
-          ><GachaConfirmButton text="Delete account" :context="selectedKey" :disabled="busy || !!deletedPreview" :action="deleteAccount" success-text="Deleted" />
-        </div>
-        <p v-if="metadataStatus" class="hint-container" :class="metadataFeedback" :role="metadataFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">
-          {{ metadataStatus }}
-        </p>
-        <p class="muted destructive-hint">Delete account removes this account’s local records. Export a backup first. Click once, then press and hold to confirm.</p>
-        <p class="muted">
-          Metadata queries send only the game, language and public item IDs.
-          Your UID, URL and history are never sent to the metadata backend.
-          Display metadata does not change your local archive.
-        </p>
-        <div class="metrics">
-          <div>
-            <span>Total pulls</span
-            ><strong>{{ stats.total.toLocaleString() }}</strong>
-          </div>
-          <div class="gold">
-            <span>{{ rarityLabel(topRank) }}</span><strong>{{ stats.gold }}</strong>
-          </div>
-          <div class="gold">
-            <span>5-star rate</span
-            ><strong>{{ stats.goldRate.toFixed(2) }}<small>%</small></strong>
-          </div>
-          <div>
-            <span>{{ rarityLabel(topRank - 1) }}</span><strong>{{ stats.purple }}</strong>
-          </div>
-          <div>
-            <span>Average {{ topRank }}-star interval</span
-            ><strong
-              >{{
-                selectedPool === "all" ||
-                stats.unknown ||
-                stats.average === null
-                  ? "—"
-                  : stats.average.toFixed(1)
-              }}<small> pulls</small></strong
-            >
-          </div>
-          <div>
-            <span>Pulls since last {{ topRank }}-star</span
-            ><strong
-              >{{
-                selectedPool === "all" || stats.unknown
-                  ? "—"
-                  : `${stats.hasGold ? "" : "≥ "}${stats.sinceGold}`
-              }}<small> pulls</small></strong
-            >
-          </div>
-        </div>
-        <p class="muted">
-          Rate = known {{ topRank }}-star (S-rank in ZZZ) records / all records. Each
-          record counts as one pull; item count is not the number of pulls.
-          These statistics describe saved history, not official probabilities.
-        </p>
-        <p v-if="stats.unknown" class="hint-container note">
-          {{ stats.unknown }} records have unknown rarity. The {{ topRank }}-star rate is
-          a lower bound. Load metadata to fill missing ranks; intervals and pity
-          counts are hidden until then.
-        </p>
-        <p class="muted">
-          Average intervals use only complete spans between known {{ topRank }}-star
-          pulls; history before the first may be missing. Pools are calculated
-          separately, except Genshin character pools 301 / 400, which share a
-          group. Miliastra is grouped by op_gacha_type without assuming shared
-          pity. Standard Evocation uses 4-star records; other pools use 5-star records.
-        </p>
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Pool</th>
-                <th>Pulls</th>
-                <th>Top rarity</th>
-                <th>Top rarity rate</th>
-                <th>Avg. interval</th>
-                <th>Pity / recorded</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="pool in poolStats" :key="pool.key">
-                <td>
-                  <button class="text-button" @click="selectedPool = selectedPool === pool.key ? 'all' : pool.key">
-                    {{ pool.name }}
-                  </button>
-                </td>
-                <td>{{ pool.total }}</td>
-                <td class="gold">{{ pool.gold }} ({{ poolTopRank(pool.key) }}-star)</td>
-                <td>
-                  {{ pool.unknown ? "≥ " : "" }}{{ pool.goldRate.toFixed(2) }}%
-                </td>
-                <td>
-                  {{
-                    pool.unknown || pool.average === null
-                      ? "—"
-                      : pool.average.toFixed(1)
-                  }}
-                </td>
-                <td>
-                  {{
-                    pool.unknown
-                      ? "—"
-                      : `${pool.sinceGold}${pool.hasGold ? "" : " (at least)"}`
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <details
-        v-if="selectedPool !== 'all' && stats.goldHistory.length"
-        :key="`${selectedKey}:${selectedPool}`"
-        class="gacha-panel"
-        open
-      >
-        <summary>{{ topRank }}-star history</summary>
-        <p class="muted">
-          Names are shown in English and times are shown in local timezone.
-        </p>
-        <p class="muted">
-          The first interval is a lower bound if earlier
-          history is missing. Intervals are hidden when any records have unknown
-          rarity.
-        </p>
-        <div class="controls">
-          <label
-            >Records per page<select v-model.number="goldPageSize">
-              <option v-for="size in [5, 10, 20, 50, 100]" :key="size" :value="size">
-                {{ size }}
-              </option>
-            </select></label
+            :disabled="
+              !accounts.length ||
+              busy ||
+              exporting ||
+              (includeItemNames && !connectionConfigured)
+            "
+            @click="download(exportTargets, exportFilename)"
+            >{{ exportButtonLabel }}</VPButton
           >
         </div>
-        <div
-          v-for="entry in visibleGoldHistory"
-          :key="`${rowGame(entry.record)}:${entry.record.id}`"
-          class="gold-entry"
+        <p v-if="accounts.length" class="muted">
+          {{ exportSelectedAccounts.length }}
+          {{
+            exportSelectedAccounts.length === 1 ? "account" : "accounts"
+          }}
+          selected.
+          {{
+            exportAllAccounts
+              ? accounts.length === 1
+                ? "The stored account will be exported."
+                : "All stored accounts will be exported."
+              : "Only selected accounts will be exported."
+          }}
+        </p>
+        <p
+          v-if="exportStatus"
+          class="hint-container note"
+          role="status"
+          aria-live="polite"
         >
-          <div>
-            <strong class="gold">{{ itemName(entry.record, overviewLanguage) }}</strong
-            ><small>{{ displayTime(entry.record) }}</small>
-          </div>
-          <span>{{
-            stats.unknown
-              ? "—"
-              : `${entry.partial ? "At least " : ""}${entry.pulls} pulls`
-          }}</span>
-        </div>
-        <div class="pagination">
-          <span class="pagination-info">
-            <input
-              class="page-input"
-              type="number"
-              :value="goldPage"
-              min="1"
-              :max="goldPageCount"
-              step="1"
-              :aria-label="`${topRank}-star history page number`"
-              @change="jumpToPage($event, true)"
-              @keydown.enter.prevent="jumpToPage($event, true)"
-            /> / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
-          </span>
-          <nav class="pagination-links" :aria-label="`${topRank}-star history pagination`">
-            <button
-              type="button"
-              class="text-button"
-              :disabled="goldPage <= 1"
-              @click="goldPage--"
-            >&lt; Previous</button>
-            <span aria-hidden="true">·</span>
-            <button
-              type="button"
-              class="text-button"
-              :disabled="goldPage >= goldPageCount"
-              @click="goldPage++"
-            >Next &gt;</button>
-          </nav>
-        </div>
-      </details>
-
-      <section class="gacha-panel">
-        <h3>Record history</h3>
-        <div class="controls record-controls">
-          <label
-            >Search items<input
-              v-model="search"
-              type="search"
-              placeholder="Name or item ID" /></label
-          ><label
-            >Rarity<select v-model="rankFilter">
-              <option value="all">All</option>
-              <option v-for="rank in rarityOptions" :key="rank" :value="String(rank)">
-                {{ rarityLabel(rank) }}
-              </option>
-              <option value="null">Unknown</option>
-            </select></label
-          >
-          <label
-            >Display language<select v-model="displayLanguage">
-              <option
-                v-for="(name, code) in exportLanguages"
-                :key="code"
-                :value="code"
-              >
-                {{ name }}
-              </option>
-            </select></label
-          >
-          <label
-            >Records per page<select v-model.number="pageSize">
-              <option v-for="size in [5, 10, 20, 50, 100]" :key="size" :value="size">
-                {{ size }}
-              </option>
-            </select></label
-          >
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Rarity</th>
-                <th>Pool</th>
-                <th>Device time</th>
-                <th>{{ serverName("en-us") }} local time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="row in visible" :key="`${rowGame(row)}:${row.id}`">
-                <td>
-                  <span class="item"
-                    ><img
-                      v-if="itemMetadata(row)?.icon"
-                      :src="itemMetadata(row)!.icon!"
-                      alt=""
-                      loading="lazy"
-                      referrerpolicy="no-referrer"
-                    /><span :class="{ gold: rowRank(row) === 5 }"
-                      >{{ itemName(row)
-                      }}<small>ID {{ row.item_id }}</small></span
-                    ></span
-                  >
-                </td>
-                <td>{{ rowRank(row) ?? "Unknown" }}</td>
-                <td>{{ displayPoolName(displayPoolKey(row), displayLanguage) }}</td>
-                <td>{{ displayTime(row) }}</td>
-                <td>{{ row.time }}</td>
-              </tr>
-              <tr v-if="!visible.length">
-                <td colspan="5">No matching records.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <span class="pagination-info">
-            <input
-              class="page-input"
-              type="number"
-              :value="page"
-              min="1"
-              :max="pageCount"
-              step="1"
-              aria-label="Record history page number"
-              @change="jumpToPage($event)"
-              @keydown.enter.prevent="jumpToPage($event)"
-            /> / {{ pageCount }} · {{ filtered.length }} records
-          </span>
-          <nav class="pagination-links" aria-label="Record history pagination">
-            <button
-              type="button"
-              class="text-button"
-              :disabled="page <= 1"
-              @click="page--"
-            >&lt; Previous</button>
-            <span aria-hidden="true">·</span>
-            <button
-              type="button"
-              class="text-button"
-              :disabled="page >= pageCount"
-              @click="page++"
-            >Next &gt;</button>
-          </nav>
-        </div>
-        <p class="muted">
-          Device timestamps use your device timezone, including daylight
-          saving time at the record date. Storage, synchronization and exports
-          retain server-local timestamps.
+          {{ exportStatus }}
+        </p>
+        <p
+          v-if="exportWarning"
+          class="hint-container warning"
+          role="status"
+          aria-live="polite"
+        >
+          {{ exportWarning }}
+        </p>
+        <p v-if="exportError" class="hint-container caution" role="alert">
+          {{ exportError }}
         </p>
         <p class="muted">
-          Fetched records use UTC+8 for China / Asia, UTC+1 for
-          Europe, and UTC−5 for America. Imported records keep their archive's
-          server timezone. Legacy ZZZ UTC+0 labels are corrected to UTC+8
-          without changing record timestamps; UTC+8 alone cannot distinguish
-          China, Asia and TW-HK-MO.
+          Records are saved in this browser; personal synchronization is
+          optional. Export backups regularly.
         </p>
       </section>
-    </template>
+
+      <section v-if="!accounts.length" class="gacha-panel empty">
+        <h3>Start with your first archive</h3>
+        <p>
+          Import a UIGF file to view pull counts, five-star rates, pool
+          statistics and five-star history.
+        </p>
+      </section>
+      <template v-if="selected">
+        <section class="gacha-panel">
+          <h3>Overview</h3>
+          <div class="controls account-controls">
+            <label
+              >Account<select v-model="selectedKey">
+                <option
+                  v-for="account in displayAccounts"
+                  :key="account.key"
+                  :value="account.key"
+                >
+                  {{ games[account.game] }} · {{ account.uid }}
+                </option>
+              </select></label
+            >
+            <label
+              >Pool<select v-model="selectedPool">
+                <option value="all">
+                  {{ displayLabel("all", overviewLanguage) }}
+                </option>
+                <option v-for="pool in pools" :key="pool" :value="pool">
+                  {{ displayPoolName(pool) }}
+                </option>
+              </select></label
+            >
+          </div>
+          <div class="actions">
+            <VPButton
+              theme="alt"
+              :disabled="metadataBusy || busy || !connectionConfigured"
+              @click="loadMetadata"
+              >{{
+                metadataBusy ? "Loading…" : "Load item names & icons"
+              }}</VPButton
+            ><GachaConfirmButton
+              text="Delete account"
+              :context="selectedKey"
+              :disabled="busy || !!deletedPreview"
+              :action="deleteAccount"
+              success-text="Deleted"
+            />
+          </div>
+          <p
+            v-if="metadataStatus"
+            class="hint-container"
+            :class="metadataFeedback"
+            :role="metadataFeedback === 'caution' ? 'alert' : 'status'"
+            aria-live="polite"
+          >
+            {{ metadataStatus }}
+          </p>
+          <p class="muted destructive-hint">
+            Delete account removes this account’s local records. Export a backup
+            first. Click once, then press and hold to confirm.
+          </p>
+          <p class="muted">
+            Metadata queries send only the game, language and public item IDs.
+            Your UID, URL and history are never sent to the metadata backend.
+            Display metadata does not change your local archive.
+          </p>
+          <div class="metrics">
+            <div>
+              <span>Total pulls</span
+              ><strong>{{ stats.total.toLocaleString() }}</strong>
+            </div>
+            <div class="gold">
+              <span>{{ rarityLabel(topRank) }}</span
+              ><strong>{{ stats.gold }}</strong>
+            </div>
+            <div class="gold">
+              <span>5-star rate</span
+              ><strong>{{ stats.goldRate.toFixed(2) }}<small>%</small></strong>
+            </div>
+            <div>
+              <span>{{ rarityLabel(topRank - 1) }}</span
+              ><strong>{{ stats.purple }}</strong>
+            </div>
+            <div>
+              <span>Average {{ topRank }}-star interval</span
+              ><strong
+                >{{
+                  selectedPool === "all" ||
+                  stats.unknown ||
+                  stats.average === null
+                    ? "—"
+                    : stats.average.toFixed(1)
+                }}<small> pulls</small></strong
+              >
+            </div>
+            <div>
+              <span>Pulls since last {{ topRank }}-star</span
+              ><strong
+                >{{
+                  selectedPool === "all" || stats.unknown
+                    ? "—"
+                    : `${stats.hasGold ? "" : "≥ "}${stats.sinceGold}`
+                }}<small> pulls</small></strong
+              >
+            </div>
+          </div>
+          <p class="muted">
+            Rate = known {{ topRank }}-star (S-rank in ZZZ) records / all
+            records. Each record counts as one pull; item count is not the
+            number of pulls. These statistics describe saved history, not
+            official probabilities.
+          </p>
+          <p v-if="stats.unknown" class="hint-container note">
+            {{ stats.unknown }} records have unknown rarity. The
+            {{ topRank }}-star rate is a lower bound. Load metadata to fill
+            missing ranks; intervals and pity counts are hidden until then.
+          </p>
+          <p class="muted">
+            Average intervals use only complete spans between known
+            {{ topRank }}-star pulls; history before the first may be missing.
+            Pools are calculated separately, except Genshin character pools 301
+            / 400, which share a group. Miliastra is grouped by op_gacha_type
+            without assuming shared pity. Standard Evocation uses 4-star
+            records; other pools use 5-star records.
+          </p>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pool</th>
+                  <th>Pulls</th>
+                  <th>Top rarity</th>
+                  <th>Top rarity rate</th>
+                  <th>Avg. interval</th>
+                  <th>Pity / recorded</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="pool in poolStats" :key="pool.key">
+                  <td>
+                    <button
+                      class="text-button"
+                      @click="
+                        selectedPool =
+                          selectedPool === pool.key ? 'all' : pool.key
+                      "
+                    >
+                      {{ pool.name }}
+                    </button>
+                  </td>
+                  <td>{{ pool.total }}</td>
+                  <td class="gold">
+                    {{ pool.gold }} ({{ poolTopRank(pool.key) }}-star)
+                  </td>
+                  <td>
+                    {{ pool.unknown ? "≥ " : ""
+                    }}{{ pool.goldRate.toFixed(2) }}%
+                  </td>
+                  <td>
+                    {{
+                      pool.unknown || pool.average === null
+                        ? "—"
+                        : pool.average.toFixed(1)
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      pool.unknown
+                        ? "—"
+                        : `${pool.sinceGold}${pool.hasGold ? "" : " (at least)"}`
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <details
+          v-if="selectedPool !== 'all' && stats.goldHistory.length"
+          :key="`${selectedKey}:${selectedPool}`"
+          class="gacha-panel"
+          open
+        >
+          <summary>{{ topRank }}-star history</summary>
+          <p class="muted">
+            Names are shown in English and times are shown in local timezone.
+          </p>
+          <p class="muted">
+            The first interval is a lower bound if earlier history is missing.
+            Intervals are hidden when any records have unknown rarity.
+          </p>
+          <div class="controls">
+            <label
+              >Records per page<select v-model.number="goldPageSize">
+                <option
+                  v-for="size in [5, 10, 20, 50, 100]"
+                  :key="size"
+                  :value="size"
+                >
+                  {{ size }}
+                </option>
+              </select></label
+            >
+          </div>
+          <div
+            v-for="entry in visibleGoldHistory"
+            :key="`${rowGame(entry.record)}:${entry.record.id}`"
+            class="gold-entry"
+          >
+            <div>
+              <strong class="gold">{{
+                itemName(entry.record, overviewLanguage)
+              }}</strong
+              ><small>{{ displayTime(entry.record) }}</small>
+            </div>
+            <span>{{
+              stats.unknown
+                ? "—"
+                : `${entry.partial ? "At least " : ""}${entry.pulls} pulls`
+            }}</span>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info">
+              <input
+                class="page-input"
+                type="number"
+                :value="goldPage"
+                min="1"
+                :max="goldPageCount"
+                step="1"
+                :aria-label="`${topRank}-star history page number`"
+                @change="jumpToPage($event, true)"
+                @keydown.enter.prevent="jumpToPage($event, true)"
+              />
+              / {{ goldPageCount }} · {{ stats.goldHistory.length }} records
+            </span>
+            <nav
+              class="pagination-links"
+              :aria-label="`${topRank}-star history pagination`"
+            >
+              <button
+                type="button"
+                class="text-button"
+                :disabled="goldPage <= 1"
+                @click="goldPage--"
+              >
+                &lt; Previous
+              </button>
+              <span aria-hidden="true">·</span>
+              <button
+                type="button"
+                class="text-button"
+                :disabled="goldPage >= goldPageCount"
+                @click="goldPage++"
+              >
+                Next &gt;
+              </button>
+            </nav>
+          </div>
+        </details>
+
+        <section class="gacha-panel">
+          <h3>Record history</h3>
+          <div class="controls record-controls">
+            <label
+              >Search items<input
+                v-model="search"
+                type="search"
+                placeholder="Name or item ID" /></label
+            ><label
+              >Rarity<select v-model="rankFilter">
+                <option value="all">All</option>
+                <option
+                  v-for="rank in rarityOptions"
+                  :key="rank"
+                  :value="String(rank)"
+                >
+                  {{ rarityLabel(rank) }}
+                </option>
+                <option value="null">Unknown</option>
+              </select></label
+            >
+            <label
+              >Display language<select v-model="displayLanguage">
+                <option
+                  v-for="(name, code) in exportLanguages"
+                  :key="code"
+                  :value="code"
+                >
+                  {{ name }}
+                </option>
+              </select></label
+            >
+            <label
+              >Records per page<select v-model.number="pageSize">
+                <option
+                  v-for="size in [5, 10, 20, 50, 100]"
+                  :key="size"
+                  :value="size"
+                >
+                  {{ size }}
+                </option>
+              </select></label
+            >
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Rarity</th>
+                  <th>Pool</th>
+                  <th>Device time</th>
+                  <th>{{ serverName("en-us") }} local time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in visible" :key="`${rowGame(row)}:${row.id}`">
+                  <td>
+                    <span class="item"
+                      ><img
+                        v-if="itemMetadata(row)?.icon"
+                        :src="itemMetadata(row)!.icon!"
+                        alt=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      /><span :class="{ gold: rowRank(row) === 5 }"
+                        >{{ itemName(row)
+                        }}<small>ID {{ row.item_id }}</small></span
+                      ></span
+                    >
+                  </td>
+                  <td>{{ rowRank(row) ?? "Unknown" }}</td>
+                  <td>
+                    {{ displayPoolName(displayPoolKey(row), displayLanguage) }}
+                  </td>
+                  <td>{{ displayTime(row) }}</td>
+                  <td>{{ row.time }}</td>
+                </tr>
+                <tr v-if="!visible.length">
+                  <td colspan="5">No matching records.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info">
+              <input
+                class="page-input"
+                type="number"
+                :value="page"
+                min="1"
+                :max="pageCount"
+                step="1"
+                aria-label="Record history page number"
+                @change="jumpToPage($event)"
+                @keydown.enter.prevent="jumpToPage($event)"
+              />
+              / {{ pageCount }} · {{ filtered.length }} records
+            </span>
+            <nav
+              class="pagination-links"
+              aria-label="Record history pagination"
+            >
+              <button
+                type="button"
+                class="text-button"
+                :disabled="page <= 1"
+                @click="page--"
+              >
+                &lt; Previous
+              </button>
+              <span aria-hidden="true">·</span>
+              <button
+                type="button"
+                class="text-button"
+                :disabled="page >= pageCount"
+                @click="page++"
+              >
+                Next &gt;
+              </button>
+            </nav>
+          </div>
+          <p class="muted">
+            Device timestamps use your device timezone, including daylight
+            saving time at the record date. Storage, synchronization and exports
+            retain server-local timestamps.
+          </p>
+          <p class="muted">
+            Fetched records use UTC+8 for China / Asia, UTC+1 for Europe, and
+            UTC−5 for America. Imported records keep their archive's server
+            timezone. Legacy ZZZ UTC+0 labels are corrected to UTC+8 without
+            changing record timestamps; UTC+8 alone cannot distinguish China,
+            Asia and TW-HK-MO.
+          </p>
+        </section>
+      </template>
     </template>
   </div>
 </template>
@@ -1517,12 +1974,29 @@ async function loadMetadata() {
 .actions :deep(.ownership-disabled),
 .actions :deep(.ownership-disabled:hover) {
   cursor: not-allowed;
-  opacity: .5;
+  opacity: 0.5;
 }
-.ownership-check { width: fit-content; }
-.worker-url-field { display: flex; align-items: stretch; margin-top: 4px; }
-.worker-url-prefix { display: flex; align-items: center; padding: 10px 12px; border: 1px solid var(--vp-c-divider); border-right: 0; border-radius: 8px 0 0 8px; background: var(--vp-c-bg-soft); color: var(--vp-c-text-2); }
-.worker-url-field input { border-radius: 0 8px 8px 0; }
+.ownership-check {
+  width: fit-content;
+}
+.worker-url-field {
+  display: flex;
+  align-items: stretch;
+  margin-top: 4px;
+}
+.worker-url-prefix {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-right: 0;
+  border-radius: 8px 0 0 8px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.worker-url-field input {
+  border-radius: 0 8px 8px 0;
+}
 .connection-memory {
   margin-top: 24px;
 }
@@ -1606,12 +2080,18 @@ textarea {
   background: var(--vp-c-bg-soft);
   cursor: pointer;
 }
-.json-drop-zone span { font-size: 13px; }
-.json-drop-zone:hover, .json-drop-zone.dragging {
+.json-drop-zone span {
+  font-size: 13px;
+}
+.json-drop-zone:hover,
+.json-drop-zone.dragging {
   border-color: var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
 }
-.json-drop-zone.disabled { opacity: 0.5; cursor: not-allowed; }
+.json-drop-zone.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 :deep(.vp-button:disabled) {
   opacity: 0.5;
   cursor: not-allowed;

@@ -7,7 +7,7 @@ comments: false
 ---
 
 <LinkCard
-  title="Gacha Manager"
+  title="Helios Assistant"
   icon="mdi:cards-outline"
   href="/tool/helios-assistant/">
 Import and export UIGF JSON, merge archives, and view account and pool statistics.
@@ -17,7 +17,7 @@ Import and export UIGF JSON, merge archives, and view account and pool statistic
 
 Cross-platform support is one of my main concerns when looking for gacha history tools for Genshin Impact, Honkai: Star Rail and Zenless Zone Zero. Many existing tools depend on a particular operating system or client, making it difficult to use the same workflow across devices. This motivated me to build a **Vue-based, self-hostable gacha record manager that runs in a web browser**.
 
-Gacha Manager aims to handle importing, merging, viewing and backing up records in the browser, reducing dependence on desktop applications and operating systems. The current frontend is a Vue 3 component integrated into this site's VuePress pages. Records are stored locally in the current browser and can be transferred between devices by exporting and importing backups.
+Helios Assistant aims to handle importing, merging, viewing and backing up records in the browser, reducing dependence on desktop applications and operating systems. The current frontend is a Vue 3 component integrated into this site's VuePress pages. Records are stored locally in the current browser and can be transferred between devices by exporting and importing backups.
 
 ## Current scope {#current-scope}
 

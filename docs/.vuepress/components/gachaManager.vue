@@ -850,7 +850,7 @@ async function loadMetadata() {
       </form>
     </section>
 
-    <section v-if="gachaFetchAllowed" class="gacha-panel">
+    <section v-if="gachaFetchAllowed && connectionConfigured" class="gacha-panel">
       <h3>Fetch records</h3>
       <div class="helper-status" role="status">
         <span>{{

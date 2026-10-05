@@ -32,9 +32,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="secret-field">
-    <label for="personal-sync-token">PERSONAL_SYNC_TOKEN</label>
+    <label for="personal-sync-token">PERSONAL_SYNC_TOKEN (optional)</label>
     <div class="secret-control">
-      <input id="personal-sync-token" v-model="value" :type="revealed ? 'text' : 'password'" autocomplete="off" :disabled="disabled" required spellcheck="false" autocapitalize="off" />
+      <input id="personal-sync-token" v-model="value" :type="revealed ? 'text' : 'password'" autocomplete="off" :disabled="disabled" spellcheck="false" autocapitalize="off" />
       <button type="button" :disabled="disabled" aria-label="Press and hold to show token" title="Press and hold to show token" :aria-pressed="revealed"
         @pointerdown="reveal" @pointerup="hide" @pointercancel="hide" @lostpointercapture="hide" @blur="hide"
         @keydown="keyDown" @keyup="keyUp" @contextmenu.prevent>

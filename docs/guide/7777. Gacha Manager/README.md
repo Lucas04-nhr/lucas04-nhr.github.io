@@ -35,4 +35,4 @@ Running in a browser does not guarantee direct access to every game's history AP
 
 ## Legal notice {#legal}
 
-Using Helios Assistant means the acceptance of [Terms of Service](/legal/terms/) and [Privacy Policy](/legal/privacy/). The Helios Assistant is not affiliated with or endorsed by miHoYo, HoYoverse, Zenless Zone Zero or any other game publisher. All trademarks are the property of their respective owners.
+Using Helios Assistant means the acceptance of [Terms of Service](/legal/terms/) and [Privacy Policy](/legal/privacy/). The Helios Assistant is not affiliated with or endorsed by miHoYo, HoYoverse, COGNOSPHERE or any other game publisher. All trademarks are the property of their respective owners.

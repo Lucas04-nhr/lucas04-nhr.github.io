@@ -3,6 +3,7 @@
 export interface GachaConnection {
   worker: string;
   personalToken: string;
+  enableSync?: boolean;
 }
 const COOKIE = "gacha-attr-token";
 const KEY = "lucas-gacha-connection-key-v1";
@@ -16,7 +17,7 @@ const attributes = () =>
 async function key(create: boolean): Promise<CryptoKey> {
   if (!globalThis.crypto?.subtle)
     throw new Error(
-      "Remembering connection details requires HTTPS or localhost.",
+      "Saving connection settings requires HTTPS or localhost.",
     );
   let value = localStorage.getItem(KEY);
   if (!value && create) {
@@ -41,7 +42,7 @@ export async function saveGachaConnection(
   const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     secret,
-    new TextEncoder().encode(JSON.stringify({ worker: connection.worker, personalToken: connection.personalToken })),
+    new TextEncoder().encode(JSON.stringify({ worker: connection.worker, personalToken: connection.personalToken, enableSync: connection.enableSync === true })),
   );
   const value = `${encode(iv)}.${encode(new Uint8Array(encrypted))}`;
   if (value.length > 3800)
@@ -77,7 +78,7 @@ export async function loadGachaConnection(): Promise<
     )
   )
     throw new Error("Invalid saved connection details.");
-  const connection = { worker: value.worker, personalToken: value.personalToken };
+  const connection = { worker: value.worker, personalToken: value.personalToken, enableSync: value.enableSync === true };
   if (Object.hasOwn(value, "updateToken")) {
     // Remove the legacy admin token before rewriting personal connection details.
     document.cookie = `${COOKIE}=; Max-Age=0; ${attributes()}`;

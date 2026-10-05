@@ -43,7 +43,7 @@ import {
   gachaFetchAllowed,
 } from "../theme/utils/gachaFetchPreference";
 
-import { fetchGachaVersion } from "../theme/utils/gachaVersion";
+import { fallbackGachaVersion, fetchGachaVersion } from "../theme/utils/gachaVersion";
 
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
@@ -866,7 +866,7 @@ async function download(
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     gachaLog("info", "Export prepared", { accounts: prepared.accounts.length });
     exportStatus.value =
-      "Export ready. Your saved records have not been changed.";
+      `Export ready · Helios Assistant v${appVersion}. Your saved records have not been changed.`;
     if (prepared.missingNames.length) {
       gachaLog("warning", "Export omitted unavailable item names", {
         accounts: prepared.missingNames.length,
@@ -1433,7 +1433,10 @@ async function loadMetadata() {
 
       <section class="gacha-panel">
         <h3>Export</h3>
-        <p class="muted">Exports use UIGF v4.2.</p>
+        <p class="muted">
+          Exports use UIGF v4.2. The app version follows the latest stable
+          release, with v{{ fallbackGachaVersion }} as the minimum and fallback.
+        </p>
         <label class="export-language"
           >Export language<select
             v-model="exportLanguage"

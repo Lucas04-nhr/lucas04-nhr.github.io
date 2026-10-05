@@ -10,5 +10,5 @@ export function applyGachaFetchPreference(allowed: boolean | null, url: URL): vo
     document.cookie = `gachaFetchAllowed=${allowed}; path=/; max-age=31536000; SameSite=Lax${secure}`;
   }
   const saved = isBrowser && document.cookie.split(";").some(cookie => cookie.trim() === "gachaFetchAllowed=true");
-  gachaFetchAllowed.value = (allowed ?? saved) && /^\/tool\/gacha-manager\/?$/.test(url.pathname);
+  gachaFetchAllowed.value = (allowed ?? saved) && /^\/tool\/(?:helios-assistant|gacha-manager)\/?$/.test(url.pathname);
 }

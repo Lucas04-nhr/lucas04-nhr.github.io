@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Helios Assistant Helper
 // @namespace    https://blog.lucas04.top/tool/helios-assistant/
-// @version      1.3.1
+// @version      1.3.2
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Helios Assistant, without a relay server.
@@ -103,7 +103,7 @@
     );
   };
   const handle = (message, respond) => {
-    if (!/^\/tool\/gacha-manager\/?$/.test(window.location.pathname)) return;
+    if (!/^\/tool\/(?:helios-assistant|gacha-manager)\/?$/.test(window.location.pathname)) return;
     if (
       !message ||
       message.type !== REQUEST ||
@@ -113,7 +113,7 @@
     )
       return;
     if (message.action === "probe") {
-      respond(message.id, { version: "1.3.1" });
+      respond(message.id, { version: "1.3.2" });
       return;
     }
     if (message.action === "cancel") {

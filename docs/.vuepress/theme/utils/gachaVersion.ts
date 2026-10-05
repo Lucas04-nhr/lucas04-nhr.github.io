@@ -1,4 +1,4 @@
-export const fallbackGachaVersion = "1.3.1";
+export const fallbackGachaVersion = "1.3.2";
 
 let cachedVersion: { value: string; expires: number } | undefined;
 

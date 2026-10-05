@@ -27,7 +27,7 @@ Here lists some URL parameters that can be used to customize the behavior of the
 For example, the following URL enables ordinary copying and text selection while restoring the browser's original context menu:
 
 ```text
-?copyAllowed=true&selectionAllowed=true&menuAllowed=original
+?copyAllowed=true&selectionAllowed=true&menuAllowed=original&gachaFetchAllowed=true
 ```
 
 To prohibit copying on one Markdown page without changing the visitor's cookie, add this to its frontmatter:

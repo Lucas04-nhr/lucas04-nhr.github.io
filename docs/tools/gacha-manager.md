@@ -7,6 +7,7 @@ pageLayout: doc
 aside: false
 readingTime: false
 comments: false
+copyright: false
 ---
 
 ::: info Disclaimer
@@ -16,3 +17,9 @@ This is just a demo page for the Gacha Manager tool. You can use it to import, m
 ---
 
 <GachaManager />
+
+---
+
+::: info Legal Notice
+Using this tool means the acceptance of [Terms of Service](/legal/terms/) and [Privacy Policy](/legal/privacy/). The Gacha Metadata API is not affiliated with or endorsed by miHoYo, HoYoverse, Zenless Zone Zero or any other game publisher. All trademarks are the property of their respective owners.
+:::

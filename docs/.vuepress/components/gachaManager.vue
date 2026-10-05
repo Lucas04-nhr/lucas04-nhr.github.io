@@ -56,15 +56,15 @@ const connectionFeedback = ref<"note" | "caution">("note");
 const connectionBusy = ref(false);
 let connectionRequest: AbortController | undefined;
 const savedConnection = ref<{ worker: string; personalToken: string; enableSync: boolean }>();
-const connectionConfigured = computed(() => {
-  const saved = savedConnection.value;
-  return !!saved && remoteServiceReady.value && saved.worker === workerHttpsOrigin()
-    && saved.personalToken === personalToken.value && saved.enableSync === ownsWorker.value;
-});
-const syncEnabled = computed(() => connectionConfigured.value && ownsWorker.value && !!personalToken.value);
+const connectionConfigured = computed(() => !!savedConnection.value);
+const syncEnabled = computed(() => !!savedConnection.value?.enableSync && !!savedConnection.value.personalToken);
+function activeWorkerOrigin() {
+  if (!savedConnection.value) throw new Error("Save remote service settings before using this feature.");
+  return savedConnection.value.worker;
+}
 
 async function rememberConnection() {
-  if (connectionBusy.value || busy.value || !ready.value) return;
+  if (connectionBusy.value || busy.value || exporting.value || metadataBusy.value || !ready.value) return;
   connectionBusy.value = true;
   const controller = new AbortController();
   connectionRequest = controller;
@@ -84,7 +84,7 @@ async function rememberConnection() {
     controller.signal.throwIfAborted();
     if (!ready.value) return;
     savedConnection.value = { worker, personalToken: token, enableSync };
-    connectionStatus.value = "Settings saved. Import, export and record views are now available.";
+    connectionStatus.value = "Settings saved";
   } catch (err) {
     connectionFeedback.value = "caution";
     connectionStatus.value = err instanceof Error ? err.message : "Could not save settings.";
@@ -134,7 +134,7 @@ const ownsWorker = ref(false);
 const ownershipRow = ref<HTMLElement>();
 let ownershipAnimation: Animation | undefined;
 function requireWorkerOwnership() {
-  if (ownsWorker.value) return true;
+  if (savedConnection.value?.enableSync) return true;
   ownershipAnimation?.cancel();
   ownershipRow.value?.scrollIntoView({ block: "nearest" });
   ownershipRow.value?.querySelector("input")?.focus({ preventScroll: true });
@@ -164,7 +164,7 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   syncRequest = controller;
   syncing.value = true;
   try {
-    const synced = await synchronizePersonal(workerHttpsOrigin(), personalToken.value, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
+    const synced = await synchronizePersonal(activeWorkerOrigin(), savedConnection.value!.personalToken, accounts.value, controller.signal, message => { personalSyncStatus.value = message; gachaLog("info", "Sync progress"); }, preferLocalTimes.value, mode);
     controller.signal.throwIfAborted();
     accounts.value = synced;
     if (!synced.some(account => groupAccountKey(account) === selectedKey.value))
@@ -599,7 +599,7 @@ async function importJsonFiles(files: File[]) {
 
 async function retrieve() {
   if (busy.value || !ready.value || !gachaFetchAllowed.value || !connectionConfigured.value) return;
-  if (!remoteServiceReady.value) {
+  if (!connectionConfigured.value) {
     error.value = "Enter a valid Worker HTTPS URL in Remote service before fetching records.";
     return;
   }
@@ -678,7 +678,7 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     const lang = exportLanguage.value;
     exportStatus.value = includeItemNames.value ? `Preparing ${exportLanguages[lang]} export…` : "Preparing export without item names…";
     const [prepared, appVersion] = await Promise.all([
-      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value, includeItemNames.value ? workerHttpsOrigin() : undefined),
+      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value, includeItemNames.value ? activeWorkerOrigin() : undefined),
       fetchGachaVersion(controller.signal),
     ]);
     controller.signal.throwIfAborted();
@@ -751,7 +751,7 @@ async function loadMetadata() {
           entry.list.map((row) => row.item_id),
           controller.signal,
           lang,
-          workerHttpsOrigin(),
+          activeWorkerOrigin(),
         );
         controller.signal.throwIfAborted();
         metadata.value = {
@@ -804,7 +804,7 @@ async function loadMetadata() {
 
     <section class="gacha-panel">
       <h3>Remote service</h3>
-      <p class="muted">Enter a Worker HTTPS URL and save settings. The backend health endpoint must pass verification before Import, Export and record views appear. Changes to these settings require saving again.</p>
+      <p class="muted">Enter a Worker HTTPS URL and save settings. The backend health endpoint must pass verification before Import, Export and record views appear. Edits take effect only after Save settings succeeds. Until then, features continue using the last saved settings.</p>
       <label for="worker-host">Worker URL (required · HTTPS)</label>
       <div class="worker-url-field">
         <span class="worker-url-prefix" aria-hidden="true">https://</span>
@@ -818,7 +818,7 @@ async function loadMetadata() {
         <div class="connection-memory">
           <p class="muted">Save the Worker URL with an optional personal-sync token.</p>
           <div class="actions">
-            <VPButton text="Save settings" theme="brand" type="button" :disabled="busy || !ready || connectionBusy || !remoteServiceReady" @click="rememberConnection" />
+            <VPButton text="Save settings" theme="brand" type="button" :disabled="busy || exporting || metadataBusy || !ready || connectionBusy || !remoteServiceReady" @click="rememberConnection" />
             <GachaConfirmButton text="Clear saved settings" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
           </div>
           <p class="muted">To clear saved settings, click once, then press and hold to confirm.</p>
@@ -838,9 +838,9 @@ async function loadMetadata() {
           </p>
           <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
           <div class="actions">
-            <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" @click="syncPersonal()" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Sync personal records" />
-            <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Pull and replace local" />
-            <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Push and replace remote" />
+            <VPButton @click="syncPersonal()" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Sync personal records" />
+            <GachaConfirmButton :blocked="!syncEnabled" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Pull and replace local" />
+            <GachaConfirmButton :blocked="!syncEnabled" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`" :disabled="busy || !ready || connectionBusy || !syncEnabled" text="Push and replace remote" />
             <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
           </div>
           <p class="muted destructive-hint">For replacement, click once, then press and hold to confirm.</p>
@@ -954,7 +954,7 @@ async function loadMetadata() {
             type="button"
             @click="retrieve"
             :disabled="
-              busy || !ready || !remoteServiceReady || helperState === 'checking' || !link.trim()
+              busy || !ready || !connectionConfigured || helperState === 'checking' || !link.trim()
             "
             >{{ busy ? "Processing…" : "Fetch gacha records" }}</VPButton
           >
@@ -1131,7 +1131,7 @@ async function loadMetadata() {
       <div class="actions export-actions">
         <VPButton
           theme="alt"
-          :disabled="!accounts.length || busy || exporting || (includeItemNames && !remoteServiceReady)"
+          :disabled="!accounts.length || busy || exporting || (includeItemNames && !connectionConfigured)"
           @click="download(exportTargets, exportFilename)"
           >{{ exportButtonLabel }}</VPButton
         >
@@ -1180,7 +1180,7 @@ async function loadMetadata() {
         <div class="actions">
           <VPButton
             theme="alt"
-            :disabled="metadataBusy || busy || !remoteServiceReady"
+            :disabled="metadataBusy || busy || !connectionConfigured"
             @click="loadMetadata"
             >{{
               metadataBusy ? "Loading…" : "Load item names & icons"

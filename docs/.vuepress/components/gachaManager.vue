@@ -74,7 +74,7 @@ async function rememberConnection() {
     if (!ready.value || !ownsWorker.value || worker !== workerHttpsOrigin() || token !== personalToken.value)
       throw new Error("Connection details changed during verification. Try remembering them again.");
     await saveGachaConnection({ worker, personalToken: token });
-    connectionStatus.value = "Connection details remembered for 1 year in this browser.";
+    connectionStatus.value = "Connection details remembered in this browser.";
   } catch (err) {
     connectionFeedback.value = "caution";
     connectionStatus.value = err instanceof Error ? err.message : "Could not remember connection details.";
@@ -1015,7 +1015,7 @@ async function loadMetadata() {
         </div>
         <label ref="ownershipRow" class="check ownership-check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
         <div class="connection-memory">
-          <p class="muted">Remember the Worker URL and personal-sync token for 1 year after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+          <p class="muted">Remember the Worker URL and personal-sync token after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
           <div class="actions">
             <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || (ownsWorker && !personalWorker)" @click="rememberConnection" />
             <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />

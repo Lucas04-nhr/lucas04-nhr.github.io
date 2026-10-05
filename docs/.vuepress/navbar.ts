@@ -24,7 +24,7 @@ export const enNavbar = defineNavbarConfig([
       { text: "R for Bioinformatics Cookbook", link: "/docs/r-course/" },
       { text: "HUST Graduation Project", link: "/docs/hust-gp-template/" },
       { text: "KU Master's Courses", link: "/docs/ku/" },
-      { text: "Helios Assistant", link: "/docs/gacha-manager/" },
+      { text: "Helios Assistant", link: "/docs/helios-assistant/" },
     ],
   },
   {

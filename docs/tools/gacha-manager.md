@@ -14,16 +14,16 @@ copyright: false
   <LinkCard
   icon="mdi:toolbox-outline"
   title="User Guide"
-  href="/docs/gacha-manager/frontend/">
+  href="/docs/helios-assistant/frontend/">
     See the documentation for Helios Assistant.
   </LinkCard>
 
-  <LinkCard
+<LinkCard
   icon="mdi:api"
   title="Backend API"
-  href="/docs/gacha-manager/backend/">
-    See the documentation for the Gacha Metadata API.
-  </LinkCard>
+  href="/docs/helios-assistant/backend/">
+See the documentation for the Gacha Metadata API.
+</LinkCard>
 </CardGrid>
 
 ::: info Legal Notice

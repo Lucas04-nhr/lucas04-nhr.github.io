@@ -5,6 +5,7 @@ import ResponsiveImage from "./components/customResponseImage.vue";
 import DebugInfo from "./components/debugInfo.vue";
 import RawJsonOutput from "./components/rawJsonOutput.vue";
 import GachaManager from "./components/gachaManager.vue";
+import GachaItemQueryDemo from "./components/gachaItemQueryDemo.vue";
 import ChinaMainlandUserCheck from "./components/chinaMainlandUserCheck.vue";
 import { applyPanguSpacingToDOM } from "./components/customPango.vue";
 import { Layout } from "vuepress-theme-plume/client";
@@ -121,6 +122,7 @@ export default defineClientConfig({
     app.component("DebugInfo", DebugInfo);
     app.component("RawJsonOutput", RawJsonOutput);
     app.component("GachaManager", GachaManager);
+    app.component("GachaItemQueryDemo", GachaItemQueryDemo);
     app.component("ChinaMainlandUserCheck", ChinaMainlandUserCheck);
     app.component("NavBarLocaleToggle", NavBarLocaleToggle);
     app.component("UrlQueryStateDecoder", UrlQueryStateDecoder);

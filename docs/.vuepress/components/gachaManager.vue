@@ -823,13 +823,13 @@ const exportFilename = computed(() => {
     return `${exportFilePrefixes[account.game]}_${account.uid}.json`;
   }
   return exportAllAccounts.value
-    ? "UIGFv4_GachaManager.json"
-    : "UIGFv4_GachaManager_selected.json";
+    ? "UIGFv4_HeliosAssistant.json"
+    : "UIGFv4_HeliosAssistant_selected.json";
 });
 
 async function download(
   selectedAccounts: GachaAccount[],
-  filename = "UIGFv4_GachaManager.json",
+  filename = "UIGFv4_HeliosAssistant.json",
 ) {
   if (exporting.value || !connectionConfigured.value) return;
   gachaLog("info", "Export started");

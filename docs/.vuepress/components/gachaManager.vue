@@ -112,6 +112,9 @@ function workerHttpsOrigin() {
   if (!origin.startsWith("https://")) throw new Error("The Worker URL requires HTTPS.");
   return origin;
 }
+const remoteServiceReady = computed(() => {
+  try { return !!workerHttpsOrigin(); } catch { return false; }
+});
 function workerUrlKeydown(event: KeyboardEvent) {
   if (event.key === "/") event.stopPropagation();
 }
@@ -569,6 +572,10 @@ async function importJsonFiles(files: File[]) {
 
 async function retrieve() {
   if (busy.value || !ready.value || !gachaFetchAllowed.value) return;
+  if (!remoteServiceReady.value) {
+    error.value = "Enter a valid Worker HTTPS URL in Remote service before fetching records.";
+    return;
+  }
   busy.value = true;
   gachaLog("info", "Fetch started");
   error.value = "";
@@ -644,7 +651,7 @@ async function download(selectedAccounts: GachaAccount[], filename = "UIGFv4_Gac
     const lang = exportLanguage.value;
     exportStatus.value = includeItemNames.value ? `Preparing ${exportLanguages[lang]} export…` : "Preparing export without item names…";
     const [prepared, appVersion] = await Promise.all([
-      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value),
+      prepareExportAccounts(selectedAccounts, lang, controller.signal, includeItemNames.value, includeItemNames.value ? workerHttpsOrigin() : undefined),
       fetchGachaVersion(controller.signal),
     ]);
     controller.signal.throwIfAborted();
@@ -717,6 +724,7 @@ async function loadMetadata() {
           entry.list.map((row) => row.item_id),
           controller.signal,
           lang,
+          workerHttpsOrigin(),
         );
         controller.signal.throwIfAborted();
         metadata.value = {
@@ -765,6 +773,55 @@ async function loadMetadata() {
         ><span>{{ totalRecords.toLocaleString() }} records</span
         ><span>Saved in this browser</span>
       </div>
+    </section>
+
+    <section class="gacha-panel">
+      <h3>Remote service</h3>
+      <p class="muted">A Worker HTTPS URL is required for fetching records and loading item metadata. Enter your own service below. Personal synchronization is optional.</p>
+      <label for="worker-host">Worker URL (required · HTTPS)</label>
+      <div class="worker-url-field">
+        <span class="worker-url-prefix" aria-hidden="true">https://</span>
+        <input id="worker-host" v-model="workerHost" type="text" required aria-required="true" inputmode="url" placeholder="your-worker.example.com" :disabled="busy" autocomplete="url" spellcheck="false" aria-description="HTTPS prefix is added automatically." @keydown="workerUrlKeydown" />
+      </div>
+      <h4>Personal remote synchronization</h4>
+      <p class="muted">
+        Sync only to your own Worker and D1 database. Its operator and anyone
+        holding the token can read, modify or delete all remote records.
+        Sync merges saved records in both directions; local deletions are not propagated.
+        Each upload batch commits separately.
+      </p>
+      <form class="remote-service-form" @submit.prevent="syncPersonal()">
+        <div class="controls">
+          <GachaSecretInput v-model="personalToken" :disabled="busy" />
+        </div>
+        <label ref="ownershipRow" class="check ownership-check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
+        <div class="connection-memory">
+          <p class="muted">Remember the Worker URL and personal-sync token after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
+          <div class="actions">
+            <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || (ownsWorker && !personalWorker)" @click="rememberConnection" />
+            <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
+          </div>
+          <p v-if="connectionStatus" class="hint-container" :class="connectionFeedback" :role="connectionFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">{{ connectionStatus }}</p>
+        </div>
+        <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
+        <p class="muted">
+          Sync personal records merges local and remote archives; deletions are not propagated.
+          Pull and replace local replaces the entire local archive with remote records, including an empty remote archive.
+          Push and replace remote replaces the entire remote archive with local records and removes remote accounts and records absent locally, including clearing remote records when the local archive is empty.
+          The timestamp conflict option applies only to merging. Remote writes commit in separate batches; cancellation or failure can leave a partial replacement.
+          <strong>Export a backup of your data before important operations, especially either replacement operation.</strong>
+        </p>
+        <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
+        <div class="actions">
+          <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" @click="syncPersonal()" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Sync personal records" />
+          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Pull and replace local" />
+          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Push and replace remote" />
+          <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
+        </div>
+        <p class="muted destructive-hint">For replacement and clearing saved details, click once, then press and hold to confirm.</p>
+        <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
+        <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
+      </form>
     </section>
 
     <section v-if="gachaFetchAllowed" class="gacha-panel">
@@ -871,7 +928,7 @@ async function loadMetadata() {
             type="button"
             @click="retrieve"
             :disabled="
-              busy || !ready || helperState === 'checking' || !link.trim()
+              busy || !ready || !remoteServiceReady || helperState === 'checking' || !link.trim()
             "
             >{{ busy ? "Processing…" : "Fetch gacha records" }}</VPButton
           >
@@ -996,51 +1053,7 @@ async function loadMetadata() {
           >UIGF Upgrader</a
         >.
       </p>
-      <h4>Remote service</h4>
-      <label for="worker-host">Worker URL (require HTTPS)</label>
-      <div class="worker-url-field">
-        <span class="worker-url-prefix" aria-hidden="true">https://</span>
-        <input id="worker-host" v-model="workerHost" type="text" inputmode="url" placeholder="your-worker.example.com" :disabled="busy" autocomplete="url" spellcheck="false" aria-description="HTTPS prefix is added automatically." @keydown="workerUrlKeydown" />
-      </div>
-      <h4>Personal remote synchronization</h4>
-      <p class="muted">
-        Sync only to your own Worker and D1 database. Its operator and anyone
-        holding the token can read, modify or delete all remote records.
-        Sync merges saved records in both directions; local deletions are not propagated.
-        Each upload batch commits separately.
-      </p>
-      <form class="remote-service-form" @submit.prevent="syncPersonal()">
-        <div class="controls">
-          <GachaSecretInput v-model="personalToken" :disabled="busy" />
-        </div>
-        <label ref="ownershipRow" class="check ownership-check"><input v-model="ownsWorker" type="checkbox" :disabled="busy" />I own and manage this Worker and D1 database.</label>
-        <div class="connection-memory">
-          <p class="muted">Remember the Worker URL and personal-sync token after verifying the Worker health endpoint. Token authentication is checked during synchronization. The encrypted cookie and its local browser key allow automatic recovery; anyone with access to this browser or this site's scripts can decrypt them.</p>
-          <div class="actions">
-            <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" text="Remember connection details" theme="alt" :disabled="busy || !ready || connectionBusy || (ownsWorker && !personalWorker)" @click="rememberConnection" />
-            <GachaConfirmButton text="Clear saved details" :disabled="busy || !ready || connectionBusy" :action="forgetConnection" success-text="Deleted" />
-          </div>
-          <p v-if="connectionStatus" class="hint-container" :class="connectionFeedback" :role="connectionFeedback === 'caution' ? 'alert' : 'status'" aria-live="polite">{{ connectionStatus }}</p>
-        </div>
-        <p class="muted">Enable after correcting records from the official API. Matching record IDs use local timestamps and update the remote copy. Item, pool and account timezone conflicts still stop synchronization.</p>
-        <p class="muted">
-          Sync personal records merges local and remote archives; deletions are not propagated.
-          Pull and replace local replaces the entire local archive with remote records, including an empty remote archive.
-          Push and replace remote replaces the entire remote archive with local records and removes remote accounts and records absent locally, including clearing remote records when the local archive is empty.
-          The timestamp conflict option applies only to merging. Remote writes commit in separate batches; cancellation or failure can leave a partial replacement.
-          <strong>Export a backup of your data before important operations, especially either replacement operation.</strong>
-        </p>
-        <label class="check"><input v-model="preferLocalTimes" type="checkbox" :disabled="busy" />Use local timestamps for sync conflicts</label>
-        <div class="actions">
-          <VPButton :class="{ 'ownership-disabled': !ownsWorker }" :aria-disabled="!ownsWorker" @click="syncPersonal()" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Sync personal records" />
-          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('pull')" success-text="Pulled" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Pull and replace local" />
-          <GachaConfirmButton :blocked="!ownsWorker" :before-arm="requireWorkerOwnership" :action="() => syncPersonal('push')" success-text="Pushed" :context="`${ownsWorker}:${personalWorker}:${personalToken}`" :disabled="busy || !ready || (ownsWorker && (!personalWorker || !personalToken))" text="Push and replace remote" />
-          <VPButton v-if="syncing" text="Cancel sync" theme="alt" @click="syncRequest?.abort()" />
-        </div>
-        <p class="muted destructive-hint">For replacement and clearing saved details, click once, then press and hold to confirm.</p>
-        <p v-if="personalSyncStatus" class="hint-container note" role="status" aria-live="polite">{{ personalSyncStatus }}</p>
-        <p v-if="personalSyncError" class="hint-container caution" role="alert">{{ personalSyncError }}</p>
-      </form>
+
 
     </section>
 
@@ -1091,7 +1104,7 @@ async function loadMetadata() {
       <div class="actions export-actions">
         <VPButton
           theme="alt"
-          :disabled="!accounts.length || busy || exporting"
+          :disabled="!accounts.length || busy || exporting || (includeItemNames && !remoteServiceReady)"
           @click="download(exportTargets, exportFilename)"
           >{{ exportButtonLabel }}</VPButton
         >
@@ -1140,7 +1153,7 @@ async function loadMetadata() {
         <div class="actions">
           <VPButton
             theme="alt"
-            :disabled="metadataBusy || busy"
+            :disabled="metadataBusy || busy || !remoteServiceReady"
             @click="loadMetadata"
             >{{
               metadataBusy ? "Loading…" : "Load item names & icons"

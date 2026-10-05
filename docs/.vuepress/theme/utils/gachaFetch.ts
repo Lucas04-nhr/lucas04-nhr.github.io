@@ -1,3 +1,4 @@
+import { personalApiBase } from "./gachaSync";
 import { gachaLog } from "./gachaLog";
 import { compactAccounts, accountKey, compareIds, localizeAccount, poolKey, poolNames, servers, validateRecord, type ExportLanguage, type GachaAccount, type Game, type ItemMetadata, type Metadata, type SelectableGame, type ServerId } from "./gachaRecords";
 import { fetchWithGachaHelper } from "./gachaTransport";
@@ -204,11 +205,13 @@ export async function fetchRecords(options: FetchOptions): Promise<number> {
   return total;
 }
 
-export async function fetchMetadata(game: Game, ids: string[], signal: AbortSignal, lang: ExportLanguage = "en-us"): Promise<Metadata> {
+export async function fetchMetadata(game: Game, ids: string[], signal: AbortSignal, lang: ExportLanguage, worker: string): Promise<Metadata> {
+  const origin = personalApiBase(worker);
+  if (!origin.startsWith("https://")) throw new Error("The Worker URL requires HTTPS.");
   const result: Metadata = {};
   const unique = [...new Set(ids)].filter(id => /^\d{1,20}$/.test(id));
   for (let offset = 0; offset < unique.length; offset += 90) {
-    const url = new URL("https://gachameta.lucas04.top/api/v1/items");
+    const url = new URL("/api/v1/items", origin);
     url.search = new URLSearchParams({ game, lang, ids: unique.slice(offset, offset + 90).join(",") }).toString();
     const body = await fetchJson(url, signal);
     if (!Array.isArray(body.items)) throw new Error("Invalid metadata API response.");
@@ -219,12 +222,13 @@ export async function fetchMetadata(game: Game, ids: string[], signal: AbortSign
   return result;
 }
 
-export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal, includeItemNames = true): Promise<{ accounts: GachaAccount[]; missingNames: GachaAccount[] }> {
+export async function prepareExportAccounts(accounts: GachaAccount[], language: ExportLanguage, signal: AbortSignal, includeItemNames = true, worker?: string): Promise<{ accounts: GachaAccount[]; missingNames: GachaAccount[] }> {
   signal.throwIfAborted();
   if (!includeItemNames) return { accounts: compactAccounts(accounts), missingNames: [] };
+  if (!worker) throw new Error("Enter a Worker HTTPS URL in Remote service before exporting item names.");
   const byGame: Partial<Record<Game, Metadata>> = {};
   for (const game of [...new Set(accounts.map(account => account.game))]) {
-    byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game).flatMap(account => account.list.map(row => row.item_id)), signal, language);
+    byGame[game] = await fetchMetadata(game, accounts.filter(account => account.game === game).flatMap(account => account.list.map(row => row.item_id)), signal, language, worker);
   }
   const missingNames: GachaAccount[] = [];
   const output = accounts.map(account => {

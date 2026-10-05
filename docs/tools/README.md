@@ -50,7 +50,7 @@ The following tools are not only hosted on this site. Some external tools behind
 <LinkCard
   title="Gacha Manager"
   icon="mdi:cards-outline"
-  href="/tool/gacha-manager/">
+  href="/tool/helios-assistant/">
 Import and export UIGF JSON, merge archives, and view account and pool statistics.
 </LinkCard>
 

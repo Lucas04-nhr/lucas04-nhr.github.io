@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gacha Manager Helper
-// @namespace    https://blog.lucas04.top/tool/gacha-manager/
+// @namespace    https://blog.lucas04.top/tool/helios-assistant/
 // @version      1.3.1
 // @updateURL    https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js

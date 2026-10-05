@@ -557,7 +557,7 @@ test("link fetching is hidden by default and the opt-in is limited to the tool r
   applyGachaFetchPreference(
     true,
     new URL(
-      "https://blog.lucas04.top/tool/gacha-manager/?gachaFetchAllowed=true",
+      "https://blog.lucas04.top/tool/helios-assistant/?gachaFetchAllowed=true",
     ),
   );
   assert.equal(gachaFetchAllowed.value, true);
@@ -565,7 +565,7 @@ test("link fetching is hidden by default and the opt-in is limited to the tool r
   assert.equal(gachaFetchAllowed.value, false);
   applyGachaFetchPreference(
     false,
-    new URL("https://blog.lucas04.top/tool/gacha-manager/"),
+    new URL("https://blog.lucas04.top/tool/helios-assistant/"),
   );
   assert.equal(gachaFetchAllowed.value, false);
 });
@@ -647,7 +647,7 @@ test("online import remembers its cookie and explicit false disables it", (t) =>
     if (previous) Object.defineProperty(globalThis, "document", previous);
     else delete globalThis.document;
   });
-  const tool = new URL("https://blog.lucas04.top/tool/gacha-manager/");
+  const tool = new URL("https://blog.lucas04.top/tool/helios-assistant/");
   applyGachaFetchPreference(null, tool);
   assert.equal(gachaFetchAllowed.value, false);
   applyGachaFetchPreference(true, tool);

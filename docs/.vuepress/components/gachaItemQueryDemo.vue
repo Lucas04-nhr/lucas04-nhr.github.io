@@ -20,7 +20,7 @@ const result = computed(() => {
   });
   return {
     count: unique.length,
-    url: `https://gachameta.lucas04.top/api/v1/items?${params}`,
+    url: `https://helios.lucas04.top/api/v1/items?${params}`,
   };
 });
 </script>

@@ -1,5 +1,5 @@
 ---
-title: Gacha Manager Demo
+title: Helios Assistant
 createTime: 2026/10/02 23:49:25
 permalink: /tool/gacha-manager/
 excerpt: Import, merge and back up gacha archives in your browser. View pull counts and five-star rates by game, account and pool.

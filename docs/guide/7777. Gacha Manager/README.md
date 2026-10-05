@@ -29,6 +29,10 @@ Running in a browser does not guarantee direct access to every game's history AP
 
 ## Usage and deployment {#documentation}
 
-- [Open Gacha Manager Demo](/tool/gacha-manager/)
+- [Open Helios Assistant](/tool/gacha-manager/)
 - [Frontend usage guide](/docs/gacha-manager/frontend/)
 - [Metadata API, self-hosting and update guide](/docs/gacha-manager/backend/)
+
+## Legal notice {#legal}
+
+Using Helios Assistant means the acceptance of [Terms of Service](/legal/terms/) and [Privacy Policy](/legal/privacy/). The Helios Assistant is not affiliated with or endorsed by miHoYo, HoYoverse, Zenless Zone Zero or any other game publisher. All trademarks are the property of their respective owners.

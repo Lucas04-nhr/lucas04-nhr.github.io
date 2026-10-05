@@ -4,46 +4,59 @@
  * Navbar 配置文件，它在 `.vuepress/plume.config.ts` 中被导入。
  */
 
-import { defineNavbarConfig } from 'vuepress-theme-plume'
+import { defineNavbarConfig } from "vuepress-theme-plume";
 
 export const enNavbar = defineNavbarConfig([
-  { text: 'Home', icon:'mdi:home', link: '/' },
-  { text: 'Blog',
-    icon: 'mdi:blog',
-    items: [
-      { text: 'All Posts', link: '/blog/' },
-      { text: 'Tags', link: '/blog/tags/' },
-    ]
-   },
+  { text: "Home", icon: "mdi:home", link: "/" },
   {
-    text: 'Docs',
-    icon: 'mdi:file-document-box-multiple-outline',
+    text: "Blog",
+    icon: "mdi:blog",
     items: [
-      { text: 'All', link: '/docs/' },
-      { text: 'R for Bioinformatics Cookbook', link: '/docs/r-course/' },
-      { text: 'HUST Graduation Project', link: '/docs/hust-gp-template/' },
-      { text: 'KU Master\'s Courses', link: '/docs/ku/' },
-      { text: 'Gacha Manager Demo', link: '/docs/gacha-manager/' },
-    ]
+      { text: "All Posts", link: "/blog/" },
+      { text: "Tags", link: "/blog/tags/" },
+    ],
   },
   {
-    text: 'Miscellaneous',
-    icon: 'mdi:about-circle-outline',
+    text: "Docs",
+    icon: "mdi:file-document-box-multiple-outline",
     items: [
-      { text: 'About', icon: 'icon-park-twotone:people', link: '/about/' },
-      { text: 'Friends', icon: 'ic:twotone-people-alt', link: '/friends/' },
-      { text: 'Support', icon: 'ic:round-attach-money', link: '/support/' },
-      { text: 'Shop', icon: 'ic:outline-shopping-bag', link: '/shop/' },
-      { text: 'Tools', icon: 'mdi:tools', link: '/tools/' },
-    ]
+      { text: "All", link: "/docs/" },
+      { text: "R for Bioinformatics Cookbook", link: "/docs/r-course/" },
+      { text: "HUST Graduation Project", link: "/docs/hust-gp-template/" },
+      { text: "KU Master's Courses", link: "/docs/ku/" },
+      { text: "Helios Assistant", link: "/docs/gacha-manager/" },
+    ],
   },
   {
-    text: 'Legal',
-    icon: 'mdi:scale-balance',
+    text: "Miscellaneous",
+    icon: "mdi:about-circle-outline",
     items: [
-      { text: 'Copyright Statement', icon: 'mdi:copyright', link: '/legal/copyright/' },
-      { text: 'Privacy Policy', icon: 'mdi:shield-lock-outline', link: '/legal/privacy/' },
-      { text: 'Terms of Service', icon: 'icon-park-solid:agreement', link: '/legal/terms/' },
-    ]
+      { text: "About", icon: "icon-park-twotone:people", link: "/about/" },
+      { text: "Friends", icon: "ic:twotone-people-alt", link: "/friends/" },
+      { text: "Support", icon: "ic:round-attach-money", link: "/support/" },
+      { text: "Shop", icon: "ic:outline-shopping-bag", link: "/shop/" },
+      { text: "Tools", icon: "mdi:tools", link: "/tools/" },
+    ],
   },
-])
+  {
+    text: "Legal",
+    icon: "mdi:scale-balance",
+    items: [
+      {
+        text: "Copyright Statement",
+        icon: "mdi:copyright",
+        link: "/legal/copyright/",
+      },
+      {
+        text: "Privacy Policy",
+        icon: "mdi:shield-lock-outline",
+        link: "/legal/privacy/",
+      },
+      {
+        text: "Terms of Service",
+        icon: "icon-park-solid:agreement",
+        link: "/legal/terms/",
+      },
+    ],
+  },
+]);

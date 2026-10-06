@@ -2,7 +2,6 @@
 import { nextTick, onBeforeUnmount, ref } from "vue";
 
 type Turnstile = {
-  ready(callback: () => void): void;
   render(container: HTMLElement, options: Record<string, unknown>): string;
   remove(id: string): void;
 };
@@ -40,8 +39,6 @@ async function verify(siteKey: string, signal: AbortSignal, operation = "sync", 
         if (settled) return;
         const turnstile = api();
         if (!turnstile) { failed(); return; }
-        turnstile.ready(() => {
-          if (settled) return;
           try {
             widget = turnstile.render(container.value!, {
               sitekey: siteKey, action, theme: "auto", size: "flexible",
@@ -52,7 +49,6 @@ async function verify(siteKey: string, signal: AbortSignal, operation = "sync", 
               "timeout-callback": () => finish(new Error("Security verification timed out. Retry.")),
             });
           } catch { finish(new Error("Could not start security verification. Retry.")); }
-        });
       };
       const timer = setTimeout(() => finish(new Error("Security verification timed out. Retry.")), 120000);
       let script = document.querySelector<HTMLScriptElement>('script[data-gacha-turnstile]');
@@ -66,10 +62,10 @@ async function verify(siteKey: string, signal: AbortSignal, operation = "sync", 
         script.async = true;
         script.dataset.gachaTurnstile = "true";
         script.addEventListener("error", () => script?.remove(), { once: true });
-        document.head.appendChild(script);
       }
       script.addEventListener("load", loaded, { once: true });
       script.addEventListener("error", failed, { once: true });
+      if (!script.isConnected) document.head.appendChild(script);
     });
   } finally {
     if (widget !== undefined) api()?.remove(widget);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { gachaLog } from "../theme/utils/gachaLog";
 import { checkGachaHealth } from "../theme/utils/gachaHealth";
+import GachaTurnstile from "./gachaTurnstile.vue";
 import GachaSecretInput from "./gachaSecretInput.vue";
 import GachaConfirmButton from "./gachaConfirmButton.vue";
 import VPButton from "vuepress-theme-plume/components/VPButton.vue";
@@ -190,6 +191,7 @@ function requireWorkerOwnership() {
 }
 watch(ownsWorker, () => ownershipAnimation?.cancel());
 const syncing = ref(false);
+const syncVerification = ref<InstanceType<typeof GachaTurnstile>>();
 const preferLocalTimes = ref(false);
 const personalSyncStatus = ref("");
 const personalSyncError = ref("");
@@ -217,6 +219,10 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
       },
       preferLocalTimes.value,
       mode,
+      (siteKey, signal) => {
+        if (!syncVerification.value) throw new Error("Security verification is unavailable. Reload the page.");
+        return syncVerification.value.verify(siteKey, signal);
+      },
     );
     controller.signal.throwIfAborted();
     accounts.value = synced;
@@ -1156,6 +1162,7 @@ async function loadMetadata() {
           <p class="muted destructive-hint">
             For replacement, click once, then press and hold to confirm.
           </p>
+          <GachaTurnstile ref="syncVerification" />
           <p
             v-if="personalSyncStatus"
             class="hint-container note"

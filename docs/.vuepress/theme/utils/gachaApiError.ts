@@ -2,6 +2,11 @@
 // not hide the original HTTP status. Never display raw HTML or request secrets.
 export async function gachaApiError(response: Response, operation: string): Promise<Error> {
   const reasons: Record<string, string> = {
+    TURNSTILE_REQUIRED: "The Worker requires security verification. Start sync again.",
+    TURNSTILE_FAILED: "Security verification was rejected. Retry sync.",
+    TURNSTILE_UNAVAILABLE: "Security verification is unavailable. Retry later.",
+    SYNC_SESSION_INVALID: "Sync authorization is invalid or expired. Start sync again to verify and reconcile.",
+    RATE_LIMITED: "Too many requests. Wait before retrying sync.",
     PERSONAL_SYNC_DISABLED: "The deployed Worker has no valid PERSONAL_SYNC_TOKEN secret.",
     DATABASE_UNAVAILABLE: "The Worker could not complete a database operation; check its runtime logs, D1 binding and migrations.",
     UNAUTHORIZED: "The token was rejected by the Worker.",

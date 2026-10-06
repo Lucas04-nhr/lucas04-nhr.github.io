@@ -1,3 +1,4 @@
+import { checkGachaHealth } from "./gachaHealth";
 import { gachaLog } from "./gachaLog";
 import { gachaApiError } from "./gachaApiError";
 import { accountKey, compactAccounts, exportUigf, mergeAccounts, parseUigf, type GachaAccount } from "./gachaRecords";
@@ -23,14 +24,39 @@ export type PersonalSyncMode = "merge" | "pull" | "push";
 
 // Read a consistent snapshot before reconciliation. Each write is a separate
 // transaction; conflicts stop immediately and are never retried blindly.
-export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge"): Promise<GachaAccount[]> {
+export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge", verifyTurnstile?: (siteKey: string, signal: AbortSignal) => Promise<string>): Promise<GachaAccount[]> {
   base = personalApiBase(base);
   validateSyncToken(token);
+  progress("Checking sync protection…");
+  const health = await checkGachaHealth(base, signal);
+  let session: string | undefined;
+  let expiresAt = 0;
+  if (health.turnstile?.enabled) {
+    if (!verifyTurnstile) throw new Error("This Worker requires Turnstile verification. Update the frontend.");
+    progress("Complete the security verification below…");
+    const turnstileToken = await verifyTurnstile(health.turnstile.siteKey!, signal);
+    signal.throwIfAborted();
+    progress("Authorizing sync…");
+    const response = await fetch(`${base}/api/v1/personal/session`, {
+      method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ turnstileToken }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
+    });
+    if (!response.ok) throw await gachaApiError(response, "Sync authorization");
+    const result = await response.json();
+    if (!result || typeof result.sessionToken !== "string" || !/^[\x21-\x7E]{1,4096}$/.test(result.sessionToken) ||
+      !Number.isSafeInteger(result.expiresAt) || result.expiresAt <= Date.now())
+      throw new Error("Invalid sync session response.");
+    session = result.sessionToken;
+    expiresAt = result.expiresAt;
+  }
   const post = async (body: Record<string, unknown>) => {
+    signal.throwIfAborted();
+    if (session && Date.now() >= expiresAt) throw new Error("Sync authorization expired. Start sync again to verify and reconcile; earlier batches may already be saved.");
     gachaLog("info", `Sync request: ${body.action}`);
     const response = await fetch(`${base}/api/v1/personal/sync`, {
       method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...(session ? { "X-Gacha-Sync-Session": session } : {}) },
       body: JSON.stringify(body), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
     });
     if (!response.ok) {

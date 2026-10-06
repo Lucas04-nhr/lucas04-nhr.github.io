@@ -4,7 +4,7 @@ import { gachaLog } from "./gachaLog";
 export async function checkGachaHealth(
   origin: string,
   signal: AbortSignal,
-): Promise<void> {
+): Promise<{ turnstile?: { enabled: boolean; siteKey?: string } }> {
   gachaLog("info", "Worker health check started");
   let response: Response;
   try {
@@ -46,6 +46,13 @@ export async function checkGachaHealth(
       "The domain did not return a valid Helios Assistant health response. Connection details were not saved.",
     );
   }
+  const turnstile = "turnstile" in body ? body.turnstile : undefined;
+  if (turnstile !== undefined && (
+    !turnstile || typeof turnstile !== "object" ||
+    !("enabled" in turnstile) || typeof turnstile.enabled !== "boolean" ||
+    (turnstile.enabled && (!("siteKey" in turnstile) || typeof turnstile.siteKey !== "string" || !/^[a-zA-Z0-9_-]{1,100}$/.test(turnstile.siteKey)))
+  )) throw new Error("The Worker returned an invalid Turnstile configuration.");
   signal.throwIfAborted();
   gachaLog("info", "Worker health check passed");
+  return { turnstile: turnstile as { enabled: boolean; siteKey?: string } | undefined };
 }

@@ -66,6 +66,17 @@ import {
 const connectionStatus = ref("");
 const connectionFeedback = ref<"note" | "caution">("note");
 const connectionBusy = ref(false);
+const connectionProtection = ref<"unchecked" | "checking" | "enabled" | "disabled" | "legacy" | "unavailable">("unchecked");
+const savePhase = ref<"idle" | "health" | "verification" | "saving">("idle");
+const saveSettingsLabel = computed(() => ({ idle: "Save settings", health: "Checking Worker…", verification: "Verifying…", saving: "Saving…" })[savePhase.value]);
+const protectionLabel = computed(() => ({
+  unchecked: "Security verification: not checked. Save settings to check this Worker.",
+  checking: "Checking Worker security configuration…",
+  enabled: "Turnstile enabled: saving requires security verification. Any supplied personal token is also verified.",
+  disabled: "Turnstile disabled: no security dialog is required. Any supplied personal token is still verified.",
+  legacy: "This Worker does not advertise Turnstile support. Any supplied personal token is still verified.",
+  unavailable: "Worker security configuration could not be verified. Settings were not saved.",
+})[connectionProtection.value]);
 let connectionRequest: AbortController | undefined;
 const savedConnection = ref<{
   worker: string;
@@ -104,8 +115,12 @@ async function rememberConnection() {
     const enableSync = ownsWorker.value;
     if (token) validateSyncToken(token);
     connectionFeedback.value = "note";
+    savePhase.value = "health";
+    connectionProtection.value = "checking";
     connectionStatus.value = "Checking Worker health…";
     const health = await checkGachaHealth(worker, controller.signal);
+    connectionProtection.value = health.turnstile === undefined ? "legacy" : health.turnstile.enabled ? "enabled" : "disabled";
+    savePhase.value = "verification";
     if (health.turnstile?.enabled) {
       connectionStatus.value = "Complete security verification to save settings…";
       if (!syncVerification.value) throw new Error("Security verification is unavailable. Reload the page.");
@@ -127,16 +142,19 @@ async function rememberConnection() {
       throw new Error(
         "Connection details changed during verification. Save settings again.",
       );
+    savePhase.value = "saving";
     await saveGachaConnection({ worker, personalToken: token, enableSync });
     controller.signal.throwIfAborted();
     if (!ready.value) return;
     savedConnection.value = { worker, personalToken: token, enableSync };
     connectionStatus.value = "Settings saved";
   } catch (err) {
+    if (connectionProtection.value === "checking") connectionProtection.value = "unavailable";
     connectionFeedback.value = "caution";
     connectionStatus.value =
       err instanceof Error ? err.message : "Could not save settings.";
   } finally {
+    savePhase.value = "idle";
     connectionBusy.value = false;
     connectionRequest = undefined;
   }
@@ -184,6 +202,10 @@ const remoteServiceReady = computed(() => {
 function workerUrlKeydown(event: KeyboardEvent) {
   if (event.key === "/") event.stopPropagation();
 }
+watch(personalWorker, () => {
+  connectionProtection.value = "unchecked";
+  connectionStatus.value = "";
+});
 const personalToken = ref("");
 const ownsWorker = ref(false);
 const ownershipRow = ref<HTMLElement>();
@@ -1075,7 +1097,7 @@ async function loadMetadata() {
           </p>
           <div class="actions">
             <VPButton
-              text="Save settings"
+              :text="saveSettingsLabel"
               theme="brand"
               type="button"
               :disabled="
@@ -1095,6 +1117,7 @@ async function loadMetadata() {
               success-text="Deleted"
             />
           </div>
+          <p class="muted" role="status" aria-live="polite">{{ protectionLabel }}</p>
           <p class="muted">
             To clear saved settings, click once, then press and hold to confirm.
           </p>

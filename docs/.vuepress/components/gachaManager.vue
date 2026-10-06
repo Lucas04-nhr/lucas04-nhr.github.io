@@ -126,7 +126,7 @@ async function rememberConnection() {
       if (!syncVerification.value) throw new Error("Security verification is unavailable. Reload the page.");
       const challenge = await syncVerification.value.verify(health.turnstile.siteKey!, controller.signal, "save settings", token ? "personal_sync" : "connection_settings");
       connectionStatus.value = "Verifying connection credentials…";
-      if (token) await authorizePersonalSession(worker, token, challenge, controller.signal);
+      if (token) await authorizePersonalSession(worker, token, challenge, controller.signal, "Connection verification");
       else await verifyGachaConnection(worker, challenge, controller.signal);
     } else if (token) {
       connectionStatus.value = "Verifying connection credentials…";

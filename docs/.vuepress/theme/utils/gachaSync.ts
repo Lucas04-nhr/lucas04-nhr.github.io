@@ -20,7 +20,7 @@ export function validateSyncToken(token: string) {
   if (!/^[\x21-\x7E]{32,64}$/.test(token)) throw new Error("Use a token of 32–64 characters containing only uppercase or lowercase English letters, digits and ASCII symbols, without spaces.");
 }
 
-export async function authorizePersonalSession(base: string, token: string, turnstileToken: string, signal: AbortSignal) {
+export async function authorizePersonalSession(base: string, token: string, turnstileToken: string, signal: AbortSignal, operation = "Sync authorization") {
   base = personalApiBase(base);
   validateSyncToken(token);
   const response = await fetch(`${base}/api/v1/personal/session`, {
@@ -28,7 +28,7 @@ export async function authorizePersonalSession(base: string, token: string, turn
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({ turnstileToken }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
   });
-  if (!response.ok) throw await gachaApiError(response, "Sync authorization");
+  if (!response.ok) throw await gachaApiError(response, operation);
   const result = await response.json();
   if (!result || typeof result.sessionToken !== "string" || !/^[\x21-\x7E]{1,4096}$/.test(result.sessionToken) ||
     !Number.isSafeInteger(result.expiresAt) || result.expiresAt <= Date.now())

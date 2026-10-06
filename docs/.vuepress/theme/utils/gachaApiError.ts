@@ -14,6 +14,13 @@ export async function gachaApiError(response: Response, operation: string): Prom
     SYNC_CONFLICT: "Remote data changed. Read and reconcile again before retrying.",
     INVALID_SYNC: "The Worker rejected the personal sync payload; check required record fields and limits.",
   };
+  // Recognize only fixed backend messages; never render arbitrary server text.
+  const protectionReasons: Record<string, string> = {
+    "Turnstile configuration is unavailable.": "The Worker protection configuration is incomplete or invalid. Check TURNSTILE_SECRET, SYNC_SESSION_SECRET, public vars and distinct-secret requirements.",
+    "Sync protection is unavailable.": "The Worker could not access its security rate-limit counters. Check D1 and migration 0005_sync_security_limits.sql.",
+    "Turnstile verification is unavailable.": "The Worker could not validate the challenge with Cloudflare Siteverify. Check the widget secret, its pairing with the sitekey, outbound requests and Worker logs.",
+    "Turnstile connection verification is disabled.": "The Worker has disabled connection verification. Check its current Turnstile configuration and retry saving settings.",
+  };
   let detail = "The server returned an empty response.";
   try {
     const text = await response.text();
@@ -22,7 +29,12 @@ export async function gachaApiError(response: Response, operation: string): Prom
       try {
         const payload = JSON.parse(text);
         const code = payload?.error?.code;
-        if (typeof code === "string" && Object.hasOwn(reasons, code)) detail = `${code}: ${reasons[code]}`;
+        if (typeof code === "string" && Object.hasOwn(reasons, code)) {
+          const message = payload?.error?.message;
+          const reason = code === "TURNSTILE_UNAVAILABLE" && typeof message === "string" && Object.hasOwn(protectionReasons, message)
+            ? protectionReasons[message] : reasons[code];
+          detail = `${code}: ${reason}`;
+        }
       } catch { /* Platform HTML and proxy errors are not application JSON. */ }
     }
   } catch {

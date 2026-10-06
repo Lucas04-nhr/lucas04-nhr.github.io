@@ -49,6 +49,9 @@ import { fallbackGachaVersion, fetchGachaVersion } from "../theme/utils/gachaVer
 import { displayLabel, localizedPoolName } from "../theme/utils/gachaDisplay";
 
 import {
+  authorizePersonalSession,
+  verifyGachaConnection,
+  verifyPersonalToken,
   personalApiBase,
   synchronizePersonal,
   validateSyncToken,
@@ -102,7 +105,18 @@ async function rememberConnection() {
     if (token) validateSyncToken(token);
     connectionFeedback.value = "note";
     connectionStatus.value = "Checking Worker health…";
-    await checkGachaHealth(worker, controller.signal);
+    const health = await checkGachaHealth(worker, controller.signal);
+    if (health.turnstile?.enabled) {
+      connectionStatus.value = "Complete security verification to save settings…";
+      if (!syncVerification.value) throw new Error("Security verification is unavailable. Reload the page.");
+      const challenge = await syncVerification.value.verify(health.turnstile.siteKey!, controller.signal, "save settings", token ? "personal_sync" : "connection_settings");
+      connectionStatus.value = "Verifying connection credentials…";
+      if (token) await authorizePersonalSession(worker, token, challenge, controller.signal);
+      else await verifyGachaConnection(worker, challenge, controller.signal);
+    } else if (token) {
+      connectionStatus.value = "Verifying connection credentials…";
+      await verifyPersonalToken(worker, token, controller.signal);
+    }
     controller.signal.throwIfAborted();
     if (
       !ready.value ||
@@ -1039,6 +1053,7 @@ async function loadMetadata() {
           @keydown="workerUrlKeydown"
         />
       </div>
+      <GachaTurnstile ref="syncVerification" />
       <form class="remote-service-form" @submit.prevent="rememberConnection()">
         <div class="controls">
           <GachaSecretInput
@@ -1162,7 +1177,6 @@ async function loadMetadata() {
           <p class="muted destructive-hint">
             For replacement, click once, then press and hold to confirm.
           </p>
-          <GachaTurnstile ref="syncVerification" />
           <p
             v-if="personalSyncStatus"
             class="hint-container note"

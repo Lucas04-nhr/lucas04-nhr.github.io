@@ -20,6 +20,51 @@ export function validateSyncToken(token: string) {
   if (!/^[\x21-\x7E]{32,64}$/.test(token)) throw new Error("Use a token of 32–64 characters containing only uppercase or lowercase English letters, digits and ASCII symbols, without spaces.");
 }
 
+export async function authorizePersonalSession(base: string, token: string, turnstileToken: string, signal: AbortSignal) {
+  base = personalApiBase(base);
+  validateSyncToken(token);
+  const response = await fetch(`${base}/api/v1/personal/session`, {
+    method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ turnstileToken }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
+  });
+  if (!response.ok) throw await gachaApiError(response, "Sync authorization");
+  const result = await response.json();
+  if (!result || typeof result.sessionToken !== "string" || !/^[\x21-\x7E]{1,4096}$/.test(result.sessionToken) ||
+    !Number.isSafeInteger(result.expiresAt) || result.expiresAt <= Date.now())
+    throw new Error("Invalid sync session response.");
+  return { sessionToken: result.sessionToken as string, expiresAt: result.expiresAt as number };
+}
+
+// Existing bearer-only Workers have no session endpoint. A minimal read checks
+// authentication without writing remote records or retaining the response.
+export async function verifyPersonalToken(base: string, token: string, signal: AbortSignal): Promise<void> {
+  base = personalApiBase(base);
+  validateSyncToken(token);
+  const response = await fetch(`${base}/api/v1/personal/sync`, {
+    method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "list", limit: 1 }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
+  });
+  if (!response.ok) throw await gachaApiError(response, "Connection token verification");
+  const result = await response.json();
+  if (!result || !Array.isArray(result.accounts) || !Number.isSafeInteger(result.revision) || result.revision < 0)
+    throw new Error("Invalid token verification response.");
+}
+
+// This endpoint verifies a challenge only; it must not grant personal access.
+export async function verifyGachaConnection(base: string, turnstileToken: string, signal: AbortSignal): Promise<void> {
+  base = personalApiBase(base);
+  const response = await fetch(`${base}/api/v1/connection/verify`, {
+    method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ turnstileToken }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
+  });
+  if (!response.ok) throw await gachaApiError(response, "Connection verification");
+  const result = await response.json();
+  if (!result || result.verified !== true) throw new Error("Invalid connection verification response.");
+}
+
 export type PersonalSyncMode = "merge" | "pull" | "push";
 
 // Read a consistent snapshot before reconciliation. Each write is a separate
@@ -33,20 +78,11 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
   let expiresAt = 0;
   if (health.turnstile?.enabled) {
     if (!verifyTurnstile) throw new Error("This Worker requires Turnstile verification. Update the frontend.");
-    progress("Complete the security verification below…");
+    progress("Complete the security verification…");
     const turnstileToken = await verifyTurnstile(health.turnstile.siteKey!, signal);
     signal.throwIfAborted();
     progress("Authorizing sync…");
-    const response = await fetch(`${base}/api/v1/personal/session`, {
-      method: "POST", credentials: "omit", referrerPolicy: "no-referrer", redirect: "error", cache: "no-store",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ turnstileToken }), signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),
-    });
-    if (!response.ok) throw await gachaApiError(response, "Sync authorization");
-    const result = await response.json();
-    if (!result || typeof result.sessionToken !== "string" || !/^[\x21-\x7E]{1,4096}$/.test(result.sessionToken) ||
-      !Number.isSafeInteger(result.expiresAt) || result.expiresAt <= Date.now())
-      throw new Error("Invalid sync session response.");
+    const result = await authorizePersonalSession(base, token, turnstileToken, signal);
     session = result.sessionToken;
     expiresAt = result.expiresAt;
   }

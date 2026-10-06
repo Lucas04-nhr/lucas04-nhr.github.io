@@ -1228,7 +1228,7 @@ async function loadMetadata() {
             script in the Tampermonkey dashboard.
           </li>
           <li>
-            Update the helper to version 1.2.1 or later, enable userscript
+            Update the helper to version 1.4.0 or later, enable userscript
             execution and allow the listed official API hosts when requested.
             Reload this page and look for “Browser helper connected”.
           </li>

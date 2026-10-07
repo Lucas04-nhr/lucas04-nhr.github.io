@@ -1235,6 +1235,8 @@ async function loadMetadata() {
             :active="syncing"
             :progress="personalSyncProgress"
             :simulated-limit="0.47"
+            :simulated-duration-min="10000"
+            :simulated-duration-max="15000"
             :tone="personalSyncError ? personalSyncCancelled ? 'warning' : 'caution' : storageError ? 'warning' : 'note'"
             :completed="!!personalSyncStatus && !personalSyncError"
           >

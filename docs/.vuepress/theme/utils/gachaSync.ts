@@ -178,7 +178,7 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
   if (batches.length) {
     const uploadProgress = createUploadProgress(batches.length, percentage => {
       const overall = 50 + percentage / 2;
-      progress(`Uploading personal records… ${Math.floor(overall)}%`, overall / 100);
+      progress(`Uploading personal records… ${percentage}%`, overall / 100);
     });
     try {
       for (const [index, body] of batches.entries()) {

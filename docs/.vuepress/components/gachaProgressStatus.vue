@@ -9,9 +9,11 @@ const props = withDefaults(defineProps<{
   active: boolean;
   progress?: number;
   simulatedLimit?: number;
+  simulatedDurationMin?: number;
+  simulatedDurationMax?: number;
   tone?: "note" | "warning" | "caution";
   completed?: boolean;
-}>(), { tone: "note", simulatedLimit: 0.94, completed: false });
+}>(), { tone: "note", simulatedLimit: 0.94, simulatedDurationMin: 3000, simulatedDurationMax: 6000, completed: false });
 // Render data fragments as text nodes, including in errors returned by the service.
 const messageParts = computed(() => props.message.split(
   /(batch \d+ of \d+|Page \d+|\b(?:ALLOWED_ORIGINS|JSON|UIGF|UID|HTTP|HTTPS|D1)\b)/g,
@@ -34,7 +36,7 @@ watch(() => props.active, (active) => {
   }
   visualProgress.value = props.progress ?? 0;
   // A new random duration for each operation; never imply completion early.
-  const duration = 3000 + Math.random() * 3000;
+  const duration = props.simulatedDurationMin + Math.random() * (props.simulatedDurationMax - props.simulatedDurationMin);
   const started = Date.now();
   timer = setInterval(() => {
     if (props.progress !== undefined) return;

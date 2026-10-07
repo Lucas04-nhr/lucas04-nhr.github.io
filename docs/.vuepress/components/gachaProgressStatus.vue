@@ -45,24 +45,24 @@ onBeforeUnmount(stop);
 
 <template>
   <div class="progress-status" :class="`is-${state}`" :aria-busy="active">
-    <h4 class="progress-title">
+    <div class="progress-content">
+      <h4 class="progress-title">
       <VPIcon :name="state === 'success' ? 'mdi:check-circle-outline' : state === 'error' ? 'mdi:close-circle-outline' : 'mdi:help-circle-outline'"
         color="var(--progress-accent)" size="24" aria-hidden="true" />
       <span>{{ title }}</span>
     </h4>
-    <div class="progress-action-row">
       <div class="progress-track" role="progressbar" :aria-label="title"
         :aria-valuemin="0" :aria-valuemax="100"
         :aria-valuenow="measured || (!active && completed && tone !== 'caution') ? Math.round(visualProgress * 100) : undefined"
         :aria-valuetext="active && !measured ? 'In progress' : message">
         <span :style="{ transform: `scaleX(${visualProgress})` }" />
       </div>
-      <div class="progress-actions"><slot name="actions" /></div>
-    </div>
     <Transition name="status-reveal" mode="out-in">
       <p :key="state" :role="tone === 'caution' ? 'alert' : 'status'" aria-live="polite"><template v-for="(part, index) in messageParts" :key="index"><code v-if="part.code" class="progress-data">{{ part.text }}</code><template v-else>{{ part.text }}</template></template></p>
     </Transition>
     <slot />
+    </div>
+    <div class="progress-actions"><slot name="actions" /></div>
   </div>
 </template>
 
@@ -70,6 +70,9 @@ onBeforeUnmount(stop);
 .progress-status {
   --progress-accent: #64748b;
   --progress-soft: rgba(100, 116, 139, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 20px;
   margin: 16px 0;
   padding: 22px;
   border: 1px solid rgba(100, 116, 139, 0.22);
@@ -90,14 +93,15 @@ onBeforeUnmount(stop);
   display: flex;
   align-items: center;
   gap: 9px;
-  margin: 4px 0 8px;
+  margin: 0;
   color: var(--progress-accent);
   transition: color 0.38s ease-out;
 }
-.progress-action-row { display: flex; align-items: center; gap: 20px; margin: 12px 0 10px; }
+.progress-content { flex: 1 1 auto; min-width: 0; }
 .progress-track {
-  flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
+  margin: 12px 0 10px;
   height: 6px;
   overflow: hidden;
   border-radius: 999px;
@@ -136,11 +140,11 @@ onBeforeUnmount(stop);
 :global(html.dark) .progress-status,
 :global(:root[data-theme="dark"]) .progress-status { border-color: rgba(148, 163, 184, 0.32); border-left-color: var(--progress-accent); }
 @media (max-width: 719px) {
-  .progress-action-row { flex-direction: column; align-items: stretch; }
-  .progress-track { flex: none; width: 100%; }
+  .progress-status { flex-direction: column; align-items: stretch; gap: 16px; }
+  .progress-content { width: 100%; }
   .progress-actions { flex: none; width: 100%; }
   .progress-actions :deep(.vp-button.medium),
-.progress-actions :deep(.gacha-confirm-button) { width: 100%; }
+  .progress-actions :deep(.gacha-confirm-button) { width: 100%; }
 }
 .status-reveal-enter-active, .status-reveal-leave-active { transition: opacity 0.2s ease-out, transform 0.2s ease-out; }
 .status-reveal-enter-from, .status-reveal-leave-to { opacity: 0; transform: translateY(-6px); }

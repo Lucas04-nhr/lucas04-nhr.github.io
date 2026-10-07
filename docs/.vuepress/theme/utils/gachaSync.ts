@@ -1,4 +1,5 @@
 import { checkGachaHealth } from "./gachaHealth";
+import { createUploadProgress } from "./gachaUploadProgress";
 import { gachaLog } from "./gachaLog";
 import { gachaApiError } from "./gachaApiError";
 import { accountKey, compactAccounts, exportUigf, mergeAccounts, parseUigf, type GachaAccount } from "./gachaRecords";
@@ -69,7 +70,7 @@ export type PersonalSyncMode = "merge" | "pull" | "push";
 
 // Read a consistent snapshot before reconciliation. Each write is a separate
 // transaction; conflicts stop immediately and are never retried blindly.
-export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string, progress?: number) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge", verifyTurnstile?: (siteKey: string, signal: AbortSignal) => Promise<string>): Promise<GachaAccount[]> {
+export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string, percentage?: number) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge", verifyTurnstile?: (siteKey: string, signal: AbortSignal) => Promise<string>): Promise<GachaAccount[]> {
   base = personalApiBase(base);
   validateSyncToken(token);
   progress("Checking sync protection…");
@@ -130,7 +131,6 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
       after = page.next ?? undefined;
     } while (after);
   }
-  progress("Remote records downloaded. Reconciling…", mode === "pull" ? 1 : 0.5);
   const validated = remote.length ? parseUigf(exportUigf(remote)) : [];
   if (mode === "pull") {
     signal.throwIfAborted();
@@ -174,13 +174,20 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
       }
     }
   }
-  for (const [index, body] of batches.entries()) {
-    progress(`Uploading batch ${index + 1} of ${batches.length}…`, 0.5 + 0.5 * index / batches.length);
-    const result = await post({ ...body, revision });
-    if (result.revision <= revision!) throw new Error("Invalid write revision. Sync stopped.");
-    revision = result.revision;
-    progress(`Uploaded batch ${index + 1} of ${batches.length}.`, 0.5 + 0.5 * (index + 1) / batches.length);
-    gachaLog("info", "Sync batch committed", { batch: index + 1, batches: batches.length });
+  if (batches.length) {
+    const uploadProgress = createUploadProgress(batches.length, percentage => progress(`Uploading personal records… ${percentage}%`, percentage / 100));
+    try {
+      for (const [index, body] of batches.entries()) {
+        const result = await post({ ...body, revision });
+        if (result.revision <= revision!) throw new Error("Invalid write revision. Sync stopped.");
+        revision = result.revision;
+        uploadProgress.committed();
+        gachaLog("info", "Sync batch committed", { batch: index + 1, batches: batches.length });
+      }
+      await uploadProgress.finish(signal);
+    } finally {
+      uploadProgress.stop();
+    }
   }
   signal.throwIfAborted();
   return merged;

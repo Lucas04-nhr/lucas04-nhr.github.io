@@ -233,6 +233,7 @@ const preferLocalTimes = ref(false);
 const personalSyncStatus = ref("");
 const personalSyncProgress = ref<number | undefined>();
 const personalSyncError = ref("");
+const personalSyncCancelled = ref(false);
 let syncRequest: AbortController | undefined;
 
 async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
@@ -241,6 +242,7 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   busy.value = true;
   gachaLog(mode === "merge" ? "info" : "warning", `Sync started: ${mode}`);
   personalSyncError.value = "";
+  personalSyncCancelled.value = false;
   personalSyncProgress.value = undefined;
   personalSyncStatus.value = "Reading remote accounts…";
   const controller = new AbortController();
@@ -293,6 +295,7 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
         : "Sync failed",
     );
     personalSyncStatus.value = "";
+    personalSyncCancelled.value = controller.signal.aborted;
     personalSyncError.value = controller.signal.aborted
       ? "Sync cancelled. Earlier upload batches may already be saved; retry to reconcile."
       : err instanceof TypeError
@@ -1179,14 +1182,15 @@ async function loadMetadata() {
             :active="syncing"
             :progress="personalSyncProgress"
             :simulated-limit="0.47"
-            :tone="personalSyncError ? 'caution' : 'note'"
+            :tone="personalSyncError ? personalSyncCancelled ? 'warning' : 'caution' : storageError ? 'warning' : 'note'"
             :completed="!!personalSyncStatus && !personalSyncError"
           >
             <template #actions>
               <VPButton
-                @click="syncPersonal()"
-                :disabled="busy || !ready || connectionBusy || !syncEnabled"
-                text="Sync personal records"
+                @click="syncing ? syncRequest?.abort() : syncPersonal()"
+                :disabled="!syncing && (busy || !ready || connectionBusy || !syncEnabled)"
+                :text="syncing ? 'Cancel sync' : 'Sync personal records'"
+                type="button"
               />
               <GachaConfirmButton
                 :blocked="!syncEnabled"
@@ -1205,12 +1209,6 @@ async function loadMetadata() {
                 :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
                 :disabled="busy || !ready || connectionBusy || !syncEnabled"
                 text="Push and replace remote"
-              />
-              <VPButton
-                v-if="syncing"
-                text="Cancel sync"
-                theme="alt"
-                @click="syncRequest?.abort()"
               />
             </template>
           </GachaProgressStatus>
@@ -1629,7 +1627,7 @@ async function loadMetadata() {
             title="Item names & icons"
             :message="metadataStatus || 'Ready to load item names and icons.'"
             :active="metadataBusy"
-            :tone="metadataFeedback === 'caution' ? 'caution' : 'note'"
+            :tone="metadataFeedback"
             :completed="metadataStatus.startsWith('Loaded ')"
           >
             <template #actions>

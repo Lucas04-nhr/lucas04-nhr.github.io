@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { VPIcon } from "vuepress-theme-plume/client";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 const props = withDefaults(defineProps<{
@@ -8,7 +7,7 @@ const props = withDefaults(defineProps<{
   active: boolean;
   progress?: number;
   simulatedLimit?: number;
-  tone?: "note" | "caution";
+  tone?: "note" | "warning" | "caution";
   completed?: boolean;
 }>(), { tone: "note", simulatedLimit: 0.94, completed: false });
 // Render data fragments as text nodes, including in errors returned by the service.
@@ -17,7 +16,7 @@ const messageParts = computed(() => props.message.split(
 ).map((text, index) => ({ text, code: index % 2 === 1 })));
 const visualProgress = ref(0);
 const measured = computed(() => props.active && props.progress !== undefined);
-const state = computed(() => props.active ? "working" : props.tone === "caution" ? "error" : props.completed ? "success" : "working");
+const state = computed(() => props.active ? "working" : props.tone === "caution" ? "error" : props.tone === "warning" ? "warning" : props.completed ? "success" : "idle");
 let timer: ReturnType<typeof setInterval> | undefined;
 function stop() { clearInterval(timer); timer = undefined; }
 watch(() => props.active, (active) => {
@@ -36,9 +35,11 @@ watch(() => props.active, (active) => {
       props.simulatedLimit * (1 - Math.exp(-3 * (Date.now() - started) / duration)));
   }, 100);
 }, { immediate: true });
-watch(() => props.progress, (progress) => {
-  if (props.active && progress !== undefined)
-    visualProgress.value = Math.max(visualProgress.value, Math.max(0, Math.min(1, progress)));
+watch(() => props.progress, (progress, previous) => {
+  if (props.active && progress !== undefined) {
+    const value = Math.max(0, Math.min(1, progress));
+    visualProgress.value = previous === undefined ? value : Math.max(visualProgress.value, value);
+  }
 });
 onBeforeUnmount(stop);
 </script>
@@ -47,8 +48,23 @@ onBeforeUnmount(stop);
   <div class="progress-status" :class="`is-${state}`" :aria-busy="active">
     <div class="progress-content">
       <h4 class="progress-title">
-      <VPIcon :name="state === 'success' ? 'mdi:check-circle-outline' : state === 'error' ? 'mdi:close-circle-outline' : 'mdi:help-circle-outline'"
-        color="var(--progress-accent)" size="24" aria-hidden="true" />
+        <svg class="progress-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <template v-if="state === 'working'">
+            <circle cx="12" cy="12" r="9" opacity=".25" /><path class="progress-spinner" d="M12 3a9 9 0 0 1 9 9" />
+          </template>
+          <template v-else-if="state === 'success'">
+            <circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" />
+          </template>
+          <template v-else-if="state === 'warning'">
+            <path d="m12 3 10 18H2Z M12 9v4 M12 17h.01" />
+          </template>
+          <template v-else-if="state === 'error'">
+            <circle cx="12" cy="12" r="9" /><path d="m9 9 6 6m0-6-6 6" />
+          </template>
+          <template v-else>
+            <circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" />
+          </template>
+        </svg>
       <span>{{ title }}</span>
     </h4>
       <div class="progress-track" role="progressbar" :aria-label="title"
@@ -81,6 +97,17 @@ onBeforeUnmount(stop);
   background: var(--progress-soft);
   transition: background-color 0.38s ease-out, border-color 0.38s ease-out;
 }
+.progress-status.is-working {
+  --progress-accent: var(--vp-c-brand-1);
+  --progress-soft: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
+}
+.progress-status.is-warning {
+  --progress-accent: var(--vp-c-warning-1);
+  --progress-soft: color-mix(in srgb, var(--vp-c-warning-1) 12%, transparent);
+}
+.progress-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.progress-spinner { transform-origin: center; animation: progress-spin 1s linear infinite; }
+@keyframes progress-spin { to { transform: rotate(360deg); } }
 .progress-status.is-success {
   --progress-accent: #16a34a;
   --progress-soft: rgba(22, 163, 74, 0.12);
@@ -149,6 +176,7 @@ onBeforeUnmount(stop);
 .status-reveal-enter-active, .status-reveal-leave-active { transition: opacity 0.2s ease-out, transform 0.2s ease-out; }
 .status-reveal-enter-from, .status-reveal-leave-to { opacity: 0; transform: translateY(-6px); }
 @media (prefers-reduced-motion: reduce) {
+  .progress-spinner { animation: none; }
   .status-reveal-enter-active, .status-reveal-leave-active { transition: none; }
   .progress-status, .progress-title, .progress-track span { transition: none; }
 }

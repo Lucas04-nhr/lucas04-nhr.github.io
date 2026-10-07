@@ -1103,39 +1103,41 @@ async function loadMetadata() {
           <p class="muted">
             Save the Worker URL with an optional personal-sync token.
           </p>
-          <div class="actions">
-            <VPButton
-              :text="saveSettingsLabel"
-              theme="brand"
-              type="button"
-              :disabled="
-                busy ||
-                exporting ||
-                metadataBusy ||
-                !ready ||
-                connectionBusy ||
-                !remoteServiceReady
-              "
-              @click="rememberConnection"
-            />
-            <GachaConfirmButton
-              text="Clear saved settings"
-              :disabled="busy || !ready || connectionBusy"
-              :action="forgetConnection"
-              success-text="Deleted"
-            />
-          </div>
+          <GachaProgressStatus
+            title="Remote service status"
+            :message="connectionStatus || 'Ready to save remote service settings.'"
+            :active="connectionBusy"
+            :tone="connectionFeedback"
+            :completed="!!connectionStatus && connectionFeedback !== 'caution'"
+          >
+            <template #actions>
+              <VPButton
+                :text="saveSettingsLabel"
+                theme="brand"
+                type="button"
+                :disabled="
+                  busy ||
+                  exporting ||
+                  metadataBusy ||
+                  !ready ||
+                  connectionBusy ||
+                  !remoteServiceReady
+                "
+                @click="rememberConnection"
+              />
+              <GachaConfirmButton
+                text="Clear saved settings"
+                :disabled="busy || !ready || connectionBusy"
+                :action="forgetConnection"
+                success-text="Deleted"
+              />
+            </template>
+          </GachaProgressStatus>
           <p class="muted" role="status" aria-live="polite">{{ protectionLabel }}</p>
           <p class="muted">
             To clear saved settings, click once, then press and hold to confirm.
           </p>
 
-          <GachaProgressStatus
-            v-if="connectionStatus"
-            :message="connectionStatus"
-            :active="connectionBusy"
-            :tone="connectionFeedback"
-          />
         </div>
         <div v-if="syncEnabled">
           <h4>Personal remote synchronization</h4>
@@ -1171,53 +1173,51 @@ async function loadMetadata() {
               :disabled="busy"
             />Use local timestamps for sync conflicts</label
           >
-          <div class="actions">
-            <VPButton
-              @click="syncPersonal()"
-              :disabled="busy || !ready || connectionBusy || !syncEnabled"
-              text="Sync personal records"
-            />
-            <GachaConfirmButton
-              :blocked="!syncEnabled"
-              :before-arm="requireWorkerOwnership"
-              :action="() => syncPersonal('pull')"
-              success-text="Pulled"
-              :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
-              :disabled="busy || !ready || connectionBusy || !syncEnabled"
-              text="Pull and replace local"
-            />
-            <GachaConfirmButton
-              :blocked="!syncEnabled"
-              :before-arm="requireWorkerOwnership"
-              :action="() => syncPersonal('push')"
-              success-text="Pushed"
-              :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
-              :disabled="busy || !ready || connectionBusy || !syncEnabled"
-              text="Push and replace remote"
-            />
-            <VPButton
-              v-if="syncing"
-              text="Cancel sync"
-              theme="alt"
-              @click="syncRequest?.abort()"
-            />
-          </div>
+          <GachaProgressStatus
+            title="Personal sync status"
+            :message="personalSyncError || personalSyncStatus || 'Ready to sync personal records.'"
+            :active="syncing"
+            :progress="personalSyncProgress"
+            :simulated-limit="0.47"
+            :tone="personalSyncError ? 'caution' : 'note'"
+            :completed="!!personalSyncStatus && !personalSyncError"
+          >
+            <template #actions>
+              <VPButton
+                @click="syncPersonal()"
+                :disabled="busy || !ready || connectionBusy || !syncEnabled"
+                text="Sync personal records"
+              />
+              <GachaConfirmButton
+                :blocked="!syncEnabled"
+                :before-arm="requireWorkerOwnership"
+                :action="() => syncPersonal('pull')"
+                success-text="Pulled"
+                :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
+                :disabled="busy || !ready || connectionBusy || !syncEnabled"
+                text="Pull and replace local"
+              />
+              <GachaConfirmButton
+                :blocked="!syncEnabled"
+                :before-arm="requireWorkerOwnership"
+                :action="() => syncPersonal('push')"
+                success-text="Pushed"
+                :context="`${savedConnection?.enableSync}:${savedConnection?.worker}:${savedConnection?.personalToken}`"
+                :disabled="busy || !ready || connectionBusy || !syncEnabled"
+                text="Push and replace remote"
+              />
+              <VPButton
+                v-if="syncing"
+                text="Cancel sync"
+                theme="alt"
+                @click="syncRequest?.abort()"
+              />
+            </template>
+          </GachaProgressStatus>
           <p class="muted destructive-hint">
             For replacement, click once, then press and hold to confirm.
           </p>
-          <GachaProgressStatus
-            v-if="personalSyncStatus"
-            :message="personalSyncStatus"
-            :active="syncing"
-            :progress="personalSyncProgress"
-          />
-          <p
-            v-if="personalSyncError"
-            class="hint-container caution"
-            role="alert"
-          >
-            {{ personalSyncError }}
-          </p>
+
         </div>
       </form>
     </section>
@@ -1323,27 +1323,37 @@ async function loadMetadata() {
             :disabled="busy"
           />
         </label>
+        <GachaProgressStatus
+          title="Fetch records status"
+          :message="error || status || 'Ready to fetch records.'"
+          :active="fetching"
+          :tone="error || status.startsWith('Stopped.') ? 'caution' : 'note'"
+          :completed="status.startsWith('Finished:')"
+        >
+          <template #actions>
+            <VPButton
+              theme="brand"
+              type="button"
+              @click="retrieve"
+              :disabled="
+                busy ||
+                !ready ||
+                !connectionConfigured ||
+                helperState === 'checking' ||
+                !link.trim()
+              "
+              :text="fetching ? 'Processing…' : 'Fetch gacha records'"
+            />
+            <VPButton
+              theme="alt"
+              v-if="request"
+              type="button"
+              @click="request?.abort()"
+              text="Stop fetching"
+            />
+          </template>
+        </GachaProgressStatus>
         <div class="actions">
-          <VPButton
-            theme="brand"
-            type="button"
-            @click="retrieve"
-            :disabled="
-              busy ||
-              !ready ||
-              !connectionConfigured ||
-              helperState === 'checking' ||
-              !link.trim()
-            "
-            >{{ busy ? "Processing…" : "Fetch gacha records" }}</VPButton
-          >
-          <VPButton
-            theme="alt"
-            v-if="request"
-            type="button"
-            @click="request?.abort()"
-            >Stop fetching</VPButton
-          >
           <label class="check"
             ><input
               v-model="incremental"
@@ -1365,15 +1375,7 @@ async function loadMetadata() {
         used only for this fetch, is never saved, and is cleared afterwards.
         Keep URLs containing authkey private.
       </p>
-      <GachaProgressStatus
-        v-if="status"
-        :message="status"
-        :active="fetching"
-        :tone="error ? 'caution' : 'note'"
-      />
-      <p v-if="error" class="hint-container caution" role="alert">
-        {{ error }}
-      </p>
+
       <details>
         <summary>URLs, servers and browser access</summary>
         <p>
@@ -1623,15 +1625,24 @@ async function loadMetadata() {
               </select></label
             >
           </div>
+          <GachaProgressStatus
+            title="Item names & icons"
+            :message="metadataStatus || 'Ready to load item names and icons.'"
+            :active="metadataBusy"
+            :tone="metadataFeedback === 'caution' ? 'caution' : 'note'"
+            :completed="metadataStatus.startsWith('Loaded ')"
+          >
+            <template #actions>
+              <VPButton
+                theme="brand"
+                :disabled="metadataBusy || busy || !connectionConfigured"
+                @click="loadMetadata"
+                :text="metadataBusy ? 'Loading…' : 'Load item names & icons'"
+              />
+            </template>
+          </GachaProgressStatus>
           <div class="actions">
-            <VPButton
-              theme="alt"
-              :disabled="metadataBusy || busy || !connectionConfigured"
-              @click="loadMetadata"
-              >{{
-                metadataBusy ? "Loading…" : "Load item names & icons"
-              }}</VPButton
-            ><GachaConfirmButton
+            <GachaConfirmButton
               text="Delete account"
               :context="selectedKey"
               :disabled="busy || !!deletedPreview"
@@ -1639,15 +1650,6 @@ async function loadMetadata() {
               success-text="Deleted"
             />
           </div>
-          <p
-            v-if="metadataStatus"
-            class="hint-container"
-            :class="metadataFeedback"
-            :role="metadataFeedback === 'caution' ? 'alert' : 'status'"
-            aria-live="polite"
-          >
-            {{ metadataStatus }}
-          </p>
           <p class="muted destructive-hint">
             Delete account removes this account’s local records. Export a backup
             first. Click once, then press and hold to confirm.

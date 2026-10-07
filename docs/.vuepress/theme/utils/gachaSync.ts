@@ -130,6 +130,7 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
       after = page.next ?? undefined;
     } while (after);
   }
+  progress("Remote records downloaded. Reconciling…", mode === "pull" ? 1 : 0.5);
   const validated = remote.length ? parseUigf(exportUigf(remote)) : [];
   if (mode === "pull") {
     signal.throwIfAborted();
@@ -174,11 +175,11 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
     }
   }
   for (const [index, body] of batches.entries()) {
-    progress(`Uploading batch ${index + 1} of ${batches.length}…`, index / batches.length);
+    progress(`Uploading batch ${index + 1} of ${batches.length}…`, 0.5 + 0.5 * index / batches.length);
     const result = await post({ ...body, revision });
     if (result.revision <= revision!) throw new Error("Invalid write revision. Sync stopped.");
     revision = result.revision;
-    progress(`Uploaded batch ${index + 1} of ${batches.length}.`, (index + 1) / batches.length);
+    progress(`Uploaded batch ${index + 1} of ${batches.length}.`, 0.5 + 0.5 * (index + 1) / batches.length);
     gachaLog("info", "Sync batch committed", { batch: index + 1, batches: batches.length });
   }
   signal.throwIfAborted();

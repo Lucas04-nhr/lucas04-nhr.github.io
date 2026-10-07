@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 const props = withDefaults(defineProps<{
   title: string;
+  activeTitle?: string;
+  failureTitle?: string;
   message: string;
   active: boolean;
   progress?: number;
@@ -17,6 +19,11 @@ const messageParts = computed(() => props.message.split(
 const visualProgress = ref(0);
 const measured = computed(() => props.active && props.progress !== undefined);
 const state = computed(() => props.active ? "working" : props.tone === "caution" ? "error" : props.tone === "warning" ? "warning" : props.completed ? "success" : "idle");
+const displayTitle = computed(() => props.active
+  ? props.activeTitle ?? `${props.title} in progress…`
+  : props.tone === "caution"
+    ? props.failureTitle ?? `${props.title} failed`
+    : props.title);
 let timer: ReturnType<typeof setInterval> | undefined;
 function stop() { clearInterval(timer); timer = undefined; }
 watch(() => props.active, (active) => {
@@ -27,7 +34,7 @@ watch(() => props.active, (active) => {
   }
   visualProgress.value = props.progress ?? 0;
   // A new random duration for each operation; never imply completion early.
-  const duration = 18000 + Math.random() * 24000;
+  const duration = 3000 + Math.random() * 3000;
   const started = Date.now();
   timer = setInterval(() => {
     if (props.progress !== undefined) return;
@@ -65,9 +72,9 @@ onBeforeUnmount(stop);
             <circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" />
           </template>
         </svg>
-      <span>{{ title }}</span>
+      <span>{{ displayTitle }}</span>
     </h4>
-      <div class="progress-track" role="progressbar" :aria-label="title"
+      <div class="progress-track" role="progressbar" :aria-label="displayTitle"
         :aria-valuemin="0" :aria-valuemax="100"
         :aria-valuenow="measured || (!active && completed && tone !== 'caution') ? Math.round(visualProgress * 100) : undefined"
         :aria-valuetext="active && !measured ? 'In progress' : message">
@@ -78,7 +85,7 @@ onBeforeUnmount(stop);
     </Transition>
     <slot />
     </div>
-    <div class="progress-actions"><slot name="actions" /></div>
+    <div v-if="$slots.actions" class="progress-actions"><slot name="actions" /></div>
   </div>
 </template>
 
@@ -158,6 +165,16 @@ onBeforeUnmount(stop);
   background: var(--progress-accent);
   border-color: var(--progress-accent);
   color: #fff;
+}
+.progress-actions :deep(.vp-button.cancel-action:not(:disabled)) {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg);
+  color: var(--vp-c-brand-1);
+  opacity: 1;
+  cursor: pointer;
+}
+.progress-actions :deep(.vp-button.cancel-action:not(:disabled):hover) {
+  background: var(--vp-c-brand-soft);
 }
 .progress-status .progress-data {
   font-family: var(--vp-font-family-mono);

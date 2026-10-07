@@ -208,7 +208,8 @@ export function validateRecord(value: unknown, game: Game): GachaRecord {
   return { ...row } as GachaRecord;
 }
 
-export function parseUigf(value: unknown): GachaAccount[] {
+function* parseUigfSteps(value: unknown): Generator<number, GachaAccount[]> {
+  let processed = 0;
   const root = object(value, "UIGF file");
   const info = object(root.info, "info");
   if (!["v4.0", "v4.1", "v4.2"].includes(String(info.version)))
@@ -245,6 +246,12 @@ export function parseUigf(value: unknown): GachaAccount[] {
         throw new Error(`Invalid language code for ${uid}.`);
       if (!Array.isArray(account.list))
         throw new Error(`The list for ${uid} must be an array.`);
+      const list: GachaRecord[] = [];
+      for (const row of account.list) {
+        list.push(validateRecord(row, game));
+        processed++;
+        if (processed % 500 === 0) yield processed;
+      }
       // Legacy ZZZ archives incorrectly marked server-local UTC+8 times as UTC+0.
       accounts.push({
         game,
@@ -254,13 +261,35 @@ export function parseUigf(value: unknown): GachaAccount[] {
             ? 8
             : (account.timezone as number),
         ...(account.lang === undefined ? {} : { lang: account.lang as string }),
-        list: account.list.map((row) => validateRecord(row, game)),
+        list,
       });
     }
   }
   if (!accounts.length)
     throw new Error("No supported game accounts found in this file.");
+  if (processed % 500 !== 0) yield processed;
   return mergeAccounts([], accounts).accounts;
+}
+
+// Both import paths share the exact same validation and reconciliation rules.
+export function parseUigf(value: unknown): GachaAccount[] {
+  const steps = parseUigfSteps(value);
+  let step = steps.next();
+  while (!step.done) step = steps.next();
+  return step.value;
+}
+
+export async function parseUigfAsync(
+  value: unknown,
+  progress: (processed: number) => Promise<void>,
+): Promise<GachaAccount[]> {
+  const steps = parseUigfSteps(value);
+  let step = steps.next();
+  while (!step.done) {
+    await progress(step.value);
+    step = steps.next();
+  }
+  return step.value;
 }
 
 // Store language-independent record data; names and item types come from metadata.

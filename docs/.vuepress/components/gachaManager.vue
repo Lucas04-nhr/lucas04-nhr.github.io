@@ -21,6 +21,7 @@ import {
   inferredServer,
   mergeAccounts,
   parseUigf,
+  parseUigfAsync,
   poolKey,
   recordRank,
   selectableGames,
@@ -331,6 +332,8 @@ const storageError = ref("");
 const metadataStatus = ref("");
 const metadataFeedback = ref<"note" | "warning" | "caution">("note");
 const importStatus = ref("");
+const importing = ref(false);
+const importProgress = ref(0);
 const importError = ref("");
 const exportStatus = ref("");
 const exportError = ref("");
@@ -758,33 +761,70 @@ async function importJsonFiles(files: File[]) {
     return;
   gachaLog("info", "Import started");
   importError.value = "";
-  importStatus.value = "Importing JSON files…";
+  importStatus.value = "Reading import files… 0%";
+  importing.value = true;
+  importProgress.value = 0;
   busy.value = true;
   try {
-    // Parse all files first, so one invalid file cannot cause a partial import.
-    const incoming: GachaAccount[] = [];
+    // Read every file to count records, then validate without changing the archive.
+    const rawFiles: unknown[] = [];
+    let total = 0;
     for (const file of files) {
+      importStatus.value = "Reading import files… 0%";
       if (!/\.json$/i.test(file.name))
         throw new Error(`${file.name} is not a JSON file.`);
       if (file.size > 50 * 1024 * 1024)
-        throw new Error(
-          `${file.name} exceeds 50 MiB. Split the file before importing.`,
-        );
-      incoming.push(...parseUigf(JSON.parse(await file.text())));
+        throw new Error(`${file.name} exceeds 50 MiB. Split the file before importing.`);
+      const raw: unknown = JSON.parse(await file.text());
+      rawFiles.push(raw);
+      if (raw && typeof raw === "object") {
+        for (const game of Object.keys(games)) {
+          const entries = (raw as Record<string, unknown>)[game];
+          if (!Array.isArray(entries)) continue;
+          for (const entry of entries) {
+            if (entry && typeof entry === "object" && Array.isArray(entry.list))
+              total += entry.list.length;
+          }
+        }
+      }
+    }
+    const incoming: GachaAccount[] = [];
+    let validated = 0;
+    for (const [index, raw] of rawFiles.entries()) {
+      const parsed = await parseUigfAsync(raw, async (processed) => {
+        if (!ready.value) throw new Error("Import cancelled.");
+        importProgress.value = (validated + processed) / (total + 1);
+        importStatus.value = `Validating records… ${Math.floor(importProgress.value * 100)}%`;
+        await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
+      });
+      incoming.push(...parsed);
+      // Count input rows, including duplicates; deduplication is a separate step.
+      const root = raw as Record<string, unknown>;
+      for (const game of Object.keys(games)) {
+        const entries = root[game];
+        if (Array.isArray(entries))
+          for (const entry of entries) validated += entry.list.length;
+      }
+      rawFiles[index] = undefined;
     }
     if (!ready.value) return;
+    importStatus.value = `Merging and saving imported records… ${Math.floor(importProgress.value * 100)}%`;
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
+    if (!ready.value) return;
     const result = merge(incoming);
+    importProgress.value = 1;
     gachaLog("info", "Import completed", {
       files: files.length,
       added: result.added,
       duplicates: result.duplicates,
     });
-    importStatus.value = `Imported ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
+    importStatus.value = `Imported ${total} records from ${files.length} files: ${result.added} added, ${result.duplicates} duplicates skipped.`;
   } catch (err) {
     gachaLog("error", "Import failed");
     importStatus.value = "";
     importError.value = err instanceof Error ? err.message : "Import failed.";
   } finally {
+    importing.value = false;
     busy.value = false;
   }
 }
@@ -1116,7 +1156,9 @@ async function loadMetadata() {
             Save the Worker URL with an optional personal-sync token.
           </p>
           <GachaProgressStatus
-            title="Remote service status"
+            title="Remote Connection"
+            active-title="Connecting to Remote Service…"
+            failure-title="Remote Connection Failed"
             :message="connectionStatus || 'Ready to save remote service settings.'"
             :active="connectionBusy"
             :tone="connectionFeedback"
@@ -1186,7 +1228,9 @@ async function loadMetadata() {
             />Use local timestamps for sync conflicts</label
           >
           <GachaProgressStatus
-            title="Personal sync status"
+            title="Personal Sync"
+            active-title="Syncing Personal Records…"
+            failure-title="Personal Sync Failed"
             :message="personalSyncError || personalSyncStatus || 'Ready to sync personal records.'"
             :active="syncing"
             :progress="personalSyncProgress"
@@ -1199,6 +1243,7 @@ async function loadMetadata() {
                 @click="syncing ? syncRequest?.abort() : syncPersonal()"
                 :disabled="!syncing && (busy || !ready || connectionBusy || !syncEnabled)"
                 :text="syncing ? 'Cancel sync' : 'Sync personal records'"
+                :class="{ 'cancel-action': syncing }"
                 type="button"
               />
               <GachaConfirmButton
@@ -1234,22 +1279,29 @@ async function loadMetadata() {
       class="gacha-panel"
     >
       <h3>Fetch records</h3>
-      <div class="helper-status" role="status">
-        <span>{{
-          helperState === "available"
-            ? "Browser helper connected · requests stay on your device"
-            : helperState === "checking"
-              ? "Checking browser helper…"
-              : "Browser helper not detected · direct fetch may be blocked by CORS"
-        }}</span>
-        <VPButton
-          theme="alt"
-          type="button"
-          :disabled="busy || helperState === 'checking'"
-          @click="checkHelper"
-          >Check helper</VPButton
-        >
-      </div>
+      <GachaProgressStatus
+        :title="helperState === 'unavailable' ? 'Browser Helper Unavailable' : 'Browser helper'"
+        active-title="Checking Browser Helper…"
+        failure-title="Browser Helper Unavailable"
+        :message="helperState === 'available'
+          ? 'Browser helper connected · requests stay on your device'
+          : helperState === 'checking'
+            ? 'Checking browser helper…'
+            : 'Browser helper not detected · direct fetch may be blocked by CORS'"
+        :active="helperState === 'checking'"
+        :tone="helperState === 'unavailable' ? 'warning' : 'note'"
+        :completed="helperState !== 'checking'"
+      >
+        <template #actions>
+          <VPButton
+            theme="brand"
+            type="button"
+            :disabled="busy || helperState === 'checking'"
+            @click="checkHelper"
+            :text="helperState === 'checking' ? 'Checking…' : 'Check helper'"
+          />
+        </template>
+      </GachaProgressStatus>
       <details :open="helperState === 'unavailable'">
         <summary>Set up the browser helper</summary>
         <ol>
@@ -1331,7 +1383,9 @@ async function loadMetadata() {
           />
         </label>
         <GachaProgressStatus
-          title="Fetch records status"
+          title="Records Fetching"
+          active-title="Fetching Records…"
+          failure-title="Records Fetch Failed"
           :message="error || status || 'Ready to fetch records.'"
           :active="fetching"
           :tone="error || status.startsWith('Stopped.') ? 'caution' : 'note'"
@@ -1357,6 +1411,7 @@ async function loadMetadata() {
               type="button"
               @click="request?.abort()"
               text="Stop fetching"
+              class="cancel-action"
             />
           </template>
         </GachaProgressStatus>
@@ -1462,17 +1517,17 @@ async function loadMetadata() {
             @change="importFiles"
           />
         </label>
-        <p
-          v-if="importStatus"
-          class="hint-container note"
-          role="status"
-          aria-live="polite"
-        >
-          {{ importStatus }}
-        </p>
-        <p v-if="importError" class="hint-container caution" role="alert">
-          {{ importError }}
-        </p>
+        <GachaProgressStatus
+          v-if="importing || importStatus || importError"
+          title="Import records"
+          active-title="Importing Records…"
+          failure-title="Records Import Failed"
+          :message="importError || importStatus"
+          :active="importing"
+          :progress="importProgress"
+          :tone="importError ? 'caution' : storageError ? 'warning' : 'note'"
+          :completed="importProgress === 1 && !importError"
+        />
 
         <p class="muted">
           Upgrade older UIGF / SRGF files with
@@ -1634,6 +1689,8 @@ async function loadMetadata() {
           </div>
           <GachaProgressStatus
             title="Item names & icons"
+            active-title="Loading Item Names & Icons…"
+            failure-title="Item Metadata Load Failed"
             :message="metadataStatus || 'Ready to load item names and icons.'"
             :active="metadataBusy"
             :tone="metadataFeedback"
@@ -2078,18 +2135,7 @@ async function loadMetadata() {
 .account-controls {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.helper-status {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 8px;
-  background: var(--vp-c-brand-soft);
-  font-size: 13px;
-  margin-bottom: 16px;
-}
+
 form {
   margin-top: 20px;
 }

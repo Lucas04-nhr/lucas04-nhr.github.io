@@ -987,13 +987,14 @@ async function loadMetadata() {
   metadataFeedback.value = "note";
   metadataStatus.value = "Loading item metadata…";
   const account = selected.value;
+  const language = displayLanguage.value;
   const controller = new AbortController();
   metadataRequest = controller;
   try {
     let loaded = 0,
       missing = 0;
     for (const entry of account.accounts) {
-      const languages = new Set([overviewLanguage, displayLanguage.value]);
+      const languages = new Set([language, overviewLanguage]);
       for (const lang of languages) {
         const data = await fetchMetadata(
           entry.game,
@@ -1010,12 +1011,20 @@ async function loadMetadata() {
             [entry.game]: { ...metadata.value[lang]?.[entry.game], ...data },
           },
         };
-        loaded += Object.keys(data).length;
-        missing += new Set(
-          entry.list
-            .filter((row) => !data[row.item_id])
-            .map((row) => row.item_id),
-        ).size;
+        const ids = [...new Set(entry.list.map((row) => row.item_id))];
+        const missingIds = ids.filter((id) => !data[id]);
+        if (missingIds.length) {
+          // Item IDs are public metadata keys; never log account IDs or records.
+          console.warn("[Helios Assistant] Missing item metadata", {
+            game: entry.game,
+            language: lang,
+            itemIds: missingIds,
+          });
+        }
+        if (lang === language) {
+          loaded += ids.length - missingIds.length;
+          missing += missingIds.length;
+        }
       }
     }
     gachaLog(missing ? "warning" : "info", "Metadata lookup completed", {
@@ -1023,7 +1032,7 @@ async function loadMetadata() {
       missing,
     });
     metadataFeedback.value = missing ? "warning" : "note";
-    metadataStatus.value = `Loaded ${loaded} items (selected display languages)${missing ? `; ${missing} items are missing requested-language metadata and display their IDs` : ""}.`;
+    metadataStatus.value = `Loaded ${loaded} items in ${exportLanguages[language]}${missing ? `; ${missing} items have no ${exportLanguages[language]} metadata and are shown by ID. See the console for missing item IDs` : ""}.`;
   } catch {
     gachaLog(
       controller.signal.aborted ? "warning" : "error",

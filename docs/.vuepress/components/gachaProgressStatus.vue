@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
 }>(), { tone: "note", simulatedLimit: 0.94, completed: false });
 // Render data fragments as text nodes, including in errors returned by the service.
 const messageParts = computed(() => props.message.split(
-  /(batch \d+ of \d+|Page \d+|\b\d+(?:,\d{3})*(?:\.\d+)?%?\b|\b(?:ALLOWED_ORIGINS|JSON|UIGF|UID|HTTP|HTTPS|D1)\b)/g,
+  /(batch \d+ of \d+|Page \d+|\b(?:ALLOWED_ORIGINS|JSON|UIGF|UID|HTTP|HTTPS|D1)\b)/g,
 ).map((text, index) => ({ text, code: index % 2 === 1 })));
 const visualProgress = ref(0);
 const measured = computed(() => props.active && props.progress !== undefined);
@@ -87,8 +87,9 @@ onBeforeUnmount(stop);
   --progress-accent: #64748b;
   --progress-soft: rgba(100, 116, 139, 0.12);
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
   margin: 16px 0;
   padding: 22px;
   border: 1px solid rgba(100, 116, 139, 0.22);
@@ -124,7 +125,7 @@ onBeforeUnmount(stop);
   color: var(--progress-accent);
   transition: color 0.38s ease-out;
 }
-.progress-content { flex: 1 1 auto; min-width: 0; }
+.progress-content { min-width: 0; }
 .progress-track {
   width: 100%;
   min-width: 0;
@@ -143,7 +144,7 @@ onBeforeUnmount(stop);
   transform-origin: left center;
   transition: transform 0.3s ease-out, background-color 0.38s ease-out;
 }
-.progress-actions { display: grid; gap: 10px; flex: 0 0 224px; width: 224px; }
+.progress-actions { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
 .progress-actions :deep(.vp-button.medium),
 .progress-actions :deep(.gacha-confirm-button) {
   box-sizing: border-box;
@@ -167,9 +168,7 @@ onBeforeUnmount(stop);
 :global(html.dark) .progress-status,
 :global(:root[data-theme="dark"]) .progress-status { border-color: rgba(148, 163, 184, 0.32); border-left-color: var(--progress-accent); }
 @media (max-width: 719px) {
-  .progress-status { flex-direction: column; align-items: stretch; gap: 16px; }
-  .progress-content { width: 100%; }
-  .progress-actions { flex: none; width: 100%; }
+  .progress-actions { flex-direction: column; }
   .progress-actions :deep(.vp-button.medium),
   .progress-actions :deep(.gacha-confirm-button) { width: 100%; }
 }

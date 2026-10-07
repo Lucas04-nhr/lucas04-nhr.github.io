@@ -69,7 +69,7 @@ export type PersonalSyncMode = "merge" | "pull" | "push";
 
 // Read a consistent snapshot before reconciliation. Each write is a separate
 // transaction; conflicts stop immediately and are never retried blindly.
-export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge", verifyTurnstile?: (siteKey: string, signal: AbortSignal) => Promise<string>): Promise<GachaAccount[]> {
+export async function synchronizePersonal(base: string, token: string, local: GachaAccount[], signal: AbortSignal, progress: (message: string, progress?: number) => void, preferLocalTimes = false, mode: PersonalSyncMode = "merge", verifyTurnstile?: (siteKey: string, signal: AbortSignal) => Promise<string>): Promise<GachaAccount[]> {
   base = personalApiBase(base);
   validateSyncToken(token);
   progress("Checking sync protection…");
@@ -174,10 +174,11 @@ export async function synchronizePersonal(base: string, token: string, local: Ga
     }
   }
   for (const [index, body] of batches.entries()) {
-    progress(`Uploading batch ${index + 1} of ${batches.length}…`);
+    progress(`Uploading batch ${index + 1} of ${batches.length}…`, index / batches.length);
     const result = await post({ ...body, revision });
     if (result.revision <= revision!) throw new Error("Invalid write revision. Sync stopped.");
     revision = result.revision;
+    progress(`Uploaded batch ${index + 1} of ${batches.length}.`, (index + 1) / batches.length);
     gachaLog("info", "Sync batch committed", { batch: index + 1, batches: batches.length });
   }
   signal.throwIfAborted();

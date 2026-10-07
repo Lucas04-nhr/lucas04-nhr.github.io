@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { gachaLog } from "../theme/utils/gachaLog";
 import { checkGachaHealth } from "../theme/utils/gachaHealth";
+import GachaProgressStatus from "./gachaProgressStatus.vue";
 import GachaTurnstile from "./gachaTurnstile.vue";
 import GachaSecretInput from "./gachaSecretInput.vue";
 import GachaConfirmButton from "./gachaConfirmButton.vue";
@@ -230,6 +231,7 @@ const syncing = ref(false);
 const syncVerification = ref<InstanceType<typeof GachaTurnstile>>();
 const preferLocalTimes = ref(false);
 const personalSyncStatus = ref("");
+const personalSyncProgress = ref<number | undefined>();
 const personalSyncError = ref("");
 let syncRequest: AbortController | undefined;
 
@@ -239,6 +241,7 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
   busy.value = true;
   gachaLog(mode === "merge" ? "info" : "warning", `Sync started: ${mode}`);
   personalSyncError.value = "";
+  personalSyncProgress.value = undefined;
   personalSyncStatus.value = "Reading remote accounts…";
   const controller = new AbortController();
   syncRequest = controller;
@@ -249,7 +252,8 @@ async function syncPersonal(mode: "merge" | "pull" | "push" = "merge") {
       savedConnection.value!.personalToken,
       accounts.value,
       controller.signal,
-      (message) => {
+      (message, progress) => {
+        personalSyncProgress.value = progress;
         personalSyncStatus.value = message;
         gachaLog("info", "Sync progress");
       },
@@ -318,6 +322,7 @@ const busy = ref(false);
 const metadataBusy = ref(false);
 const ready = ref(false);
 const status = ref("");
+const fetching = ref(false);
 const error = ref("");
 const storageError = ref("");
 const metadataStatus = ref("");
@@ -795,6 +800,8 @@ async function retrieve() {
     return;
   }
   busy.value = true;
+  fetching.value = true;
+  status.value = "Preparing to fetch records…";
   gachaLog("info", "Fetch started");
   error.value = "";
   const controller = new AbortController();
@@ -848,6 +855,7 @@ async function retrieve() {
     }
   } finally {
     link.value = "";
+    fetching.value = false;
     busy.value = false;
     request = undefined;
   }
@@ -1122,15 +1130,12 @@ async function loadMetadata() {
             To clear saved settings, click once, then press and hold to confirm.
           </p>
 
-          <p
+          <GachaProgressStatus
             v-if="connectionStatus"
-            class="hint-container"
-            :class="connectionFeedback"
-            :role="connectionFeedback === 'caution' ? 'alert' : 'status'"
-            aria-live="polite"
-          >
-            {{ connectionStatus }}
-          </p>
+            :message="connectionStatus"
+            :active="connectionBusy"
+            :tone="connectionFeedback"
+          />
         </div>
         <div v-if="syncEnabled">
           <h4>Personal remote synchronization</h4>
@@ -1200,14 +1205,12 @@ async function loadMetadata() {
           <p class="muted destructive-hint">
             For replacement, click once, then press and hold to confirm.
           </p>
-          <p
+          <GachaProgressStatus
             v-if="personalSyncStatus"
-            class="hint-container note"
-            role="status"
-            aria-live="polite"
-          >
-            {{ personalSyncStatus }}
-          </p>
+            :message="personalSyncStatus"
+            :active="syncing"
+            :progress="personalSyncProgress"
+          />
           <p
             v-if="personalSyncError"
             class="hint-container caution"
@@ -1362,14 +1365,12 @@ async function loadMetadata() {
         used only for this fetch, is never saved, and is cleared afterwards.
         Keep URLs containing authkey private.
       </p>
-      <p
+      <GachaProgressStatus
         v-if="status"
-        class="hint-container note"
-        role="status"
-        aria-live="polite"
-      >
-        {{ status }}
-      </p>
+        :message="status"
+        :active="fetching"
+        :tone="error ? 'caution' : 'note'"
+      />
       <p v-if="error" class="hint-container caution" role="alert">
         {{ error }}
       </p>

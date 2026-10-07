@@ -168,6 +168,18 @@ onBeforeUnmount(stop);
   border-color: var(--progress-accent);
   color: #fff;
 }
+.progress-status.is-working .progress-actions :deep(.vp-button.brand:not(:disabled)) {
+  opacity: 1;
+  cursor: pointer;
+  background: var(--vp-button-brand-bg);
+  border-color: var(--vp-button-brand-border);
+  color: var(--vp-button-brand-text);
+}
+.progress-status.is-working .progress-actions :deep(.vp-button.brand:not(:disabled):hover) {
+  background: var(--vp-button-brand-hover-bg);
+  border-color: var(--vp-button-brand-hover-border);
+  color: var(--vp-button-brand-hover-text);
+}
 .progress-status .progress-data {
   font-family: var(--vp-font-family-mono);
   font-size: 0.9em;

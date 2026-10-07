@@ -1396,22 +1396,15 @@ async function loadMetadata() {
             <VPButton
               theme="brand"
               type="button"
-              @click="retrieve"
-              :disabled="
+              @click="fetching ? request?.abort() : retrieve()"
+              :disabled="!fetching && (
                 busy ||
                 !ready ||
                 !connectionConfigured ||
                 helperState === 'checking' ||
                 !link.trim()
-              "
-              :text="fetching ? 'Processing…' : 'Fetch gacha records'"
-            />
-            <VPButton
-              theme="alt"
-              v-if="request"
-              type="button"
-              @click="request?.abort()"
-              text="Stop fetching"
+              )"
+              :text="fetching ? 'Cancel fetch' : 'Fetch gacha records'"
             />
           </template>
         </GachaProgressStatus>

@@ -1410,7 +1410,6 @@ async function loadMetadata() {
               type="button"
               @click="request?.abort()"
               text="Stop fetching"
-              class="cancel-action"
             />
           </template>
         </GachaProgressStatus>

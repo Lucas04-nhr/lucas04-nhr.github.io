@@ -166,16 +166,6 @@ onBeforeUnmount(stop);
   border-color: var(--progress-accent);
   color: #fff;
 }
-.progress-actions :deep(.vp-button.cancel-action:not(:disabled)) {
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-bg);
-  color: var(--vp-c-brand-1);
-  opacity: 1;
-  cursor: pointer;
-}
-.progress-actions :deep(.vp-button.cancel-action:not(:disabled):hover) {
-  background: var(--vp-c-brand-soft);
-}
 .progress-status .progress-data {
   font-family: var(--vp-font-family-mono);
   font-size: 0.9em;

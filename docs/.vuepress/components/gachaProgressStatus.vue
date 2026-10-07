@@ -42,10 +42,10 @@ watch(() => props.active, (active) => {
       props.simulatedLimit * (1 - Math.exp(-3 * (Date.now() - started) / duration)));
   }, 100);
 }, { immediate: true });
-watch(() => props.progress, (progress, previous) => {
+watch(() => props.progress, (progress) => {
   if (props.active && progress !== undefined) {
     const value = Math.max(0, Math.min(1, progress));
-    visualProgress.value = previous === undefined ? value : Math.max(visualProgress.value, value);
+    visualProgress.value = Math.max(visualProgress.value, value);
   }
 });
 onBeforeUnmount(stop);

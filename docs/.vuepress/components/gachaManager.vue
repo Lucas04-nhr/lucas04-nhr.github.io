@@ -1243,7 +1243,6 @@ async function loadMetadata() {
                 @click="syncing ? syncRequest?.abort() : syncPersonal()"
                 :disabled="!syncing && (busy || !ready || connectionBusy || !syncEnabled)"
                 :text="syncing ? 'Cancel sync' : 'Sync personal records'"
-                :class="{ 'cancel-action': syncing }"
                 type="button"
               />
               <GachaConfirmButton

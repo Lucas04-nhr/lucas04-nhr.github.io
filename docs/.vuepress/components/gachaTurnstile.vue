@@ -12,6 +12,13 @@ let widget: string | undefined;
 let cancel: (() => void) | undefined;
 const api = () => (window as unknown as { turnstile?: Turnstile }).turnstile;
 
+function cancelOnBackdrop(event: MouseEvent) {
+  if (event.target !== dialog.value) return;
+  const bounds = dialog.value.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right
+    || event.clientY < bounds.top || event.clientY > bounds.bottom) cancel?.();
+}
+
 // Load only when a configured Worker requests verification. Keep the shared
 // script across route entries; remove each component's widget and listeners.
 async function verify(siteKey: string, signal: AbortSignal, operation = "sync", action = "personal_sync"): Promise<string> {
@@ -84,11 +91,10 @@ defineExpose({ verify });
 <template>
   <Teleport to="body">
     <dialog ref="dialog" class="gacha-turnstile-dialog" aria-label="Security verification"
-      @cancel.prevent="cancel?.()">
+      @cancel.prevent="cancel?.()" @click="cancelOnBackdrop">
       <h3>Security verification</h3>
       <p role="status">Complete verification to {{ purpose }}.</p>
       <div ref="container" class="gacha-turnstile-widget" />
-      <button type="button" autofocus @click="cancel?.()">Cancel</button>
     </dialog>
   </Teleport>
 </template>
@@ -116,14 +122,4 @@ defineExpose({ verify });
 .gacha-turnstile-dialog::backdrop { background: rgb(0 0 0 / 50%); }
 h3 { margin: 0 0 12px; }
 p { margin: 0 0 16px; }
-button {
-  margin-top: 16px;
-  padding: 8px 16px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  color: var(--vp-c-text-1);
-  background: var(--vp-c-bg-soft);
-  cursor: pointer;
-}
-button:focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 2px; }
 </style>

@@ -884,7 +884,7 @@ async function retrieve() {
       { added, corrected },
     );
     if (controller.signal.aborted)
-      status.value = `Stopped. ${added} new records retained, ${corrected} timestamps corrected.`;
+      status.value = `Stopped. Fetch cancelled; records fetched so far have been merged. ${added} new records retained, ${corrected} timestamps corrected.`;
     else {
       const message =
         err instanceof TypeError
@@ -1384,12 +1384,12 @@ async function loadMetadata() {
           />
         </label>
         <GachaProgressStatus
-          title="Records Fetching"
+          :title="status.startsWith('Stopped.') ? 'Records Fetch Cancelled' : 'Records Fetching'"
           active-title="Fetching Records…"
           failure-title="Records Fetch Failed"
           :message="error || status || 'Ready to fetch records.'"
           :active="fetching"
-          :tone="error || status.startsWith('Stopped.') ? 'caution' : 'note'"
+          :tone="error ? 'caution' : status.startsWith('Stopped.') ? 'warning' : 'note'"
           :completed="status.startsWith('Finished:')"
         >
           <template #actions>

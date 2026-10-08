@@ -5,7 +5,7 @@ permalink: /blog/ku-bsa-weight-matrices-sequence-motifs/
 tags:
   - KU
   - Biological Sequence Analysis
-excerpt: "This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about position-specific weight matrices in biological sequence analysis, from splice-site counts and log-odds scores to motif scanning, classification errors, information content, and sequence logos."
+excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about position-specific weight matrices in biological sequence analysis, from splice-site counts and log-odds scores to motif scanning, classification errors, information content, and sequence logos.
 preview: true
 ---
 

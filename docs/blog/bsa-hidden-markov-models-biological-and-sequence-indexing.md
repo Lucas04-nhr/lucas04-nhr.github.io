@@ -2,7 +2,7 @@
 title: Hidden Markov Models, Biological Applications, and Sequence Indexing
 createTime: 2026/10/01 11:06:11
 permalink: /blog/ku-bsa-hmm-applications-sequence-indexing/
-excerpt: "BSA lecture notes connecting HMM inference and training to signal-peptide prediction and gene finding, followed by suffix arrays, the Burrows–Wheeler transform, and FM-index searching."
+excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about HMM inference and training to signal-peptide prediction and gene finding, followed by suffix arrays, the Burrows–Wheeler transform, and FM-index searching.
 tags:
   - KU
   - Biological Sequence Analysis

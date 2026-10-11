@@ -1,0 +1,511 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": {
+    "enable": true,
+    "blackList": [],
+    "whiteList": [
+      {
+        "packageName": "com.tencent.mm",
+        "sha256": "0FE4FF85C215918396DADC7CD8CE6963339AF33D37751A56E54C7206B63A3C7C"
+      },
+      {
+        "packageName": "com.ss.android.ugc.aweme",
+        "sha256": "D7811EC4166FEA6CC720BA66699DC84B584AC9E6986613A76D4E43D8CBE32B27"
+      },
+      {
+        "packageName": "com.tencent.mobileqq",
+        "sha256": "EA6E97AD6C34F7039A9C6DABA732C97D0E098E83EDE2B4D52C76EB0184AC7A38"
+      },
+      {
+        "packageName": "com.ss.android.ugc.aweme.lite",
+        "sha256": "D7811EC4166FEA6CC720BA66699DC84B584AC9E6986613A76D4E43D8CBE32B27"
+      },
+      {
+        "packageName": "com.eg.android.AlipayGphone",
+        "sha256": "389B49F7832F53E9017923220AA85E14DFAA4886ECD7428818BF339543CF498A"
+      },
+      {
+        "packageName": "com.smile.gifmaker",
+        "sha256": "0A350C6FBF39A939B34D4A4F470A93D961D554890BA8C37FF8CCCEBA0A3B1D7D"
+      },
+      {
+        "packageName": "com.kuaishou.nebula",
+        "sha256": "0A350C6FBF39A939B34D4A4F470A93D961D554890BA8C37FF8CCCEBA0A3B1D7D"
+      },
+      {
+        "packageName": "com.tencent.wework",
+        "sha256": "66896AE0AAE48B9E963A3E034FA2CA813CA2F661F53619A92263A8A5C2E3F388"
+      },
+      {
+        "packageName": "com.sankuai.meituan",
+        "sha256": "73A611C3A01DC6E11388873DAEEE1E556AD9E5768E5C222055F508A24C3A8215"
+      },
+      {
+        "packageName": "com.jingdong.app.mall",
+        "sha256": "A5FDBFA8A769A9F2041C7F6706A52B8D981C0F12A6F10E989A9F583A43ED217D"
+      },
+      {
+        "packageName": "com.baidu.searchbox",
+        "sha256": "A6EF817BFD6C083442A149856E51036F6912C2DB6B6009DB8127CDD641E295A9"
+      },
+      {
+        "packageName": "com.miui.tsmclient",
+        "sha256": "C9009D01EBF9F5D0302BC71B2FE9AA9A47A432BBA17308A3111B75D7B2149025"
+      },
+      {
+        "packageName": "cn.wps.moffice_eng",
+        "sha256": "643990878D3CA83952A5BE5F3E58D9F8BB6CDC57BF0F228700212071C68DB3D7"
+      },
+      {
+        "packageName": "com.eastmoney.android.berlin",
+        "sha256": "FDF6B1E025FE265462BA8C0D5DD610BC025C389B4F43407050851580BEC3547B"
+      },
+      {
+        "packageName": "com.sdu.didi.gsui",
+        "sha256": "613CC829902938FE4074BBC839F1FCDD332640DF9217B95C602BD590E82A7551"
+      },
+      {
+        "packageName": "com.greenpoint.android.mc10086.activity",
+        "sha256": "6FCB7DECFC2DDD8729FAC93D75B2762918944D524F344DA141EFF79C9769CEC9"
+      },
+      {
+        "packageName": "com.android.bankabc",
+        "sha256": "9BE0E0F9A6FF303C0C677CA856481D3A2B2D2D5910721A6EC2FB41305127C741"
+      },
+      {
+        "packageName": "com.mi.health",
+        "sha256": "C9009D01EBF9F5D0302BC71B2FE9AA9A47A432BBA17308A3111B75D7B2149025"
+      },
+      {
+        "packageName": "com.qiyi.video",
+        "sha256": "BF46EAE985C1AB0D636833670C3686BC443E49F37D75DEC5909ADCB587A80AB4"
+      },
+      {
+        "packageName": "com.icbc",
+        "sha256": "3CF66195FD9040A485582684B2A6A2111486DFCFAD0F15A4CEC6729F73B5A556"
+      },
+      {
+        "packageName": "com.unionpay",
+        "sha256": "5F6B3D22859624A8DE36F95D03AE2FF7581A1DAABB230C62AED9470A54414845"
+      },
+      {
+        "packageName": "com.sankuai.meituan.takeoutnew",
+        "sha256": "73A611C3A01DC6E11388873DAEEE1E556AD9E5768E5C222055F508A24C3A8215"
+      },
+      {
+        "packageName": "com.chinamworld.main",
+        "sha256": "C8191338F1172BE788266FEF54BC0C643E9A86B7073B1D3ECA2FB787F5BBE0D8"
+      },
+      {
+        "packageName": "com.mipay.wallet",
+        "sha256": "C9009D01EBF9F5D0302BC71B2FE9AA9A47A432BBA17308A3111B75D7B2149025"
+      },
+      {
+        "packageName": "com.dianping.v1",
+        "sha256": "9DE70C3259948B324D84397A0AB9A732AFB4546A7CBF9B375D7A074F55265BD2"
+      },
+      {
+        "packageName": "cmb.pb",
+        "sha256": "B82EE4946685121F43F04A259339213B1DAAE5FF527BDE8C347575EB11A4931A"
+      },
+      {
+        "packageName": "com.youku.phone",
+        "sha256": "C7DFD19F8199B80615EA6E70AB46F85D87F36AF26501F4E02D5C2CBA85E802FB"
+      },
+      {
+        "packageName": "com.chinamworld.bocmbci",
+        "sha256": "9D4D9697F8AA0F3C8E69D1050793CFE642C9D6E528CEE82BEEF5A4690D2D4F06"
+      },
+      {
+        "packageName": "com.jd.jrapp",
+        "sha256": "AC826FD707242208D755601CA8E65C97984539DED42984E230A35DC1B3B9B71E"
+      },
+      {
+        "packageName": "com.geenk.zto.sys",
+        "sha256": "FCB250C4E2A0DA61B5C26776BB145E7796EAECB9B4570657441F94F5D921AEBE"
+      },
+      {
+        "packageName": "com.fido.asm",
+        "sha256": "C9009D01EBF9F5D0302BC71B2FE9AA9A47A432BBA17308A3111B75D7B2149025"
+      },
+      {
+        "packageName": "com.hundsun.winner.pazq",
+        "sha256": "C7D020011213BC17A0AB8E54349ABDE0700B329EE646E7C1F3CC420C430C959A"
+      },
+      {
+        "packageName": "com.google.android.gms",
+        "sha256": "F0FD6C5B410F25CB25C3B53346C8972FAE30F8EE7411DF910480AD6B2D60DB83"
+      },
+      {
+        "packageName": "com.guotai.dazhihui",
+        "sha256": "7D0DCA7DECA599AA8A3EC164BC9E96481F2FCE2C675CCA0E9E797281179A3A1F"
+      },
+      {
+        "packageName": "com.yitong.mbank.psbc",
+        "sha256": "445ADE32F49DFC559A54B9D4141F4F5BE1BA580D8D7F67067225B4FFE8FB21F3"
+      },
+      {
+        "packageName": "com.yitong.mbank.psbc.creditcard",
+        "sha256": "DC5E0889028EE82DE451C4788C7D32E3F3D67DE0212A8F32C7214D91E4760AC4"
+      },
+      {
+        "packageName": "com.android.haitong",
+        "sha256": "EE01B810C8AEFE6ADE35B0CBEE1FB266575D9CDFF804B2710698CF83B191E01D"
+      },
+      {
+        "packageName": "com.bankcomm.Bankcomm",
+        "sha256": "B64E693569E8107E200AD80223EEFBE61A6EF7CABD603F45DA38318C49EC2C7E"
+      },
+      {
+        "packageName": "com.kwai.hisense",
+        "sha256": "EC7056598CCA57B66C1B7D89446DED4094F2E0606E243D4B96676BAFC3BB7C4C"
+      },
+      {
+        "packageName": "com.umetrip.android.msky.app",
+        "sha256": "A9AEB6F674870D164B77EEC54E8641DE27ECDC038FEF540351654FA5AA88BDBA"
+      },
+      {
+        "packageName": "com.cmbchina.ccd.pluto.cmbActivity",
+        "sha256": "FA92477E99B32C4A96A097F70F8CEDA4730CBA026AC76DAE865CD512C2378A80"
+      },
+      {
+        "packageName": "com.pingan.paces.ccms",
+        "sha256": "5C9B515148ED653EF4050099B9BAB0E783F679B28C06FCED568678C489F9E39A"
+      },
+      {
+        "packageName": "cn.com.cmbc.newmbank",
+        "sha256": "AD4B8B547B69265FBC10DA3C6D03D596920CDB21F5F3181229B6258F46BB2259"
+      },
+      {
+        "packageName": "cn.com.cmbc.newmbank.ep",
+        "sha256": "AD4B8B547B69265FBC10DA3C6D03D596920CDB21F5F3181229B6258F46BB2259"
+      },
+      {
+        "packageName": "cn.com.cmbc.newmbank.micro",
+        "sha256": "AD4B8B547B69265FBC10DA3C6D03D596920CDB21F5F3181229B6258F46BB2259"
+      },
+      {
+        "packageName": "com.mygolbs.mybus",
+        "sha256": "EB08BE9A0C7CF98AE6F9D7CDF6D3E9E3E98EE0CD016AFE7A93FFC04B0FC7FC7E"
+      },
+      {
+        "packageName": "cn.com.spdb.mobilebank.per",
+        "sha256": "468268F928DF8B5F7317FBCFBEA2EBBF25F2F20826DEBED82ADD11C1B92FBE55"
+      },
+      {
+        "packageName": "com.jd.jmworkstation",
+        "sha256": "8FA59CEC3260C9BD5832EF130445F0261FB6104E942D3DE1D3EB7ED5ABA2111C"
+      },
+      {
+        "packageName": "com.eastmoney.android.fund",
+        "sha256": "FDF6B1E025FE265462BA8C0D5DD610BC025C389B4F43407050851580BEC3547B"
+      },
+      {
+        "packageName": "com.bankcomm.maidanba",
+        "sha256": "8EAA1E2744C5F824A806EB2E90D6E09CBF9CD7C9C2AB658B63516237C923F28D"
+      },
+      {
+        "packageName": "com.ecitic.bank.mobile",
+        "sha256": "9BA15FA0B481CC4BE12C67BBC2B48D8B87E322ACAA487BE857C9A8774ED8ECC3"
+      },
+      {
+        "packageName": "com.newcapec.mobile.ncp",
+        "sha256": "0CDE84395735C2DFAFD15796B82642971040D5D76ED3A567FF56EA2EFF6031C7"
+      },
+      {
+        "packageName": "com.chinarainbow.tft",
+        "sha256": "DFB2A6005242A0998B15F2CDB0A531BD212B4DFF6D14525B24BDCF5C7D4C8A90"
+      },
+      {
+        "packageName": "com.eno.xyzq.page",
+        "sha256": "CD94CA07340E00CB0959648A4CC7F99AF306C9C1B0D62F63B0D178EB38DCB2DC"
+      },
+      {
+        "packageName": "cn.gov.pbc.dcep",
+        "sha256": "C0A593F74426420A55F4D5D7153301E418533C67A63E89391CE54BEC815E14A6"
+      },
+      {
+        "packageName": "cn.com.bmac.nfc",
+        "sha256": "2DC58E6C22FF4A8D6DEAD9048A3D626373377661F8F221670BB255883671EEF8"
+      },
+      {
+        "packageName": "cn.com.cbhb.mbank.per",
+        "sha256": "DAF1BAD8615B0EB75EBC94004870043D12B7D9266B5FF0CD05BA337AB55E3B52"
+      },
+      {
+        "packageName": "cn.com.csbank",
+        "sha256": "BAC74CBBD0FC024A1C7CEA2DEDECD0C0FE2C8559A1E02E154FD915B718ABCCEC"
+      },
+      {
+        "packageName": "cn.com.gmcc.app_travel_yinchuan",
+        "sha256": "5C2DD863053FB65DB8C7D1CAF11F68E15C403314FB81FEA0190551457F992B13"
+      },
+      {
+        "packageName": "cn.com.hzb.mobilebank.per",
+        "sha256": "6D0A4C3E4003F618C0540C41141E142446E77E5323F4D41FA5B1C1FE1B857EE1"
+      },
+      {
+        "packageName": "cn.com.lzb.mobilebank.per",
+        "sha256": "1C75B8B23E10FB4DEDAB66D6D46C1FEC06ECFD10871ECE4724DEE171FAE9AE85"
+      },
+      {
+        "packageName": "cn.com.nbcard",
+        "sha256": "0DEC6E6475450AEF03DDCC9E174E926E9E71BE39BA80513B86E017CDA59EB0AD"
+      },
+      {
+        "packageName": "cn.com.njcb.android.mobilebank",
+        "sha256": "468268F928DF8B5F7317FBCFBEA2EBBF25F2F20826DEBED82ADD11C1B92FBE55"
+      },
+      {
+        "packageName": "cn.com.shbank.mper",
+        "sha256": "468268F928DF8B5F7317FBCFBEA2EBBF25F2F20826DEBED82ADD11C1B92FBE55"
+      },
+      {
+        "packageName": "cn.com.shbank.pension",
+        "sha256": "6E2D266EB033259F69EBDB17837199B757D2AB72D8BDCD7FCC0D4D02FF613D65"
+      },
+      {
+        "packageName": "cn.com.whty.cqt",
+        "sha256": "344795A9C27AE0FAB54A510395B944372B93870019580656B924A11C82F6C3FD"
+      },
+      {
+        "packageName": "cn.com.whty.hfcard",
+        "sha256": "123A7B289EFD25F8904D457A1D206EDC8DE5946F90855786C877D291EB106923"
+      },
+      {
+        "packageName": "cn.cyberIdentity.certification",
+        "sha256": "F9F565086CB680B5417445F493E588349E8527418ECE5BA9E91EB5A75C9EBB73"
+      },
+      {
+        "packageName": "cn.jsb.china",
+        "sha256": "3B7E237BA10510E32D731E44FDCEEEAABE4FAC7C1CDF064E52774C23CF768175"
+      },
+      {
+        "packageName": "com.bjgas.shop",
+        "sha256": "FDF4B47ADCB233EAA9AF672D4EDFB1F1C29DB236D3ED1DA6900CED2604355AF1"
+      },
+      {
+        "packageName": "com.ccb.companybank",
+        "sha256": "C8191338F1172BE788266FEF54BC0C643E9A86B7073B1D3ECA2FB787F5BBE0D8"
+      },
+      {
+        "packageName": "com.chinatelecom.bestpayclient",
+        "sha256": "5E3FBBC9644F700A414CF820BBA3368EFAC60F96A4C195D8E08B46ECC59881B4"
+      },
+      {
+        "packageName": "com.cmbc.unite",
+        "sha256": "AD4B8B547B69265FBC10DA3C6D03D596920CDB21F5F3181229B6258F46BB2259"
+      },
+      {
+        "packageName": "com.csii.hrxj",
+        "sha256": "AEE3012E3BE0C14F440510319F8B1C6EF7BEFAB84A3CC449F8A65743DB833B2C"
+      },
+      {
+        "packageName": "com.csii.mobile.iap.bodl",
+        "sha256": "1C7954E61708F1D2D6B9ED416E779066195BBC4404583AD2F3360C2C9FCEABB6"
+      },
+      {
+        "packageName": "com.csii.tiannongshang.mobilebank",
+        "sha256": "AC1F9559D4113D5528494BBA0EAFD733796CE6CF8FB239945E293896002F8AFE"
+      },
+      {
+        "packageName": "com.csii.zbdirect",
+        "sha256": "D12F2A88948B596BDD10DA4746EF4E6D67C5BDF64D8AF9606AD0635461562917"
+      },
+      {
+        "packageName": "com.cs_credit_bank",
+        "sha256": "DC10123021F41E4EBFEADA25A926D6ECEA34CF9EA8482D5F2DD8D68A2E4A9B1E"
+      },
+      {
+        "packageName": "com.czbank.mbank",
+        "sha256": "AF3DCE1E819AEA6AE71B93354CC1209C386A2F18DE80C483163A913BF7C1B6F9"
+      },
+      {
+        "packageName": "com.czbank.mbankent",
+        "sha256": "AF3DCE1E819AEA6AE71B93354CC1209C386A2F18DE80C483163A913BF7C1B6F9"
+      },
+      {
+        "packageName": "com.decerp.totalnew",
+        "sha256": "DAB6F56F2B55E79675D2175C100C2E64DC2BC7609EDC483CDF17C58039BF31FB"
+      },
+      {
+        "packageName": "com.eastmoney.android.newyork",
+        "sha256": "FDF6B1E025FE265462BA8C0D5DD610BC025C389B4F43407050851580BEC3547B"
+      },
+      {
+        "packageName": "com.gomejr.icash",
+        "sha256": "5F1FB795C04BEDB1C0B355DAFFDAF8CEB459462603B6880DF158E48BA443B318"
+      },
+      {
+        "packageName": "com.hanweb.izhengzhou.android",
+        "sha256": "246C0680E2F2DB1A4C9455B5D50876E5A5A894155FD43FDF8C756922FC6D432F"
+      },
+      {
+        "packageName": "com.hnzycfc.zyxj",
+        "sha256": "79475C87B6F1DF27ECC0703C8065A0B8E9AD162338A104C12468D8D8BE093A4E"
+      },
+      {
+        "packageName": "com.iss.laishangbank",
+        "sha256": "E7D21B405739AC492393038898277F04296AFC0D88C715A272D9359DD16A3CF9"
+      },
+      {
+        "packageName": "com.iss.taianbank",
+        "sha256": "E7D21B405739AC492393038898277F04296AFC0D88C715A272D9359DD16A3CF9"
+      },
+      {
+        "packageName": "com.iss.weihaibank",
+        "sha256": "E7D21B405739AC492393038898277F04296AFC0D88C715A272D9359DD16A3CF9"
+      },
+      {
+        "packageName": "com.jd.waimai",
+        "sha256": "A5FDBFA8A769A9F2041C7F6706A52B8D981C0F12A6F10E989A9F583A43ED217D"
+      },
+      {
+        "packageName": "com.jlmobile",
+        "sha256": "17F15287FA6DB9D17D8B5DA5B855A4CF54357185A99570E0ADBE3CBE7FF92137"
+      },
+      {
+        "packageName": "com.magicpoint.mobile.bank",
+        "sha256": "B067854A1E7A8A52F9F96ECDAEED9925B3500FD9A06F39843259FEF4CC8B07D5"
+      },
+      {
+        "packageName": "com.mobile.byxf",
+        "sha256": "1CDE5752F2A975007153B1A9323830125F3B814AA9DA5C86D1CA7D433BF46C28"
+      },
+      {
+        "packageName": "com.mobile.zgcbank",
+        "sha256": "D929A22DD76A0965CD4BE88D7E8FB69373EFEF281D7F72EE9638B2A1796EAEAC"
+      },
+      {
+        "packageName": "com.nxy.gs",
+        "sha256": "4F01E8165D59FF547898AB5B8D873569057ADF2C087FA41B94E3B8E836632914"
+      },
+      {
+        "packageName": "com.nxy.mobilebank.gx",
+        "sha256": "73439E730F265E803FBD9CA1761009FD5BAF0D2BF9098797B766210DFC172238"
+      },
+      {
+        "packageName": "com.qdccb.bank",
+        "sha256": "8E9772FF73D2D8D5E13C0C44C97A440F0A0AA045CFD50A94A47B4F161B3393A9"
+      },
+      {
+        "packageName": "com.qihoo.loan",
+        "sha256": "7129F2E6E961FF2FD06CF34443998AE02FFCBE7DC2EBC3681AC7141D60C44870"
+      },
+      {
+        "packageName": "com.qxnga.qjt",
+        "sha256": "17269A14309B585D3B4B2773A6EB4F21E21A7D3EFF47B5A26BAAAC137317354B"
+      },
+      {
+        "packageName": "com.sand.sandbao",
+        "sha256": "C9C85B53F545DF87E9A975152FAEC69F35CA13A5AD71DB4779EB333FAF7F530E"
+      },
+      {
+        "packageName": "com.shengjingbank.mobile.cust",
+        "sha256": "3A6509CB1B74B241A932C8F6483F465F9333FA2E5F71BA56DC752F537DC32975"
+      },
+      {
+        "packageName": "com.shuhekeji",
+        "sha256": "0B48AAF229A4BAFD9BA93B96B55ADDAD8E9D8BBDDC638CC452A31CBCC9CD91C3"
+      },
+      {
+        "packageName": "com.spdbccc.app",
+        "sha256": "F687EB967782EBF5A9AE46267AE861CC6EEEB626C6EE2ABCD837043A163AB4C1"
+      },
+      {
+        "packageName": "com.srcb.pmbank",
+        "sha256": "E4F9B27148C8F76897E597D20A963229FE673569444C58AF2BDE94BF7E30A1AD"
+      },
+      {
+        "packageName": "com.szicbc.mobile",
+        "sha256": "260DF5BE5D03F99F3E5BF4D7A7B318F5D0F88AA96C025A346AEFA38133C56544"
+      },
+      {
+        "packageName": "com.tjbhb.pmbs",
+        "sha256": "38A1010512BD1C85006C93898D3B124B71B3128FC693D42126A04530B0C57F5C"
+      },
+      {
+        "packageName": "com.unicom.wopay",
+        "sha256": "BE44CBD236F23A5F2FD2D75BD16DACDF3BA0EC89C11B6B756CD950B239B64CC9"
+      },
+      {
+        "packageName": "com.xiaomi.wearable",
+        "sha256": "B031FE98A4DBB0D4D82661787F25DE643182B378E9EF632D8ADEA75AAB58F2D8"
+      },
+      {
+        "packageName": "com.yilianbank.yilian",
+        "sha256": "F1C5D57ED5CDA7C13A127F4E834034DF660EB6E83B27E647230D4EBEE95F8EF4"
+      },
+      {
+        "packageName": "com.yitong.cd.mbank.android",
+        "sha256": "CEA19C9B0130D649D1A26B1FE94433636F68C744613E6758CB81EC0BC6D86B55"
+      },
+      {
+        "packageName": "com.yitong.fjnx.mbank.android",
+        "sha256": "CD14FEDB1EE1959CA712DAE406CD91EA1EB2FC2FB24136AE48A1AA1F5C821904"
+      },
+      {
+        "packageName": "com.yitong.gansu.mobilebank",
+        "sha256": "18859429886EEA7E31B2DA1A0294D3C0F849C7F5CAC8AE7C70281567ECCCBC37"
+      },
+      {
+        "packageName": "com.yitong.ksrcb.mbank.android",
+        "sha256": "B51288D92A83EAF9720FF31CC1816057568C34CA64A263FFEDE1765F15928594"
+      },
+      {
+        "packageName": "com.yitong.mbank",
+        "sha256": "FB5786B2D97FB08EF3B76B86B5656EE2053F84A9D5396A3FC2563A213BA42B07"
+      },
+      {
+        "packageName": "com.yitong.xian.mbank",
+        "sha256": "4D56A44921612F26666CE8654A7F2DF3C7EA2E3F29636BF23F1AB15BFD49B662"
+      },
+      {
+        "packageName": "com.youcash.ZYWallet",
+        "sha256": "C5E686079AD11280FEC2C4F3E5973BCC180579FDD3BE2B9F0FE9737167C173FE"
+      },
+      {
+        "packageName": "hk.com.hsbc.hsbchkmobilebanking",
+        "sha256": "1F3C6481453DFC5F41EDFEE201DDCE476AA0AA605F6D8E3259C252F46A0A092F"
+      },
+      {
+        "packageName": "com.uroad.unitoll",
+        "sha256": "B87598C72CC843819B4C0B7F4D801ECDC00E7393B30786D92D1A71603BD74737"
+      },
+      {
+        "packageName": "com.zhszcn.zhsmk",
+        "sha256": "EF0DC6E7574898D8282DE9238B84A5A732FEE7C1CF2076BAB67A44B8C4A7F31E"
+      },
+      {
+        "packageName": "com.asiainfo.cm10085",
+        "sha256": "326A11BDC7D87834D123A2B7F23D217CE3D606FCB3FF241EB5297FD1B0264176"
+      },
+      {
+        "packageName": "com.readid.ready",
+        "sha256": "99435C3ABF0D1AA40F4C1864B7318B6A2CCABA7FD0325FB230B09F82563A552B"
+      },
+      {
+        "packageName": "com.chinatelecom.zhejiang.bss",
+        "sha256": "AE6A12F250DE849EA3253DC7F6D255CDB349F4DE097BB63552D8CA6AC58955C3"
+      },
+      {
+        "packageName": "com.jiuyu.sptcc.cordova",
+        "sha256": "B8B4185CA66AF689C61AE8B71B5987BB21B21BF4BA8029BD347B9368C190B92D"
+      },
+      {
+        "packageName": "com.xaykt",
+        "sha256": "3DB210D81311C2195E93433D9559A202050C926FDB5B20A66124456E2325E003"
+      },
+      {
+        "packageName": "com.gzyct.yctwallet",
+        "sha256": "C372FB23C8F50A68424F91F78F8F9085CFC6BB0CB395EBF2D4891B156D39E913"
+      },
+      {
+        "packageName": "com.mzk.android",
+        "sha256": "1E18460ADF3F441B8F583D1C405B89563707FC74275CDCBEC34577C291128922"
+      }
+    ],
+    "dataVersion": -886491459
+  }
+}

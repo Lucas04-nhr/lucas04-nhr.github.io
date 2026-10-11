@@ -153,7 +153,17 @@ https://fraud-detection.engine.miui.com/nfc/antifraud/config
 
 Its request parameters include `deviceModel`, derived from `Build.DEVICE`, and `appDataVersion`. The response model contains `enable`, `whiteList`, `blackList`, and `dataVersion`.
 
-`NfcAccessManager.N()` retrieves configuration. When a successful response has a different data version, it saves the configuration and invokes `M()` to recompute allowed applications. `NfcAccessWorker` schedules the retrieval work. The endpoint was identified in code; no live request was made during this investigation.
+`NfcAccessManager.N()` retrieves configuration. When a successful response has a different data version, it saves the configuration and invokes `M()` to recompute allowed applications. `NfcAccessWorker` schedules the retrieval work.
+
+Using parameters from my own device and a request-signing function reconstructed from the Security Center APK, I retrieved one response from this endpoint. The captured configuration has `enable=true`, an empty `blackList`, and 125 unique package entries in `whiteList`. Many are widely used applications, including WeChat, Douyin, QQ, Alipay, Kuaishou, WeCom, Meituan, JD, Baidu, WPS Office, DiDi, iQIYI, UnionPay, and Google Play services. It also includes numerous banking, payment, public-transport, and city-card applications.
+
+This file is evidence of the configuration returned for that particular request, rather than proof that every device, region, or later request receives the same policy. Each whitelist entry pairs a package name with a signing-certificate SHA-256 hash, so the presence of a package name alone does not authorize an arbitrary build using that name.
+
+<LinkCard
+  icon="material-symbols:data-object"
+  title="View the captured NFC anti-fraud configuration (JSON)"
+  href="/assets/miui_nfc_antifraud_config.json"
+/>
 
 The SQLite helper `com.miui.nfcaccess.b` creates `NfcAccess.db` with three tables:
 

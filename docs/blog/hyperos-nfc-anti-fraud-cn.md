@@ -153,7 +153,17 @@ https://fraud-detection.engine.miui.com/nfc/antifraud/config
 
 请求参数包括来自 `Build.DEVICE` 的 `deviceModel`，以及 `appDataVersion`。响应模型包含 `enable`、`whiteList`、`blackList` 和 `dataVersion`。
 
-`NfcAccessManager.N()` 负责获取配置。成功响应中的数据版本发生变化时，它会保存配置，并调用 `M()` 重新计算允许访问的应用。获取任务由 `NfcAccessWorker` 调度。本次调查只是在代码中识别出了这个端点，没有向它发起实际请求。
+`NfcAccessManager.N()` 负责获取配置。成功响应中的数据版本发生变化时，它会保存配置，并调用 `M()` 重新计算允许访问的应用。获取任务由 `NfcAccessWorker` 调度。
+
+我使用本机参数，以及根据安全中心 APK 逆向结果重建的请求签名函数，向该端点获取了一份响应。此次取得的配置中，`enable=true`，`blackList` 为空，`whiteList` 包含 125 个唯一包名。白名单中有许多常用应用，包括微信、抖音、QQ、支付宝、快手、企业微信、美团、京东、百度、WPS Office、滴滴、爱奇艺、云闪付和 Google Play 服务；此外还有大量银行、支付、公共交通及城市卡应用。
+
+该文件记录的是这一次请求返回的配置，不能据此认定所有设备、地区或后续请求都会收到相同策略。白名单中的每一项都同时包含包名和签名证书的 SHA-256 哈希，因此，仅有相同包名的任意构建并不会自动获得授权。
+
+<LinkCard
+  icon="material-symbols:data-object"
+  title="查看获取到的 NFC 反诈配置（JSON）"
+  href="/assets/miui_nfc_antifraud_config.json"
+/>
 
 SQLite 辅助类 `com.miui.nfcaccess.b` 创建 `NfcAccess.db`，其中包含三张表：
 

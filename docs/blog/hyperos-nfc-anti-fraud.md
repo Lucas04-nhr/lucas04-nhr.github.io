@@ -24,11 +24,11 @@ These tests used the same phone and reader application:
 
 ::: table align="center" title="Device observations"
 
-| Configuration | Non-UnionPay test card | UnionPay test card | Warning Toast |
-|---|---|---|---|
-| Ordinary third-party installation source | Read successfully | Failed | Appeared |
-| Entire `com.android.nfc` package suspended | Read successfully | Failed | Disappeared |
-| Installed through ADB with a trusted installer name | Read successfully | Read successfully | Disappeared |
+| Configuration                                       | Non-UnionPay test card | UnionPay test card | Warning Toast |
+| --------------------------------------------------- | ---------------------- | ------------------ | ------------- |
+| Ordinary third-party installation source            | Read successfully      | Failed             | Appeared      |
+| Entire `com.android.nfc` package suspended          | Read successfully      | Failed             | Disappeared   |
+| Installed through ADB with a trusted installer name | Read successfully      | Read successfully  | Disappeared   |
 
 :::
 
@@ -42,10 +42,10 @@ The analysis covered these exact samples:
 
 ::: table align="center" title="Analyzed APK samples"
 
-| File | Package | Version |
-|---|---|---|
-| `XMNfcNci.apk` | `com.android.nfc` | Version name `17`, version code `37`, target/min SDK `37` |
-| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `13.5.8-260908.0.1`, version code `40001358` |
+| File                     | Package                   | Version                                                   |
+| ------------------------ | ------------------------- | --------------------------------------------------------- |
+| `XMNfcNci.apk`           | `com.android.nfc`         | Version name `17`, version code `37`, target/min SDK `37` |
+| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `13.5.8-260908.0.1`, version code `40001358`              |
 
 :::
 
@@ -73,14 +73,14 @@ The policy code is in `com.miui.nfcaccess.NfcAccessManager`, in `classes3.dex` o
 
 ::: table align="center" title="Recovered policy methods"
 
-| Method | Role |
-|---|---|
-| `t(String)` | Read the installing package name |
-| `y(String)` | Compare that name with the trusted installer constant |
-| `j(PackageInfo, List, Map, Map)` | Decide whether an application is allowed |
-| `k(Map, String, List)` | Match a package and its signing-certificate hashes |
-| `v(PackageInfo)` | Collect signing-certificate hashes |
-| `M(ConfigData)` | Rebuild and save the allowed-app list |
+| Method                           | Role                                                  |
+| -------------------------------- | ----------------------------------------------------- |
+| `t(String)`                      | Read the installing package name                      |
+| `y(String)`                      | Compare that name with the trusted installer constant |
+| `j(PackageInfo, List, Map, Map)` | Decide whether an application is allowed              |
+| `k(Map, String, List)`           | Match a package and its signing-certificate hashes    |
+| `v(PackageInfo)`                 | Collect signing-certificate hashes                    |
+| `M(ConfigData)`                  | Rebuild and save the allowed-app list                 |
 
 :::
 
@@ -223,10 +223,10 @@ An **application protocol data unit (APDU)** carries a command or response excha
 
 ::: table align="center" title="Payment AID prefixes"
 
-| Constant in `com.android.nfc.ApduUtils` | Hexadecimal bytes |
-|---|---|
-| `PBOC_DEBIT_AID` | `A000000333010101` |
-| `PBOC_CREDIT_AID` | `A000000333010102` |
+| Constant in `com.android.nfc.ApduUtils` | Hexadecimal bytes  |
+| --------------------------------------- | ------------------ |
+| `PBOC_DEBIT_AID`                        | `A000000333010101` |
+| `PBOC_CREDIT_AID`                       | `A000000333010102` |
 
 :::
 
@@ -390,7 +390,7 @@ Installing with an explicit installer name and changing an existing installer as
 adb install -i com.xiaomi.market reader.apk
 ```
 
-It would be misleading to present `pm set-installer` as an equivalent, unrestricted shortcut. The [Android API documentation](https://developer.android.com/reference/android/content/pm/PackageManager#setInstallerPackageName(java.lang.String,%20java.lang.String)) describes certificate checks involving the caller, the proposed installer, and an existing installer. The target reader app itself is not the certificate comparison's central party.
+It would be misleading to present `pm set-installer` as an equivalent, unrestricted shortcut. The [Android API documentation](<https://developer.android.com/reference/android/content/pm/PackageManager#setInstallerPackageName(java.lang.String,%20java.lang.String)>) describes certificate checks involving the caller, the proposed installer, and an existing installer. The target reader app itself is not the certificate comparison's central party.
 
 Shizuku's shell identity does not make those checks disappear. The experimentally supported non-root route here is specifying provenance during installation, followed by policy recomputation, rather than assuming arbitrary post-install edits are accepted.
 
@@ -438,13 +438,13 @@ Root also creates other possible intervention points, but none were implemented 
 
 ::: table align="center" title="Untested root intervention points"
 
-| Approach | Relevant location | Main boundary |
-|---|---|---|
-| Set the full-access flag through a runtime hook | NFC process, `TagInfoHelper` | Requires compatible process injection; broad exemption |
-| Override provenance for a selected app | Security Center, `NfcAccessManager.y(String)` | Policy must be recomputed; blacklist takes precedence |
-| Override allowlist matching for a selected caller | Inlined logic in NFC `transceive()` | Must target the real compiled path |
-| Edit the computed database list | `NfcAccess.db`, `nfc_access_app_list` | Recalculation may overwrite it; cache and SQLite WAL matter |
-| Patch DEX instructions | The actual comparison or rejection branch | System APK signatures, optimized artifacts, and updates complicate deployment |
+| Approach                                          | Relevant location                             | Main boundary                                                                 |
+| ------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------- |
+| Set the full-access flag through a runtime hook   | NFC process, `TagInfoHelper`                  | Requires compatible process injection; broad exemption                        |
+| Override provenance for a selected app            | Security Center, `NfcAccessManager.y(String)` | Policy must be recomputed; blacklist takes precedence                         |
+| Override allowlist matching for a selected caller | Inlined logic in NFC `transceive()`           | Must target the real compiled path                                            |
+| Edit the computed database list                   | `NfcAccess.db`, `nfc_access_app_list`         | Recalculation may overwrite it; cache and SQLite WAL matter                   |
+| Patch DEX instructions                            | The actual comparison or rejection branch     | System APK signatures, optimized artifacts, and updates complicate deployment |
 
 :::
 
@@ -457,3 +457,11 @@ The two APKs are sufficient to establish the central connection between installe
 The remaining questions are specific: which APDU failed in the original test, which package owns the special exemption Provider, what the current database and remote configuration contain, and how this ROM's framework handles suspended-package Toasts and failed `TransceiveResult` objects.
 
 The useful distinction is between three layers: **Security Center generates policy, the NFC service enforces it before communication, and the UI reports the decision afterward.** Changing installer metadata affects the first layer. Suppressing the Toast affects the last. Only the former explains the restored card-reading behavior observed in the installation experiment.
+
+## Legal Notice {#legal}
+
+This research was conducted on my own device using my own test applications. It is intended for educational purposes and legitimate security research. The discussion of bypass mechanisms does not imply an endorsement of their use. Users are responsible for complying with applicable laws and terms of service when interacting with devices and software.
+
+Third-party names, trademarks, code excerpts, and other copyrighted materials remain the property of their respective owners. They are referenced for identification, commentary, interoperability analysis, and security research. I have no affiliation with Xiaomi Corporation or its subsidiaries, affiliates, or related entities, and this research was not commissioned, sponsored, or authorized by them. No endorsement by Xiaomi Corporation or any other rights holder is implied.
+
+If you believe that material on this page infringes your copyright or other rights, please send a good-faith notice through the contact channel published on this site. Include the protected work, the material at issue and its location, your contact information, and the basis for your claim. Notices will be reviewed, and material may be corrected, attributed, restricted, or removed as appropriate. Knowingly submitting a false or misleading claim may have legal consequences.

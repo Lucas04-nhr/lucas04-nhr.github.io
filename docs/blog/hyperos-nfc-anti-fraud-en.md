@@ -11,10 +11,11 @@ tags:
 ---
 
 ::: note Translation
+The analysis and investigation were performed by Codex and manually verified. The conclusions are for reference only.
 See the Chinese version here: [HyperOS 的 NFC 反诈检查机制的逆向分析](/blog/hyperos-nfc-anti-fraud-cn/).
 :::
 
-On my Xiaomi phone running HyperOS 4 with Android 17, an NFC reader could read one card normally but failed when I tried a UnionPay card. The system displayed:
+On my Xiaomi phone running HyperOS 4 with Android 17, an NFC reader could read one MasterCard EMV card normally but failed when I tried a UnionPay card. The system displayed:
 
 > This app came from an untrusted source. NFC card reading isn't available.
 
@@ -46,10 +47,10 @@ The analysis covered these exact samples:
 
 ::: table align="center" title="Analyzed APK samples"
 
-| File                     | Package                   | Version                                                   |
-| ------------------------ | ------------------------- | --------------------------------------------------------- |
-| `XMNfcNci.apk`           | `com.android.nfc`         | Version name `17`, version code `37`, target/min SDK `37` |
-| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `13.5.8-260908.0.1`, version code `40001358`              |
+| File                     | Package                   | Version Code     | Path             |
+| ------------------------ | ------------------------- | ---------------- | ---------------- |
+| `XMNfcNci.apk`           | `com.android.nfc`         | `37`             | `/system/app/XMNfcNci/XMNfcNci.apk` |
+| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `40001358`       | `/product/priv-app/MIUISecurityCenter/MIUISecurityCenter.apk` |
 
 :::
 
@@ -63,7 +64,7 @@ MIUISecurityCenter.apk
 9b6c7a3ed636d43d8a279744caacca549f9743ec59f128f6c3e802de72e4816e
 ```
 
-The work used a custom DEX parser, Androguard disassembly and DAD decompilation, and decoded manifests and resources. Instruction boundaries agreed between the two decoders for 255 relevant methods with code.
+The work used a custom DEX parser on Codex Cloud, Androguard disassembly and DAD decompilation, and decoded manifests and resources. Instruction boundaries agreed between the two decoders for 255 relevant methods with code.
 
 That agreement validates instruction decoding, not every line of generated Java. Some DAD output contained incorrect variable types and incomplete control flow. The Java below is **reconstructed pseudocode**, checked against DEX branches, rather than original source or directly compilable decompiler output.
 
@@ -191,7 +192,7 @@ The relevant entry point returns a Bundle whose `accessValue` entry contains a J
 
 ::: code-tabs
 
-@tab Provider pseudocode
+@tab provider.java
 
 ```java
 Bundle call(String method, String arg, Bundle extras) {
@@ -203,7 +204,7 @@ Bundle call(String method, String arg, Bundle extras) {
 }
 ```
 
-@tab JSON schema example
+@tab response.json
 
 ```json
 {

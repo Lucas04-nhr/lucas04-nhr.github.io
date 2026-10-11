@@ -11,12 +11,13 @@ tags:
 ---
 
 ::: note 英文版
+分析和调查均由 Codex 完成并由人工核对，相关结论仅供参考。
 本文的英文版见 [Reverse Engineering HyperOS NFC Anti-Fraud Checks](/blog/hyperos-nfc-anti-fraud-en/)。
 :::
 
-在我运行 HyperOS 4、Android 17 的小米手机上，一款 NFC 读卡应用可以正常读取一张测试卡，但读取银联卡时却失败了。系统提示：
+在我运行 HyperOS 4、Android 17 的小米手机上，一款 NFC 读卡应用可以正常读取一张 MasterCard 银行卡，但读取银联卡时却失败了。系统提示：
 
-> 此应用来自不可信来源，无法使用 NFC 读卡功能。
+> 此应用来自不可信来源，无法使用 NFC 读卡功能
 
 通过 ADB 更改应用记录的安装来源后，银联卡恢复了正常读取。安装来源因此成了最直接的调查线索，但限制究竟在哪一层生效，仍不清楚：是安全中心拒绝了请求，还是 NFC 服务拦截了指令？抑或这条提示只是对其他故障的描述？
 
@@ -46,10 +47,10 @@ tags:
 
 ::: table align="center" title="分析使用的 APK 样本"
 
-| 文件 | 包名 | 版本 |
-| --- | --- | --- |
-| `XMNfcNci.apk` | `com.android.nfc` | 版本名称 `17`，版本号 `37`，目标与最低 SDK 均为 `37` |
-| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `13.5.8-260908.0.1`，版本号 `40001358` |
+| 文件 | 包名 | 版本号 | 路径 |
+| --- | --- | --- | --- |
+| `XMNfcNci.apk` | `com.android.nfc` | `37` | `/system/app/XMNfcNci/XMNfcNci.apk` |
+| `MIUISecurityCenter.apk` | `com.miui.securitycenter` | `40001358` | `/product/priv-app/MIUISecurityCenter/MIUISecurityCenter.apk` |
 
 :::
 
@@ -63,7 +64,7 @@ MIUISecurityCenter.apk
 9b6c7a3ed636d43d8a279744caacca549f9743ec59f128f6c3e802de72e4816e
 ```
 
-分析使用了自定义 DEX 解析器、Androguard 反汇编和 DAD 反编译，并解码了清单文件与资源。对 255 个包含代码的相关方法，两套解码器识别出的指令边界一致。
+分析使用了ChatGPT Work 的自定义 DEX 解析器、Androguard 反汇编和 DAD 反编译，并解码了清单文件与资源。对 255 个包含代码的相关方法，两套解码器识别出的指令边界一致。
 
 这种一致性验证的是指令解码结果，而不是生成的 Java 代码中每一行的正确性。部分 DAD 输出存在变量类型错误或控制流不完整的问题。下文的 Java 是结合 DEX 分支核对后**重建的伪代码**，并非原始源码，也不是可以直接编译的反编译结果。
 
@@ -191,7 +192,7 @@ content://com.miui.securitycenter.NfcAccessProvider
 
 ::: code-tabs
 
-@tab Provider 伪代码
+@tab provider.java
 
 ```java
 Bundle call(String method, String arg, Bundle extras) {
@@ -203,7 +204,7 @@ Bundle call(String method, String arg, Bundle extras) {
 }
 ```
 
-@tab JSON 结构示例
+@tab response.json
 
 ```json
 {

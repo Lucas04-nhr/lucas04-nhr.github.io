@@ -12,7 +12,8 @@ tags:
 
 ::: note Translation
 The analysis and investigation were performed by Codex and manually verified. The conclusions are for reference only.
-See the Chinese version here: [HyperOS 的 NFC 反诈检查机制的逆向分析](/blog/hyperos-nfc-anti-fraud-cn/).
+
+This is the original English version. The Chinese version, automatically translated by AI, can be found here: [HyperOS 的 NFC 反诈检查机制的逆向分析](/blog/hyperos-nfc-anti-fraud-cn/).
 :::
 
 On my Xiaomi phone running HyperOS 4 with Android 17, an NFC reader could read one MasterCard EMV card normally but failed when I tried a UnionPay card. The system displayed:

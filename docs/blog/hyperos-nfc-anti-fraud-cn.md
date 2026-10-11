@@ -12,7 +12,8 @@ tags:
 
 ::: note 英文版
 分析和调查均由 Codex 完成并由人工核对，相关结论仅供参考。
-本文的英文版见 [Reverse Engineering HyperOS NFC Anti-Fraud Checks](/blog/hyperos-nfc-anti-fraud-en/)。
+
+本文原始版本由英文撰写，见 [Reverse Engineering HyperOS NFC Anti-Fraud Checks](/blog/hyperos-nfc-anti-fraud-en/)。
 :::
 
 在我运行 HyperOS 4、Android 17 的小米手机上，一款 NFC 读卡应用可以正常读取一张 MasterCard 银行卡，但读取银联卡时却失败了。系统提示：

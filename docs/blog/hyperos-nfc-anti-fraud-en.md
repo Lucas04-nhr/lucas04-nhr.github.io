@@ -1,7 +1,7 @@
 ---
 title: Reverse Engineering HyperOS NFC Anti-Fraud Checks
 createTime: 2026/10/11 23:43:53
-permalink: /blog/hyperos-nfc-anti-fraud/
+permalink: /blog/hyperos-nfc-anti-fraud-en/
 excerpt: Tracing how Xiaomi Security Center turns installer metadata into an allowlist, and how the NFC service blocks selected payment APDUs before they reach a card.
 tags:
   - Android
@@ -9,6 +9,10 @@ tags:
   - NFC
   - HyperOS
 ---
+
+::: note Translation
+See the Chinese version here: [HyperOS 的 NFC 反诈检查机制的逆向分析](/blog/hyperos-nfc-anti-fraud-cn/).
+:::
 
 On my Xiaomi phone running HyperOS 4 with Android 17, an NFC reader could read one card normally but failed when I tried a UnionPay card. The system displayed:
 

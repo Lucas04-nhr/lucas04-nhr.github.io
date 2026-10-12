@@ -21,7 +21,7 @@ copyright: false
 
 ---
 
-I'm a passionate graduate student at Huazhong University of Copenhagen (Københavns Universitet, KU), majoring in Bioinformatics.
+I'm a passionate graduate student at University of Copenhagen (Københavns Universitet, KU), majoring in Bioinformatics.
 
 ## About Me {#basic}
 

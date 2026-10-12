@@ -104,10 +104,12 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 
 ## Verification and Delivery
 
-- Check `git status` and diffs before and after editing, preserving the user's existing changes. Report what changed, which checks ran, and what remains unverified.
-- For repository documentation changes such as this file, verify content, paths, commands, and `git diff --check`. A full site build is unnecessary.
-- After changing articles or site code, run `pnpm docs:build`. Inspect build errors and new or affected warnings. Report environmental limitations honestly if the build cannot finish; do not claim it passed.
-- For changes to equations, containers, Vue components, assets, or styles, inspect affected pages through the development server or build preview. A successful build alone does not confirm correct formula rendering, remote images, or interactions.
-- VuePress automatically fills in titles and creation times. After starting or building the site, check for unrelated Markdown changes. Handle only changes introduced by the task and preserve user edits.
+- Perform verification of any kind only when the user explicitly requests it or explicitly agrees after being asked. An instruction to edit files does not authorize verification. This applies to status and diff checks, `git diff --check`, content and path validation, tests, type checks, local builds such as `pnpm docs:build`, and browser inspection. There is no exemption for local builds. Read files as needed to make the requested edits, and preserve the user's existing changes.
+- For repository documentation changes such as this file, when verification is authorized, verify content, paths, commands, and `git diff --check`. A full site build is unnecessary.
+- After changing articles or site code, run `pnpm docs:build` only when build verification is explicitly authorized. Inspect build errors and new or affected warnings within that authorized scope. Report environmental limitations honestly if the build cannot finish; do not claim it passed.
+- Do not start a local development or preview server to connect a browser and inspect page appearance or interactions without the user's explicit permission for that verification.
+- For changes to equations, containers, Vue components, assets, or styles, inspect affected pages through the development server or build preview only when that browser verification and starting the local server are explicitly authorized. Otherwise, report browser verification as unperformed. A successful build alone does not confirm correct formula rendering, remote images, or interactions.
+- VuePress automatically fills in titles and creation times. After an authorized server start or build, check for unrelated Markdown changes only when such checks are also authorized. Handle only changes introduced by the task and preserve user edits.
+- Report what changed, which authorized checks ran, and what remains unverified. If no verification was authorized, state that none was performed.
 - Pushing to `main` currently triggers deployment. Keep commits, pushes, publishing, and dependency upgrades within the user's requested scope; completing a local edit does not itself authorize deployment.
 - When the user explicitly asks Codex to push changes, include `Co-authored-by: Codex <noreply@openai.com>` in the commits created for that push by default, unless the user requests otherwise.

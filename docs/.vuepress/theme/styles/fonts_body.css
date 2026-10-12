@@ -1,4 +1,49 @@
 @font-face {
+  font-family: "Macintosh Skeletal";
+  src: url("https://static.lucas04.top/MacintoshSkeletalJoined/MacintoshSkeletalVariableJoined-Thin.woff2")
+    format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Macintosh Skeletal";
+  src: url("https://static.lucas04.top/MacintoshSkeletalJoined/MacintoshSkeletalVariableJoined-Light.woff2")
+    format("woff2");
+  font-weight: 270;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Macintosh Skeletal";
+  src: url("https://static.lucas04.top/MacintoshSkeletalJoined/MacintoshSkeletalVariableJoined-Regular.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Macintosh Skeletal";
+  src: url("https://static.lucas04.top/MacintoshSkeletalJoined/MacintoshSkeletalVariableJoined-Bold.woff2")
+    format("woff2");
+  font-weight: 690;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Macintosh Skeletal";
+  src: url("https://static.lucas04.top/MacintoshSkeletalJoined/MacintoshSkeletalVariableJoined-Black.woff2")
+    format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Maple Mono Normal";
   src: url("https://static.lucas04.top/MapleMono/MapleMono-Regular.woff2")
     format("woff2");
@@ -279,6 +324,12 @@ summary {
   font-weight: 400;
   /* allow variable font axes if supported */
   font-variation-settings: "wght" 500;
+}
+
+.vp-home-hero .hero-name {
+  font-family: "Macintosh Skeletal", var(--site-body-font-fallback);
+  font-weight: 690;
+  font-variation-settings: normal;
 }
 
 /* Mermaid measures HTML labels before a remote webfont has necessarily

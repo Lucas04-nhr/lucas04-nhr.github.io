@@ -18,7 +18,13 @@ config:
         offset: 36
     hero:
       name: Hi~
-      tagline: '<picture><source media="(prefers-color-scheme: dark)" srcset="https://static.lucas04.top/typing_night.svg"><source media="(prefers-color-scheme: light)" srcset="https://static.lucas04.top/typing_day.svg"><img src="https://static.lucas04.top/typing_day.svg" alt="Ad astra abyssosque."></picture>'
+      tagline: >-
+        <picture><source media="(prefers-color-scheme: dark)"
+        srcset="https://static.lucas04.top/typing_night.svg"><source
+        media="(prefers-color-scheme: light)"
+        srcset="https://static.lucas04.top/typing_day.svg"><img
+        src="https://static.lucas04.top/typing_day.svg" alt="Ad astra
+        abyssosque."></picture>
       actions:
         - theme: brand
           icon: mdi:blog
@@ -32,4 +38,5 @@ config:
           icon: mdi:github
           text: Source Code →
           link: https://github.com/Lucas04-nhr/lucas04-nhr.github.io
+title: Home
 ---

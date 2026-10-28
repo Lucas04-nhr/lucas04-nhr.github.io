@@ -6,7 +6,6 @@ tags:
   - KU
   - Biological Sequence Analysis
 excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about position-specific weight matrices in biological sequence analysis, from splice-site counts and log-odds scores to motif scanning, classification errors, information content, and sequence logos.
-preview: true
 ---
 
 A splice donor site often begins with `GT`, but a genome contains many `GT` dinucleotides that are not splice sites. The interesting question is not merely whether a short pattern is present. It is whether the *surrounding sequence* resembles the collection of known functional sites more than it resembles ordinary background DNA.

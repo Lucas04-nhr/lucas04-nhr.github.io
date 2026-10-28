@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@12.16.1",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "GPLv3",
   "scripts": {
@@ -33,7 +33,7 @@
     "@simonwep/pickr": "^1.10.2",
     "@vuepress/shiki-twoslash": "2.0.0-rc.135",
     "artplayer": "^5.4.0",
-    "chart.js": "^4.5.1",
+    "chart.js": "^4.6.1",
     "dashjs": "^5.2.1",
     "echarts": "^6.1.0",
     "flowchart.ts": "^3.0.1",

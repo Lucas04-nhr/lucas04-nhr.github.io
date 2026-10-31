@@ -15,3 +15,4 @@ The summarization of each course is available in the [blog](/blog/tags/?tag=KU) 
 ## Table of Contents
 
 - [Advanced Bioinformatics for NGS](/docs/ku/advbinf/)
+- [Biological Sequence Analysis](/docs/ku-bsa/)

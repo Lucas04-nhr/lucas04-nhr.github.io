@@ -23,6 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
+# Agent files
+*claude
+
+# Figures
+*.jpg
+*.png
+*.gif
+
 # Dependency directories
 node_modules
 .pnpm-store

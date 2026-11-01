@@ -132,8 +132,8 @@ onBeforeUnmount(() => { mounted = false; reset(); clearTimeout(feedback); });
   --confirm-on-danger: var(--vp-c-white);
   --confirm-sweep: color-mix(in srgb, var(--vp-c-danger-1) 72%, #000);
 }
-:global(html.dark) .gacha-confirm-button,
-:global(:root[data-theme="dark"]) .gacha-confirm-button {
+html.dark .gacha-confirm-button,
+:root[data-theme="dark"] .gacha-confirm-button {
   --confirm-on-danger: var(--vp-c-bg);
   --confirm-sweep: var(--vp-c-danger-2);
 }

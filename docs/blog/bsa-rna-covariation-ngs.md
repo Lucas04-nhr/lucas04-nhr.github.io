@@ -149,12 +149,12 @@ flowchart TD
     D --> E[Search new sequences]
     E --> F[Identify RNA-family homologs]
 
-    style A fill:#66a9c9
-    style B fill:#51c4d3
-    style C fill:#66a9c9
-    style D fill:#2982ba
-    style E fill:#51c4d3
-    style F fill:#66a9c9
+    style A fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
+    style B fill:#2f8fbf14,stroke:#2f8fbf,stroke-width:1.5px
+    style C fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
+    style D fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2px
+    style E fill:#2f8fbf14,stroke:#2f8fbf,stroke-width:1.5px
+    style F fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
 ```
 
 This allows homology detection even when exact sequence conservation is weak but structural constraints remain strong.
@@ -214,15 +214,15 @@ flowchart TD
     G --> H[VCF]
     H --> I[Downstream analysis]
 
-    style A fill:#66a9c9
-    style B fill:#51c4d3
-    style C fill:#66a9c9
-    style D fill:#2982ba
-    style E fill:#51c4d3
-    style F fill:#2982ba
-    style G fill:#66a9c9
-    style H fill:#2982ba
-    style I fill:#51c4d3
+    style A fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
+    style B fill:#2f8fbf14,stroke:#2f8fbf,stroke-width:1.5px
+    style C fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
+    style D fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2px
+    style E fill:#2f8fbf14,stroke:#2f8fbf,stroke-width:1.5px
+    style F fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2px
+    style G fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px
+    style H fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2px
+    style I fill:#2f8fbf14,stroke:#2f8fbf,stroke-width:1.5px
 ```
 
 The main file types correspond to different stages of the analysis:

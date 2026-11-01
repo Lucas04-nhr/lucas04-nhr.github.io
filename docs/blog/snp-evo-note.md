@@ -123,17 +123,17 @@ graph TD
     Output --> Fig3[密度树<br/>显示不确定性]
     Output --> Fig4[分面树<br/>按门/功能分组]
 
-    style Start fill:#e1f5ff
-    style QC fill:#fff4e1
-    style Extract fill:#fff4e1
-    style Align fill:#ffe1f5
-    style HGT fill:#ffebee
-    style PhyloTree fill:#e8f5e9
-    style MolClock fill:#f3e5f5
-    style Visualize fill:#fff9c4
-    style Output fill:#c8e6c9
+    style Start fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:2px
+    style QC fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Extract fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Align fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
+    style HGT fill:#7d859029,stroke:#7d8590,stroke-width:2px
+    style PhyloTree fill:#2b946029,stroke:#2b9460,stroke-width:2px
+    style MolClock fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
+    style Visualize fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Output fill:#2b946052,stroke:#2b9460,stroke-width:3px
 
-    classDef software fill:#ffccbc,stroke:#bf360c,stroke-width:2px
+    classDef software fill:#c8690f29,stroke:#c8690f,stroke-width:2px,stroke-dasharray:5 3
     class QC1,QC2,ExtractA,ExtractB,CoreGene,Align1,Align2,Align3,HGT1,HGT2,ML1,ML2,ML3,TimeSignal,Clock1,Clock2,Clock3,Convergence,TimeTree2,Vis1,Vis2,Vis3,Vis4 software
 ```
 
@@ -200,17 +200,17 @@ flowchart LR
     Start --> QC --> Annotate --> CoreGene --> Align --> PhyloTree --> MolClock --> Visualize --> Output
 
     %% ===== 颜色与样式（与示例配色相似） =====
-    style Start fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b
-    style QC fill:#fff4e1,stroke:#ffb74d,stroke-width:2px,color:#e65100
-    style Annotate fill:#fff4e1,stroke:#ffb74d,stroke-width:2px,color:#e65100
-    style CoreGene fill:#fff4e1,stroke:#ffb74d,stroke-width:2px,color:#e65100
-    style Align fill:#ffe1f5,stroke:#f06292,stroke-width:2px,color:#ad1457
-    style PhyloTree fill:#e8f5e9,stroke:#66bb6a,stroke-width:2px,color:#1b5e20
-    style MolClock fill:#f3e5f5,stroke:#ab47bc,stroke-width:2px,color:#4a148c
-    style Visualize fill:#fff9c4,stroke:#fdd835,stroke-width:2px,color:#f57f17
-    style Output fill:#c8e6c9,stroke:#43a047,stroke-width:3px,color:#1b5e20
+    style Start fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:2px
+    style QC fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Annotate fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style CoreGene fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Align fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
+    style PhyloTree fill:#2b946029,stroke:#2b9460,stroke-width:2px
+    style MolClock fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
+    style Visualize fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style Output fill:#2b946052,stroke:#2b9460,stroke-width:3px
 
-    classDef software fill:#ffccbc,stroke:#bf360c,stroke-width:2px,color:#3e2723
+    classDef software fill:#c8690f29,stroke:#c8690f,stroke-width:2px,stroke-dasharray:5 3
     class QC,Annotate,CoreGene,Align,PhyloTree,MolClock,Visualize software
 ```
 

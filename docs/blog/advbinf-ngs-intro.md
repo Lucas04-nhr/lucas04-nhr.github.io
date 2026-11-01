@@ -31,9 +31,9 @@ flowchart LR
   class A,B,C soft;
   class D,E primary;
   class F accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 The diagram groups the workflow into two compact stages: **data generation** and **reference-based analysis**. The same distinction is used throughout this note.
@@ -545,9 +545,9 @@ flowchart TB
   class A soft;
   class B,C primary;
   class D accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 The practical exercises compare different BWA workflows.
@@ -622,9 +622,9 @@ flowchart TB
   class A soft;
   class B,C primary;
   class D accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 ---
@@ -1096,9 +1096,9 @@ flowchart LR
   class A soft;
   class B,C primary;
   class D accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 ---
@@ -1220,9 +1220,9 @@ flowchart LR
   class A soft;
   class B,C,D,E primary;
   class F accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 This integrates the biological properties of ancient DNA with the computational workflow used to detect them.
@@ -1293,9 +1293,9 @@ flowchart LR
   class A,B,C soft;
   class D,E primary;
   class F accent;
-  classDef accent fill:#66a9c9,stroke:#2982ba,color:#ffffff,stroke-width:1.5px;
-  classDef primary fill:#dff3f5,stroke:#51c4d3,color:#244b5a,stroke-width:1.5px;
-  classDef soft fill:#f2f9fb,stroke:#66a9c9,color:#3c3c43,stroke-width:1.2px;
+  classDef accent fill:#2f8fbf52,stroke:#2f8fbf,stroke-width:2.5px;
+  classDef primary fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef soft fill:#7d85901f,stroke:#7d8590,stroke-width:1.2px;
 ```
 
 ---

@@ -131,8 +131,8 @@ flowchart LR
   SW --> SW3[Traceback starts at highest-scoring cell]
   SW --> SW4[Best for shared motifs or conserved regions]
 
-  classDef global fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-  classDef local fill:#dcfce7,stroke:#16a34a,color:#14532d;
+  classDef global fill:#2f8fbf29,stroke:#2f8fbf,stroke-width:1.5px;
+  classDef local fill:#2b946029,stroke:#2b9460,stroke-width:1.5px;
   class NW,NW1,NW2,NW3,NW4 global;
   class SW,SW1,SW2,SW3,SW4 local;
 ```

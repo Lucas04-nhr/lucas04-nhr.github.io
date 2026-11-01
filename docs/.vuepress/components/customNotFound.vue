@@ -139,17 +139,17 @@ html.dark .not-found__desc,
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease;
-  border: 1px solid var(--vp-c-brand, #5b9bd5);
+  border: 1px solid var(--vp-c-brand-1, #306b88);
 }
 
 .not-found__actions .vp-button.brand {
-  background: var(--vp-c-brand, #5b9bd5);
+  background: var(--vp-c-brand-1, #306b88);
   color: var(--vp-button-brand-text, #fff);
 }
 
 .not-found__actions .vp-button.alt {
   background: transparent;
-  color: var(--vp-c-brand, #5b9bd5);
+  color: var(--vp-c-brand-1, #306b88);
 }
 
 .not-found__actions .vp-button:hover {

@@ -895,7 +895,7 @@ onBeforeUnmount(() => {
   padding: 0;
   color: var(--vp-button-brand-text, var(--vp-c-white));
   cursor: pointer;
-  opacity: 0.55;
+  opacity: 0.8;
   background-color: var(--vp-c-brand-1);
   border: 0;
   border-radius: 50%;
@@ -1015,7 +1015,7 @@ onBeforeUnmount(() => {
 .assistant-message.user { align-self: flex-end; color: var(--vp-button-brand-text, var(--vp-c-white)); background: var(--vp-c-brand-1); border-bottom-right-radius: 4px; }
 .assistant-message.user :deep(*) { color: inherit; }
 .assistant-message.user :deep(a) { text-decoration-color: currentcolor; }
-.assistant-message.user :deep(code) { background: color-mix(in srgb, currentColor 16%, transparent); }
+.assistant-message.user :deep(code) { background: color-mix(in srgb, currentColor 10%, transparent); }
 
 .assistant-results,
 .assistant-suggestions { display: flex; width: min(100%, 360px); flex-direction: column; gap: 6px; }

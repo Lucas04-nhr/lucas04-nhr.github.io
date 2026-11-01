@@ -893,7 +893,7 @@ onBeforeUnmount(() => {
   width: 36px;
   height: 36px;
   padding: 0;
-  color: var(--vp-c-white);
+  color: var(--vp-button-brand-text, var(--vp-c-white));
   cursor: pointer;
   opacity: 0.55;
   background-color: var(--vp-c-brand-1);
@@ -907,7 +907,7 @@ onBeforeUnmount(() => {
 .algolia-ai-assistant.open .assistant-fab,
 .assistant-fab:hover,
 .assistant-fab:focus-visible {
-  color: var(--vp-c-white);
+  color: var(--vp-button-brand-text, var(--vp-c-white));
   opacity: 1;
 }
 
@@ -1012,10 +1012,10 @@ onBeforeUnmount(() => {
 .assistant-message :deep(pre code) { font-family: var(--vp-font-family-mono); font-size: 0.86em; white-space: pre; }
 
 .assistant-message.assistant { align-self: flex-start; background: var(--vp-c-bg-soft); border-bottom-left-radius: 4px; }
-.assistant-message.user { align-self: flex-end; color: var(--vp-c-white); background: var(--vp-c-brand-1); border-bottom-right-radius: 4px; }
+.assistant-message.user { align-self: flex-end; color: var(--vp-button-brand-text, var(--vp-c-white)); background: var(--vp-c-brand-1); border-bottom-right-radius: 4px; }
 .assistant-message.user :deep(*) { color: inherit; }
 .assistant-message.user :deep(a) { text-decoration-color: currentcolor; }
-.assistant-message.user :deep(code) { background: rgb(255 255 255 / 16%); }
+.assistant-message.user :deep(code) { background: color-mix(in srgb, currentColor 16%, transparent); }
 
 .assistant-results,
 .assistant-suggestions { display: flex; width: min(100%, 360px); flex-direction: column; gap: 6px; }
@@ -1080,7 +1080,7 @@ onBeforeUnmount(() => {
 .assistant-form:focus-within { border-color: var(--vp-c-brand-1); }
 .assistant-form textarea { min-height: 34px; max-height: 96px; padding: 7px 0; overflow-y: auto; color: var(--vp-c-text-1); resize: none; background: transparent; border: 0; flex: 1; font: inherit; font-size: 14px; line-height: 20px; }
 .assistant-form textarea:focus { outline: 0; }
-.assistant-form button { display: grid; width: 34px; height: 34px; padding: 0; color: var(--vp-c-white); cursor: pointer; background: var(--vp-c-brand-1); border: 0; border-radius: 10px; place-items: center; }
+.assistant-form button { display: grid; width: 34px; height: 34px; padding: 0; color: var(--vp-button-brand-text, var(--vp-c-white)); cursor: pointer; background: var(--vp-c-brand-1); border: 0; border-radius: 10px; place-items: center; }
 .assistant-form button:disabled { cursor: not-allowed; opacity: 0.45; }
 .assistant-form button svg { width: 18px; height: 18px; fill: currentcolor; }
 .assistant-disclaimer { margin: 6px 0 8px; color: var(--vp-c-text-3); font-size: 10px; text-align: center; }

@@ -442,8 +442,12 @@ onMounted(() => {
 
 <style scoped>
 .china-user-check {
-  --check-accent: #2563eb;
-  --check-accent-soft: rgba(37, 99, 235, 0.1);
+  --check-accent: #1d4ed8;
+  --check-accent-soft: rgba(29, 78, 216, 0.1);
+  --check-on-accent: #ffffff;
+  --check-mainland: #b91c1c;
+  --check-suspected: #92400e;
+  --check-non-mainland: #166534;
   --check-border: rgba(100, 116, 139, 0.22);
   --check-muted: #64748b;
   --check-card: rgba(255, 255, 255, 0.72);
@@ -453,23 +457,23 @@ onMounted(() => {
 }
 
 .china-user-check.is-mainland {
-  --check-accent: #dc2626;
-  --check-accent-soft: rgba(220, 38, 38, 0.12);
+  --check-accent: var(--check-mainland);
+  --check-accent-soft: color-mix(in srgb, var(--check-mainland) 12%, transparent);
 }
 
 .china-user-check.is-suspected-mainland {
-  --check-accent: #d97706;
-  --check-accent-soft: rgba(217, 119, 6, 0.12);
+  --check-accent: var(--check-suspected);
+  --check-accent-soft: color-mix(in srgb, var(--check-suspected) 12%, transparent);
 }
 
 .china-user-check.is-non-mainland {
-  --check-accent: #16a34a;
-  --check-accent-soft: rgba(22, 163, 74, 0.12);
+  --check-accent: var(--check-non-mainland);
+  --check-accent-soft: color-mix(in srgb, var(--check-non-mainland) 12%, transparent);
 }
 
 .china-user-check.is-checking-internal-rule {
-  --check-accent: #64748b;
-  --check-accent-soft: rgba(100, 116, 139, 0.12);
+  --check-accent: #475569;
+  --check-accent-soft: rgba(71, 85, 105, 0.12);
 }
 
 .result-panel {
@@ -574,7 +578,7 @@ onMounted(() => {
   border: 1px solid var(--check-accent);
   border-radius: 6px;
   background: var(--check-accent);
-  color: #ffffff;
+  color: var(--check-on-accent);
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
@@ -695,17 +699,17 @@ onMounted(() => {
 }
 
 .result-mainland-like {
-  color: #dc2626;
+  color: var(--check-mainland);
   font-weight: 700;
 }
 
 .result-non-mainland {
-  color: #16a34a;
+  color: var(--check-non-mainland);
   font-weight: 700;
 }
 
 .result-suspected-mainland {
-  color: #d97706;
+  color: var(--check-suspected);
   font-weight: 700;
 }
 
@@ -726,6 +730,22 @@ html.dark .china-user-check,
   --check-border: rgba(148, 163, 184, 0.32);
   --check-muted: #cbd5e1;
   --check-card: rgba(15, 23, 42, 0.45);
+  --check-on-accent: var(--vp-c-bg);
+  --check-mainland: #f87171;
+  --check-suspected: #fbbf24;
+  --check-non-mainland: #22c55e;
+}
+
+html.dark .china-user-check:not(.is-mainland, .is-suspected-mainland, .is-non-mainland, .is-checking-internal-rule),
+:root[data-theme="dark"] .china-user-check:not(.is-mainland, .is-suspected-mainland, .is-non-mainland, .is-checking-internal-rule) {
+  --check-accent: #60a5fa;
+  --check-accent-soft: rgba(96, 165, 250, 0.1);
+}
+
+html.dark .china-user-check.is-checking-internal-rule,
+:root[data-theme="dark"] .china-user-check.is-checking-internal-rule {
+  --check-accent: #94a3b8;
+  --check-accent-soft: rgba(148, 163, 184, 0.12);
 }
 
 html.dark .error-message,

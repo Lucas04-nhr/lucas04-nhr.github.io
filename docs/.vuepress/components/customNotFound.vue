@@ -108,6 +108,17 @@ const goBack = () => {
   line-height: 1.6;
 }
 
+/* The light-only inks above disappear on the dark background. */
+html.dark .not-found__title,
+:root[data-theme="dark"] .not-found__title {
+  color: var(--vp-c-text-1);
+}
+
+html.dark .not-found__desc,
+:root[data-theme="dark"] .not-found__desc {
+  color: var(--vp-c-text-2);
+}
+
 .not-found__actions {
   display: flex;
   gap: 12px;
@@ -133,7 +144,7 @@ const goBack = () => {
 
 .not-found__actions .vp-button.brand {
   background: var(--vp-c-brand, #5b9bd5);
-  color: #fff;
+  color: var(--vp-button-brand-text, #fff);
 }
 
 .not-found__actions .vp-button.alt {

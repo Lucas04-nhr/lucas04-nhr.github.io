@@ -93,8 +93,9 @@ onBeforeUnmount(stop);
 
 <style scoped>
 .progress-status {
-  --progress-accent: #64748b;
-  --progress-soft: rgba(100, 116, 139, 0.12);
+  --progress-accent: #475569;
+  --progress-soft: rgba(71, 85, 105, 0.12);
+  --progress-on-accent: #fff;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -119,12 +120,39 @@ onBeforeUnmount(stop);
 .progress-spinner { transform-origin: center; animation: progress-spin 1s linear infinite; }
 @keyframes progress-spin { to { transform: rotate(360deg); } }
 .progress-status.is-success {
-  --progress-accent: #16a34a;
-  --progress-soft: rgba(22, 163, 74, 0.12);
+  --progress-accent: #166534;
+  --progress-soft: rgba(22, 101, 52, 0.12);
 }
 .progress-status.is-error {
-  --progress-accent: #dc2626;
-  --progress-soft: rgba(220, 38, 38, 0.12);
+  --progress-accent: #b91c1c;
+  --progress-soft: rgba(185, 28, 28, 0.12);
+}
+/* Dark theme: lighter accents with dark text on filled buttons (all ≥ 4.5:1). */
+:global(html.dark) .progress-status,
+:global(:root[data-theme="dark"]) .progress-status {
+  --progress-accent: #94a3b8;
+  --progress-soft: rgba(148, 163, 184, 0.12);
+  --progress-on-accent: var(--vp-c-bg);
+}
+:global(html.dark) .progress-status.is-working,
+:global(:root[data-theme="dark"]) .progress-status.is-working {
+  --progress-accent: var(--vp-c-brand-1);
+  --progress-soft: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
+}
+:global(html.dark) .progress-status.is-warning,
+:global(:root[data-theme="dark"]) .progress-status.is-warning {
+  --progress-accent: var(--vp-c-warning-1);
+  --progress-soft: color-mix(in srgb, var(--vp-c-warning-1) 12%, transparent);
+}
+:global(html.dark) .progress-status.is-success,
+:global(:root[data-theme="dark"]) .progress-status.is-success {
+  --progress-accent: #22c55e;
+  --progress-soft: rgba(34, 197, 94, 0.12);
+}
+:global(html.dark) .progress-status.is-error,
+:global(:root[data-theme="dark"]) .progress-status.is-error {
+  --progress-accent: #f87171;
+  --progress-soft: rgba(248, 113, 113, 0.12);
 }
 .progress-title {
   display: flex;
@@ -166,7 +194,7 @@ onBeforeUnmount(stop);
 .progress-actions :deep(.vp-button.brand) {
   background: var(--progress-accent);
   border-color: var(--progress-accent);
-  color: #fff;
+  color: var(--progress-on-accent);
 }
 .progress-status.is-working .progress-actions :deep(.vp-button.brand:not(:disabled)) {
   opacity: 1;

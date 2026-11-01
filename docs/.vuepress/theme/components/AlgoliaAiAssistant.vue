@@ -1016,6 +1016,7 @@ onBeforeUnmount(() => {
 .assistant-message.user :deep(*) { color: inherit; }
 .assistant-message.user :deep(a) { text-decoration-color: currentcolor; }
 .assistant-message.user :deep(code) { background: color-mix(in srgb, currentColor 10%, transparent); }
+.assistant-message.user :deep(pre) { color: var(--vp-c-text-1); }
 
 .assistant-results,
 .assistant-suggestions { display: flex; width: min(100%, 360px); flex-direction: column; gap: 6px; }

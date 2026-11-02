@@ -73,7 +73,7 @@ Convert PDF files to different formats.
 Each tool has its own page and runs in your browser, so it measures your real route.
 
 ::: note
-Each tool runs when its page opens. Speed Test can use several hundred megabytes of data. Many of the tools contact third-party services directly, and those services see your IP address. Each page explains what it contacts.
+Each tool runs when its page opens. Speed Test can use several hundred megabytes of data. Many of the tools contact third-party services directly, and those services see your IP address. See the [Privacy Policy](/legal/privacy/#network-tools) for what each tool reads and contacts.
 :::
 
 <LinkCard

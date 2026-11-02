@@ -108,7 +108,7 @@ watch(running, (isRunning) => {
   --tool-warn: #92400e;
   --tool-bad: #b91c1c;
   --tool-border: rgba(100, 116, 139, 0.22);
-  --tool-muted: #64748b;
+  --tool-muted: #475569;
   --tool-card: rgba(255, 255, 255, 0.72);
   display: grid;
   grid-template-columns: minmax(0, 1fr);

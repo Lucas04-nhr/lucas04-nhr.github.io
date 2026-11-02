@@ -129,8 +129,8 @@ graph TD
     style Align fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
     style HGT fill:#7d859029,stroke:#7d8590,stroke-width:2px
     style PhyloTree fill:#2b946029,stroke:#2b9460,stroke-width:2px
-    style MolClock fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
-    style Visualize fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style MolClock fill:#8e5cd952,stroke:#8e5cd9,stroke-width:2px
+    style Visualize fill:#c8690f52,stroke:#c8690f,stroke-width:2px
     style Output fill:#2b946052,stroke:#2b9460,stroke-width:3px
 
     classDef software fill:#c8690f29,stroke:#c8690f,stroke-width:2px,stroke-dasharray:5 3
@@ -140,14 +140,14 @@ graph TD
 ::: note
 
 - 🔵 **浅蓝色**: 起始数据
-- 🟡 **浅黄色**: 数据预处理阶段
+- 🟠 **浅橙色**: 数据预处理阶段
 - 🟣 **浅紫色**: 序列比对
-- 🔴 **浅红色**: HGT检测
+- ⚪ **灰色**: HGT检测
 - 🟢 **浅绿色**: 系统发育树构建
 - 🟣 **紫色**: 分子钟分析
-- 🟡 **黄色**: 可视化
+- 🟠 **橙色**: 可视化
 - 🟢 **深绿色**: 最终输出
-- 🟠 **橙色边框**: 具体软件工具
+- 🟠 **橙色虚线边框**: 具体软件工具
 :::
 
 ## 进化树与分子钟 {#phylogenetic-tree-and-molecular-clock}
@@ -206,8 +206,8 @@ flowchart LR
     style CoreGene fill:#c8690f29,stroke:#c8690f,stroke-width:2px
     style Align fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
     style PhyloTree fill:#2b946029,stroke:#2b9460,stroke-width:2px
-    style MolClock fill:#8e5cd929,stroke:#8e5cd9,stroke-width:2px
-    style Visualize fill:#c8690f29,stroke:#c8690f,stroke-width:2px
+    style MolClock fill:#8e5cd952,stroke:#8e5cd9,stroke-width:2px
+    style Visualize fill:#c8690f52,stroke:#c8690f,stroke-width:2px
     style Output fill:#2b946052,stroke:#2b9460,stroke-width:3px
 
     classDef software fill:#c8690f29,stroke:#c8690f,stroke-width:2px,stroke-dasharray:5 3

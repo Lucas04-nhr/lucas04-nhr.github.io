@@ -553,7 +553,7 @@ onMounted(() => {
 .debug-loading {
   text-align: center;
   padding: 40px;
-  color: #6b7280;
+  color: var(--vp-c-text-2);
   font-size: 16px;
 }
 

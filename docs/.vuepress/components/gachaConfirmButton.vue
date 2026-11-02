@@ -128,8 +128,17 @@ onBeforeUnmount(() => { mounted = false; reset(); clearTimeout(feedback); });
 .sizing, .label { grid-area: 1 / 1; }
 .sizing { visibility: hidden; }
 .label { position: relative; z-index: 1; }
-.armed, .armed:hover { background: var(--vp-c-danger-1); border-color: var(--vp-c-danger-1); color: var(--vp-c-white); }
-.armed::before { content: ''; position: absolute; inset: 0; background: var(--vp-c-danger-3); transform: scaleX(0); transform-origin: left; }
+.gacha-confirm-button {
+  --confirm-on-danger: var(--vp-c-white);
+  --confirm-sweep: color-mix(in srgb, var(--vp-c-danger-1) 72%, #000);
+}
+html.dark .gacha-confirm-button,
+:root[data-theme="dark"] .gacha-confirm-button {
+  --confirm-on-danger: var(--vp-c-bg);
+  --confirm-sweep: var(--vp-c-danger-2);
+}
+.armed, .armed:hover { background: var(--vp-c-danger-1); border-color: var(--vp-c-danger-1); color: var(--confirm-on-danger); }
+.armed::before { content: ''; position: absolute; inset: 0; background: var(--confirm-sweep); transform: scaleX(0); transform-origin: left; }
 .holding::before { animation: confirm-hold 3s linear forwards; }
 @keyframes confirm-hold { to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .gacha-confirm-button { transition: none; } .holding::before { animation: none; transform: scaleX(1); } }

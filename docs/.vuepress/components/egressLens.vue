@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="done / PROBES.length"
+    :progress-range="[9000, 13000]"
     :button-text="finished ? 'Run again' : 'Start'"
     @run="start"
   >
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -594,11 +594,15 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return `${done.value} of ${probes.length} probes finished.`;
   if (!finished.value) {
-    return `${probes.length} probes, in mainland China and abroad, at AI services, over IPv4, IPv6, and WebRTC, show every exit your traffic takes. Nothing runs until you press Start.`;
+    return `${probes.length} probes, in mainland China and abroad, at AI services, over IPv4, IPv6, and WebRTC, show every exit your traffic takes.`;
   }
   return verdictKey.value
     ? `${exits.value.length} exits found across ${probes.length} probes.`
     : "Are you offline? An ad blocker may also be blocking the probes.";
+});
+
+onMounted(() => {
+  void start();
 });
 
 onBeforeUnmount(() => {

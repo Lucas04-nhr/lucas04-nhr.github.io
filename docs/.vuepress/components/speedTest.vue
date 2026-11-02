@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="progress"
+    :progress-range="[20000, 28000]"
     :error="error"
     :button-text="finished ? 'Test again' : 'Start'"
     stoppable
@@ -50,14 +50,14 @@
 
     <ul class="network-tool-notes">
       <li>The test connects directly to Cloudflare's speed test servers, so proxy rules may route it differently from other sites.</li>
-      <li>A run usually takes 10 to 25 seconds. On a fast line it can transfer several hundred megabytes, which counts toward metered data plans.</li>
+      <li>The test starts when this page opens. A run usually takes 10 to 25 seconds. On a fast line it can transfer several hundred megabytes, which counts toward metered data plans.</li>
       <li>Download and upload speeds exclude the ramp-up period. Latency under load measures bufferbloat.</li>
     </ul>
   </NetworkToolShell>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -145,7 +145,6 @@ const USE_TEXT: Record<string, [string, Tone]> = {
 
 const result = ref<SpeedResult>(emptyResult());
 const phase = ref("");
-const progress = ref(0);
 const running = ref(false);
 const finished = ref(false);
 const stopped = ref(false);
@@ -230,7 +229,7 @@ const summary = computed(() => {
       : "Latency under load could not be measured.";
   }
   if (stopped.value) return "Partial results stay on the page. Start again for a full run.";
-  return "Measures latency, download, upload, and bufferbloat. Nothing runs until you press Start.";
+  return "Measures latency, download, upload, and bufferbloat.";
 });
 
 const exitLine = computed(() => {
@@ -287,19 +286,13 @@ const start = async () => {
   error.value = null;
   result.value = emptyResult();
   usedBytes.value = 0;
-  progress.value = 0;
   coloCode.value = "";
   phase.value = "Measuring Latency...";
 
   void loadRoute(signal).catch(() => undefined);
 
   try {
-    const idle = await ping({
-      signal,
-      onSample: (_ms: number, index: number, total: number) => {
-        progress.value = (index / total) * 0.1;
-      },
-    });
+    const idle = await ping({ signal });
     if (signal.aborted) return;
 
     coloCode.value = idle.meta.colo;
@@ -309,9 +302,8 @@ const start = async () => {
     phase.value = "Measuring Download...";
     const down = await download({
       signal,
-      onTick: (tick: { ms: number; mbps: number; bytes: number }) => {
+      onTick: (tick: { mbps: number }) => {
         result.value.down = tick.mbps;
-        progress.value = 0.1 + Math.min(1, tick.ms / 10000) * 0.45;
       },
     });
     if (signal.aborted) return;
@@ -323,9 +315,8 @@ const start = async () => {
     phase.value = "Measuring Upload...";
     const up = await upload({
       signal,
-      onTick: (tick: { ms: number; mbps: number }) => {
+      onTick: (tick: { mbps: number }) => {
         result.value.up = tick.mbps;
-        progress.value = 0.55 + Math.min(1, tick.ms / 10000) * 0.45;
       },
     });
     if (signal.aborted) return;
@@ -333,7 +324,6 @@ const start = async () => {
     usedBytes.value += up.bytes;
     result.value.up = up.mbps;
     result.value.lup = median(up.loaded);
-    progress.value = 1;
     finished.value = true;
   } catch (err) {
     if (!signal.aborted) {
@@ -355,6 +345,10 @@ const toggle = () => {
   }
   void start();
 };
+
+onMounted(() => {
+  void start();
+});
 
 onBeforeUnmount(() => {
   controller?.abort();

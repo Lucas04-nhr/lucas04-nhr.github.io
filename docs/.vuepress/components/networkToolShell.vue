@@ -8,7 +8,13 @@
       </h2>
       <div class="network-tool-action-row">
         <div class="network-tool-progress" aria-hidden="true">
-          <span :style="{ transform: `scaleX(${progressValue})` }" />
+          <span
+            v-if="running"
+            :key="`run-${progressKey}`"
+            class="is-running"
+            :style="progressStyle"
+          />
+          <span v-else :class="{ 'is-full': kind !== 'idle' }" />
         </div>
         <button
           type="button"
@@ -32,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 
 type ShellKind = "idle" | "running" | "ok" | "warn" | "bad";
@@ -43,14 +49,14 @@ const props = withDefaults(
     title: string;
     summary: string;
     kind?: ShellKind;
-    progress?: number;
+    progressRange?: [number, number];
     buttonText?: string;
     stoppable?: boolean;
     error?: string | null;
   }>(),
   {
     kind: "idle",
-    progress: 0,
+    progressRange: () => [1500, 2500],
     buttonText: "Start",
     stoppable: false,
     error: null,
@@ -69,9 +75,28 @@ const icons: Record<ShellKind, string> = {
 
 const icon = computed(() => icons[props.kind]);
 const running = computed(() => props.kind === "running");
-const progressValue = computed(() =>
-  Math.min(1, Math.max(0, props.progress)),
-);
+
+const progressDuration = ref(0);
+const progressEasing = ref("");
+const progressKey = ref(0);
+
+const randomBetween = (min: number, max: number) =>
+  min + Math.random() * (max - min);
+
+const progressStyle = computed(() => ({
+  "--tool-progress-duration": `${progressDuration.value}ms`,
+  "--tool-progress-easing": progressEasing.value,
+}));
+
+// The bar is only an estimate: it holds short of full until the run really ends.
+watch(running, (isRunning) => {
+  if (!isRunning) return;
+
+  const [min, max] = props.progressRange;
+  progressDuration.value = Math.round(randomBetween(min, max));
+  progressEasing.value = `cubic-bezier(${randomBetween(0.08, 0.24).toFixed(2)}, ${randomBetween(0.78, 1).toFixed(2)}, ${randomBetween(0.22, 0.42).toFixed(2)}, 1)`;
+  progressKey.value += 1;
+});
 </script>
 
 <style>
@@ -86,6 +111,7 @@ const progressValue = computed(() =>
   --tool-muted: #64748b;
   --tool-card: rgba(255, 255, 255, 0.72);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   margin: 24px 0;
 }
@@ -164,8 +190,30 @@ const progressValue = computed(() =>
   height: 100%;
   border-radius: inherit;
   background: var(--tool-accent);
+  transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.2s ease-out;
+}
+
+.network-tool-progress span.is-running {
+  animation: network-tool-progress-fill var(--tool-progress-duration) var(--tool-progress-easing) forwards;
+}
+
+.network-tool-progress span.is-full {
+  transform: scaleX(1);
+}
+
+@keyframes network-tool-progress-fill {
+  0% {
+    transform: scaleX(0);
+  }
+
+  62% {
+    transform: scaleX(0.86);
+  }
+
+  100% {
+    transform: scaleX(0.96);
+  }
 }
 
 .network-tool-button,
@@ -269,7 +317,7 @@ const progressValue = computed(() =>
 
 .network-tool-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -349,7 +397,7 @@ const progressValue = computed(() =>
   grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 10px;
-  color: var(--tool-accent);
+  color: var(--vp-c-brand-1);
   font-size: 0.9rem;
   font-weight: 800;
   cursor: pointer;
@@ -474,6 +522,10 @@ html.dark .network-tool-error,
 
   .network-tool-grid {
     grid-template-columns: 1fr;
+  }
+
+  .network-tool-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>

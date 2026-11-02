@@ -110,8 +110,8 @@ The network tools use the Cloudflare Worker at `ip.lucas04.top`, whose source is
 - Give each tool its own page at `docs/tools/<slug>.md` with the permalink `/tools/<slug>/`, and its own component in `docs/.vuepress/components/`. Do not combine tools on one page.
 - When adding or removing a tool, update its async registration in `docs/.vuepress/client.ts` and its `<LinkCard>` under Network Tools in `docs/tools/README.md`.
 - Build tool interfaces on `networkToolShell.vue`, which holds the shared layout, colors, and dark theme styles.
-- Start new tools only when the visitor presses Start, since they contact third parties and may use a lot of data. Say on the tool's page which services see the visitor's IP address or input, and do not persist results or fingerprints.
-- Keep files in `vendor/` close to upstream. Keep the `LICENSE` notice, and record each local change and synced commit in `vendor/README.md`. Point upstream `1ms.dog` or same-origin paths at `ip.lucas04.top` or another domain the site controls.
+- Start each tool when its page opens, and use the shell's `progressRange` estimate for its progress bar. Say on the tool's page which services see the visitor's IP address or input and how much data it may use, and do not persist results or fingerprints.
+- Keep files in `vendor/` close to upstream. Tool pages don't need to credit upstream in their notes, but keep the `LICENSE` notice, and record each local change and synced commit in `vendor/README.md`. Point upstream `1ms.dog` or same-origin paths at `ip.lucas04.top` or another domain the site controls.
 - `/tools/connection-info/` was retired and redirects to `/tools/who-are-you/` through a router guard in `client.ts`. Keep that redirect so existing links work.
 
 ## Verification and Delivery

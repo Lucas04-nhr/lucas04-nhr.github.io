@@ -73,7 +73,7 @@ Convert PDF files to different formats.
 Each tool has its own page and runs in your browser, so it measures your real route.
 
 ::: note
-Region Detection runs when its page opens. The other tools wait until you press Start. Many of them contact third-party services directly, and those services see your IP address. Each page explains what it contacts.
+Each tool runs when its page opens. Speed Test can use several hundred megabytes of data. Many of the tools contact third-party services directly, and those services see your IP address. Each page explains what it contacts.
 :::
 
 <LinkCard

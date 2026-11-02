@@ -10,8 +10,7 @@ createTime: 2026/11/02 17:22:00
 ---
 
 ::: note
-This tool is adapted from yt1988's MIT-licensed `who-are-you`. It reads device and browser details, including a browser fingerprint, after you press Start. It does not save them, but a few third-party services and this site's API see your IP address during the check.
-<RepoCard repo="yt1988/who-are-you" />
+This tool reads device and browser details, including a browser fingerprint, when this page opens. It does not save them, but a few third-party services and this site's API see your IP address during the check.
 :::
 
 <WhoAreYou />

@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="done / SERVICES.length"
+    :progress-range="[10000, 16000]"
     :button-text="finished ? 'Check again' : 'Start'"
     @run="start"
   >
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, shallowRef } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
 import NetworkToolShell from "./networkToolShell.vue";
 import { IP_API_URL } from "../theme/utils/chinaMainlandUserDetection";
 import {
@@ -463,7 +463,7 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return `${done.value} of ${services.length} services checked.`;
   if (finished.value) return `${services.length} services checked.`;
-  return `Your browser visits ${services.length} services directly to see whether each one works and which country it places you in. Nothing runs until you press Start.`;
+  return `Your browser visits ${services.length} services directly to see whether each one works and which country it places you in.`;
 });
 
 const notes = computed(() => {
@@ -575,6 +575,10 @@ const start = async () => {
   running.value = false;
   finished.value = true;
 };
+
+onMounted(() => {
+  void start();
+});
 
 onBeforeUnmount(() => {
   generation += 1;

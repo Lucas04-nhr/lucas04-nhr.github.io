@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="progress"
+    :progress-range="[6000, 10000]"
     :button-text="finished ? 'Test again' : 'Start'"
     stoppable
     @run="toggle"
@@ -15,7 +15,7 @@
           <VPIcon name="mdi:numeric-6-box-outline" size="22" aria-hidden="true" />
           <h3>IPv6 Address</h3>
         </header>
-        <p class="network-tool-value network-tool-mono">{{ addressText(results.v6, "No IPv6 address") }}</p>
+        <p class="network-tool-value network-tool-mono" :class="addressClass(results.v6)">{{ addressText(results.v6, "No IPv6 address") }}</p>
         <p class="network-tool-detail">{{ addressDetail(results.v6) }}</p>
       </article>
       <article class="network-tool-card">
@@ -23,7 +23,7 @@
           <VPIcon name="mdi:numeric-4-box-outline" size="22" aria-hidden="true" />
           <h3>IPv4 Address</h3>
         </header>
-        <p class="network-tool-value network-tool-mono">{{ addressText(results.v4, "No IPv4 address") }}</p>
+        <p class="network-tool-value network-tool-mono" :class="addressClass(results.v4)">{{ addressText(results.v4, "No IPv4 address") }}</p>
         <p class="network-tool-detail">{{ addressDetail(results.v4) }}</p>
       </article>
     </div>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -180,20 +180,19 @@ const KIND_TEXT: Record<string, string> = {
 
 const results = ref<Record<string, TestResult>>({});
 const sides = ref<Record<string, TestResult>>({});
-const completed = ref(0);
 const running = ref(false);
 const finished = ref(false);
 let controller: AbortController | null = null;
 
-const total = TESTS.length + SIDES.length;
-const progress = computed(() => completed.value / total);
 const report = computed(() => verdict(results.value));
 
 const kind = computed(() => {
   if (running.value) return "running" as const;
   if (!finished.value) return "idle" as const;
   if (report.value.head === "v_ready") return "ok" as const;
-  if (report.value.head === "v_offline") return "bad" as const;
+  if (report.value.head === "v_none" || report.value.head === "v_offline") {
+    return "bad" as const;
+  }
   return "warn" as const;
 });
 
@@ -206,7 +205,7 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return "Your browser is contacting test hosts over IPv4 and IPv6.";
   if (!finished.value) {
-    return "Checks IPv6-only and dual-stack sites, large packets, DNS, and NAT64. Nothing runs until you press Start.";
+    return "Checks IPv6-only and dual-stack sites, large packets, DNS, and NAT64.";
   }
   if (report.value.head === "v_ready") {
     return "Every test passed: IPv6-only sites open, and IPv6 slows nothing down.";
@@ -224,6 +223,9 @@ const addressText = (result: TestResult | undefined, empty: string) => {
   if (!result) return running.value ? "Checking..." : "N/A";
   return result.ok && result.ip ? result.ip : empty;
 };
+
+const addressClass = (result: TestResult | undefined) =>
+  result && !result.ok ? "tool-tone-bad" : "";
 
 const addressDetail = (result: TestResult | undefined) => {
   if (!result?.ok) return "";
@@ -315,13 +317,11 @@ const start = async () => {
   finished.value = false;
   results.value = {};
   sides.value = {};
-  completed.value = 0;
 
   const sideRuns = (SIDES as { id: string }[]).map(async (side) => {
     const result = await runTest(side, { signal });
     if (signal.aborted) return;
     sides.value[side.id] = result;
-    completed.value += 1;
   });
 
   const testRuns = (TESTS as { id: string; fam: number }[]).map(async (test) => {
@@ -342,7 +342,6 @@ const start = async () => {
     }
 
     results.value[test.id] = result;
-    completed.value += 1;
   });
 
   await Promise.all([...sideRuns, ...testRuns]);
@@ -363,6 +362,10 @@ const toggle = () => {
   }
   void start();
 };
+
+onMounted(() => {
+  void start();
+});
 
 onBeforeUnmount(() => {
   controller?.abort();

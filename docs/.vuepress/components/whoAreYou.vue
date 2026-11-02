@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="filled / totalRows"
+    :progress-range="[5000, 8000]"
     :button-text="finished ? 'Run again' : 'Start'"
     @run="start"
   >
@@ -76,7 +76,7 @@
       </summary>
       <div class="network-tool-disclosure-body">
         <p v-if="blurred" class="network-tool-detail">Hidden while location is blurred.</p>
-        <div v-else class="vp-code-group">
+        <div v-else class="vp-code-group who-are-you-raw">
           <CodeViewer lang="json" :content="rawOutput" />
         </div>
       </div>
@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import CodeViewer from "./customCodeViewer.vue";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -419,7 +419,7 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return "Your browser is running the same checks any website can run.";
   if (!finished.value) {
-    return "See what any website learns about you without asking, and whether a VPN or proxy shows. This page stores nothing, and nothing runs until you press Start.";
+    return "See what any website learns about you without asking, and whether a VPN or proxy shows. This page stores nothing.";
   }
   if (!flagged.value.length) {
     return `Scored ${score.value.score} / 100. Everything agrees: if you aren't hiding, this is the real you as sites see it; if you are, the disguise holds.`;
@@ -453,6 +453,10 @@ const start = async () => {
   finished.value = true;
 };
 
+onMounted(() => {
+  void start();
+});
+
 onBeforeUnmount(() => {
   generation += 1;
 });
@@ -465,6 +469,14 @@ onBeforeUnmount(() => {
   height: 1px;
   overflow: hidden;
   pointer-events: none;
+}
+
+.who-are-you-raw :deep(pre),
+.who-are-you-raw :deep(code) {
+  width: auto !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap !important;
 }
 
 .who-are-you-blurred {

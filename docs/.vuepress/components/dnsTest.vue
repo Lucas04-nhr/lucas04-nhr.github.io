@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="progress"
+    :progress-range="[15000, 25000]"
     :button-text="finished ? 'Test again' : 'Start'"
     stoppable
     @run="toggle"
@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, shallowRef } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
   type Tone,
@@ -67,7 +67,6 @@ import {
   msTone,
 } from "../theme/utils/networkTools/shared";
 import {
-  ROUNDS,
   loss,
   median,
   run,
@@ -118,7 +117,6 @@ const BLOCKS: Record<string, string> = {
 
 const list = shallowRef<Target[]>([]);
 const tick = ref(0);
-const steps = ref(0);
 const running = ref(false);
 const finished = ref(false);
 let controller: AbortController | null = null;
@@ -200,11 +198,6 @@ const leader = computed(() =>
   ranked.value[0]?.value === null ? null : ranked.value[0],
 );
 
-const totalSteps = computed(() => list.value.length * (ROUNDS + 1));
-const progress = computed(() =>
-  totalSteps.value ? steps.value / totalSteps.value : 0,
-);
-
 const kind = computed(() => {
   if (running.value) return "running" as const;
   if (!finished.value) return "idle" as const;
@@ -233,7 +226,7 @@ const summary = computed(() => {
   if (running.value) {
     return "Each resolver gets the same names in random order, a few at a time.";
   }
-  return `Times ${RESOLVERS.length} public resolvers from your browser. Nothing runs until you press Start.`;
+  return `Times ${RESOLVERS.length} public resolvers from your browser.`;
 });
 
 const start = async () => {
@@ -242,7 +235,6 @@ const start = async () => {
 
   controller = active;
   list.value = nextTargets;
-  steps.value = 0;
   running.value = true;
   finished.value = false;
 
@@ -252,7 +244,6 @@ const start = async () => {
     signal: active.signal,
     onStep: () => {
       if (controller !== active) return;
-      steps.value += 1;
       tick.value += 1;
     },
   });
@@ -275,6 +266,10 @@ const toggle = () => {
   }
   void start();
 };
+
+onMounted(() => {
+  void start();
+});
 
 onBeforeUnmount(() => {
   controller?.abort();

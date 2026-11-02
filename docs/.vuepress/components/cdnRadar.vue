@@ -4,7 +4,7 @@
     :title="title"
     :summary="summary"
     :kind="kind"
-    :progress="progress"
+    :progress-range="[7000, 11000]"
     :button-text="finished ? 'Test again' : 'Start'"
     stoppable
     @run="toggle"
@@ -62,7 +62,7 @@
       </table>
     </div>
 
-    <article class="network-tool-card">
+    <article class="network-tool-card cdn-radar-site" :class="`is-${siteStatus}`">
       <header class="network-tool-card-header">
         <VPIcon name="mdi:web-check" size="22" aria-hidden="true" />
         <h3>Check a Website</h3>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, shallowRef } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -168,6 +168,7 @@ const running = ref(false);
 const finished = ref(false);
 const siteInput = ref("");
 const siteChecking = ref(false);
+const siteStatus = ref<"idle" | "running" | "ok" | "bad">("idle");
 const siteLine = ref("");
 const siteDetail = ref("");
 let controller: AbortController | null = null;
@@ -224,7 +225,6 @@ const resolved = computed(() =>
 );
 
 const completed = computed(() => resolved.value.length);
-const progress = computed(() => completed.value / CDNS.length);
 
 const report = computed(() =>
   finished.value ? summarize(resolved.value) : null,
@@ -254,7 +254,7 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return `${completed.value} of ${CDNS.length} CDNs answered so far.`;
   if (!report.value) {
-    return `Tests ${CDNS.length} CDNs from your browser. Nothing runs until you press Start.`;
+    return `Tests ${CDNS.length} CDNs from your browser.`;
   }
   if (report.value.located) {
     return `${report.value.located} CDNs said where they answered from: ${report.value.near} nearby, ${report.value.far} far away.`;
@@ -428,6 +428,7 @@ const checkSite = async () => {
   if (!host) {
     siteLine.value = "Enter a domain, like example.com";
     siteDetail.value = "";
+    siteStatus.value = "bad";
     return;
   }
 
@@ -442,6 +443,7 @@ const checkSite = async () => {
 
   siteController = active;
   siteChecking.value = true;
+  siteStatus.value = "running";
   siteLine.value = `Checking ${host}...`;
   siteDetail.value = "";
 
@@ -517,6 +519,7 @@ const checkSite = async () => {
     const cdnLabel = site.cdn ? cdnName(site.cdn) : "No known CDN";
     const where = row?.place ? `answers from ${placeText(row.place)}` : site.code ? `answers from ${site.code}` : "";
 
+    siteStatus.value = timing?.ms != null ? "ok" : "bad";
     siteLine.value = [host, cdnLabel, where].filter(Boolean).join(" · ");
     siteDetail.value = [
       row?.d != null ? kmText(row.d) : "",
@@ -525,6 +528,10 @@ const checkSite = async () => {
     ]
       .filter(Boolean)
       .join(" · ");
+  } catch {
+    if (signal.aborted) return;
+    siteStatus.value = "bad";
+    siteLine.value = `Couldn't check ${host}`;
   } finally {
     if (siteController === active) {
       siteController = null;
@@ -532,6 +539,10 @@ const checkSite = async () => {
     }
   }
 };
+
+onMounted(() => {
+  void start();
+});
 
 onBeforeUnmount(() => {
   controller?.abort();
@@ -542,6 +553,37 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* The website check has its own status, separate from the page's CDN test. */
+.cdn-radar-site {
+  border-left: 5px solid var(--tool-accent);
+}
+
+.cdn-radar-site.is-idle {
+  --tool-accent: #1d4ed8;
+}
+
+.cdn-radar-site.is-running {
+  --tool-accent: #475569;
+}
+
+.cdn-radar-site.is-ok {
+  --tool-accent: var(--tool-ok);
+}
+
+.cdn-radar-site.is-bad {
+  --tool-accent: var(--tool-bad);
+}
+
+html.dark .cdn-radar-site.is-idle,
+:root[data-theme="dark"] .cdn-radar-site.is-idle {
+  --tool-accent: #60a5fa;
+}
+
+html.dark .cdn-radar-site.is-running,
+:root[data-theme="dark"] .cdn-radar-site.is-running {
+  --tool-accent: #94a3b8;
+}
+
 .cdn-radar-site-form {
   display: flex;
   gap: 10px;

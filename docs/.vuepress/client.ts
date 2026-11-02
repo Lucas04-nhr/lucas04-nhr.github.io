@@ -37,13 +37,26 @@ import { initializeDebugPreference } from "./theme/utils/debugPreference";
 import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
 
 // The network tools carry large probe lists, so only their own pages load them.
-const SpeedTest = defineAsyncComponent(() => import("./components/speedTest.vue"));
-const EgressLens = defineAsyncComponent(() => import("./components/egressLens.vue"));
-const WhoAreYou = defineAsyncComponent(() => import("./components/whoAreYou.vue"));
-const UnlockCheck = defineAsyncComponent(() => import("./components/unlockCheck.vue"));
-const CdnRadar = defineAsyncComponent(() => import("./components/cdnRadar.vue"));
-const DnsTest = defineAsyncComponent(() => import("./components/dnsTest.vue"));
-const Ipv6Test = defineAsyncComponent(() => import("./components/ipv6Test.vue"));
+// A blocked script would otherwise leave the page empty, so say why it didn't load.
+const NetworkToolLoadError = {
+  props: ["error"],
+  render(this: { error?: Error }) {
+    return h(
+      "p",
+      `This tool failed to load: ${this.error?.message ?? "unknown error"}. A browser extension or network rule may be blocking it.`,
+    );
+  },
+};
+const lazyNetworkTool = (loader: () => Promise<any>) =>
+  defineAsyncComponent({ loader, errorComponent: NetworkToolLoadError });
+
+const SpeedTest = lazyNetworkTool(() => import("./components/speedTest.vue"));
+const EgressLens = lazyNetworkTool(() => import("./components/egressLens.vue"));
+const WhoAreYou = lazyNetworkTool(() => import("./components/whoAreYou.vue"));
+const UnlockCheck = lazyNetworkTool(() => import("./components/unlockCheck.vue"));
+const CdnRadar = lazyNetworkTool(() => import("./components/cdnRadar.vue"));
+const DnsTest = lazyNetworkTool(() => import("./components/dnsTest.vue"));
+const Ipv6Test = lazyNetworkTool(() => import("./components/ipv6Test.vue"));
 
 export default defineClientConfig({
   setup() {

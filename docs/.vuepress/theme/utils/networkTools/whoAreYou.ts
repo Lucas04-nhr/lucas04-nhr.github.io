@@ -101,7 +101,7 @@ export const SNIFFER_GROUPS: [string, string, [string, string, string, boolean?]
     ["webrtc", "WebRTC addresses", "RTCPeerConnection · STUN", true],
     ["lan", "Local address", "WebRTC host candidate"],
   ]],
-  ["exit", "Exits", [
+  ["exit", "Egress IPs", [
     ["ex_cn", "Site in mainland China", "myip.ipip.net", true],
     ["ex_intl", "IP service abroad", "api.ip.sb", true],
     ["ex_gpt", "ChatGPT", "chatgpt.com/cdn-cgi/trace", true],

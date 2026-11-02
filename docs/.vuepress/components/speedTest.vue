@@ -257,13 +257,13 @@ const routeWarnings = computed(() => {
 
   if (deviceCountry && info.cc && deviceCountry !== info.cc && !sameRegion) {
     warnings.push(
-      `Your device's time zone is in ${countryName(deviceCountry)}, but the exit is in ${countryName(info.cc)}. This run may measure a proxy, not your own line.`,
+      `Your device's time zone is in ${countryName(deviceCountry)}, but your egress IP is in ${countryName(info.cc)}. This run may measure a proxy, not your own line.`,
     );
   }
 
   if (info.org && DC_RE.test(info.org)) {
     warnings.push(
-      `Your exit is ${info.org}, a data-center network: a proxy, VPN, or cloud server.`,
+      `Your egress IP is on ${info.org}, a data-center network: a proxy, VPN, or cloud server.`,
     );
   }
 

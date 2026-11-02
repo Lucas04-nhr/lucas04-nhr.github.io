@@ -84,7 +84,7 @@
 
     <ul class="network-tool-notes">
       <li>Any website can read all of this without a permission prompt. Nothing here is stored by this page.</li>
-      <li>The server only answers one request to <code>/v1/whoami</code> with what it already sees in it. To find your exits and DNS resolver, your browser also contacts IPIP.NET, IP.SB, ip-api, Cloudflare Radar, the Cloudflare trace on chatgpt.com, claude.ai, and cloudflare.com, and two STUN servers.</li>
+      <li>The server only answers one request to <code>/v1/whoami</code> with what it already sees in it. To find your egress IPs and DNS resolver, your browser also contacts IPIP.NET, IP.SB, ip-api, Cloudflare Radar, the Cloudflare trace on chatgpt.com, claude.ai, and cloudflare.com, and two STUN servers.</li>
       <li>"Nationality" is only a guess from your browser language and system time zone.</li>
     </ul>
   </NetworkToolShell>
@@ -162,8 +162,8 @@ const MESSAGES: Record<string, string> = {
   c_dns_ok: "The resolver is in {ipc} too",
   c_dns_bad: "Resolver in {ccName}, IP in {ipc}",
   c_dns_info: "Couldn't place the resolver",
-  c_split_ok: "Every destination sees the same exit",
-  c_split_warn: "{aName} and {bName} see different exits",
+  c_split_ok: "Every destination sees the same egress IP",
+  c_split_warn: "{aName} and {bName} see different egress IPs",
   c_rtc_off: "WebRTC is off: nothing to leak",
   c_rtc_ok: "Same address as the page sees",
   c_rtc_none: "No public address came back",
@@ -172,7 +172,7 @@ const MESSAGES: Record<string, string> = {
   c_rtc_relay: "Through a relay like iCloud Private Relay too: no real address leaks",
   c_dc_ok: "An ordinary network: {org}",
   c_dc_warn: "{org} is a data center; sites can tell",
-  c_dc_relay: "An exit of a relay like iCloud Private Relay: sites can tell, but can't see your real IP",
+  c_dc_relay: "An egress IP of a relay like iCloud Private Relay: sites can tell, but can't see your real IP",
   c_ua_info: "Not enough clues to compare",
   c_ua_ok: "Everything agrees: {a}",
   c_ua_bad: "The user agent says {a}, the rest looks like {b}",
@@ -212,7 +212,7 @@ const TIPS: Record<string, string> = {
   split: "To hide it, switch to global mode. If local sites go direct on purpose, leave it.",
   webrtc: "Turn on TUN mode in your proxy client, or limit WebRTC in the browser.",
   rtt: "A proxy always adds this leg. A server closer to you narrows the gap.",
-  dc: "Use a home or mobile exit. Streaming, AI, and payment sites often block data centers.",
+  dc: "Use a home or mobile egress IP. Streaming, AI, and payment sites often block data centers.",
   ua: "Don't change the user agent alone: the graphics card gives it away.",
   fp: "Use Brave, Firefox with resistFingerprinting, or Tor Browser.",
   bot: "Close Selenium, Puppeteer, or other automation, then reload.",

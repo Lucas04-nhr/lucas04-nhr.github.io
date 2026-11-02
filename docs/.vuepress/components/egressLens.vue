@@ -9,7 +9,7 @@
     @run="start"
   >
     <div v-if="finished && exits.length" class="network-tool-toolbar">
-      <span class="network-tool-count">{{ exits.length }} exits found</span>
+      <span class="network-tool-count">{{ egressCount }} found</span>
       <button type="button" class="network-tool-secondary-button" @click="masked = !masked">
         {{ masked ? "Show IPs" : "Hide IPs" }}
       </button>
@@ -59,7 +59,7 @@
             <tr>
               <th>Probe</th>
               <th>Address</th>
-              <th>Exit</th>
+              <th>Egress</th>
               <th>Time</th>
             </tr>
           </thead>
@@ -191,8 +191,8 @@ const FAILURE_TEXT: Record<string, string> = {
 const VERDICTS: Record<string, [string, "ok" | "warn" | "bad"]> = {
   leak: ["IP Leak Found: Some Traffic Skips the Proxy", "bad"],
   ai: ["AI Services See an Unsupported Region", "bad"],
-  split: ["Split Routing: Sites Use Different Exits", "warn"],
-  proxy: ["Every Website Sees the Same Proxy Exit", "ok"],
+  split: ["Split Routing: Sites See Different Egress IPs", "warn"],
+  proxy: ["Every Website Sees the Same Proxy Egress IP", "ok"],
   direct: ["Direct: Every Website Sees the Local IP", "ok"],
 };
 
@@ -417,6 +417,10 @@ const start = async () => {
   finished.value = true;
 };
 
+const egressCount = computed(() =>
+  `${exits.value.length} egress ${exits.value.length === 1 ? "point" : "points"}`,
+);
+
 const exitOf = (letter: string) =>
   exits.value.find((exit) => exit.letter === letter);
 
@@ -492,11 +496,11 @@ const findingText = (id: string, finding: Finding) => {
     case "v6":
       if (k === "leak") return `Bypasses the proxy, exposes ${exitLabel(v.a)}`;
       if (k === "ok") return `Via ${exitLabel(v.a)}`;
-      return "No IPv6 exit";
+      return "No IPv6 egress";
     case "tz":
       return k === "ok"
-        ? `Matches the exit (${countryName(v.a)})`
-        : `Browser says ${countryName(v.a)}, exit is in ${countryName(v.b)}: easy to spot as a proxy`;
+        ? `Matches the egress IP (${countryName(v.a)})`
+        : `Browser says ${countryName(v.a)}, egress IP is in ${countryName(v.b)}: easy to spot as a proxy`;
     default:
       return "N/A";
   }
@@ -542,7 +546,7 @@ const probeGroups = computed(() => {
           );
           tone = "muted";
         } else if (odd?.k === "leak") {
-          note = `Sees your local exit ${exitLabel(odd.x)} over UDP: the proxy doesn't carry WebRTC`;
+          note = `Sees your local egress ${exitLabel(odd.x)} over UDP: the proxy doesn't carry WebRTC`;
           tone = "bad";
         } else if (odd?.k === "odd") {
           note = `Sees ${exitLabel(odd.x)}; most similar sites see ${exitLabel(odd.y)}`;
@@ -594,10 +598,10 @@ const title = computed(() => {
 const summary = computed(() => {
   if (running.value) return `${done.value} of ${probes.length} probes finished.`;
   if (!finished.value) {
-    return `${probes.length} probes, in mainland China and abroad, at AI services, over IPv4, IPv6, and WebRTC, show every exit your traffic takes.`;
+    return `${probes.length} probes, in mainland China and abroad, at AI services, over IPv4, IPv6, and WebRTC, show every egress IP your traffic uses.`;
   }
   return verdictKey.value
-    ? `${exits.value.length} exits found across ${probes.length} probes.`
+    ? `${egressCount.value} found across ${probes.length} probes.`
     : "Are you offline? An ad blocker may also be blocking the probes.";
 });
 

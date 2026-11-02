@@ -94,7 +94,7 @@ Measure download, upload, latency, and bufferbloat.
   title="EgressLens"
   icon="mdi:source-branch"
   href="/tools/egress-lens/">
-Find every exit IP your traffic uses, including WebRTC and IPv6 leaks.
+Find every egress IP your traffic uses, including WebRTC and IPv6 leaks.
 </LinkCard>
 
 <LinkCard

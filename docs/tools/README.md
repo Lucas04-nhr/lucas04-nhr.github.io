@@ -55,6 +55,28 @@ Import and export UIGF JSON, merge archives, and view account and pool statistic
 </LinkCard>
 
 <LinkCard
+  title="VERT Image Converter"
+  icon="mdi:image-edit-outline"
+  href="https://vert.lucas04.top/">
+Convert images to different formats.
+</LinkCard>
+
+<LinkCard
+  title="Bento PDF Toolbox"
+  icon="streamline-plump:convert-pdf-1"
+  href="https://pdf.lucas04.top/">
+Convert PDF files to different formats.
+</LinkCard>
+
+## Network Tools {#network-tools}
+
+Each tool has its own page and runs in your browser, so it measures your real route.
+
+::: note
+Region Detection runs when its page opens. The other tools wait until you press Start. Many of them contact third-party services directly, and those services see your IP address. Each page explains what it contacts.
+:::
+
+<LinkCard
   title="Region Detection"
   icon="mdi:map-marker-question-outline"
   href="/tools/region-detect/">
@@ -108,18 +130,4 @@ Find the fastest public DNS resolver from your network.
   icon="mdi:numeric-6-box-outline"
   href="/tools/ipv6-test/">
 Check IPv6 support and compare it with IPv4.
-</LinkCard>
-
-<LinkCard
-  title="VERT Image Converter"
-  icon="mdi:image-edit-outline"
-  href="https://vert.lucas04.top/">
-Convert images to different formats.
-</LinkCard>
-
-<LinkCard
-  title="Bento PDF Toolbox"
-  icon="streamline-plump:convert-pdf-1"
-  href="https://pdf.lucas04.top/">
-Convert PDF files to different formats.
 </LinkCard>

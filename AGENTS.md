@@ -10,7 +10,7 @@ This is Lucas's personal blog, covering bioinformatics course notes, paper discu
 | --- | --- |
 | `docs/blog/` | Standalone blog posts; `Archived/` contains historical articles |
 | `docs/guide/` | Documentation series, including R courses, the HUST graduation project template, KU master's courses, and StayUp Schedule |
-| `docs/tools/` | Tool pages and usage instructions |
+| `docs/tools/` | Tool pages and usage instructions; `README.md` is the tools index |
 | `docs/legal/` | Legal and copyright information |
 | `docs/README.md` | Site homepage |
 | `docs/about.md`, `docs/friends.md`, `docs/shop.md`, `docs/support.md` | Standalone site pages |
@@ -20,6 +20,7 @@ This is Lucas's personal blog, covering bioinformatics course notes, paper discu
 | `docs/.vuepress/client.ts` | Client registration, layouts, and browser interactions |
 | `docs/.vuepress/components/`, `docs/.vuepress/layouts/` | Custom components and page layouts |
 | `docs/.vuepress/theme/` | Theme components, utilities, and styles |
+| `docs/.vuepress/theme/utils/networkTools/` | Shared network tool logic; `vendor/` holds adapted upstream code |
 | `docs/.vuepress/public/` | Static assets, served from the site root |
 | `.github/workflows/`, `.github/scripts/` | GitHub Pages deployment and dependency update automation |
 
@@ -101,6 +102,17 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 - Keep browser APIs inside client lifecycle hooks or existing environment guards. Avoid directly accessing `window`, `document`, storage, or observers during SSR. Clean up new listeners and observers on unmount and account for repeated route entry.
 - For interaction changes, check light and dark themes, mobile viewports, and route transitions. Read the corresponding logic in `theme/utils/` before changing language switching, URL parameters, or user preferences.
 - Do not commit generated directories such as `node_modules/`, `.temp/`, `.cache/`, or `dist/`, or edit build output directly.
+
+## Network Tools
+
+The network tools use the Cloudflare Worker at `ip.lucas04.top`, whose source is in the separate `ip-test` repository. Read that repository's `README.md` before using or changing an endpoint.
+
+- Give each tool its own page at `docs/tools/<slug>.md` with the permalink `/tools/<slug>/`, and its own component in `docs/.vuepress/components/`. Do not combine tools on one page.
+- When adding or removing a tool, update its async registration in `docs/.vuepress/client.ts` and its `<LinkCard>` under Network Tools in `docs/tools/README.md`.
+- Build tool interfaces on `networkToolShell.vue`, which holds the shared layout, colors, and dark theme styles.
+- Start new tools only when the visitor presses Start, since they contact third parties and may use a lot of data. Say on the tool's page which services see the visitor's IP address or input, and do not persist results or fingerprints.
+- Keep files in `vendor/` close to upstream. Keep the `LICENSE` notice, and record each local change and synced commit in `vendor/README.md`. Point upstream `1ms.dog` or same-origin paths at `ip.lucas04.top` or another domain the site controls.
+- `/tools/connection-info/` was retired and redirects to `/tools/who-are-you/` through a router guard in `client.ts`. Keep that redirect so existing links work.
 
 ## Verification and Delivery
 

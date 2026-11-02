@@ -55,17 +55,59 @@ Import and export UIGF JSON, merge archives, and view account and pool statistic
 </LinkCard>
 
 <LinkCard
-  title="Connection Info"
-  icon="mdi:connection"
-  href="/tools/connection-info/">
-Display information about the current network connection.
-</LinkCard>
-
-<LinkCard
   title="Region Detection"
   icon="mdi:map-marker-question-outline"
   href="/tools/region-detect/">
 Detect the region of the current network connection.
+</LinkCard>
+
+<LinkCard
+  title="Speed Test"
+  icon="mdi:speedometer"
+  href="/tools/speed-test/">
+Measure download, upload, latency, and bufferbloat.
+</LinkCard>
+
+<LinkCard
+  title="EgressLens"
+  icon="mdi:source-branch"
+  href="/tools/egress-lens/">
+Find every exit IP your traffic uses, including WebRTC and IPv6 leaks.
+</LinkCard>
+
+<LinkCard
+  title="Who Are You"
+  icon="mdi:incognito"
+  href="/tools/who-are-you/">
+See what websites can learn about you, and whether a VPN or proxy shows.
+</LinkCard>
+
+<LinkCard
+  title="Unlock Check"
+  icon="mdi:lock-open-check-outline"
+  href="/tools/unlock-check/">
+Check which streaming and AI services work on your IP.
+</LinkCard>
+
+<LinkCard
+  title="CDN Radar"
+  icon="mdi:radar"
+  href="/tools/cdn-radar/">
+See which location of each major CDN serves you, and check any website's CDN.
+</LinkCard>
+
+<LinkCard
+  title="DNS Test"
+  icon="mdi:dns-outline"
+  href="/tools/dns-test/">
+Find the fastest public DNS resolver from your network.
+</LinkCard>
+
+<LinkCard
+  title="IPv6 Test"
+  icon="mdi:numeric-6-box-outline"
+  href="/tools/ipv6-test/">
+Check IPv6 support and compare it with IPv4.
 </LinkCard>
 
 <LinkCard

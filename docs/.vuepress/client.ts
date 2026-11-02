@@ -1,9 +1,7 @@
-import { h, onMounted } from "vue";
+import { defineAsyncComponent, h, onMounted } from "vue";
 import CustomNotFound from "./components/customNotFound.vue";
 import CustomAside from "./components/customAside.vue";
 import ResponsiveImage from "./components/customResponseImage.vue";
-import DebugInfo from "./components/debugInfo.vue";
-import RawJsonOutput from "./components/rawJsonOutput.vue";
 import GachaManager from "./components/gachaManager.vue";
 import GachaItemQueryDemo from "./components/gachaItemQueryDemo.vue";
 import ChinaMainlandUserCheck from "./components/chinaMainlandUserCheck.vue";
@@ -37,6 +35,15 @@ import { installContentInteractionGuards } from "./theme/utils/contentInteractio
 import { initializeScriptPreference } from "./theme/utils/localeScriptPreference";
 import { initializeDebugPreference } from "./theme/utils/debugPreference";
 import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
+
+// The network tools carry large probe lists, so only their own pages load them.
+const SpeedTest = defineAsyncComponent(() => import("./components/speedTest.vue"));
+const EgressLens = defineAsyncComponent(() => import("./components/egressLens.vue"));
+const WhoAreYou = defineAsyncComponent(() => import("./components/whoAreYou.vue"));
+const UnlockCheck = defineAsyncComponent(() => import("./components/unlockCheck.vue"));
+const CdnRadar = defineAsyncComponent(() => import("./components/cdnRadar.vue"));
+const DnsTest = defineAsyncComponent(() => import("./components/dnsTest.vue"));
+const Ipv6Test = defineAsyncComponent(() => import("./components/ipv6Test.vue"));
 
 export default defineClientConfig({
   setup() {
@@ -87,6 +94,18 @@ export default defineClientConfig({
   },
 
   enhance({ app, router }) {
+    // Connection Info was replaced by Who Are You; keep its old links working.
+    router.beforeEach((to) => {
+      if (to.path.replace(/\/?$/, "/") !== "/tools/connection-info/") return;
+
+      return {
+        path: "/tools/who-are-you/",
+        query: to.query,
+        hash: to.hash,
+        replace: true,
+      };
+    });
+
     // Keep external links to old underscore-based permalinks working.
     router.beforeEach((to) => {
       if (!to.path.includes("_")) return;
@@ -119,11 +138,16 @@ export default defineClientConfig({
 
     // your custom components
     app.component("ResponsiveImage", ResponsiveImage);
-    app.component("DebugInfo", DebugInfo);
-    app.component("RawJsonOutput", RawJsonOutput);
     app.component("GachaManager", GachaManager);
     app.component("GachaItemQueryDemo", GachaItemQueryDemo);
     app.component("ChinaMainlandUserCheck", ChinaMainlandUserCheck);
+    app.component("SpeedTest", SpeedTest);
+    app.component("EgressLens", EgressLens);
+    app.component("WhoAreYou", WhoAreYou);
+    app.component("UnlockCheck", UnlockCheck);
+    app.component("CdnRadar", CdnRadar);
+    app.component("DnsTest", DnsTest);
+    app.component("Ipv6Test", Ipv6Test);
     app.component("NavBarLocaleToggle", NavBarLocaleToggle);
     app.component("UrlQueryStateDecoder", UrlQueryStateDecoder);
     // app.component('CustomComponent', CustomComponent)

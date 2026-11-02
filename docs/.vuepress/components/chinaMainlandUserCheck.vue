@@ -322,7 +322,7 @@ const ipFootnote = computed(() => {
     '<a href="https://ip.skk.moe" class="no-icon" target="_blank" rel="noopener noreferrer">an external website</a>';
 
   if (hasIpLinkDetail.value) {
-    return `See <a href="/tools/connection-info/">Connection Info</a> or go to ${externalLink} for more details about your IP and network connection information.`;
+    return `See <a href="/tools/who-are-you/">Who Are You</a> or go to ${externalLink} for more details about your IP and network connection information.`;
   }
 
   return `Go to ${externalLink} for more details about your IP and network connection information.`;

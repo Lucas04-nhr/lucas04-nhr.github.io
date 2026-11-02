@@ -112,4 +112,13 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 - VuePress automatically fills in titles and creation times. After an authorized server start or build, check for unrelated Markdown changes only when such checks are also authorized. Handle only changes introduced by the task and preserve user edits.
 - Report what changed, which authorized checks ran, and what remains unverified. If no verification was authorized, state that none was performed.
 - Pushing to `main` currently triggers deployment. Keep commits, pushes, publishing, and dependency upgrades within the user's requested scope; completing a local edit does not itself authorize deployment.
-- When the user explicitly asks Codex to push changes, include `Co-authored-by: Codex <noreply@openai.com>` in the commits created for that push by default, unless the user requests otherwise.
+- When the user explicitly asks Codex/Claude Code to push changes, include `Co-authored-by: Codex <noreply@openai.com>` or `Co-authored-by: Claude <noreply@anthropic.com>` in the commits created for that push by default, unless the user requests otherwise.
+
+## Commit Conventions
+
+- Follow the Conventional Commits format: `<type>(<scope>): <description>`
+- Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+- Write the description in English, starting with a lowercase letter, in the imperative mood, with no trailing period
+- Keep the subject line concise (ideally under 72 characters)
+- Use the optional scope to indicate the affected area, e.g. `ci`, `deps`, `docs`
+- Example: `chore(ci): update style`

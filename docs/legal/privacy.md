@@ -33,7 +33,7 @@ To decide whether to show the ICP filing number, pages on this website check whe
 
 - Your browser language, time zone, emoji rendering, and whether certain fonts are installed.
 - A request to `ip.lucas04.top`, which returns the country of your IP address.
-- A connectivity test to an external website, which sees your IP address as any website you visit does.
+- A connectivity test to `www.google.com`, which sees your IP address as any website you visit does.
 
 The result only controls what the page displays. It is not stored or sent to this website. A cookie named `internalBypass` keeps your preference for the connectivity test.
 
@@ -56,6 +56,16 @@ These third parties see your IP address and normal request details, and their ow
 Results stay in your browser. The tools do not save results or fingerprints, and they are gone when you leave the page.
 
 The tools also call this website's API at `ip.lucas04.top`, which receives your IP address and request headers, plus any domain you enter in CDN Radar. The API uses them to answer the request and does not store them, and its application logging is turned off. Cloudflare still processes these requests and may keep platform-level logs, as described above.
+
+## Analytics, Search, and Comments {#third-party-services}
+
+This website also uses the following services, whose own privacy policies apply:
+
+- **Google Analytics** receives information about your visit, including the pages you view, to measure site usage.
+- **Algolia** receives what you type into the site search and any questions you send to its AI assistant.
+- **Giscus** shows comments stored in GitHub Discussions on pages with comments. Signing in and commenting uses your GitHub account, and your comments are public.
+
+Your theme, language, and similar preferences are saved in your browser with cookies or local storage so the website can remember them.
 
 ## Policy Updates
 

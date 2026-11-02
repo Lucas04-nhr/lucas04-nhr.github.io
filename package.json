@@ -5,7 +5,7 @@
   "description": "A blog belongs to Lucas",
   "packageManager": "pnpm@12.16.1",
   "author": "Haoran Nie <lucas04@foxmail.com>",
-  "license": "GPLv3",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "docs:build": "vuepress build docs --clean-cache --clean-temp",
     "docs:dev": "vuepress dev docs",

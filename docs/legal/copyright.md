@@ -50,7 +50,7 @@ A copyright notice on an individual page takes precedence over this section for 
 
 ## License of Code
 
-Any derivative program code authored by Lucas is licensed under the ==**GNU Affero General Public License v3.0 (AGPLv3)**==.
+All code and software authored by Lucas is licensed under the ==**GNU Affero General Public License v3.0 (AGPLv3)**==.
 
 <LinkCard
   title="GNU AGPLv3"

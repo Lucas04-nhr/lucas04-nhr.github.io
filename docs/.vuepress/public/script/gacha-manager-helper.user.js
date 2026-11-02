@@ -6,7 +6,7 @@
 // @downloadURL  https://blog.lucas04.top/script/gacha-manager-helper.user.js
 // @description  Fetch official gacha history locally for Helios Assistant, without a relay server.
 // @author       Lucas
-// @license      GPL-3.0-only
+// @license      AGPL-3.0-only
 // @match        https://blog.lucas04.top/*
 // @match        http://localhost:*/*
 // @match        http://127.0.0.1:*/*

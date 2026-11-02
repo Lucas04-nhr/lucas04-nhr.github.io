@@ -77,7 +77,7 @@ If you don't have access to Greasy Fork, you can create a new user script in Tam
 // @grant        GM_registerMenuCommand
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @license      GPLv3
+// @license      AGPL-3.0-only
 // @icon        https://www.apple.com/favicon.ico
 // ==/UserScript==
 

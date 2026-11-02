@@ -82,7 +82,7 @@ You may cancel your subscription at any time via Account Settings → Wallet →
 Credits included in a subscription plan accumulate across billing periods and do not expire as long as your subscription remains active (subject to a maximum balance limit specified in your plan).
 
 ### Credits After Subscription Cancellation
-After subscription cancellation, separately purchased credits become immediately unavailable; no refund will be issued for any unused balance in accordance with [Credits Refunds](#credits-refunds).
+After subscription cancellation, separately purchased credits remain available until their validity period ends. Refunds for them follow [Credits Refunds](#credits-refunds).
 
 ### Credit Consumption Order
 When both subscription plan credits and separately purchased credits are available, subscription plan credits are consumed first.

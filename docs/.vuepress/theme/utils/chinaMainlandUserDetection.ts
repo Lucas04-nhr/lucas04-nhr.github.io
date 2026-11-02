@@ -76,13 +76,9 @@ export type MainlandVerdict = {
 
 export const IP_API_URL = "https://ip.lucas04.top";
 
-const decodeInternalCheckTarget = (codes: number[]) =>
-  String.fromCharCode(...codes);
-
-export const INTERNAL_CONNECTIVITY_CHECK_URL = decodeInternalCheckTarget([
-  104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 101, 112, 111, 99,
-  104, 116, 105, 109, 101, 115, 46, 99, 111, 109, 47,
-]);
+// Google's empty connectivity endpoint: blocked in the Chinese mainland and reachable almost everywhere else.
+export const INTERNAL_CONNECTIVITY_CHECK_URL =
+  "https://www.google.com/generate_204";
 
 const INTERNAL_RULE_BYPASS_COOKIE = "internalBypass";
 const LEGACY_INTERNAL_RULE_BYPASS_COOKIE = "internal-rule-bypass";

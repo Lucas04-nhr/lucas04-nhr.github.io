@@ -131,3 +131,7 @@ Find the fastest public DNS resolver from your network.
   href="/tools/ipv6-test/">
 Check IPv6 support and compare it with IPv4.
 </LinkCard>
+
+These tools use an open-source backend running on Cloudflare Workers:
+
+<RepoCard repo="Lucas04-nhr/ip-test" />

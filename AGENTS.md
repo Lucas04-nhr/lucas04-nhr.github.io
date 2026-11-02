@@ -93,7 +93,7 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 - Reference files in `docs/.vuepress/public/` using site-root paths, such as `/assets/<filename>`. Preserve existing asset URLs on `pic.lucas04.top`, `static.lucas04.top`, and other hosts. Do not invent upload URLs.
 - Prefer stable `permalink` values for internal page links and verify anchors when linking to sections. Provide meaningful image alt text and retain source information for republished figures.
 - Asset URL replacement is enabled in the theme configuration. Check `replaceAssets` and build output when migrating assets rather than replacing existing URLs indiscriminately.
-- The theme defaults article content to CC BY-NC-SA 4.0. Repository code licensing is defined in `LICENSE`. Preserve article-specific copyright notices and exceptions.
+- Article content is licensed under CC BY-NC-SA 4.0, which is the theme default and is defined in `LICENSE-CONTENT`. All code and software by Lucas is licensed under AGPLv3, defined in `LICENSE`. Third-party code keeps its own license. Preserve article-specific copyright notices and exceptions.
 
 ## Site Code Changes
 

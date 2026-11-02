@@ -85,7 +85,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -148,7 +148,7 @@ jobs:
       (needs.update-dependencies.result == 'success' &&
       needs.update-dependencies.outputs.changes_committed == 'false'))
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # 保留全部提交历史以便生成“最近更新时间”等信息
           fetch-depth: 0

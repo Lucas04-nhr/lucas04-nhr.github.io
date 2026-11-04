@@ -3,7 +3,8 @@ name: Update Dependencies
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 20 * * 0" # 每周一 4:00(CST) 运行一次
+    - cron: "0 20 * * 0" # 每周日 20:00（哥本哈根时间）运行一次
+      timezone: "Europe/Copenhagen"
 
 jobs:
   update:

@@ -246,7 +246,6 @@ jobs:
           DEP_UPDATE_OUTCOME: ${{ needs.update-dependencies.outputs.update_outcome }}
           CHANGES_COMMITTED: ${{ needs.update-dependencies.outputs.changes_committed }}
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           if [ -z "$SERVERCHAN_SENDKEY" ]; then
@@ -313,9 +312,6 @@ jobs:
           - Build: \`$BUILD_RESULT\`
           - Deploy: \`$DEPLOY_RESULT\`
           - Search index: \`$CRAWL_RESULT\`"
-          if [ -n "$COMMIT_MESSAGE" ]; then
-            desp+=$'\n'"- Message: ${COMMIT_MESSAGE%%$'\n'*}"
-          fi
           if [ -n "$NEW_VERSION" ]; then
             desp+=$'\n'"- Template: \`$CURRENT_VERSION\` -> \`$NEW_VERSION\`"
           fi

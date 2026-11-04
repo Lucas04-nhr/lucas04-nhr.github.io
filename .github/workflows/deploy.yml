@@ -21,6 +21,8 @@ jobs:
       is_latest: ${{ steps.check.outputs.is_latest }}
       needs_update: ${{ steps.check.outputs.needs_update }}
       new_version: ${{ steps.check.outputs.new_version }}
+      current_version: ${{ steps.check.outputs.current_version }}
+      sources_unavailable: ${{ steps.check.outputs.sources_unavailable }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -38,6 +40,7 @@ jobs:
         run: |
           # 获取当前版本
           CURRENT_VERSION=$(jq -r '.devDependencies["vuepress-theme-plume"]' package.json)
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
           GITHUB_METADATA=$(curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -58,6 +61,7 @@ jobs:
           if [ -z "$TARGET_VERSION" ]; then
             echo "needs_update=false" >> "$GITHUB_OUTPUT"
             echo "is_latest=true" >> "$GITHUB_OUTPUT"
+            echo "sources_unavailable=true" >> "$GITHUB_OUTPUT"
             echo "⚠️ Failed to query both release sources; skip dependency update and continue with deployment"
             exit 0
           fi
@@ -81,7 +85,10 @@ jobs:
     if: needs.check-version.outputs.needs_update == 'true'
     outputs:
       changes_committed: ${{ steps.commit.outputs.changes_committed }}
+      install_outcome: ${{ steps.install.outcome }}
+      update_outcome: ${{ steps.update.outcome }}
     permissions:
+      actions: write
       contents: write
     steps:
       - name: Checkout repository
@@ -116,6 +123,7 @@ jobs:
         env:
           INSTALL_OUTCOME: ${{ steps.install.outcome }}
           UPDATE_OUTCOME: ${{ steps.update.outcome }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "$INSTALL_OUTCOME" != "success" ] || [ "$UPDATE_OUTCOME" != "success" ]; then
             echo "changes_committed=false" >> "$GITHUB_OUTPUT"
@@ -136,6 +144,8 @@ jobs:
           git commit -m "chore(dep): Update template to \`${{ needs.check-version.outputs.new_version }}\`"
           git push
           echo "changes_committed=true" >> "$GITHUB_OUTPUT"
+          # A push made with GITHUB_TOKEN does not start another workflow, so deploy the new commit explicitly
+          gh workflow run deploy.yml --ref "$GITHUB_REF_NAME"
 
   build:
     name: Build site and upload pages artifact
@@ -189,6 +199,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-version, build]
     if: always() && needs.build.result == 'success'
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
@@ -211,3 +223,122 @@ jobs:
           crawler_id: ${{ secrets.ALGOLIA_CRAWLER_ID }}
           crawler_user_id: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
           crawler_api_key: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
+
+  notify:
+    name: Notify deployment result
+    needs: [check-version, update-dependencies, build, deploy, crawl]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Send ServerChan push
+        env:
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          CHECK_RESULT: ${{ needs.check-version.result }}
+          UPDATE_RESULT: ${{ needs.update-dependencies.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          CRAWL_RESULT: ${{ needs.crawl.result }}
+          SOURCES_UNAVAILABLE: ${{ needs.check-version.outputs.sources_unavailable }}
+          CURRENT_VERSION: ${{ needs.check-version.outputs.current_version }}
+          NEW_VERSION: ${{ needs.check-version.outputs.new_version }}
+          INSTALL_OUTCOME: ${{ needs.update-dependencies.outputs.install_outcome }}
+          DEP_UPDATE_OUTCOME: ${{ needs.update-dependencies.outputs.update_outcome }}
+          CHANGES_COMMITTED: ${{ needs.update-dependencies.outputs.changes_committed }}
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SERVERCHAN_SENDKEY" ]; then
+            echo "::warning title=Deployment push skipped::Set the SERVERCHAN_SENDKEY secret to enable pushes."
+            exit 0
+          fi
+          if [[ ! "$SERVERCHAN_SENDKEY" =~ ^sctp([0-9]+)t ]]; then
+            echo "::error title=Deployment push failed::SERVERCHAN_SENDKEY is not a ServerChan3 key (sctp...)."
+            exit 1
+          fi
+          uid="${BASH_REMATCH[1]}"
+          echo "::add-mask::$uid"
+
+          repo="${GITHUB_REPOSITORY#*/}"
+          sha="${GITHUB_SHA:0:7}"
+
+          warnings=""
+          add_warning() {
+            if [ -n "$warnings" ]; then
+              warnings+=$'\n'
+            fi
+            warnings+="- $1"
+          }
+          if [ "$SOURCES_UNAVAILABLE" = "true" ]; then
+            add_warning "Template release sources were unavailable, so the update check was skipped"
+          fi
+          if [ "$INSTALL_OUTCOME" = "failure" ] || [ "$DEP_UPDATE_OUTCOME" = "failure" ]; then
+            add_warning "Template update to \`$NEW_VERSION\` failed, so the current version was built"
+          fi
+          if [ "$CRAWL_RESULT" = "failure" ]; then
+            add_warning "The site was deployed, but the Algolia crawler could not be triggered"
+          fi
+
+          failed_step=""
+          for pair in "Check template version:$CHECK_RESULT" "Update template dependencies:$UPDATE_RESULT" "Build site:$BUILD_RESULT" "Deploy to GitHub Pages:$DEPLOY_RESULT"; do
+            if [ "${pair##*:}" = "failure" ]; then
+              failed_step="${pair%:*}"
+              break
+            fi
+          done
+
+          if [ -n "$failed_step" ]; then
+            title="Blog deployment failed"
+            short="$repo: Failed at $failed_step"
+          elif [ "$CHANGES_COMMITTED" = "true" ]; then
+            title="Blog template updated"
+            short="$repo: Updated to $NEW_VERSION, redeploying"
+          elif [ "$DEPLOY_RESULT" != "success" ]; then
+            title="Blog deployment skipped"
+            short="$repo: Nothing was deployed"
+          elif [ -n "$warnings" ]; then
+            title="Blog deployed with warnings"
+            short="$repo: Deployed $sha, $(grep -c '' <<< "$warnings") warning(s)"
+          else
+            title="Blog deployed"
+            short="$repo: Deployed $sha"
+          fi
+
+          desp="- Repository: \`$repo\`
+          - Commit: \`$sha\`
+          - Trigger: \`$GITHUB_EVENT_NAME\`
+          - Version check: \`$CHECK_RESULT\`
+          - Template update: \`$UPDATE_RESULT\`
+          - Build: \`$BUILD_RESULT\`
+          - Deploy: \`$DEPLOY_RESULT\`
+          - Search index: \`$CRAWL_RESULT\`"
+          if [ -n "$COMMIT_MESSAGE" ]; then
+            desp+=$'\n'"- Message: ${COMMIT_MESSAGE%%$'\n'*}"
+          fi
+          if [ -n "$NEW_VERSION" ]; then
+            desp+=$'\n'"- Template: \`$CURRENT_VERSION\` -> \`$NEW_VERSION\`"
+          fi
+          if [ "$CHANGES_COMMITTED" = "true" ]; then
+            desp+=$'\n\n'"A new deployment was started, and it sends its own push."
+          fi
+          if [ -n "$failed_step" ]; then
+            desp+=$'\n'"- Failed step: \`$failed_step\`"
+          fi
+          if [ -n "$warnings" ]; then
+            desp+=$'\n\n'"**Warnings**"$'\n\n'"$warnings"
+          fi
+          if [ -n "$PAGE_URL" ]; then
+            desp+=$'\n\n'"[View the site]($PAGE_URL)"
+          fi
+          desp+=$'\n\n'"Check the [workflow run]($RUN_URL) for detailed logs."
+
+          response=$(curl -sS --fail-with-body --retry 3 \
+            --data-urlencode "title=$title" \
+            --data-urlencode "desp=$desp" \
+            --data-urlencode "short=$short" \
+            --data-urlencode "tags=GitHub" \
+            "https://$uid.push.ft07.com/send/$SERVERCHAN_SENDKEY.send")
+          # The response may carry a read key and the logs are public, so print only the status.
+          jq -r '"code=\(.code // "none") message=\(.message // "")"' <<< "$response"
+          jq -e '(.code // 0) == 0' <<< "$response" > /dev/null

@@ -27,6 +27,7 @@ jobs:
         run: |
           # 获取当前版本
           CURRENT_VERSION=$(jq -r '.devDependencies["vuepress-theme-plume"]' package.json)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> "$GITHUB_ENV"
 
           GITHUB_METADATA=$(curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -38,6 +39,8 @@ jobs:
           NPM_VERSION=$(jq -r '.version // empty' <<< "$NPM_METADATA")
           TARGET_VERSION=$(node .github/scripts/latest-semver.mjs "$GITHUB_VERSION" "$NPM_VERSION")
           NEWEST_VERSION=$(node .github/scripts/latest-semver.mjs "$CURRENT_VERSION" "$TARGET_VERSION")
+          echo "LATEST_GITHUB_VERSION=$GITHUB_VERSION" >> "$GITHUB_ENV"
+          echo "LATEST_NPM_VERSION=$NPM_VERSION" >> "$GITHUB_ENV"
 
           echo "Latest GitHub version: ${GITHUB_VERSION:-unavailable}"
           echo "Latest npm version: ${NPM_VERSION:-unavailable}"
@@ -46,6 +49,7 @@ jobs:
 
           if [ -z "$TARGET_VERSION" ]; then
             echo "NEEDS_UPDATE=false" >> "$GITHUB_ENV"
+            echo "SOURCES_UNAVAILABLE=true" >> "$GITHUB_ENV"
             echo "⚠️ Failed to query both release sources; skip dependency update and continue with Pages build"
             exit 0
           fi
@@ -106,8 +110,76 @@ jobs:
           git push
           echo "changes_committed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Build Pages when no changes were committed
-        if: env.NEEDS_UPDATE != 'true' || steps.commit.outputs.changes_committed == 'false'
+      # A push made with GITHUB_TOKEN does not start another workflow, so deploy explicitly in every case
+      - name: Build Pages
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy.yml --ref "$GITHUB_REF_NAME"
+
+      - name: Send ServerChan push
+        if: ${{ !cancelled() }}
+        env:
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          JOB_STATUS: ${{ job.status }}
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          DEP_UPDATE_OUTCOME: ${{ steps.update.outcome }}
+          CHANGES_COMMITTED: ${{ steps.commit.outputs.changes_committed }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SERVERCHAN_SENDKEY" ]; then
+            echo "::warning title=Update push skipped::Set the SERVERCHAN_SENDKEY secret to enable pushes."
+            exit 0
+          fi
+          if [[ ! "$SERVERCHAN_SENDKEY" =~ ^sctp([0-9]+)t ]]; then
+            echo "::error title=Update push failed::SERVERCHAN_SENDKEY is not a ServerChan3 key (sctp...)."
+            exit 1
+          fi
+          uid="${BASH_REMATCH[1]}"
+          echo "::add-mask::$uid"
+
+          repo="${GITHUB_REPOSITORY#*/}"
+
+          if [ "$JOB_STATUS" != "success" ]; then
+            title="Blog template update failed"
+            short="$repo: The update workflow failed"
+          elif [ "$INSTALL_OUTCOME" = "failure" ] || [ "$DEP_UPDATE_OUTCOME" = "failure" ]; then
+            title="Blog template update failed"
+            short="$repo: Could not update to $NEW_VERSION"
+          elif [ "$CHANGES_COMMITTED" = "true" ]; then
+            title="Blog template updated"
+            short="$repo: Updated to $NEW_VERSION, redeploying"
+          elif [ "$SOURCES_UNAVAILABLE" = "true" ]; then
+            title="Blog template check has warnings"
+            short="$repo: Release sources were unavailable"
+          elif [ "$NEEDS_UPDATE" = "true" ]; then
+            title="Blog template is unchanged"
+            short="$repo: $NEW_VERSION changed no dependencies"
+          else
+            title="Blog template is up to date"
+            short="$repo: No new template version"
+          fi
+
+          desp="- Repository: \`$repo\`
+          - Trigger: \`$GITHUB_EVENT_NAME\`
+          - Current template: \`$CURRENT_VERSION\`
+          - Latest GitHub version: \`${LATEST_GITHUB_VERSION:-unavailable}\`
+          - Latest npm version: \`${LATEST_NPM_VERSION:-unavailable}\`"
+          if [ -n "$NEW_VERSION" ]; then
+            desp+=$'\n'"- Update target: \`$NEW_VERSION\`"
+            desp+=$'\n'"- Install: \`${INSTALL_OUTCOME:-skipped}\`"
+            desp+=$'\n'"- Update: \`${DEP_UPDATE_OUTCOME:-skipped}\`"
+          fi
+          if [ "$JOB_STATUS" = "success" ]; then
+            desp+=$'\n\n'"A new deployment was started, and it sends its own push."
+          fi
+          desp+=$'\n\n'"Check the [workflow run]($RUN_URL) for detailed logs."
+
+          response=$(curl -sS --fail-with-body --retry 3 \
+            --data-urlencode "title=$title" \
+            --data-urlencode "desp=$desp" \
+            --data-urlencode "short=$short" \
+            --data-urlencode "tags=GitHub" \
+            "https://$uid.push.ft07.com/send/$SERVERCHAN_SENDKEY.send")
+          # The response may carry a read key and the logs are public, so print only the status.
+          jq -r '"code=\(.code // "none") message=\(.message // "")"' <<< "$response"
+          jq -e '(.code // 0) == 0' <<< "$response" > /dev/null

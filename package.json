@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@12.16.1",
+  "packageManager": "pnpm@12.18.0",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "AGPL-3.0-only",
   "scripts": {

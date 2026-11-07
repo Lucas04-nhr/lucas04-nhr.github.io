@@ -41,3 +41,9 @@ minimumReleaseAgeExclude:
 overrides:
   rolldown: 1.2.16
   webworkify-webpack: 2.1.5
+peerDependencyRules:
+  allowedVersions:
+    # vuepress-theme-plume requires katex ^0.19, while @vuepress/plugin-markdown-math still declares ^0.16 || ^0.18
+    '@vuepress/plugin-markdown-math>katex': '0.19'
+    # @mdit/* plugins declare markdown-it ^15, but VuePress and @mdit-vue still depend on markdown-it 14
+    markdown-it: '14'

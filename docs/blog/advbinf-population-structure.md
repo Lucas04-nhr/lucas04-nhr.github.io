@@ -1,7 +1,7 @@
 ---
 title: Population Structure, Admixture and PCA
 createTime: 2026/09/16 09:41:56
-permalink: /blogs/ku-advbinf-population-structure/
+permalink: /blog/ku-advbinf-population-structure/
 tags:
   - KU
   - Advanced Bioinformatics

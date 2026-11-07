@@ -1,7 +1,7 @@
 ---
 title: EM Algorithm
 createTime: 2026/09/09 13:45:23
-permalink: /blogs/ku-advbinf-em-algo/
+permalink: /blog/ku-advbinf-em-algo/
 tags:
   - KU
   - Advanced Bioinformatics
@@ -944,4 +944,3 @@ $$
 \text{repeat}
 }
 $$
-

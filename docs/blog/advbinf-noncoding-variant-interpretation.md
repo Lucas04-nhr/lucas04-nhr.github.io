@@ -1,7 +1,7 @@
 ---
 title: Non-coding Variant Interpretation
 createTime: 2026/09/23 08:28:14
-permalink: /blogs/ku-advbinf-noncoding-variant-interpretation/
+permalink: /blog/ku-advbinf-noncoding-variant-interpretation/
 tags:
   - KU
   - Advanced Bioinformatics
@@ -776,13 +776,13 @@ The **coloc** framework expresses this as five hypotheses:
 
 ::: table align="center" copy="all" title="Colocalization hypotheses and interpretations"
 
-| Hypothesis | Interpretation |
-| :---: | --- |
-| $H_0$ | Neither trait has an association in the region |
-| $H_1$ | Only trait 1 is associated |
-| $H_2$ | Only trait 2 is associated |
-| $H_3$ | Both traits are associated, but with different causal variants |
-| $H_4$ | Both traits are associated and share one causal variant |
+| Hypothesis | Interpretation                                                 |
+| :--------: | -------------------------------------------------------------- |
+|   $H_0$    | Neither trait has an association in the region                 |
+|   $H_1$    | Only trait 1 is associated                                     |
+|   $H_2$    | Only trait 2 is associated                                     |
+|   $H_3$    | Both traits are associated, but with different causal variants |
+|   $H_4$    | Both traits are associated and share one causal variant        |
 
 :::
 
@@ -887,7 +887,7 @@ A 95% credible set does not give every member a 95% probability of causality. It
 
 A locus may contain several causal variants. Conditional analysis can search for a second signal after accounting for a lead variant. Joint methods model several variants at once. The lecture compares **CAVIAR**, **FINEMAP**, and **SuSiE**.
 
-**SuSiE**, or *Sum of Single Effects*, decomposes the total effect into $L$ components:
+**SuSiE**, or _Sum of Single Effects_, decomposes the total effect into $L$ components:
 
 $$
 \mathbf{b}
@@ -1036,15 +1036,15 @@ These layers answer different questions:
 
 ::: table align="center" copy="all" title="Evidence and its contribution to interpretation"
 
-| Evidence | Main contribution | Does not establish alone |
-| --- | --- | --- |
-| GWAS and LD | Associated locus and correlated variants | Functional variant or target gene |
-| Molecular QTLs | Candidate molecular phenotype | Shared causality with the trait |
-| Colocalization | Compatibility with a shared genetic signal | Mediation or molecular mechanism |
-| Fine-mapping | PIPs and credible sets | Experimental causality |
-| Regulatory maps | Candidate element and cell type | The causal SNP at one locus |
-| Enhancer-to-gene models | Candidate target gene | Direct regulatory validation |
-| Sequence models | Predicted REF-to-ALT effect | An observed effect in vivo |
+| Evidence                | Main contribution                          | Does not establish alone          |
+| ----------------------- | ------------------------------------------ | --------------------------------- |
+| GWAS and LD             | Associated locus and correlated variants   | Functional variant or target gene |
+| Molecular QTLs          | Candidate molecular phenotype              | Shared causality with the trait   |
+| Colocalization          | Compatibility with a shared genetic signal | Mediation or molecular mechanism  |
+| Fine-mapping            | PIPs and credible sets                     | Experimental causality            |
+| Regulatory maps         | Candidate element and cell type            | The causal SNP at one locus       |
+| Enhancer-to-gene models | Candidate target gene                      | Direct regulatory validation      |
+| Sequence models         | Predicted REF-to-ALT effect                | An observed effect in vivo        |
 
 :::
 

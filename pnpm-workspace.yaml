@@ -39,4 +39,5 @@ minimumReleaseAgeExclude:
   - '@vue/shared@3.5.45'
   - vue@3.5.45
 overrides:
+  rolldown: 1.2.16
   webworkify-webpack: 2.1.5

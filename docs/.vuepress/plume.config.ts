@@ -98,6 +98,10 @@ export default defineThemeConfig({
        * 公告板
        * @see https://theme-plume.vuejs.press/guide/features/bulletin/
        */
+      // rc.215 renders an empty bulletin when none is configured; keep it off until one is needed.
+      bulletin: {
+        enablePage: false,
+      },
       // bulletin: {
       //   layout: 'top-right',
       //   contentType: 'markdown',

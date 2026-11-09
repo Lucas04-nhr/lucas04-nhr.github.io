@@ -21,7 +21,7 @@
   ],
   "apps": [
     {
-      "github": "huamidev/GestaltX",
+      "github": "Lucas04-nhr/GestaltX",
       "assetPattern": "^GestaltX_.*\\.ipa$",
       "includePrereleases": false,
       "maxVersions": 5,
@@ -32,7 +32,7 @@
         "bundleIdentifier": "com.huami.gestultx",
         "developerName": "huamidev",
         "subtitle": "MobileGestalt editor for iOS 27",
-        "localizedDescription": "A MobileGestalt editor for iPhone and iPad, with region-code tweaks, device presets, a CacheExtra field editor, automatic backups and per-preset restore.\n\nOn-device MobileGestalt access requires iOS / iPadOS 27.x; on iOS 26.x only local plist editing works. When re-signing, keep the share extension and give the app and the extension the same App Group.\n\nFor security research and educational purposes only. Use it only on devices you own or are authorized to manage.",
+        "localizedDescription": "A MobileGestalt editor for iPhone and iPad, with region-code tweaks, device presets, a CacheExtra field editor, automatic backups and per-preset restore.\n\nOn-device MobileGestalt access requires iOS / iPadOS 27.x; on iOS 26.x only local plist editing works.\n\nThis source installs builds from Lucas04-nhr/GestaltX, which rebuilds each upstream release with the App Group entitlement embedded, so SideStore and AltStore can set up the App Group themselves. When re-signing with another tool, keep the share extension and give the app and the extension the same App Group.\n\nFor security research and educational purposes only. Use it only on devices you own or are authorized to manage.",
         "iconURL": "https://raw.githubusercontent.com/huamidev/GestaltX/main/GestaltX/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
         "tintColor": "#3A3A3C",
         "category": "utilities"

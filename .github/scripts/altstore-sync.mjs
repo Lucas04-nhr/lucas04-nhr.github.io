@@ -95,7 +95,12 @@ async function buildApp(entry) {
   const maxVersions = entry.maxVersions ?? 5
   const pattern = new RegExp(entry.assetPattern ?? '\\.ipa$', 'i')
   const excludeTags = entry.excludeTags ? new RegExp(entry.excludeTags, 'i') : null
-  const releases = await fetchJSON(`https://api.github.com/repos/${entry.github}/releases?per_page=30`)
+  // GitHub lists releases by tag rather than by publish time, so a new
+  // pre-release on a newer commit can come after an older tagged release.
+  // AltStore and SideStore treat the first version as the latest, so sort
+  // newest first. Drafts have no publish time and are skipped below.
+  const releases = (await fetchJSON(`https://api.github.com/repos/${entry.github}/releases?per_page=30`))
+    .sort((a, b) => String(b.published_at ?? '').localeCompare(String(a.published_at ?? '')))
 
   const versions = []
   const seenVersions = new Set()

@@ -55,6 +55,13 @@ Import and export UIGF JSON, merge archives, and view account and pool statistic
 </LinkCard>
 
 <LinkCard
+  title="AltStore Source"
+  icon="mdi:apple-ios"
+  href="/tool/altstore/">
+Sideload apps from AltGallery and my own picks with AltStore, SideStore and similar apps.
+</LinkCard>
+
+<LinkCard
   title="VERT Image Converter"
   icon="mdi:image-edit-outline"
   href="https://vert.lucas04.top/">

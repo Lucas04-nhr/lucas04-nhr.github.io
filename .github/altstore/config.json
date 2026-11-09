@@ -1,0 +1,42 @@
+{
+  "output": ".cache/altstore/altstore.json",
+  "source": {
+    "name": "Lucas's AltStore Gallery",
+    "identifier": "top.lucas04.blog.altstore",
+    "subtitle": "AltGallery plus Lucas's own picks",
+    "description": "A personal AltStore source. It mirrors the AltGallery list (https://github.com/bebound/AltGallery) and adds apps chosen by Lucas, each built from its GitHub Releases.",
+    "iconURL": "https://static.lucas04.top/favicon/favicon-512.png",
+    "website": "https://blog.lucas04.top",
+    "tintColor": "#306B88",
+    "featuredApps": [
+      "com.huami.gestultx"
+    ]
+  },
+  "upstreams": [
+    {
+      "name": "AltGallery",
+      "url": "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/all-apps.json",
+      "exclude": []
+    }
+  ],
+  "apps": [
+    {
+      "github": "huamidev/GestaltX",
+      "assetPattern": "^GestaltX_.*\\.ipa$",
+      "includePrereleases": false,
+      "maxVersions": 5,
+      "releaseNotes": "en",
+      "minOSVersion": "26.0",
+      "app": {
+        "name": "GestaltX",
+        "bundleIdentifier": "com.huami.gestultx",
+        "developerName": "huamidev",
+        "subtitle": "MobileGestalt editor for iOS 27",
+        "localizedDescription": "A MobileGestalt editor for iPhone and iPad, with region-code tweaks, device presets, a CacheExtra field editor, automatic backups and per-preset restore.\n\nOn-device MobileGestalt access requires iOS / iPadOS 27.x; on iOS 26.x only local plist editing works. When re-signing, keep the share extension and give the app and the extension the same App Group.\n\nFor security research and educational purposes only. Use it only on devices you own or are authorized to manage.",
+        "iconURL": "https://raw.githubusercontent.com/huamidev/GestaltX/main/GestaltX/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+        "tintColor": "#3A3A3C",
+        "category": "utilities"
+      }
+    }
+  ]
+}

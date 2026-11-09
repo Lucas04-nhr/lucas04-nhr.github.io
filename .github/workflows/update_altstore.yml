@@ -1,0 +1,134 @@
+name: Update AltStore Source
+
+# Generates the AltStore source and uploads it to the R2 bucket. It never
+# commits to the repository or starts the blog deployment.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *" # 每天 5:00（哥本哈根时间）同步一次
+      timezone: "Europe/Copenhagen"
+  push:
+    branches: [main]
+    paths:
+      - ".github/altstore/**"
+      - ".github/scripts/altstore-sync.mjs"
+
+concurrency:
+  group: update-altstore
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  R2_BUCKET: lucas-oss
+  R2_OBJECT: altstore.json
+  PUBLIC_URL: https://static.lucas04.top/altstore.json
+  LOCAL_FILE: .cache/altstore/altstore.json
+  AWS_DEFAULT_REGION: auto
+  # R2 rejects some of the checksum headers that newer AWS CLI versions send by default
+  AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+  AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Download current source
+        env:
+          AWS_ACCESS_KEY_ID: ${{ vars.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+        run: |
+          mkdir -p "$(dirname "$LOCAL_FILE")"
+          # The current object is the previous source; on the first run it does not exist yet
+          aws s3 cp "s3://$R2_BUCKET/$R2_OBJECT" "$LOCAL_FILE" \
+            --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
+            || echo "No current source in R2; a new one will be uploaded."
+
+      - name: Generate AltStore source
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/altstore-sync.mjs
+
+      - name: Upload to R2
+        id: upload
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ vars.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+        run: |
+          aws s3 cp "$LOCAL_FILE" "s3://$R2_BUCKET/$R2_OBJECT" \
+            --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
+            --content-type "application/json; charset=utf-8" \
+            --cache-control "public, max-age=300"
+
+      - name: Send ServerChan push
+        # Push only when the source was updated or the run failed, not on unchanged daily runs
+        if: ${{ !cancelled() && (failure() || steps.upload.outcome == 'success') }}
+        env:
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          JOB_STATUS: ${{ job.status }}
+          SYNC_OUTCOME: ${{ steps.sync.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
+          SUMMARY: ${{ steps.sync.outputs.summary }}
+          WARNINGS: ${{ steps.sync.outputs.warnings }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SERVERCHAN_SENDKEY" ]; then
+            echo "::warning title=AltStore push skipped::Set the SERVERCHAN_SENDKEY secret to enable pushes."
+            exit 0
+          fi
+          if [[ ! "$SERVERCHAN_SENDKEY" =~ ^sctp([0-9]+)t ]]; then
+            echo "::error title=AltStore push failed::SERVERCHAN_SENDKEY is not a ServerChan3 key (sctp...)."
+            exit 1
+          fi
+          uid="${BASH_REMATCH[1]}"
+          echo "::add-mask::$uid"
+
+          if [ "$JOB_STATUS" != "success" ]; then
+            title="AltStore source update failed"
+            if [ "$SYNC_OUTCOME" = "failure" ]; then
+              short="Could not generate the source"
+            elif [ "$UPLOAD_OUTCOME" = "failure" ]; then
+              short="Could not upload the source to R2"
+            else
+              short="The update workflow failed"
+            fi
+            desp="- Trigger: \`$GITHUB_EVENT_NAME\`
+          - Generate: \`${SYNC_OUTCOME:-skipped}\`
+          - Upload: \`${UPLOAD_OUTCOME:-skipped}\`"
+          else
+            title="AltStore source updated"
+            short="$(grep -m1 -E '^- (Added|Removed|.+→)' <<< "$SUMMARY" | sed 's/^- //')"
+            short="${short:-The source was refreshed}"
+            desp="$SUMMARY
+
+          [Source JSON]($PUBLIC_URL)"
+          fi
+
+          if [ -n "$WARNINGS" ]; then
+            desp+=$'\n\n'"**Warnings**"$'\n\n'"$WARNINGS"
+          fi
+          desp+=$'\n\n'"Check the [workflow run]($RUN_URL) for detailed logs."
+
+          response=$(curl -sS --fail-with-body --retry 3 \
+            --data-urlencode "title=$title" \
+            --data-urlencode "desp=$desp" \
+            --data-urlencode "short=$short" \
+            --data-urlencode "tags=GitHub" \
+            "https://$uid.push.ft07.com/send/$SERVERCHAN_SENDKEY.send")
+          # The response may carry a read key and the logs are public, so print only the status.
+          jq -r '"code=\(.code // "none") message=\(.message // "")"' <<< "$response"
+          jq -e '(.code // 0) == 0' <<< "$response" > /dev/null

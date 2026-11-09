@@ -6,6 +6,8 @@
 //   minus any bundle identifiers listed in `exclude`.
 // - Each entry in `apps` is built from its GitHub repo's releases: every
 //   release with an asset matching `assetPattern` becomes a version.
+//   `excludeTags` skips releases whose tag matches it (e.g. betas that are
+//   not marked as prereleases).
 // - Custom apps come first and win over upstream apps with the same
 //   bundle identifier; earlier upstreams win over later ones.
 // - The file already at `output` is treated as the previous source: if a
@@ -92,21 +94,37 @@ function releaseNotes(release, language) {
 async function buildApp(entry) {
   const maxVersions = entry.maxVersions ?? 5
   const pattern = new RegExp(entry.assetPattern ?? '\\.ipa$', 'i')
+  const excludeTags = entry.excludeTags ? new RegExp(entry.excludeTags, 'i') : null
   const releases = await fetchJSON(`https://api.github.com/repos/${entry.github}/releases?per_page=30`)
 
   const versions = []
+  const seenVersions = new Set()
   let latestRelease
   for (const release of releases) {
     if (versions.length >= maxVersions)
       break
     if (release.draft || (release.prerelease && !entry.includePrereleases))
       continue
+    if (excludeTags?.test(release.tag_name))
+      continue
     const asset = release.assets.find(a => pattern.test(a.name))
     if (!asset)
       continue
+
+    // Tags like "v8.0.17+339" carry build metadata. The build number in a
+    // Flutter-style asset name ("App_8.0.18+344.ipa") is the IPA's
+    // CFBundleVersion, so use it as buildVersion; the tag's may differ.
+    const version = release.tag_name.replace(/^v/i, '').replace(/\+.*$/, '')
+    const buildVersion = asset.name.match(/\+(\d+)\.ipa$/i)?.[1]
+    const key = `${version}+${buildVersion ?? ''}`
+    if (seenVersions.has(key))
+      continue
+    seenVersions.add(key)
+
     latestRelease ??= release
     versions.push({
-      version: release.tag_name.replace(/^v/i, ''),
+      version,
+      ...(buildVersion ? { buildVersion } : {}),
       date: release.published_at.slice(0, 10),
       localizedDescription: releaseNotes(release, entry.releaseNotes),
       downloadURL: asset.browser_download_url,

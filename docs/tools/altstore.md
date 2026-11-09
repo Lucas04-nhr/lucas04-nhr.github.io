@@ -48,6 +48,14 @@ https://static.lucas04.top/altstore.json
 | App | Description | Requirements |
 | --- | --- | --- |
 | [GestaltX](https://github.com/huamidev/GestaltX) | A MobileGestalt editor with region-code tweaks, device presets, a field editor and automatic backups. | Installs on iOS 26.0+; editing MobileGestalt on the device requires iOS / iPadOS 27.x. |
+| [Kelivo](https://github.com/Chevey339/kelivo) | A Flutter LLM chat client for mobile and desktop. | iOS 15.0+ |
+| [Ksign](https://github.com/Nyasami/Ksign) | An on-device IPA signer and installer, a cleaner take on ESign. | iOS 16.0+; needs your own signing certificate. |
+| [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |
+| [Provenance](https://github.com/Provenance-Emu/Provenance) | A multi-emulator frontend for Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony consoles. | iOS 16.0+; each download is about 1 GB. |
+| [JHenTai](https://github.com/jiangtian616/JHenTai) | A manga client for E-Hentai and ExHentai. | iOS 13.0+; the sites' content is mostly for adults. |
+| [Spotube](https://github.com/team-spotube/spotube) | An open-source music streaming app. | iOS 14.0+ |
+
+Only stable releases are listed. Beta and nightly builds, such as Provenance's `alpha` and Ksign's `beta` releases, are left out.
 
 ::: warning GestaltX
 GestaltX changes system capability flags, and the effects depend on the device and OS. It backs up the original values before every write, but use it only on devices you own or are authorized to manage. When re-signing it, keep its share extension and give the app and the extension the same App Group.

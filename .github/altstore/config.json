@@ -37,6 +37,104 @@
         "tintColor": "#3A3A3C",
         "category": "utilities"
       }
+    },
+    {
+      "github": "Chevey339/kelivo",
+      "assetPattern": "^Kelivo_ios_.*\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "15.0",
+      "app": {
+        "name": "Kelivo",
+        "bundleIdentifier": "psyche.kelivo",
+        "developerName": "Chevey339",
+        "subtitle": "LLM chat client",
+        "localizedDescription": "A Flutter LLM chat client for mobile and desktop.",
+        "iconURL": "https://raw.githubusercontent.com/Chevey339/kelivo/master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+        "tintColor": "#3D5A99",
+        "category": "utilities"
+      }
+    },
+    {
+      "github": "Nyasami/Ksign",
+      "assetPattern": "^Ksign\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "16.0",
+      "app": {
+        "name": "Ksign",
+        "bundleIdentifier": "nya.asami.ksign",
+        "developerName": "Nyasami",
+        "subtitle": "On-device IPA signer",
+        "localizedDescription": "The \"cleaner\" ESign app: sign and install IPAs on the device with your own certificate, no computer needed.",
+        "iconURL": "https://raw.githubusercontent.com/Nyasami/Ksign/main/Ksign/Resources/Assets.xcassets/AppIcon.appiconset/Ksign-default.png",
+        "tintColor": "#2496FD",
+        "category": "utilities"
+      }
+    },
+    {
+      "github": "hrydgard/ppsspp",
+      "assetPattern": "^PPSSPP-iOS-.*\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "11.0",
+      "app": {
+        "name": "PPSSPP",
+        "bundleIdentifier": "org.ppsspp.ppsspp",
+        "developerName": "Henrik Rydgård",
+        "subtitle": "PSP emulator",
+        "localizedDescription": "A cross-platform PSP emulator written in C++. See https://ppsspp.org for the full changelog.",
+        "iconURL": "https://raw.githubusercontent.com/hrydgard/ppsspp/master/ios/assets.xcassets/AppIcon.appiconset/icon_backfill_1024.png",
+        "tintColor": "#4D7080",
+        "category": "games"
+      }
+    },
+    {
+      "github": "Provenance-Emu/Provenance",
+      "assetPattern": "^Provenance(?!.*tvOS).*\\.ipa$",
+      "maxVersions": 3,
+      "minOSVersion": "16.0",
+      "app": {
+        "name": "Provenance",
+        "bundleIdentifier": "org.provenance-emu.provenance",
+        "developerName": "Provenance Emu",
+        "subtitle": "Multi-system emulator frontend",
+        "localizedDescription": "An iOS and tvOS multi-emulator frontend supporting various Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony console systems.\n\nEach download is about 1 GB. Get started with the wiki at https://wiki.provenance-emu.com.",
+        "iconURL": "https://raw.githubusercontent.com/Provenance-Emu/Provenance/develop/Provenance/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon512x512.png",
+        "tintColor": "#2B8AF7",
+        "category": "games"
+      }
+    },
+    {
+      "github": "jiangtian616/JHenTai",
+      "assetPattern": "^JHenTai_.*\\.ipa$",
+      "maxVersions": 5,
+      "releaseNotes": "en",
+      "minOSVersion": "13.0",
+      "app": {
+        "name": "JHenTai",
+        "bundleIdentifier": "top.jtmonster.jhentai",
+        "developerName": "jiangtian616",
+        "subtitle": "E-Hentai and ExHentai client",
+        "localizedDescription": "A cross-platform manga app for E-Hentai and ExHentai, made with Flutter.\n\nThe content on these sites is mostly for adults.",
+        "iconURL": "https://raw.githubusercontent.com/jiangtian616/JHenTai/master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+        "tintColor": "#B5AE12",
+        "category": "entertainment"
+      }
+    },
+    {
+      "github": "team-spotube/spotube",
+      "assetPattern": "^Spotube-iOS\\.ipa$",
+      "excludeTags": "alpha|beta|nightly|rc",
+      "maxVersions": 5,
+      "minOSVersion": "14.0",
+      "app": {
+        "name": "Spotube",
+        "bundleIdentifier": "oss.krtirtho.spotube.stable",
+        "developerName": "KRTirtho",
+        "subtitle": "Open-source music streaming app",
+        "localizedDescription": "An open-source music streaming app for desktop and mobile.",
+        "iconURL": "https://raw.githubusercontent.com/team-spotube/spotube/master/iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/app-icon-1024.png",
+        "tintColor": "#3B6DF6",
+        "category": "entertainment"
+      }
     }
   ]
 }

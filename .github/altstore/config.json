@@ -39,6 +39,22 @@
       }
     },
     {
+      "github": "LiveContainer/LiveContainer",
+      "assetPattern": "^LiveContainer\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "15.0",
+      "app": {
+        "name": "LiveContainer",
+        "bundleIdentifier": "com.kdt.livecontainer",
+        "developerName": "LiveContainer Team",
+        "subtitle": "Run iOS apps without actually installing them!",
+        "localizedDescription": "Run iOS apps without actually installing them!\n\nThis is the standalone build, without the built-in SideStore. Install it with AltStore, SideStore or another signer, and refresh it from there.",
+        "iconURL": "https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/AppIcon1024.png",
+        "tintColor": "#0784FC",
+        "category": "utilities"
+      }
+    },
+    {
       "github": "Chevey339/kelivo",
       "assetPattern": "^Kelivo_ios_.*\\.ipa$",
       "maxVersions": 5,

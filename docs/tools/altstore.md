@@ -48,6 +48,7 @@ https://static.lucas04.top/altstore.json
 | App | Description | Requirements |
 | --- | --- | --- |
 | [GestaltX](https://github.com/huamidev/GestaltX) | A MobileGestalt editor with region-code tweaks, device presets, a field editor and automatic backups. | Installs on iOS 26.0+; editing MobileGestalt on the device requires iOS / iPadOS 27.x. |
+| [LiveContainer](https://github.com/LiveContainer/LiveContainer) | Runs iOS apps without actually installing them. This is the standalone build, without the built-in SideStore. | iOS 15.0+ |
 | [Kelivo](https://github.com/Chevey339/kelivo) | A Flutter LLM chat client for mobile and desktop. | iOS 15.0+ |
 | [Ksign](https://github.com/Nyasami/Ksign) | An on-device IPA signer and installer, a cleaner take on ESign. | iOS 16.0+; needs your own signing certificate. |
 | [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |
@@ -65,7 +66,7 @@ GestaltX changes system capability flags, and the effects depend on the device a
 
 The full AltGallery list is included as published. See the [AltGallery README](https://github.com/bebound/AltGallery#available-apps) for the current list. To request an app there, open an issue in that repository.
 
-If an app in my picks has the same bundle identifier as an AltGallery app, my entry is used.
+If an app in my picks has the same bundle identifier as an AltGallery app, my entry is used. This is why AltGallery's LiveContainer+SideStore is not listed: it shares a bundle identifier with the standalone LiveContainer above, and one source can list only one of them.
 
 ## Updates {#updates}
 

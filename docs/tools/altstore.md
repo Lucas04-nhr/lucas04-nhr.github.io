@@ -33,10 +33,11 @@ https://static.lucas04.top/altstore.json
 
    - [Add to AltStore](altstore://source?url=https://static.lucas04.top/altstore.json)
    - [Add to SideStore](sidestore://source?url=https://static.lucas04.top/altstore.json)
+   - [Add to LiveContainer](livecontainer://source?url=https://static.lucas04.top/altstore.json)
 
 2. For any other app, copy the source URL above and add it in the app's source or repository settings.
 
-3. Confirm the source in the app. Its apps then appear under **Browse**, and new releases appear under **News**.
+3. Confirm the source in the app. In AltStore and SideStore, its apps then appear under **Browse** and new releases under **News**. In LiveContainer, the source appears in the **Sources** tab.
 
 :::
 

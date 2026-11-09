@@ -49,6 +49,7 @@ https://static.lucas04.top/altstore.json
 | --- | --- | --- |
 | [GestaltX](https://github.com/Lucas04-nhr/GestaltX) | My unofficial fork of [huamidev/GestaltX](https://github.com/huamidev/GestaltX), a MobileGestalt editor with region-code tweaks, device presets, a field editor and automatic backups. The fork adds a unified Backups tab, a read-only check for unofficial settings, and builds with the App Group entitlements embedded. | Installs on iOS 26.0+; editing MobileGestalt on the device requires iOS / iPadOS 27.x. |
 | [LiveContainer](https://github.com/LiveContainer/LiveContainer) | Runs iOS apps without actually installing them. This is the standalone build, without the built-in SideStore. | iOS 15.0+ |
+| [SideStore](https://github.com/SideStore/SideStore) | An untethered alternative app store that re-signs and refreshes apps with your own Apple ID, without AltServer. | iOS 15.0+ |
 | [Kelivo](https://github.com/Chevey339/kelivo) | A Flutter LLM chat client for mobile and desktop. | iOS 15.0+ |
 | [Ksign](https://github.com/Nyasami/Ksign) | An on-device IPA signer and installer, a cleaner take on ESign. | iOS 16.0+; needs your own signing certificate. |
 | [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |

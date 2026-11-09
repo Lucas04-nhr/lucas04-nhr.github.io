@@ -56,6 +56,23 @@
       }
     },
     {
+      "github": "SideStore/SideStore",
+      "assetPattern": "^SideStore\\.ipa$",
+      "excludeTags": "alpha|beta|nightly|rc",
+      "maxVersions": 5,
+      "minOSVersion": "15.0",
+      "app": {
+        "name": "SideStore",
+        "bundleIdentifier": "com.SideStore.SideStore",
+        "developerName": "SideStore Team",
+        "subtitle": "Untethered alternative app store for iOS",
+        "localizedDescription": "An untethered, community-driven alternative app store for non-jailbroken iOS devices. It re-signs and installs IPA files with your own Apple ID and refreshes them in the background, without AltServer.\n\nOnly stable releases are listed here. See https://docs.sidestore.io for setup instructions.",
+        "iconURL": "https://raw.githubusercontent.com/SideStore/SideStore/develop/AltStore/Resources/Icons.xcassets/AppIcon.appiconset/1024.png",
+        "tintColor": "#A405FA",
+        "category": "utilities"
+      }
+    },
+    {
       "github": "Chevey339/kelivo",
       "assetPattern": "^Kelivo_ios_.*\\.ipa$",
       "maxVersions": 5,

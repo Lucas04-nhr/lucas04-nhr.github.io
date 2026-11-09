@@ -23,19 +23,20 @@
     {
       "github": "Lucas04-nhr/GestaltX",
       "assetPattern": "^GestaltX_.*\\.ipa$",
-      "includePrereleases": false,
+      "includePrereleases": true,
       "maxVersions": 5,
       "releaseNotes": "en",
       "minOSVersion": "26.0",
       "app": {
         "name": "GestaltX",
         "bundleIdentifier": "com.huami.gestultx",
-        "developerName": "huamidev",
-        "subtitle": "MobileGestalt editor for iOS 27",
-        "localizedDescription": "A MobileGestalt editor for iPhone and iPad, with region-code tweaks, device presets, a CacheExtra field editor, automatic backups and per-preset restore.\n\nOn-device MobileGestalt access requires iOS / iPadOS 27.x; on iOS 26.x only local plist editing works.\n\nThis source installs builds from Lucas04-nhr/GestaltX, which rebuilds each upstream release with the App Group entitlement embedded, so SideStore and AltStore can set up the App Group themselves. When re-signing with another tool, keep the share extension and give the app and the extension the same App Group.\n\nFor security research and educational purposes only. Use it only on devices you own or are authorized to manage.",
+        "developerName": "Lucas04-nhr",
+        "subtitle": "MobileGestalt editor for iOS 27 (unofficial fork)",
+        "localizedDescription": "Includes beta builds as well as stable releases. Beta builds are for development use only and may be unstable or incomplete.\n\nA MobileGestalt editor for iPhone and iPad, with region-code tweaks, device presets, a CacheExtra field editor, automatic backups and per-preset restore.\n\nThis is an unofficial fork, Lucas04-nhr/GestaltX, of huamidev/GestaltX. It follows the upstream releases and adds:\n\n• Backups tab: create, import, restore, open, rename and export backups in one place. Imports are verified against this device, and restores require a matching system cache layout.\n• Check Unofficial Settings: a read-only check in Tools that lists values not official for this device, such as internal flags or unsupported features, and can stage fixes for review.\n• Builds with the App Group entitlements of the app and its share extension embedded, so SideStore and AltStore can set up the App Group themselves. When re-signing with another tool, keep the share extension and give the app and the extension the same App Group.\n\nOn-device MobileGestalt access requires iOS / iPadOS 27.x; on iOS 26.x only local plist editing works. Report issues with the fork's changes to Lucas04-nhr/GestaltX and all others upstream.\n\nFor security research and educational purposes only. Use it only on devices you own or are authorized to manage.",
         "iconURL": "https://raw.githubusercontent.com/huamidev/GestaltX/main/GestaltX/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
         "tintColor": "#3A3A3C",
-        "category": "utilities"
+        "category": "utilities",
+        "beta": true
       }
     },
     {

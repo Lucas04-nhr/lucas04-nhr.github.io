@@ -47,7 +47,7 @@ https://static.lucas04.top/altstore.json
 
 | App | Description | Requirements |
 | --- | --- | --- |
-| [GestaltX](https://github.com/huamidev/GestaltX) | A MobileGestalt editor with region-code tweaks, device presets, a field editor and automatic backups. | Installs on iOS 26.0+; editing MobileGestalt on the device requires iOS / iPadOS 27.x. |
+| [GestaltX](https://github.com/Lucas04-nhr/GestaltX) | My unofficial fork of [huamidev/GestaltX](https://github.com/huamidev/GestaltX), a MobileGestalt editor with region-code tweaks, device presets, a field editor and automatic backups. The fork adds a unified Backups tab, a read-only check for unofficial settings, and builds with the App Group entitlements embedded. | Installs on iOS 26.0+; editing MobileGestalt on the device requires iOS / iPadOS 27.x. |
 | [LiveContainer](https://github.com/LiveContainer/LiveContainer) | Runs iOS apps without actually installing them. This is the standalone build, without the built-in SideStore. | iOS 15.0+ |
 | [Kelivo](https://github.com/Chevey339/kelivo) | A Flutter LLM chat client for mobile and desktop. | iOS 15.0+ |
 | [Ksign](https://github.com/Nyasami/Ksign) | An on-device IPA signer and installer, a cleaner take on ESign. | iOS 16.0+; needs your own signing certificate. |
@@ -56,10 +56,10 @@ https://static.lucas04.top/altstore.json
 | [JHenTai](https://github.com/jiangtian616/JHenTai) | A manga client for E-Hentai and ExHentai. | iOS 13.0+; the sites' content is mostly for adults. |
 | [Spotube](https://github.com/team-spotube/spotube) | An open-source music streaming app. | iOS 14.0+ |
 
-Only stable releases are listed. Beta and nightly builds, such as Provenance's `alpha` and Ksign's `beta` releases, are left out.
+Only stable releases are listed, except for GestaltX, which also includes beta builds of my fork for development use. Beta and nightly builds of the other apps, such as Provenance's `alpha` and Ksign's `beta` releases, are left out.
 
 ::: warning GestaltX
-GestaltX changes system capability flags, and the effects depend on the device and OS. It backs up the original values before every write, but use it only on devices you own or are authorized to manage. When re-signing it, keep its share extension and give the app and the extension the same App Group.
+GestaltX changes system capability flags, and the effects depend on the device and OS. It backs up the original values before every write, but use it only on devices you own or are authorized to manage. Report problems with the fork's changes to [Lucas04-nhr/GestaltX](https://github.com/Lucas04-nhr/GestaltX/issues) and all others [upstream](https://github.com/huamidev/GestaltX/issues). When re-signing it, keep its share extension and give the app and the extension the same App Group.
 :::
 
 ### From AltGallery {#from-altgallery}

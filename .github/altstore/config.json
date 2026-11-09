@@ -107,6 +107,7 @@
     {
       "github": "Lakr233/Asspp",
       "assetPattern": "^Asspp\\.ipa$",
+      "versionFromIPA": true,
       "maxVersions": 5,
       "minOSVersion": "17.0",
       "app": {

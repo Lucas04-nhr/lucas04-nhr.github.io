@@ -7,7 +7,10 @@
 // - Each entry in `apps` is built from its GitHub repo's releases: every
 //   release with an asset matching `assetPattern` becomes a version.
 //   `excludeTags` skips releases whose tag matches it (e.g. betas that are
-//   not marked as prereleases).
+//   not marked as prereleases). With `versionFromIPA`, each version and
+//   build number are read from the IPA's Info.plist instead of the tag, for
+//   projects whose tags don't match the IPA they ship; AltStore and
+//   SideStore reject a download whose version differs from the source.
 // - Custom apps come first and win over upstream apps with the same
 //   bundle identifier; earlier upstreams win over later ones.
 // - The file already at `output` is treated as the previous source: if a
@@ -22,6 +25,7 @@ import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { inflateRawSync } from 'node:zlib'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const configPath = resolve(root, process.argv[2] ?? '.github/altstore/config.json')
@@ -41,8 +45,8 @@ async function setOutput(name, value) {
   await appendFile(process.env.GITHUB_OUTPUT, `${name}<<${delimiter}\n${value}\n${delimiter}\n`)
 }
 
-async function fetchJSON(url) {
-  const headers = { 'User-Agent': 'lucas04-nhr-altstore-sync' }
+async function request(url, extraHeaders, read) {
+  const headers = { 'User-Agent': 'lucas04-nhr-altstore-sync', ...extraHeaders }
   if (new URL(url).hostname === 'api.github.com') {
     headers.Accept = 'application/vnd.github+json'
     headers['X-GitHub-Api-Version'] = '2022-11-28'
@@ -56,7 +60,7 @@ async function fetchJSON(url) {
       const response = await fetch(url, { headers })
       if (!response.ok)
         throw new Error(`HTTP ${response.status} ${response.statusText}`)
-      return await response.json()
+      return await read(response)
     }
     catch (error) {
       lastError = error
@@ -65,6 +69,122 @@ async function fetchJSON(url) {
     }
   }
   throw new Error(`${url}: ${lastError.message}`)
+}
+
+function fetchJSON(url) {
+  return request(url, {}, response => response.json())
+}
+
+// Bytes [start, end) of a file. GitHub's release downloads accept explicit
+// ranges but not suffix ranges such as "bytes=-100", so callers pass the
+// asset size. A server that ignores Range sends the whole file with 200.
+function fetchRange(url, start, end) {
+  return request(url, { Range: `bytes=${start}-${end - 1}` }, async (response) => {
+    const buffer = Buffer.from(await response.arrayBuffer())
+    return response.status === 206 ? buffer : buffer.subarray(start, end)
+  })
+}
+
+// Reads the given string keys from the top-level dictionary of an XML or
+// binary (bplist00) property list.
+function plistStrings(buffer, keys) {
+  if (buffer.toString('latin1', 0, 8) !== 'bplist00') {
+    const xml = buffer.toString('utf8')
+    return Object.fromEntries(keys.map(key =>
+      [key, xml.match(new RegExp(`<key>${key}</key>\\s*<string>([^<]*)</string>`))?.[1]]))
+  }
+
+  const trailer = buffer.subarray(buffer.length - 32)
+  const offsetSize = trailer[6]
+  const refSize = trailer[7]
+  const topObject = Number(trailer.readBigUInt64BE(16))
+  const offsetTable = Number(trailer.readBigUInt64BE(24))
+  const uint = (pos, size) => {
+    let value = 0
+    for (let i = 0; i < size; i++)
+      value = value * 256 + buffer[pos + i]
+    return value
+  }
+  // The marker's high nibble is the type and its low nibble the length; a
+  // length of 0xF means an integer object with the real length follows.
+  const object = (ref) => {
+    const pos = uint(offsetTable + ref * offsetSize, offsetSize)
+    let length = buffer[pos] & 0x0F
+    let start = pos + 1
+    if (length === 0x0F) {
+      const size = 1 << (buffer[start] & 0x0F)
+      length = uint(start + 1, size)
+      start += 1 + size
+    }
+    return { type: buffer[pos] >> 4, length, start }
+  }
+  const string = (ref) => {
+    const { type, length, start } = object(ref)
+    if (type === 0x5)
+      return buffer.toString('latin1', start, start + length)
+    if (type === 0x6)
+      return Buffer.from(buffer.subarray(start, start + length * 2)).swap16().toString('utf16le')
+    return undefined
+  }
+
+  const dict = object(topObject)
+  if (dict.type !== 0xD)
+    throw new Error('Info.plist is not a dictionary')
+  const result = {}
+  for (let i = 0; i < dict.length; i++) {
+    const key = string(uint(dict.start + i * refSize, refSize))
+    if (keys.includes(key))
+      result[key] = string(uint(dict.start + (dict.length + i) * refSize, refSize))
+  }
+  return result
+}
+
+// Reads the app's Info.plist from an IPA (a zip archive) with range
+// requests: the end-of-central-directory record, the central directory,
+// then the plist itself. Only a few KB are downloaded per IPA.
+async function ipaVersion(url, size) {
+  const tailStart = Math.max(0, size - 22 - 0xFFFF)
+  const tail = await fetchRange(url, tailStart, size)
+  const eocd = tail.lastIndexOf(Buffer.from([0x50, 0x4B, 0x05, 0x06]))
+  if (eocd < 0)
+    throw new Error('not a zip archive')
+  const directorySize = tail.readUInt32LE(eocd + 12)
+  const directoryOffset = tail.readUInt32LE(eocd + 16)
+  if (directoryOffset === 0xFFFFFFFF)
+    throw new Error('ZIP64 archives are not supported')
+
+  const directory = directoryOffset >= tailStart
+    ? tail.subarray(directoryOffset - tailStart, directoryOffset - tailStart + directorySize)
+    : await fetchRange(url, directoryOffset, directoryOffset + directorySize)
+  let plist
+  for (let p = 0; p + 46 <= directory.length && directory.readUInt32LE(p) === 0x02014B50;) {
+    const nameLength = directory.readUInt16LE(p + 28)
+    const name = directory.toString('utf8', p + 46, p + 46 + nameLength)
+    if (/^Payload\/[^/]+\.app\/Info\.plist$/.test(name)) {
+      plist = {
+        method: directory.readUInt16LE(p + 10),
+        compressedSize: directory.readUInt32LE(p + 20),
+        offset: directory.readUInt32LE(p + 42),
+      }
+      break
+    }
+    p += 46 + nameLength + directory.readUInt16LE(p + 30) + directory.readUInt16LE(p + 32)
+  }
+  if (!plist)
+    throw new Error('no Payload/*.app/Info.plist')
+
+  // The local header's name and extra fields can differ in length from the
+  // central directory's, so read it before the data.
+  const header = await fetchRange(url, plist.offset, plist.offset + 30)
+  const dataStart = plist.offset + 30 + header.readUInt16LE(26) + header.readUInt16LE(28)
+  const data = await fetchRange(url, dataStart, dataStart + plist.compressedSize)
+  if (plist.method !== 0 && plist.method !== 8)
+    throw new Error(`unsupported zip compression method ${plist.method}`)
+  const info = plistStrings(plist.method === 8 ? inflateRawSync(data) : data,
+    ['CFBundleShortVersionString', 'CFBundleVersion'])
+  if (!info.CFBundleShortVersionString)
+    throw new Error('Info.plist has no CFBundleShortVersionString')
+  return { version: info.CFBundleShortVersionString, buildVersion: info.CFBundleVersion }
 }
 
 async function readPrevious(path) {
@@ -116,22 +236,36 @@ async function buildApp(entry) {
     if (!asset)
       continue
 
-    // Tags like "v8.0.17+339" carry build metadata. The build number in a
-    // Flutter-style asset name ("App_8.0.18+344.ipa") is the IPA's
-    // CFBundleVersion, so use it as buildVersion; the tag's may differ.
-    // Tags that are not a version, such as GestaltX's beta tags
-    // ("sha-557369f"), take the version from the asset name instead
-    // ("GestaltX_1.1.0+11100024.ipa"); releases with neither are skipped.
-    let version = release.tag_name.replace(/^v/i, '').replace(/\+.*$/, '')
-    if (!/^\d/.test(version)) {
-      const fromAsset = asset.name.match(/_v?(\d[^_+]*?)(?:\+\d+)?\.ipa$/i)?.[1]
-      if (!fromAsset) {
-        console.log(`  skip ${release.tag_name}: no version in the tag or in ${asset.name}`)
+    let version, buildVersion
+    if (entry.versionFromIPA) {
+      // Asspp, for example, has shipped a 4.2.0 build under the 4.2.2 tag.
+      try {
+        ({ version, buildVersion } = await ipaVersion(asset.browser_download_url, asset.size))
+      }
+      catch (error) {
+        warn(`${entry.github} ${release.tag_name}: can't read the version from ${asset.name} (${error.message}); skipping it`)
         continue
       }
-      version = fromAsset
+      console.log(`  ${release.tag_name}: ${asset.name} is ${version} (${buildVersion ?? 'no build'})`)
     }
-    const buildVersion = asset.name.match(/\+(\d+)\.ipa$/i)?.[1]
+    else {
+      // Tags like "v8.0.17+339" carry build metadata. The build number in a
+      // Flutter-style asset name ("App_8.0.18+344.ipa") is the IPA's
+      // CFBundleVersion, so use it as buildVersion; the tag's may differ.
+      // Tags that are not a version, such as GestaltX's beta tags
+      // ("sha-557369f"), take the version from the asset name instead
+      // ("GestaltX_1.1.0+11100024.ipa"); releases with neither are skipped.
+      version = release.tag_name.replace(/^v/i, '').replace(/\+.*$/, '')
+      if (!/^\d/.test(version)) {
+        const fromAsset = asset.name.match(/_v?(\d[^_+]*?)(?:\+\d+)?\.ipa$/i)?.[1]
+        if (!fromAsset) {
+          console.log(`  skip ${release.tag_name}: no version in the tag or in ${asset.name}`)
+          continue
+        }
+        version = fromAsset
+      }
+      buildVersion = asset.name.match(/\+(\d+)\.ipa$/i)?.[1]
+    }
     const key = `${version}+${buildVersion ?? ''}`
     if (seenVersions.has(key))
       continue

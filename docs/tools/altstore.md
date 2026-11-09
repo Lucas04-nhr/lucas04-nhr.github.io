@@ -2,7 +2,6 @@
 title: AltStore Source
 createTime: 2026/11/09 19:30:05
 permalink: /tool/altstore/
-excerpt: A personal AltStore source that mirrors the AltGallery list and adds apps picked by Lucas, with steps for adding it to AltStore, SideStore and other compatible apps.
 pageLayout: doc
 aside: false
 readingTime: false

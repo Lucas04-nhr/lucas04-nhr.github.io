@@ -86,13 +86,17 @@ jobs:
           WARNINGS: ${{ steps.sync.outputs.warnings }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          if [ -z "$SERVERCHAN_SENDKEY" ]; then
-            echo "::warning title=AltStore push skipped::Set the SERVERCHAN_SENDKEY secret to enable pushes."
+          # The push is best effort: a missing or wrong key, or a failed push, only adds a warning annotation
+          warn() {
+            echo "::warning title=$1::$2"
             exit 0
+          }
+
+          if [ -z "$SERVERCHAN_SENDKEY" ]; then
+            warn "AltStore push skipped" "Set the SERVERCHAN_SENDKEY secret to enable pushes."
           fi
           if [[ ! "$SERVERCHAN_SENDKEY" =~ ^sctp([0-9]+)t ]]; then
-            echo "::error title=AltStore push failed::SERVERCHAN_SENDKEY is not a ServerChan3 key (sctp...)."
-            exit 1
+            warn "AltStore push skipped" "SERVERCHAN_SENDKEY is not a ServerChan3 key (sctp...). Check the secret."
           fi
           uid="${BASH_REMATCH[1]}"
           echo "::add-mask::$uid"
@@ -123,12 +127,18 @@ jobs:
           fi
           desp+=$'\n\n'"Check the [workflow run]($RUN_URL) for detailed logs."
 
-          response=$(curl -sS --fail-with-body --retry 3 \
+          if ! response=$(curl -sS --fail-with-body --retry 3 \
             --data-urlencode "title=$title" \
             --data-urlencode "desp=$desp" \
             --data-urlencode "short=$short" \
             --data-urlencode "tags=GitHub" \
-            "https://$uid.push.ft07.com/send/$SERVERCHAN_SENDKEY.send")
+            "https://$uid.push.ft07.com/send/$SERVERCHAN_SENDKEY.send"); then
+            warn "AltStore push failed" "The ServerChan request failed. Check that SERVERCHAN_SENDKEY is correct."
+          fi
           # The response may carry a read key and the logs are public, so print only the status.
-          jq -r '"code=\(.code // "none") message=\(.message // "")"' <<< "$response"
-          jq -e '(.code // 0) == 0' <<< "$response" > /dev/null
+          push_status=$(jq -r '"code=\(.code // "none") message=\(.message // "")"' <<< "$response" 2>/dev/null) \
+            || warn "AltStore push failed" "ServerChan returned a response that is not JSON."
+          echo "$push_status"
+          if ! jq -e '(.code // 0) == 0' <<< "$response" > /dev/null; then
+            warn "AltStore push failed" "ServerChan rejected the push ($push_status). Check that SERVERCHAN_SENDKEY is correct."
+          fi

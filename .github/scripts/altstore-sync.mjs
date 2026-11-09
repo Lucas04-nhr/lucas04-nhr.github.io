@@ -114,7 +114,18 @@ async function buildApp(entry) {
     // Tags like "v8.0.17+339" carry build metadata. The build number in a
     // Flutter-style asset name ("App_8.0.18+344.ipa") is the IPA's
     // CFBundleVersion, so use it as buildVersion; the tag's may differ.
-    const version = release.tag_name.replace(/^v/i, '').replace(/\+.*$/, '')
+    // Tags that are not a version, such as GestaltX's beta tags
+    // ("sha-557369f"), take the version from the asset name instead
+    // ("GestaltX_1.1.0+11100024.ipa"); releases with neither are skipped.
+    let version = release.tag_name.replace(/^v/i, '').replace(/\+.*$/, '')
+    if (!/^\d/.test(version)) {
+      const fromAsset = asset.name.match(/_v?(\d[^_+]*?)(?:\+\d+)?\.ipa$/i)?.[1]
+      if (!fromAsset) {
+        console.log(`  skip ${release.tag_name}: no version in the tag or in ${asset.name}`)
+        continue
+      }
+      version = fromAsset
+    }
     const buildVersion = asset.name.match(/\+(\d+)\.ipa$/i)?.[1]
     const key = `${version}+${buildVersion ?? ''}`
     if (seenVersions.has(key))

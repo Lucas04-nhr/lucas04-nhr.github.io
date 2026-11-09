@@ -51,6 +51,7 @@ https://static.lucas04.top/altstore.json
 | [SideStore](https://github.com/SideStore/SideStore) | An untethered alternative app store that re-signs and refreshes apps with your own Apple ID, without AltServer. | iOS 15.0+ |
 | [Kelivo](https://github.com/Chevey339/kelivo) | A Flutter LLM chat client for mobile and desktop. | iOS 15.0+ |
 | [Ksign](https://github.com/Nyasami/Ksign) | An on-device IPA signer and installer, a cleaner take on ESign. | iOS 16.0+; needs your own signing certificate. |
+| [Asspp](https://github.com/Lakr233/Asspp) | A multi-account App Store manager that downloads official IPAs, including older versions, from any region. | iOS 17.0+; needs an Apple ID, preferably a secondary one. |
 | [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |
 | [Provenance](https://github.com/Provenance-Emu/Provenance) | A multi-emulator frontend for Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony consoles. | iOS 16.0+; each download is about 1 GB. |
 | [JHenTai](https://github.com/jiangtian616/JHenTai) | A manga client for E-Hentai and ExHentai. | iOS 13.0+; the sites' content is mostly for adults. |
@@ -66,7 +67,7 @@ GestaltX changes system capability flags, and the effects depend on the device a
 
 The full AltGallery list is included as published. See the [AltGallery README](https://github.com/bebound/AltGallery#available-apps) for the current list. To request an app there, open an issue in that repository.
 
-If an app in my picks has the same bundle identifier as an AltGallery app, my entry is used. This is why AltGallery's LiveContainer+SideStore is not listed: it shares a bundle identifier with the standalone LiveContainer above, and one source can list only one of them.
+If an app in my picks has the same bundle identifier as an AltGallery app, my entry is used. Asspp is listed this way: AltGallery also has it, but its versions here come straight from the project's GitHub Releases. This is also why AltGallery's LiveContainer+SideStore is not listed: it shares a bundle identifier with the standalone LiveContainer above, and one source can list only one of them.
 
 ## Updates {#updates}
 

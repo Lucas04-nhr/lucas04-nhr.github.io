@@ -105,6 +105,27 @@
       }
     },
     {
+      "github": "Lakr233/Asspp",
+      "assetPattern": "^Asspp\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "17.0",
+      "app": {
+        "name": "Asspp",
+        "bundleIdentifier": "wiki.qaq.Asspp",
+        "developerName": "Lakr233",
+        "subtitle": "Multi-account App Store manager",
+        "localizedDescription": "Manage several Apple IDs across App Store regions: switch stores, search apps, download official IPAs including older versions, and keep them in a local library, without signing out on the device.\n\nDownloads go through Apple's servers with your own Apple ID, using the same protocol as ipatool. A secondary account is recommended.",
+        "iconURL": "https://raw.githubusercontent.com/Lakr233/Asspp/main/Asspp/App/Assets.xcassets/AppIcon.appiconset/asspp.png",
+        "screenshots": [
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/Asspp/images/search.jpeg",
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/Asspp/images/app.jpeg",
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/Asspp/images/account.jpeg"
+        ],
+        "tintColor": "#3060D0",
+        "category": "utilities"
+      }
+    },
+    {
       "github": "hrydgard/ppsspp",
       "assetPattern": "^PPSSPP-iOS-.*\\.ipa$",
       "maxVersions": 5,

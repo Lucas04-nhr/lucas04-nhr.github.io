@@ -127,6 +127,37 @@
       }
     },
     {
+      "github": "huamurui/zhihu-minus-minus",
+      "assetPattern": "^zhihu-minus-minus-v.*-unsigned\\.ipa$",
+      "maxVersions": 5,
+      "minOSVersion": "16.4",
+      "app": {
+        "name": "Zhihu--",
+        "bundleIdentifier": "com.huamu013.ZhihuMinusMinus",
+        "developerName": "huamurui",
+        "subtitle": "Lightweight, ad-free Zhihu client",
+        "localizedDescription": "Zhihu-- is a lightweight, ad-free third-party Zhihu client built with React Native (Expo). It supports multiple accounts, a guest mode, custom theme colors and dark mode, and shows the hot list, recommendations, answers, articles, pins and comments.\n\nThe app's interface is in Chinese.",
+        "iconURL": "https://raw.githubusercontent.com/huamurui/zhihu-minus-minus/main/src/assets/images/icon.png",
+        "screenshots": [
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/ZhihuMinusMinus/images/home.png",
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/ZhihuMinusMinus/images/detail.png",
+          "https://raw.githubusercontent.com/bebound/AltGallery/refs/heads/master/apps/ZhihuMinusMinus/images/hot.png"
+        ],
+        "appPermissions": {
+          "entitlements": [],
+          "privacy": {
+            "NSCameraUsageDescription": "Allow app to access your camera",
+            "NSFaceIDUsageDescription": "Allow app to access your Face ID biometric data.",
+            "NSMicrophoneUsageDescription": "Allow app to access your microphone",
+            "NSPhotoLibraryAddUsageDescription": "Allow app to save photos",
+            "NSPhotoLibraryUsageDescription": "Allow app to access your photo library."
+          }
+        },
+        "tintColor": "#0084FF",
+        "category": "social"
+      }
+    },
+    {
       "github": "hrydgard/ppsspp",
       "assetPattern": "^PPSSPP-iOS-.*\\.ipa$",
       "maxVersions": 5,

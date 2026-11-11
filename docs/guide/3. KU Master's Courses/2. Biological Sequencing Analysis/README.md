@@ -9,11 +9,11 @@ tags:
   - Exam Preparation
 ---
 
-These pages prepare the oral exam for Biological Sequence Analysis (5550-B1-1E26) at the University of Copenhagen. An oral exam rewards two things at once: a clear story that can be told in about ten minutes, and enough depth to survive follow-up questions at the whiteboard. Each of the twelve exam topics therefore has its own page combining revision notes, a presentation, a board plan and likely follow-up questions. This overview collects the exam format and the material that links the topics.
+These pages prepare the oral exam for Biological Sequence Analysis (5550-B1-1E26) at the University of Copenhagen. An oral exam rewards two things at once: a clear story that can be told in about ten minutes, and enough depth to survive follow-up questions at the whiteboard. Each of the twelve exam topics therefore has its own page combining revision notes, a presentation script, key terms and likely follow-up questions. This overview collects the exam format and the material that links the topics.
 
 ::: note Source and scope
 
-The notes are built from the week 1–7 slides and exercises, my own handwritten notes, and a classmate's exam notes. Questions marked ★ on the topic pages were raised in the revision sessions on 27 and 29 October. The advice on talks and board work is my own preparation strategy, not official guidance.
+The notes are built from the week 1–7 slides and exercises, my own handwritten notes, and a classmate's exam notes, and were rewritten from my revised knowledge notes and exam preparation sheets. Rules of thumb such as E-value thresholds are conventions, not laws. Questions marked ★ on the topic pages were raised in the revision sessions on 27 and 29 October. The advice on talks and board work is my own preparation strategy, not official guidance.
 
 :::
 
@@ -58,16 +58,17 @@ The course learning outcomes describe what is tested: explain the algorithms, de
 
 ## How Each Topic Page Is Organised {#page-structure}
 
-- **Revision notes:** definitions, models, recurrences and worked examples small enough to reproduce by hand, ending with assumptions and limitations.
-- **Ten-minute presentation:** a keyword card to glance at while speaking, and a full spoken script (about 850–1,150 words, i.e. 7–9 minutes at a calm pace, leaving time for writing on the board). Every script follows the arc *problem → method → worked example → statistics/complexity → assumptions and failure modes → link to another topic*. Ending on a link invites follow-up questions that have been prepared.
-- **Board plan:** what to write or draw, split into *must* (what the examiners are likely to check, or asked for in the revision sessions) and *optional* items.
+- **Opening:** a short spoken introduction that frames the topic as a practical question.
+- **Revision notes, application first:** which method answers which biological question, how its output is read and what decisions follow, then the algorithms, formulas and worked examples that support those choices, with limitations. Most pages end the notes with a suggested whiteboard route.
+- **Ten-minute presentation:** a full spoken script in the same order: application and practical question first, then interpretation of the output, and only then the algorithm and formulas as support.
+- **Key terms:** the topic's vocabulary with Chinese equivalents and a one-line gloss.
 - **Follow-up questions:** likely questions with model answers. Questions marked ★ were actually raised in the revision sessions on 27 and 29 October.
 
 ## Preparation and Answering Technique {#technique}
 
 During the 25-minute preparation:
 
-- Pick the three to five *must* items for the drawn topic and work the examples out on paper, so they only need to be copied onto the board.
+- Follow the whiteboard route on the drawn topic's page and work the examples out on paper, so they only need to be copied onto the board.
 - Put formulas on the left, the worked example in the middle, and keep the right side free; examiners often ask for an addition during the questions.
 - Keep diagrams minimal and correct: three columns of a profile HMM, two states for the casino, seven rows for BANANA\$. A small correct drawing beats a large messy one.
 

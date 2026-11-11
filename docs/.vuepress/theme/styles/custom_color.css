@@ -27,6 +27,25 @@
   --vp-local-nav-bg-color: #fff; /* 页面内导航栏 */
   --vp-sidebar-bg-color: #f6f6f7; /* 侧边栏背景 */
   --vp-code-block-bg: #f6f8fa; /* 代码块背景 */
+
+  /* 马克笔：低饱和度马卡龙色，正文 text-1 在其上 ≥ 7:1 */
+  --mark-default: #cde6e4; /* 薄荷青，呼应品牌色 */
+  --mark-note: #f2e6b3; /* 奶油黄 */
+  --mark-info: #dfe3ea; /* 雾灰蓝 */
+  --mark-tip: #d3e8c9; /* 开心果绿 */
+  --mark-warning: #f5d7b5; /* 杏橙 */
+  --mark-danger: #f2cdd0; /* 玫瑰粉 */
+  --mark-important: #ddd5f0; /* 薰衣草紫 */
+
+  /* 提示容器：比马克笔更浅一档的马卡龙底色，标题 *-1 色在其上 ≥ 4.5:1 */
+  --container-info: #f1f2f5; /* 雾灰 */
+  --container-note: #e7f1f5; /* 粉蓝，呼应品牌色 */
+  --container-tip: #e5f2ef; /* 薄荷青 */
+  --container-success: #e9f3e3; /* 开心果绿 */
+  --container-important: #efebf8; /* 薰衣草紫 */
+  --container-warning: #fbf1e1; /* 杏色奶油 */
+  --container-danger: #f9e6e8; /* 玫瑰粉 */
+  --container-code-bg: rgb(60 60 67 / 0.06); /* 容器内行内代码，中性叠加 */
 }
 
 [data-theme="dark"] {
@@ -50,4 +69,74 @@
   --vp-local-nav-bg-color: #1b1b1f; /* 页面内导航栏 */
   --vp-sidebar-bg-color: #161618; /* 侧边栏背景 */
   --vp-code-block-bg: #202127; /* 代码块背景 */
+
+  /* 马克笔：降明度的灰调马卡龙色，正文 text-1 在其上 ≥ 4.5:1 */
+  --mark-default: #2f5856;
+  --mark-note: #5c5230;
+  --mark-info: #3b4150;
+  --mark-tip: #3d5638;
+  --mark-warning: #634a32;
+  --mark-danger: #633c42;
+  --mark-important: #4b4268;
+
+  /* 提示容器：深色灰调马卡龙底色，标题 *-1 色在其上 ≥ 4.5:1 */
+  --container-info: #26282e;
+  --container-note: #1f2d36;
+  --container-tip: #1f302e;
+  --container-success: #223024;
+  --container-important: #2b2738;
+  --container-warning: #342c1f;
+  --container-danger: #36242a;
+  --container-code-bg: rgb(255 255 245 / 0.07);
+}
+
+/* 马克笔 ==text== / ==text=={.tip}：覆盖 Plume 的高饱和默认色。
+   :root 前缀让选择器优先级高于主题的 [data-theme="dark"] mark:where(...) */
+:root mark {
+  --vp-mark-linear-color: var(--mark-default);
+}
+
+:root mark.note {
+  --vp-mark-linear-color: var(--mark-note);
+}
+
+:root mark.info {
+  --vp-mark-linear-color: var(--mark-info);
+}
+
+:root mark.tip {
+  --vp-mark-linear-color: var(--mark-tip);
+}
+
+:root mark:is(.caution, .danger) {
+  --vp-mark-linear-color: var(--mark-danger);
+}
+
+:root mark.warning {
+  --vp-mark-linear-color: var(--mark-warning);
+}
+
+:root mark.important {
+  --vp-mark-linear-color: var(--mark-important);
+}
+
+/* 提示容器 ::: note / tip / warning 等：只替换背景，标题与链接仍用主题的 *-1 色。
+   html:root 优先级高于主题的 :root，变量在 html 上按当前主题解析 */
+html:root {
+  --vp-custom-block-info-bg: var(--container-info);
+  --vp-custom-block-info-code-bg: var(--container-code-bg);
+  --vp-custom-block-note-bg: var(--container-note);
+  --vp-custom-block-note-code-bg: var(--container-code-bg);
+  --vp-custom-block-tip-bg: var(--container-tip);
+  --vp-custom-block-tip-code-bg: var(--container-code-bg);
+  --vp-custom-block-success-bg: var(--container-success);
+  --vp-custom-block-success-code-bg: var(--container-code-bg);
+  --vp-custom-block-important-bg: var(--container-important);
+  --vp-custom-block-important-code-bg: var(--container-code-bg);
+  --vp-custom-block-warning-bg: var(--container-warning);
+  --vp-custom-block-warning-code-bg: var(--container-code-bg);
+  --vp-custom-block-danger-bg: var(--container-danger);
+  --vp-custom-block-danger-code-bg: var(--container-code-bg);
+  --vp-custom-block-caution-bg: var(--container-danger);
+  --vp-custom-block-caution-code-bg: var(--container-code-bg);
 }

@@ -203,7 +203,7 @@ export default defineUserConfig({
       field: true, // 启用 field 语法  [field]: content
       pdf: true, // 启用 PDF 嵌入 @[pdf](/xxx.pdf)
       caniuse: true, // 启用 caniuse 语法  @[caniuse](feature_name)
-      plot: true, // 启用隐秘文本语法 !!xxxx!!
+      plot: { effect: "blur" }, // 启用隐秘文本语法 !!xxxx!!，网络工具的隐藏 IP 也用它
       bilibili: true, // 启用嵌入 bilibili 视频 语法 @[bilibili](bid)
       youtube: true, // 启用嵌入 youtube 视频 语法 @[youtube](video_id)
       artPlayer: true, // 启用嵌入 artPlayer 本地视频 语法 @[artPlayer](url)

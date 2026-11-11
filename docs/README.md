@@ -8,14 +8,14 @@ config:
     effect: tint-plate
     effectConfig:
       r:
-        value: 210
-        offset: 36
+        value: 206
+        offset: 22
       g:
-        value: 210
-        offset: 36
+        value: 220
+        offset: 18
       b:
-        value: 210
-        offset: 36
+        value: 228
+        offset: 16
     hero:
       name: Hi~
       tagline: >-

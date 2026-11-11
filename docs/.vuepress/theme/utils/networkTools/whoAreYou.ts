@@ -6,13 +6,16 @@ import {
   discreteGpu,
   gpuName,
   gpuOS,
+  isDataCenter,
   isSoftGpu,
   kbdLayout,
+  netOf,
   offTxt,
   physicalScreen,
   rfpClock,
   sysLangs,
 } from "./vendor/who-are-you/infer.mjs";
+import { TZ_CC } from "./vendor/who-are-you/tz.mjs";
 
 export interface SnifferRow {
   id: string;
@@ -47,6 +50,7 @@ export interface Readings {
   voices?: string[];
   dev?: { os: string | null; osv: string; kind: string; model: string };
   hints?: Record<string, any>;
+  arch?: { name: string; from: string } | null;
   browserInfo?: { name: string | null; v: string };
   gpuRaw?: string | null;
   gpu?: string | null;
@@ -65,6 +69,7 @@ export interface Readings {
   stack?: string[];
   dnsCC?: string | null;
   dnsOrg?: string;
+  dnsEcs?: string | null;
   trace?: Record<string, string>;
   http?: string[];
   rttBrowser?: number | null;
@@ -342,6 +347,40 @@ const readVoices = async (R: Readings, emit: Emit) => {
   emit("voices", `${voices.length}: ${langs.slice(0, 6).join(", ")}${langs.length > 6 ? "…" : ""}`);
 };
 
+// 架构统一写成 amd64、arm64 这类常见名称。
+const ARCH_NAMES: Record<string, string> = {
+  "x86:64": "amd64",
+  "x86:32": "x86",
+  "arm:64": "arm64",
+  "arm:32": "arm",
+};
+
+// 优先用 Client Hints；没有时读 UA 和 navigator.platform。macOS 的 UA 和 platform 在 Apple 芯片上也写 Intel，
+// 所以只有 WebGL 报出 Apple M 系列芯片时才判为 arm64。
+const readArch = (
+  nav: any,
+  hints: Record<string, any>,
+  os: string | null | undefined,
+  gpuRaw: string | null | undefined,
+): Readings["arch"] => {
+  const hinted = String(hints.architecture ?? "").toLowerCase();
+  if (hinted) {
+    return { name: ARCH_NAMES[`${hinted}:${hints.bitness ?? ""}`] ?? hinted, from: "client hints" };
+  }
+
+  if (os === "iOS" || os === "iPadOS") return { name: "arm64", from: "iOS" };
+  if (os === "macOS") {
+    return /\bApple M\d/.test(gpuRaw ?? "") ? { name: "arm64", from: "GPU name" } : null;
+  }
+
+  const text = `${nav.userAgent ?? ""} ${nav.platform ?? ""}`;
+  if (/\barmv8l\b|\barmv7/i.test(text)) return { name: "arm", from: "user agent" };
+  if (/\b(aarch64|arm64|armv8)\b/i.test(text)) return { name: "arm64", from: "user agent" };
+  if (/\b(x86_64|x64|amd64|Win64|WOW64)\b/i.test(text)) return { name: "amd64", from: "user agent" };
+  if (/\bi[3-6]86\b/i.test(text)) return { name: "x86", from: "user agent" };
+  return null;
+};
+
 const readHardware = async (R: Readings, emit: Emit) => {
   const nav = navigator as any;
   const clientHints = nav.userAgentData;
@@ -362,10 +401,14 @@ const readHardware = async (R: Readings, emit: Emit) => {
 
   emit("os", [R.dev?.os, R.dev?.osv].filter(Boolean).join(" ") || nav.platform || NA);
   emit("browser", [R.browserInfo?.name, R.browserInfo?.v].filter(Boolean).join(" ") || NA);
-  if (hints.architecture) {
-    emit("arch", `${hints.architecture} · ${hints.bitness ?? "?"}-bit${R.dev?.model ? ` · ${R.dev.model}` : ""}`);
+  R.arch = readArch(nav, hints, R.dev?.os, R.gpuRaw);
+  if (R.arch) {
+    const detail = hints.architecture
+      ? `${hints.architecture} · ${hints.bitness ?? "?"}-bit`
+      : `from ${R.arch.from}`;
+    emit("arch", [R.arch.name, detail, R.dev?.model].filter(Boolean).join(" · "));
   } else {
-    emit("arch", nav.platform || NA);
+    emit("arch", nav.platform ? `${NA} (platform says ${nav.platform})` : NA);
   }
 
   const ratio = devicePixelRatio || 1;
@@ -794,6 +837,7 @@ const readDnsResolver = async (R: Readings, emit: Emit) => {
 
     R.dnsCC = countryCodeOfName(name);
     R.dnsOrg = parts.slice(1).join(" - ").trim();
+    R.dnsEcs = answer.edns?.ip ?? null;
     emit("dns", [resolver.ip, R.dnsOrg || name, subnet].filter(Boolean).join(" · "));
   } catch {
     R.dnsCC = null;
@@ -985,6 +1029,63 @@ export const systemLanguages = (R: Readings) =>
         kbd: R.kbd,
       })
     : undefined;
+
+// 运营商的解析器常放在邻国机房（例如丹麦家宽用荷兰的解析器），这些国家组内跨境不算泄露。
+// 欧洲取 tz 数据里有 Europe/ 时区的国家；亚洲不放宽，因为那里正是代理用户 DNS 泄露最常见的地方。
+const NEAR_GROUPS: Set<string>[] = [
+  new Set([
+    ...Object.entries(TZ_CC as Record<string, string>)
+      .filter(([zone]) => zone.startsWith("Europe/"))
+      .map(([, cc]) => cc),
+    "IS", "FO", "SJ",
+  ]),
+  new Set(["US", "CA"]),
+  new Set(["AU", "NZ"]),
+];
+
+const ORG_NOISE = new Set([
+  "aps", "asa", "oyj", "gmbh", "ltd", "limited", "llc", "inc", "plc", "corp", "corporation", "company",
+  "group", "holding", "holdings", "network", "networks", "net", "telecom", "telecommunications",
+  "communication", "communications", "broadband", "internet", "isp", "service", "services", "the",
+]);
+
+const orgTokens = (org: string | undefined) =>
+  new Set(
+    String(org ?? "")
+      .toLowerCase()
+      .split(/[^\p{L}\p{N}]+/u)
+      .filter((token) => token.length >= 3 && !ORG_NOISE.has(token)),
+  );
+
+type CheckResult = [string, string, Record<string, string | number | null>] | null;
+
+// 在上游 DNS 检查给出“国家不一致”之后再看三件事：
+// 1. 解析器带的 ECS 子网就是访客自己的网络，说明查询没有绕开出口；
+// 2. 解析器和出口 IP 属于同一家运营商；
+// 3. 出口不是机房 IP，且两国在同一个邻近区域。
+// 前两种算正常，第三种只作提示、不扣分；出口是机房 IP（多为代理）时保留原判定。
+export const refineDnsCheck = (result: CheckResult, R: Readings): CheckResult => {
+  if (!result || result[0] !== "bad" || !R.dnsCC) return result;
+
+  const cf = R.server?.cf ?? {};
+  const vars = result[2];
+  const own = [R.server?.ip, ...Object.values(R.exits ?? {})].filter(Boolean) as string[];
+
+  if (R.dnsEcs && own.some((ip) => netOf(ip) === netOf(R.dnsEcs as string))) {
+    return ["ok", "c_dns_ecs", vars];
+  }
+
+  const ispTokens = orgTokens(cf.asOrganization);
+  if ([...orgTokens(R.dnsOrg)].some((token) => ispTokens.has(token))) {
+    return ["ok", "c_dns_isp", vars];
+  }
+
+  if (isDataCenter(cf.asn, cf.asOrganization)) return result;
+  if (NEAR_GROUPS.some((group) => group.has(R.dnsCC as string) && group.has(cf.country))) {
+    return ["info", "c_dns_near", vars];
+  }
+  return result;
+};
 
 export const readGpuOs = (R: Readings) => gpuOS(R.gpuRaw) as string | null;
 

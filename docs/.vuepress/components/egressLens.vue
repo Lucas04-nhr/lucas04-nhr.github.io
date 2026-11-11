@@ -27,7 +27,10 @@
         </header>
         <p class="network-tool-value">{{ exitPlace(exit) }}</p>
         <p class="network-tool-detail">{{ exitNetwork(exit) }}</p>
-        <p class="network-tool-detail network-tool-mono">{{ exit.ips.map(showIp).join(" · ") }}</p>
+        <p class="network-tool-detail network-tool-mono">
+          <VPPlot v-if="masked">{{ exit.ips.join(" · ") }}</VPPlot>
+          <template v-else>{{ exit.ips.join(" · ") }}</template>
+        </p>
       </article>
     </div>
 
@@ -70,7 +73,8 @@
                 <div class="network-tool-detail">{{ row.host }}</div>
               </td>
               <td :class="row.tone && `tool-tone-${row.tone}`">
-                <code>{{ row.address }}</code>
+                <VPPlot v-if="masked && row.answered"><code>{{ row.address }}</code></VPPlot>
+                <code v-else>{{ row.address }}</code>
                 <div v-if="row.note" class="network-tool-detail">{{ row.note }}</div>
               </td>
               <td>{{ row.exit }}</td>
@@ -106,7 +110,6 @@ import {
   findings,
   geoOf,
   groupExits,
-  maskIp,
   natOf,
   netOf,
   oddProbes,
@@ -210,8 +213,6 @@ const running = ref(false);
 const finished = ref(false);
 const masked = ref(false);
 let generation = 0;
-
-const showIp = (ip: string) => (masked.value ? maskIp(ip) : ip);
 
 const httpProbe = async (probe: Probe): Promise<ProbeResult[]> => {
   const separator = probe.url.includes("?") ? "&" : "?";
@@ -554,7 +555,7 @@ const probeGroups = computed(() => {
         }
 
         let address = running.value ? "..." : "N/A";
-        if (answers?.length) address = answers.map((answer) => showIp(answer.ip)).join(" · ");
+        if (answers?.length) address = answers.map((answer) => answer.ip).join(" · ");
         else if (failure) address = "No answer";
 
         return {

@@ -13,7 +13,10 @@
     <div v-if="running || finished" class="network-tool-stats" aria-label="Who sites think you are">
       <div v-for="item in portrait" :key="item.label" class="network-tool-stat">
         <span>{{ item.label }}</span>
-        <strong>{{ item.value }}</strong>
+        <strong>
+          <VPPlot v-if="blurred && item.sensitive">{{ item.value }}</VPPlot>
+          <template v-else>{{ item.value }}</template>
+        </strong>
       </div>
     </div>
 
@@ -61,7 +64,10 @@
           <tbody>
             <tr v-for="row in group.rows" :key="row.id">
               <td>{{ row.label }}</td>
-              <td :class="{ 'who-are-you-blurred': blurred && row.sensitive }">{{ row.value }}</td>
+              <td>
+                <VPPlot v-if="blurred && row.sensitive">{{ row.value }}</VPPlot>
+                <template v-else>{{ row.value }}</template>
+              </td>
               <td><code>{{ row.method }}</code></td>
             </tr>
           </tbody>
@@ -105,6 +111,7 @@ import {
   collectReadings,
   isResistFingerprinting,
   readGpuOs,
+  refineDnsCheck,
   systemLanguages,
   tzOffset,
 } from "../theme/utils/networkTools/whoAreYou";
@@ -162,6 +169,9 @@ const MESSAGES: Record<string, string> = {
   c_dns_ok: "The resolver is in {ipc} too",
   c_dns_bad: "Resolver in {ccName}, IP in {ipc}",
   c_dns_info: "Couldn't place the resolver",
+  c_dns_ecs: "Resolver in {ccName}, but it queries on behalf of your own network",
+  c_dns_isp: "Resolver in {ccName}, run by the same provider as your IP",
+  c_dns_near: "Resolver in {ccName}, IP in {ipc}: ISPs often host resolvers in a nearby country",
   c_split_ok: "Every destination sees the same egress IP",
   c_split_warn: "{aName} and {bName} see different egress IPs",
   c_rtc_off: "WebRTC is off: nothing to leak",
@@ -304,6 +314,7 @@ const checkResults = computed<Record<string, CheckResult>>(() => {
 
   return {
     ...results,
+    dns: refineDnsCheck(results.dns, R),
     ...protocols({
       http: R.http ? [cf.httpProtocol, ...R.http].filter(Boolean) : null,
       rtc: R.rtc,
@@ -386,12 +397,16 @@ const portrait = computed(() => {
   const network = cf.asn
     ? `${cf.asOrganization ?? `AS${cf.asn}`} (${isDataCenter(cf.asn, cf.asOrganization) ? "data center" : "home or mobile"})`
     : "";
-  const deviceText = [R.dev?.os, R.dev?.osv].filter(Boolean).join(" ");
+  const deviceText = [
+    [R.dev?.os, R.dev?.osv].filter(Boolean).join(" "),
+    R.arch?.name,
+    R.dev?.model,
+  ].filter(Boolean).join(" · ");
   const browserText = [R.browserInfo?.name, R.browserInfo?.v].filter(Boolean).join(" ");
 
   return [
     { label: "Probably From", value: likely ? countryLabel(likely.cc) : waiting },
-    { label: "Right Now In", value: blurred.value ? "•••" : place || waiting },
+    { label: "Right Now In", value: place || waiting, sensitive: Boolean(place) },
     { label: "Device", value: deviceText || waiting },
     { label: "Browser", value: browserText || waiting },
     { label: "Graphics", value: bestGpuName(R) || waiting },
@@ -477,11 +492,6 @@ onBeforeUnmount(() => {
   min-width: 0 !important;
   overflow-wrap: anywhere;
   white-space: pre-wrap !important;
-}
-
-.who-are-you-blurred {
-  filter: blur(5px);
-  user-select: none;
 }
 
 .who-are-you-tip {

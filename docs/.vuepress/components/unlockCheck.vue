@@ -19,6 +19,10 @@
       <ul class="network-tool-notes">
         <li v-for="note in notes" :key="note.text" :class="note.tone && `tool-tone-${note.tone}`">
           {{ note.text }}
+          <template v-for="([ip, count], index) in note.ips ?? []" :key="ip">
+            <template v-if="index"> · </template>
+            <VPPlot v-if="masked">{{ ip }}</VPPlot><template v-else>{{ ip }}</template> ×{{ count }}
+          </template>
         </li>
       </ul>
       <button type="button" class="network-tool-secondary-button" @click="masked = !masked">
@@ -57,7 +61,12 @@
               <td>{{ row.country }}</td>
               <td>
                 <strong v-if="row.how">{{ row.how }}</strong>
-                <div class="network-tool-detail">{{ row.why }}</div>
+                <div class="network-tool-detail">
+                  {{ row.why }}
+                  <template v-if="row.ip">
+                    IP <VPPlot v-if="masked">{{ row.ip }}</VPPlot><template v-else>{{ row.ip }}</template>.
+                  </template>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -90,7 +99,6 @@ import {
   exitsByCountry,
   guessCountry,
   judge,
-  maskIp,
   tally,
 } from "../theme/utils/networkTools/vendor/unlock-check/lib.mjs";
 import {
@@ -406,10 +414,6 @@ const groups = computed(() =>
         }
 
         const [result, tone] = RESULT_TEXT[verdict.v];
-        const address = verdict.ip
-          ? ` IP ${masked.value ? maskIp(verdict.ip) : verdict.ip}.`
-          : "";
-
         return {
           id: service.id,
           name: service.name,
@@ -418,7 +422,8 @@ const groups = computed(() =>
           tone,
           country: verdict.cc ? countryName(verdict.cc) : "N/A",
           how: verdict.how ? HOW_TEXT[verdict.how] : "",
-          why: `${whyOf(service, verdict)}${address}`,
+          why: whyOf(service, verdict),
+          ip: verdict.ip ?? "",
         };
       }),
     };
@@ -467,7 +472,7 @@ const summary = computed(() => {
 });
 
 const notes = computed(() => {
-  const output: { text: string; tone: Tone }[] = [];
+  const output: { text: string; tone: Tone; ips?: [string, number][] }[] = [];
   const exits = exitsByCountry(verdicts.value) as { cc: string; ids: string[] }[];
 
   if (!exits.length) {
@@ -487,12 +492,10 @@ const notes = computed(() => {
     if (verdict?.ip) addresses.set(verdict.ip, (addresses.get(verdict.ip) ?? 0) + 1);
   });
   if (addresses.size) {
-    const parts = [...addresses]
-      .sort((first, second) => second[1] - first[1])
-      .map(([ip, count]) => `${masked.value ? maskIp(ip) : ip} ×${count}`);
     output.push({
-      text: `IPs the services see: ${parts.join(" · ")}`,
+      text: "IPs the services see:",
       tone: addresses.size > 1 ? "warn" : "",
+      ips: [...addresses].sort((first, second) => second[1] - first[1]),
     });
   }
 

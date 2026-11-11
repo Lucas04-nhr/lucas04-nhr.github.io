@@ -33,5 +33,3 @@ Using Helios Assistant means the acceptance of [Terms of Service](/legal/terms/)
 ---
 
 <GachaManager />
-
----

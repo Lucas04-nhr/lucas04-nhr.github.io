@@ -137,7 +137,7 @@ export default defineUserConfig({
       formatOptions: { dateStyle: "short", timeStyle: "short" },
     },
     contributors: false,
-    changelog: false,
+    changelog: true,
 
     /**
      * 编译缓存，加快编译速度
@@ -151,7 +151,7 @@ export default defineUserConfig({
      */
     autoFrontmatter: {
       permalink: false, // 是否生成永久链接
-      createTime: true, // 是否生成创建时间
+      createTime: false, // 是否生成创建时间
       title: true, // 是否生成标题
     },
 
@@ -266,7 +266,8 @@ export default defineUserConfig({
      * 资源链接替换
      * @see https://theme-plume.vuejs.press/guide/features/replace-assets/
      */
-    replaceAssets: "https://static.lucas04.top/blog",
+    // replaceAssets: "https://static.lucas04.top/blog",
+    replaceAssets: false, // 禁用资源链接替换
 
     /**
      * 启用 llmstxt 插件，用于为大语言模型提供更友好的内容
@@ -276,5 +277,16 @@ export default defineUserConfig({
       locale: "all",
       filter: () => true, // 为所有页面生成 llms 友好内容
     },
+
+    /***
+     * 启用 feed 订阅
+     * @see https://theme-plume.vuejs.press/guide/features/feed/
+     */
+
+    feed: {
+      // 配置 feed 订阅
+      perCollection: true, // 为每个集合生成独立的 feed
+      formats: ["rss", "atom", "json"], // 生成的 feed 格式
+    }
   }),
 });

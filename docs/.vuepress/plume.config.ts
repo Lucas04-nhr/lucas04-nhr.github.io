@@ -24,16 +24,14 @@ export default defineThemeConfig({
 
   social: [
     { icon: "github", link: "https://github.com/Lucas04-nhr" },
-    { icon: "gitlab", link: "https://gitlab.com/Lucas04" },
     { icon: "mdi:twitter", link: "https://twitter.com/__Lucas04__" },
-    // { icon: "mdi:facebook", link: "https://www.facebook.com/haorannie04" },
-    // { icon: "mdi:instagram", link: "https://instagram.com/lucas04_11" },
+    { icon: "mdi:linkedin", link: "https://linkedin.com/in/lucas04" },
     { icon: "bluesky", link: "https://bsky.app/profile/lucas.lucas04.top" },
-    { icon: "discord", link: "https://discord.com/users/1078951739576815626" },
-    { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
-    { icon: "zhihu", link: "https://www.zhihu.com/people/NHR-zh-cn" },
+    // { icon: "gitlab", link: "https://gitlab.com/Lucas04" },
+    // { icon: "bilibili", link: "https://space.bilibili.com/474539451" },
+    // { icon: "zhihu", link: "https://www.zhihu.com/people/NHR-zh-cn" },
   ],
-  navbarSocialInclude: ["github", "mdi:twitter", "bluesky"], // 允许显示在导航栏的 social 社交链接
+  navbarSocialInclude: ["github", "mdi:twitter"], // 允许显示在导航栏的 social 社交链接
   aside: true, // 页内侧边栏， 默认显示在右侧
   outline: [2, 4], // 页内大纲， 默认显示 h2, h3
 
@@ -55,6 +53,8 @@ export default defineThemeConfig({
   prevPage: false, // 是否启用上一页链接
   nextPage: false, // 是否启用下一页链接
   createTime: true, // 是否显示文章创建时间
+  linkPreview: true, // 是否启用鼠标悬停链接预览
+  relatedPosts: true, // 是否启用相关文章推荐
 
   /* 站点页脚 */
   footer: {
@@ -68,7 +68,7 @@ export default defineThemeConfig({
   transition: {
     page: true, // 启用 页面间跳转过渡动画
     postList: true, // 启用 博客文章列表过渡动画
-    appearance: "fade", // 启用 深色模式切换过渡动画, 或配置过渡动画类型
+    appearance: "soft-blur-fade", // 启用 深色模式切换过渡动画, 或配置过渡动画类型
   },
 
   locales: {

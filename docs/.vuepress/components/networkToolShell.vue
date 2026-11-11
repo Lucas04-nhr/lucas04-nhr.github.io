@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
 
 type ShellKind = "idle" | "running" | "ok" | "warn" | "bad";
@@ -89,13 +89,20 @@ const progressStyle = computed(() => ({
 }));
 
 // The bar is only an estimate: it holds short of full until the run really ends.
-watch(running, (isRunning) => {
-  if (!isRunning) return;
-
+const startProgress = () => {
   const [min, max] = props.progressRange;
   progressDuration.value = Math.round(randomBetween(min, max));
   progressEasing.value = `cubic-bezier(${randomBetween(0.08, 0.24).toFixed(2)}, ${randomBetween(0.78, 1).toFixed(2)}, ${randomBetween(0.22, 0.42).toFixed(2)}, 1)`;
   progressKey.value += 1;
+};
+
+watch(running, (isRunning) => {
+  if (isRunning) startProgress();
+});
+
+// A tool may already be running when it mounts, which the watcher never sees.
+onMounted(() => {
+  if (running.value) startProgress();
 });
 </script>
 
@@ -480,19 +487,31 @@ html.dark .network-tool-error,
 }
 
 @media (max-width: 719px) {
-  .network-tool-action-row {
+  /* Mobile order: progress, summary, then the full-width button. */
+  .network-tool-panel {
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+  }
+
+  .network-tool-action-row {
+    display: contents;
   }
 
   .network-tool-progress {
     flex: 0 0 6px;
+    order: 1;
+    margin: 12px 0 10px;
+  }
+
+  .network-tool-summary {
+    order: 2;
   }
 
   .network-tool-button {
     flex: 0 0 auto;
+    order: 3;
     width: 100%;
+    margin-top: 14px;
   }
 
   .network-tool-grid {

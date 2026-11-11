@@ -153,7 +153,7 @@ html.dark .not-found__desc,
 }
 
 .not-found__actions .vp-button:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--vp-shadow-2);
   transform: translateY(-1px);
 }
 </style>

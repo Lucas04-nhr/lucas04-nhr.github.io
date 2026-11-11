@@ -1,49 +1,21 @@
 <template>
-  <section class="china-user-check" :class="`is-${displayVerdict.kind}`">
-    <header class="result-panel">
-      <div class="result-panel-content">
-        <p class="eyebrow">Mainland China User Check</p>
-        <h2 class="result-title">
-          <VPIcon
-            :key="displayVerdictIcon"
-            :name="displayVerdictIcon"
-            color="var(--check-accent)"
-            size="28"
-            aria-hidden="true"
-          />
-          <span>{{ displayVerdict.title }}</span>
-        </h2>
-        <div class="result-panel-action-row">
-          <div
-            v-if="isCheckingResult"
-            :key="checkingProgressKey"
-            class="checking-progress"
-            :style="checkingProgressStyle"
-            aria-hidden="true"
-          >
-            <span />
-          </div>
-          <div v-else class="checking-progress-spacer" aria-hidden="true" />
-          <button type="button" class="refresh-button" @click="refresh" :disabled="loading">
-            {{ loading ? "Checking..." : "Refresh" }}
-          </button>
-        </div>
-        <p class="result-summary">{{ displayVerdict.summary }}</p>
-      </div>
-    </header>
-
-    <div v-if="error" class="message error-message">
-      <strong>IP API request failed.</strong>
-      <span>{{ error }}</span>
-    </div>
-
-    <div class="slot-note">
+  <NetworkToolShell
+    eyebrow="Mainland China User Check"
+    :title="displayVerdict.title"
+    :summary="displayVerdict.summary"
+    :kind="shellKind"
+    :progress-range="PROGRESS_RANGE"
+    button-text="Refresh"
+    :error="error"
+    @run="refresh"
+  >
+    <div v-if="$slots.note" class="region-detect-note">
       <slot name="note" />
     </div>
 
-    <div class="signal-grid">
-      <article class="signal-card ip-card">
-        <div class="signal-header">
+    <div class="network-tool-grid">
+      <article class="network-tool-card is-wide">
+        <header class="network-tool-card-header">
           <VPIcon
             :color="visibleStatusIconColor(ipSignal?.result ?? null)"
             name="mdi:map-marker-outline"
@@ -51,12 +23,12 @@
             aria-hidden="true"
           />
           <h3>IP Geolocation</h3>
-        </div>
-        <p class="signal-value">{{ visibleValue(ipSignal?.value) }}</p>
-        <p v-if="isCheckingResult" class="signal-detail">
+        </header>
+        <p class="network-tool-value">{{ visibleValue(ipSignal?.value) }}</p>
+        <p v-if="isCheckingResult" class="network-tool-detail">
           Collecting detection signals...
         </p>
-        <p v-else-if="hasIpLinkDetail" class="signal-detail">
+        <p v-else-if="hasIpLinkDetail" class="network-tool-detail">
           According to our data, you are visiting our site from
           <a
             :href="ipLookupUrl"
@@ -77,13 +49,13 @@
           </a>,
           located in {{ ipSignal?.country }}.
         </p>
-        <p v-else class="signal-detail">
+        <p v-else class="network-tool-detail">
           {{ ipSignal?.detail }}
         </p>
       </article>
 
-      <article v-for="signal in browserSignals" :key="signal.id" class="signal-card">
-        <div class="signal-header">
+      <article v-for="signal in browserSignals" :key="signal.id" class="network-tool-card">
+        <header class="network-tool-card-header">
           <VPIcon
             :color="visibleStatusIconColor(signal.result)"
             :name="signalIcon(signal.id)"
@@ -91,48 +63,50 @@
             aria-hidden="true"
           />
           <h3>{{ signal.label }}</h3>
-        </div>
-        <p class="signal-value">{{ visibleValue(signal.value) }}</p>
-        <p class="signal-detail">{{ signal.detail }}</p>
+        </header>
+        <p class="network-tool-value">{{ visibleValue(signal.value) }}</p>
+        <p class="network-tool-detail">{{ signal.detail }}</p>
       </article>
     </div>
 
     <Transition name="result-reveal">
-      <div v-if="!isCheckingResult" class="result-details">
-        <table class="details-table">
-          <thead>
-            <tr>
-              <th>Signal</th>
-              <th>Result</th>
-              <th>Observed Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>IP Country</td>
-              <td :class="resultClass(ipSignal?.result ?? null)">
-                {{ formatResult(ipSignal?.result ?? null) }}
-              </td>
-              <td>{{ ipSignal?.country ?? "N/A" }}</td>
-            </tr>
-            <tr>
-              <td>Non-IP Mainland Signals</td>
-              <td :class="mainlandSignalRuleResultClass">
-                {{ mainlandSignalRuleResult }}
-              </td>
-              <td>{{ mainlandSignalRuleText }}</td>
-            </tr>
-            <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
-              <td>{{ signal.label }}</td>
-              <td :class="resultClass(signal.result)">
-                {{ formatResult(signal.result) }}
-              </td>
-              <td>{{ signal.value }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div v-if="!isCheckingResult" class="region-detect-details">
+        <div class="network-tool-table-wrap">
+          <table class="network-tool-table">
+            <thead>
+              <tr>
+                <th>Signal</th>
+                <th>Result</th>
+                <th>Observed Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IP Country</td>
+                <td :class="resultClass(ipSignal?.result ?? null)">
+                  {{ formatResult(ipSignal?.result ?? null) }}
+                </td>
+                <td>{{ ipSignal?.country ?? "N/A" }}</td>
+              </tr>
+              <tr>
+                <td>Non-IP Mainland Signals</td>
+                <td :class="mainlandSignalRuleResultClass">
+                  {{ mainlandSignalRuleResult }}
+                </td>
+                <td>{{ mainlandSignalRuleText }}</td>
+              </tr>
+              <tr v-for="signal in browserSignals" :key="`row-${signal.id}`">
+                <td>{{ signal.label }}</td>
+                <td :class="resultClass(signal.result)">
+                  {{ formatResult(signal.result) }}
+                </td>
+                <td>{{ signal.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <ul class="footnote footnote-list">
+        <ul class="network-tool-notes">
           <li>
             {{ proxyFootnote }}
           </li>
@@ -146,12 +120,13 @@
         </ul>
       </div>
     </Transition>
-  </section>
+  </NetworkToolShell>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { VPIcon } from "vuepress-theme-plume/client";
+import NetworkToolShell from "./networkToolShell.vue";
 import {
   type BrowserSignal,
   type InternalMainlandRuleSignal,
@@ -170,11 +145,9 @@ const ipSignal = ref<IpSignal | null>(null);
 const browserSignals = ref<BrowserSignal[]>([]);
 const internalRuleSignal = ref<InternalMainlandRuleSignal | null>(null);
 const internalRuleChecking = ref(true);
-const checkingProgressDuration = ref(4000);
-const checkingProgressEasing = ref("cubic-bezier(0.16, 1, 0.3, 1)");
-const checkingProgressKey = ref(0);
 
 const CHECKING_TEXT = "Checking...";
+const PROGRESS_RANGE: [number, number] = [1500, 2500];
 
 const randomBetween = (min: number, max: number) =>
   min + Math.random() * (max - min);
@@ -184,18 +157,11 @@ const wait = (duration: number) =>
     window.setTimeout(resolve, duration);
   });
 
-const randomizeCheckingProgress = () => {
-  checkingProgressDuration.value = Math.round(randomBetween(1500, 2500));
-  checkingProgressEasing.value = `cubic-bezier(${randomBetween(0.08, 0.24).toFixed(2)}, ${randomBetween(0.78, 1).toFixed(2)}, ${randomBetween(0.22, 0.42).toFixed(2)}, 1)`;
-  checkingProgressKey.value += 1;
-};
-
 const refresh = async () => {
   loading.value = true;
   error.value = null;
   ipSignal.value = null;
-  randomizeCheckingProgress();
-  const progressPromise = wait(checkingProgressDuration.value);
+  const progressPromise = wait(Math.round(randomBetween(...PROGRESS_RANGE)));
   browserSignals.value = detectBrowserSignals();
   internalRuleSignal.value = null;
   internalRuleChecking.value = true;
@@ -277,21 +243,14 @@ const isCheckingResult = computed(
   () => displayVerdict.value.kind === "checking-internal-rule",
 );
 
-const verdictIcons: Record<DisplayVerdict["kind"], string> = {
-  "suspected-mainland": "mdi:alert-circle-outline",
-  "non-mainland": "mdi:check-circle-outline",
-  mainland: "mdi:close-circle-outline",
-  "checking-internal-rule": "mdi:help-circle-outline",
-};
+const shellKinds = {
+  "suspected-mainland": "warn",
+  "non-mainland": "ok",
+  mainland: "bad",
+  "checking-internal-rule": "running",
+} as const satisfies Record<DisplayVerdict["kind"], string>;
 
-const displayVerdictIcon = computed(
-  () => verdictIcons[displayVerdict.value.kind],
-);
-
-const checkingProgressStyle = computed(() => ({
-  "--checking-progress-duration": `${checkingProgressDuration.value}ms`,
-  "--checking-progress-easing": checkingProgressEasing.value,
-}));
+const shellKind = computed(() => shellKinds[displayVerdict.value.kind]);
 
 const hasIpLinkDetail = computed(
   () =>
@@ -348,14 +307,14 @@ const mainlandSignalRuleResult = computed(() => {
 
 const mainlandSignalRuleResultClass = computed(() => {
   if (mainlandSignalScore.value === browserSignalTotal.value) {
-    return "result-mainland-like";
+    return "tool-tone-bad";
   }
 
   if (mainlandSignalScore.value >= 2) {
-    return "result-suspected-mainland";
+    return "tool-tone-warn";
   }
 
-  return "result-non-mainland";
+  return "tool-tone-ok";
 });
 
 const mainlandSignalRuleText = computed(() => {
@@ -411,16 +370,16 @@ const formatResult = (result: boolean | null) => {
 };
 
 const resultClass = (result: boolean | null) => {
-  if (result === true) return "result-mainland-like";
-  if (result === false) return "result-non-mainland";
+  if (result === true) return "tool-tone-bad";
+  if (result === false) return "tool-tone-ok";
   return "";
 };
 
 const visibleStatusIconColor = (result: boolean | null) => {
   const visibleResult = isCheckingResult.value ? null : result;
-  if (visibleResult === true) return "#dc2626";
-  if (visibleResult === false) return "#16a34a";
-  return "#94a3b8";
+  if (visibleResult === true) return "var(--tool-bad)";
+  if (visibleResult === false) return "var(--tool-ok)";
+  return "var(--tool-muted)";
 };
 
 const signalIcons: Record<BrowserSignal["id"], string> = {
@@ -441,223 +400,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.china-user-check {
-  --check-accent: var(--vp-c-brand-1);
-  --check-accent-soft: var(--container-note);
-  --check-on-accent: var(--vp-button-brand-text);
-  --check-mainland: var(--vp-c-red-1);
-  --check-suspected: var(--vp-c-yellow-1);
-  --check-non-mainland: var(--vp-c-green-1);
-  --check-border: rgba(100, 116, 139, 0.22);
-  --check-muted: #64748b;
-  --check-card: rgba(255, 255, 255, 0.72);
-  display: grid;
-  gap: 18px;
-  margin: 24px 0;
-}
-
-.china-user-check.is-mainland {
-  --check-accent: var(--check-mainland);
-  --check-accent-soft: var(--container-danger);
-}
-
-.china-user-check.is-suspected-mainland {
-  --check-accent: var(--check-suspected);
-  --check-accent-soft: var(--container-warning);
-}
-
-.china-user-check.is-non-mainland {
-  --check-accent: var(--check-non-mainland);
-  --check-accent-soft: var(--container-success);
-}
-
-.china-user-check.is-checking-internal-rule {
-  --check-accent: #475569;
-  --check-accent-soft: var(--container-info);
-}
-
-.result-panel {
-  padding: 22px;
-  border: 1px solid var(--check-border);
-  border-left: 5px solid var(--check-accent);
-  border-radius: var(--radius-md);
-  background: var(--check-accent-soft);
-}
-
-@media (min-width: 720px) {
-  .result-panel {
-    padding-bottom: 28px;
-  }
-}
-
-.result-panel-content {
-  min-width: 0;
-}
-
-.result-panel h2 {
-  margin: 4px 0 8px;
-  font-size: 1.55rem;
-  line-height: 1.2;
-}
-
-.result-title {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.result-panel p {
-  margin: 0;
-  white-space: pre-line;
-}
-
-.result-panel-action-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin: 12px 0 10px;
-}
-
-.checking-progress,
-.checking-progress-spacer {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 6px;
-  min-width: 0;
-}
-
-.checking-progress {
-  overflow: hidden;
-  border-radius: var(--radius-pill);
-  background: rgba(100, 116, 139, 0.24);
-}
-
-.checking-progress-spacer {
-  border-radius: var(--radius-pill);
-  background: var(--check-accent);
-}
-
-.checking-progress span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--check-accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  animation: checking-progress-fill var(--checking-progress-duration) var(--checking-progress-easing) forwards;
-}
-
-@keyframes checking-progress-fill {
-  0% {
-    transform: scaleX(0);
-  }
-
-  62% {
-    transform: scaleX(0.86);
-  }
-
-  100% {
-    transform: scaleX(1);
-  }
-}
-
-.eyebrow {
-  color: var(--check-accent);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.refresh-button {
-  flex: 0 0 112px;
-  width: 112px;
-  min-height: 38px;
-  padding: 8px 14px;
-  border: 1px solid var(--check-accent);
-  border-radius: var(--radius-md);
-  background: var(--check-accent);
-  color: var(--check-on-accent);
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.refresh-button:disabled {
-  cursor: wait;
-  opacity: 0.72;
-}
-
-.message {
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-}
-
-.error-message {
-  border: 1px solid rgba(220, 38, 38, 0.35);
-  background: rgba(220, 38, 38, 0.1);
-  color: #991b1b;
-}
-
-.error-message span {
-  display: block;
-  margin-top: 4px;
-}
-
-.slot-note :deep(*) {
+.region-detect-note :deep(*) {
   margin-top: 0;
 }
 
-.signal-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.signal-card {
-  min-height: 156px;
-  padding: 18px;
-  border: 1px solid var(--check-border);
-  border-radius: var(--radius-md);
-  background: var(--check-card);
-}
-
-.ip-card {
-  grid-column: 1 / -1;
-}
-
-.signal-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.signal-header h3 {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.signal-value {
-  margin: 16px 0 8px;
-  overflow-wrap: anywhere;
-  font-size: 1.08rem;
-  font-weight: 800;
-}
-
-.signal-detail,
-.footnote {
-  color: var(--check-muted);
-  font-size: 0.92rem;
-}
-
-.details-table {
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.result-details {
+.region-detect-details {
   display: grid;
   gap: 18px;
 }
@@ -679,98 +426,5 @@ onMounted(() => {
   opacity: 1;
   clip-path: inset(0);
   transform: translateY(0);
-}
-
-.details-table th,
-.details-table td {
-  padding: 10px;
-  border-bottom: 1px solid var(--check-border);
-  text-align: center;
-  vertical-align: top;
-}
-
-.details-table th {
-  background: rgba(148, 163, 184, 0.12);
-  font-weight: 800;
-}
-
-.details-table code {
-  overflow-wrap: anywhere;
-}
-
-.result-mainland-like {
-  color: var(--check-mainland);
-  font-weight: 700;
-}
-
-.result-non-mainland {
-  color: var(--check-non-mainland);
-  font-weight: 700;
-}
-
-.result-suspected-mainland {
-  color: var(--check-suspected);
-  font-weight: 700;
-}
-
-.footnote {
-  margin: 0;
-}
-
-.footnote-list {
-  padding-left: 1.25rem;
-}
-
-.footnote-list li {
-  margin: 4px 0;
-}
-
-html.dark .china-user-check,
-:root[data-theme="dark"] .china-user-check {
-  --check-border: rgba(148, 163, 184, 0.32);
-  --check-muted: #cbd5e1;
-  --check-card: rgba(15, 23, 42, 0.45);
-}
-
-html.dark .china-user-check.is-checking-internal-rule,
-:root[data-theme="dark"] .china-user-check.is-checking-internal-rule {
-  --check-accent: #94a3b8;
-}
-
-html.dark .error-message,
-:root[data-theme="dark"] .error-message {
-  color: #fecaca;
-}
-
-@media (max-width: 719px) {
-  .result-panel-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .result-panel-action-row {
-    display: contents;
-  }
-
-  .checking-progress,
-  .checking-progress-spacer {
-    order: 1;
-    margin: 12px 0 10px;
-  }
-
-  .result-summary {
-    order: 2;
-  }
-
-  .refresh-button {
-    order: 3;
-    flex-basis: auto;
-    margin-top: 14px;
-    width: 100%;
-  }
-
-  .signal-grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

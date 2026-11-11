@@ -9,6 +9,7 @@
   --radius-md: 8px; /* 按钮、输入框、卡片 */
   --radius-lg: 12px; /* 面板、内容卡片 */
   --radius-xl: 18px; /* 弹窗 */
+  --radius-pill: 999px; /* 胶囊形：进度条、徽标 */
 
   /* 对比度：brand-1/brand-2 在 #fff 与 #f6f6f7 上均 ≥ 4.5:1，白字按钮亦 ≥ 4.5:1 */
   --vp-c-brand-1: #306b88; /* 链接颜色、强调色 */

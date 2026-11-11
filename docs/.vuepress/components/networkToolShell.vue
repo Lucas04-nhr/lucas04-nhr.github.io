@@ -180,7 +180,7 @@ watch(running, (isRunning) => {
   height: 6px;
   min-width: 0;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(100, 116, 139, 0.24);
 }
 

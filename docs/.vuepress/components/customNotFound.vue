@@ -133,7 +133,7 @@ html.dark .not-found__desc,
   justify-content: center;
   gap: 6px;
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 14px;
   line-height: 1.4;
   text-decoration: none;

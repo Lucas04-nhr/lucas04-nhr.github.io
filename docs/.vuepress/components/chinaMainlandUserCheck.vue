@@ -528,12 +528,12 @@ onMounted(() => {
 
 .checking-progress {
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(100, 116, 139, 0.24);
 }
 
 .checking-progress-spacer {
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--check-accent);
 }
 

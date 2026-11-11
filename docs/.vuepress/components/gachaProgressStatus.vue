@@ -169,7 +169,7 @@ html.dark .progress-status.is-error,
   margin: 12px 0 10px;
   height: 6px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(100, 116, 139, 0.24);
 }
 .progress-track span {

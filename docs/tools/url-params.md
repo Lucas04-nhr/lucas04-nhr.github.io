@@ -23,6 +23,7 @@ Here lists some URL parameters that can be used to customize the behavior of the
 | `menuAllowed` | `custom`, `original`, `false` | `custom` | Uses the site-styled context menu, restores the browser's original context menu, or disables context menus completely. The custom menu is available through right-click on desktop and long press on mobile. |
 | `debugAllowed` | `true`, `false` | `false` | Allows browser debugging when `true`. When `false`, the site enables its anti-debugging hooks: periodic `debugger` checks, console clearing, developer-tools shortcut blocking, and a full-screen white or black cover matching the active theme after a detected debugging pause. |
 | `gachaFetchAllowed` | `true`, `false` | `false` | Allows the gacha system to fetch data from the server when `true`. When `false`, the gacha system online-fetching is disabled. |
+| `aiAssistantAllowed` | `true`, `false` | `false` | Shows the floating AI assistant button in the bottom-right corner when `true`. When `false`, the button is hidden. **Ask AI** in the search dialog remains available either way. |
 
 For example, the following URL enables ordinary copying and text selection while restoring the browser's original context menu:
 

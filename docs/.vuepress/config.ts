@@ -168,7 +168,11 @@ export default defineUserConfig({
       appId: '74YMW3SD6Z',
       apiKey: '8452a5a75f5166abe464b8fe85d3b3cc',
       indices: ['Blog Website'],
-      placeholder: 'Search the blog...',
+      placeholder: 'Search the blog or ask AI',
+      // DocSearch v5 Ask AI, using the Agent Studio agent of AlgoliaAiAssistant.vue.
+      // The plugin passes it through to @docsearch/js, but its option type omits
+      // `askAi`, so it is spread in to avoid the excess-property check.
+      ...{ askAi: { agentId: '782ad8a9-dafa-4e57-90ef-3fc5e42ac9fd' } },
     },
 
     /**

@@ -19,6 +19,7 @@ import "./theme/styles/fonts_body.css";
 import "./theme/styles/custom_color.css";
 import "./theme/styles/content_interaction.css";
 import "./theme/styles/anti_debug.css";
+import "./theme/styles/docsearch.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import ContentInteractionPreferenceSync from "./theme/components/ContentInteractionPreferenceSync";
@@ -34,6 +35,7 @@ import {
 import { installContentInteractionGuards } from "./theme/utils/contentInteractionPreference";
 import { initializeScriptPreference } from "./theme/utils/localeScriptPreference";
 import { initializeDebugPreference } from "./theme/utils/debugPreference";
+import { initializeAiAssistantPreference } from "./theme/utils/aiAssistantPreference";
 import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
 
 // The network tools carry large probe lists, so only their own pages load them.
@@ -142,6 +144,7 @@ export default defineClientConfig({
     initializeInternalRuleBypassPreference();
     installContentInteractionGuards();
     initializeDebugPreference();
+    initializeAiAssistantPreference();
 
     // built-in components
     app.component("RepoCard", RepoCard);

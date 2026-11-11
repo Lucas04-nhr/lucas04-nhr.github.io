@@ -20,6 +20,10 @@ import {
   parseDebugAllowedPreference,
 } from "./debugPreference";
 import { applyGachaFetchPreference } from "./gachaFetchPreference";
+import {
+  applyAndPersistAiAssistantAllowedPreference,
+  parseAiAssistantAllowedPreference,
+} from "./aiAssistantPreference";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -100,6 +104,14 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
     if (preference === null) return unhandledResult;
 
     applyAndPersistDebugAllowedPreference(preference);
+    return { handled: true, removeParam: true };
+  },
+
+  aiAssistantAllowed(value) {
+    const preference = parseAiAssistantAllowedPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistAiAssistantAllowedPreference(preference);
     return { handled: true, removeParam: true };
   },
 };

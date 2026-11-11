@@ -1,0 +1,127 @@
+/*
+ * Algolia DocSearch v5 modal
+ * Maps DocSearch tokens to the site's Plume tokens (custom_color.css) and
+ * follows the look of AlgoliaAiAssistant.vue: divider borders, brand-soft
+ * highlights and rounded panels. Selectors use `.DocSearch.DocSearch-Container`
+ * so they win over the defaults that Plume sets on `.DocSearch`; the navbar
+ * search button keeps Plume's own styles.
+ */
+.DocSearch.DocSearch-Container {
+  --docsearch-font-family: var(--vp-font-family-base);
+  --docsearch-primary-color: var(--vp-c-brand-1);
+  --docsearch-primary-dark-color: var(--vp-c-brand-2);
+  --docsearch-highlight-color: var(--vp-c-brand-1);
+  --docsearch-soft-primary-color: var(--vp-c-brand-soft);
+  --docsearch-focus-color: var(--vp-c-brand-1);
+  --docsearch-text-color: var(--vp-c-text-1);
+  --docsearch-secondary-text-color: var(--vp-c-text-2);
+  --docsearch-muted-color: var(--vp-c-text-3);
+  --docsearch-muted-color-darker: var(--vp-c-text-2);
+  --docsearch-icon-color: var(--vp-c-text-2);
+  --docsearch-logo-color: var(--vp-c-text-2);
+  --docsearch-subtle-color: var(--vp-c-divider);
+  --docsearch-error-color: var(--vp-c-danger-1);
+  --docsearch-error-text-color: var(--vp-c-danger-1);
+  --docsearch-error-soft-color: var(--vp-c-danger-soft);
+  --docsearch-success-color: var(--vp-c-success-1);
+
+  --docsearch-container-background: rgba(0, 0, 0, 0.32);
+  --docsearch-modal-background: var(--vp-c-bg);
+  --docsearch-modal-radius: 18px;
+  --docsearch-modal-shadow: var(--vp-shadow-4);
+  --docsearch-border-radius: 10px;
+
+  --docsearch-searchbox-background: var(--vp-c-bg);
+  --docsearch-searchbox-focus-background: var(--vp-c-bg);
+
+  --docsearch-hit-background: var(--vp-c-bg-soft);
+  --docsearch-hit-focus-background: var(--vp-c-brand-soft);
+  --docsearch-hit-color: var(--vp-c-text-1);
+  --docsearch-hit-highlight-color: var(--vp-c-brand-soft);
+  --docsearch-hit-shadow: none;
+
+  --docsearch-footer-background: var(--vp-c-bg);
+  --docsearch-footer-shadow: none;
+  --docsearch-key-background: var(--vp-c-default-soft);
+  --docsearch-key-color: var(--vp-c-text-2);
+  --docsearch-key-pressed-shadow: none;
+  --docsearch-background-color: var(--vp-c-default-soft);
+
+  --docsearch-chip-background: var(--vp-c-brand-soft);
+  --docsearch-chip-text-color: var(--vp-c-brand-1);
+  --docsearch-code-block-background: var(--vp-code-block-bg);
+  --docsearch-dropdown-menu-background: var(--vp-c-bg);
+  --docsearch-dropdown-menu-item-hover-background: var(--vp-c-default-soft);
+  --docsearch-popover-background: var(--vp-c-bg);
+  --docsearch-popover-shadow: var(--vp-shadow-3);
+  --docsearch-popover-arrow-color: var(--vp-c-divider);
+  --docsearch-menu-trigger-active-background: var(--vp-c-brand-soft);
+  --docsearch-menu-trigger-active-text-color: var(--vp-c-brand-1);
+}
+
+[data-theme="dark"] .DocSearch.DocSearch-Container {
+  --docsearch-container-background: rgba(0, 0, 0, 0.55);
+  --docsearch-modal-shadow: var(--vp-shadow-4);
+  --docsearch-footer-shadow: none;
+  --docsearch-hit-shadow: none;
+}
+
+.DocSearch-Modal {
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* Plume draws a brand border round the whole search form; use the divider instead. */
+.DocSearch-Container .DocSearch-Form,
+[data-theme="dark"] .DocSearch-Container .DocSearch-Form {
+  background-color: var(--vp-c-bg);
+  border: 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.DocSearch-Hit a {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 11px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.DocSearch-Hit[aria-selected="true"] a {
+  border-color: var(--vp-c-brand-1);
+}
+
+.DocSearch-Hit mark,
+.DocSearch-Hits mark {
+  font-weight: 600;
+}
+
+.DocSearch-Hit-source {
+  color: var(--vp-c-text-2);
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.DocSearch-Commands-Key {
+  border-radius: 6px;
+}
+
+/* Hide the "Powered by Algolia" logo in the modal footer. */
+.DocSearch-Footer .DocSearch-Logo {
+  display: none;
+}
+
+/* On phones DocSearch already hides the key hints, so without the logo the footer is an empty bar. */
+@media (width <= 768px) {
+  .DocSearch-Footer:not(:has(.DocSearch-Footer-Action)) {
+    display: none;
+  }
+
+  .DocSearch-Modal {
+    border: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .DocSearch-Hit a {
+    transition: none;
+  }
+}

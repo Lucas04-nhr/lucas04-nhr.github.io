@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import MarkdownIt from "markdown-it";
-import { computed, nextTick, onBeforeUnmount, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import VPIcon from "vuepress-theme-plume/components/VPIcon.vue";
+import { aiAssistantAllowed } from "../utils/aiAssistantPreference";
 
 type ChatRole = "assistant" | "user";
 type FeedbackVote = 0 | 1;
@@ -99,6 +100,22 @@ const messages = ref<ChatMessage[]>([
 const messageList = ref<HTMLElement | null>(null);
 let requestController: AbortController | null = null;
 let scrollFrame: number | null = null;
+
+// Hidden by default; `?aiAssistantAllowed=true` shows it. SSR always renders it
+// hidden, so wait for mount before reading the cookie-backed preference.
+const isMounted = ref(false);
+const isVisible = computed(() => isMounted.value && aiAssistantAllowed.value);
+
+onMounted(() => {
+  isMounted.value = true;
+});
+
+watch(isVisible, (visible) => {
+  if (!visible) {
+    requestController?.abort();
+    isOpen.value = false;
+  }
+});
 
 const canSubmit = computed(
   () => input.value.trim().length > 0 && !isLoading.value,
@@ -729,7 +746,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <aside class="algolia-ai-assistant" :class="{ open: isOpen }">
+  <aside v-if="isVisible" class="algolia-ai-assistant" :class="{ open: isOpen }">
     <Transition name="assistant-panel">
       <section
         v-if="isOpen"

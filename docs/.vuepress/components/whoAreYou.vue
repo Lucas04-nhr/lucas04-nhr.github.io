@@ -10,10 +10,19 @@
   >
     <div ref="bait" class="adsbox ad-banner ad-placement who-are-you-bait" aria-hidden="true" />
 
-    <div v-if="running || finished" class="network-tool-stats" aria-label="Who sites think you are">
+    <div
+      v-if="running || finished"
+      ref="statsGrid"
+      class="network-tool-stats"
+      aria-label="Who sites think you are"
+    >
       <div v-for="item in portrait" :key="item.label" class="network-tool-stat">
         <span>{{ item.label }}</span>
-        <strong>
+        <strong
+          ref="statValues"
+          class="who-are-you-stat-value"
+          :title="blurred && item.sensitive ? undefined : item.value"
+        >
           <VPPlot v-if="blurred && item.sensitive">{{ item.value }}</VPPlot>
           <template v-else>{{ item.value }}</template>
         </strong>
@@ -97,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import CodeViewer from "./customCodeViewer.vue";
 import NetworkToolShell from "./networkToolShell.vue";
 import {
@@ -405,13 +414,13 @@ const portrait = computed(() => {
   const browserText = [R.browserInfo?.name, R.browserInfo?.v].filter(Boolean).join(" ");
 
   return [
-    { label: "Probably From", value: likely ? countryLabel(likely.cc) : waiting },
+    { label: "Probably From", value: likely ? countryLabel(likely.cc) : waiting, sensitive: Boolean(likely) },
     { label: "Right Now In", value: place || waiting, sensitive: Boolean(place) },
     { label: "Device", value: deviceText || waiting },
     { label: "Browser", value: browserText || waiting },
     { label: "Graphics", value: bestGpuName(R) || waiting },
-    { label: "Network", value: network || waiting },
-    { label: "DNS Resolver", value: R.dnsCC ? countryLabel(R.dnsCC) : waiting },
+    { label: "Network", value: network || waiting, sensitive: Boolean(network) },
+    { label: "DNS Resolver", value: R.dnsCC ? countryLabel(R.dnsCC) : waiting, sensitive: Boolean(R.dnsCC) },
     { label: "Fingerprint ID", value: R.fingerprint ?? waiting },
   ];
 });
@@ -468,12 +477,52 @@ const start = async () => {
   finished.value = true;
 };
 
+const MIN_STAT_FONT_PX = 11;
+const statsGrid = ref<HTMLElement | null>(null);
+const statValues = ref<HTMLElement[]>([]);
+let statsObserver: ResizeObserver | null = null;
+let statsWidth = 0;
+
+// Shrink each overview value until it fits on one line, so cards keep a fixed height.
+const fitStats = () => {
+  for (const el of statValues.value) {
+    el.style.fontSize = "";
+    const available = el.clientWidth;
+    const needed = el.scrollWidth;
+    if (!available || needed <= available) continue;
+
+    const base = parseFloat(getComputedStyle(el).fontSize);
+    const size = Math.floor((base * available / needed) * 10) / 10;
+    el.style.fontSize = `${Math.max(size, MIN_STAT_FONT_PX)}px`;
+  }
+};
+
+watch([portrait, blurred], () => {
+  void nextTick(fitStats);
+}, { flush: "post" });
+
+watch(statsGrid, (el, old) => {
+  if (old) statsObserver?.unobserve(old);
+  if (el) statsObserver?.observe(el);
+});
+
 onMounted(() => {
+  if (typeof ResizeObserver !== "undefined") {
+    statsObserver = new ResizeObserver(([entry]) => {
+      const width = entry?.contentRect.width ?? 0;
+      if (width === statsWidth) return;
+      statsWidth = width;
+      fitStats();
+    });
+    if (statsGrid.value) statsObserver.observe(statsGrid.value);
+  }
   void start();
 });
 
 onBeforeUnmount(() => {
   generation += 1;
+  statsObserver?.disconnect();
+  statsObserver = null;
 });
 </script>
 
@@ -484,6 +533,14 @@ onBeforeUnmount(() => {
   height: 1px;
   overflow: hidden;
   pointer-events: none;
+}
+
+.network-tool-stat .who-are-you-stat-value {
+  display: block;
+  overflow: hidden;
+  overflow-wrap: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .who-are-you-raw :deep(pre),

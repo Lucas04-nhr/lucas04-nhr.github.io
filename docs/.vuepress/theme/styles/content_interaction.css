@@ -18,9 +18,7 @@ html.native-context-menu-disabled * {
   background: color-mix(in srgb, var(--vp-c-bg) 94%, transparent);
   border: 1px solid color-mix(in srgb, var(--vp-c-text-3) 28%, transparent);
   border-radius: var(--radius-lg);
-  box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.18),
-    0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--vp-shadow-4);
   opacity: 0;
   transform: translateY(-4px) scale(0.97);
   transform-origin: top left;

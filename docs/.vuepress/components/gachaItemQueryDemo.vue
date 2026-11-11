@@ -75,7 +75,7 @@ const result = computed(() => {
   min-width: 0;
   padding: 8px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
   font: inherit;

@@ -4,6 +4,12 @@
     "Liberation Mono", "Courier New", monospace;
   --vp-font-weight-mono: 500;
 
+  /* 圆角：全站统一四档，胶囊形用 999px，圆形用 50% */
+  --radius-sm: 4px; /* 尖角、小标签 */
+  --radius-md: 8px; /* 按钮、输入框、卡片 */
+  --radius-lg: 12px; /* 面板、内容卡片 */
+  --radius-xl: 18px; /* 弹窗 */
+
   /* 对比度：brand-1/brand-2 在 #fff 与 #f6f6f7 上均 ≥ 4.5:1，白字按钮亦 ≥ 4.5:1 */
   --vp-c-brand-1: #306b88; /* 链接颜色、强调色 */
   --vp-c-brand-2: #1c587d; /* 链接、按钮 hover 颜色 */

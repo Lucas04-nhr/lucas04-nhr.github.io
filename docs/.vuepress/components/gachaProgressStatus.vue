@@ -104,7 +104,7 @@ onBeforeUnmount(stop);
   padding: 22px;
   border: 1px solid rgba(100, 116, 139, 0.22);
   border-left: 5px solid var(--progress-accent);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--progress-soft);
   transition: background-color 0.38s ease-out, border-color 0.38s ease-out;
 }
@@ -188,7 +188,7 @@ html.dark .progress-status.is-error,
   width: 224px;
   min-height: 38px;
   padding: 0 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   white-space: nowrap;
 }
 .progress-actions :deep(.vp-button.brand) {

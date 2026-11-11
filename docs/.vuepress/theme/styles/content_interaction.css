@@ -17,7 +17,7 @@ html.native-context-menu-disabled * {
   color: var(--vp-c-text-1);
   background: color-mix(in srgb, var(--vp-c-bg) 94%, transparent);
   border: 1px solid color-mix(in srgb, var(--vp-c-text-3) 28%, transparent);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   box-shadow:
     0 18px 48px rgba(0, 0, 0, 0.18),
     0 3px 10px rgba(0, 0, 0, 0.1);
@@ -72,7 +72,7 @@ html.native-context-menu-disabled * {
   cursor: pointer;
   background: transparent;
   border: 0;
-  border-radius: 9px;
+  border-radius: var(--radius-md);
   transition:
     color 120ms ease,
     background-color 120ms ease;
@@ -117,7 +117,7 @@ html.selection-prohibited .site-context-menu-copy-source {
     bottom: max(10px, env(safe-area-inset-bottom));
     left: 10px !important;
     width: auto;
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
     opacity: 0;
     transform: translateY(16px) scale(0.98);
     transform-origin: bottom center;

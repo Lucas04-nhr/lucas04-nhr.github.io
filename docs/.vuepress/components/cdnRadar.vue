@@ -595,7 +595,7 @@ html.dark .cdn-radar-site.is-running,
   min-width: 0;
   padding: 8px 12px;
   border: 1px solid var(--tool-border);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: transparent;
   color: inherit;
 }

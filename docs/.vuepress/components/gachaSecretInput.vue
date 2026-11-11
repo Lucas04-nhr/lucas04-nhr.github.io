@@ -47,8 +47,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .secret-control { display: flex; gap: 8px; margin-top: 4px; }
-input { box-sizing: border-box; min-width: 0; width: 100%; padding: 10px 12px; border: 1px solid var(--vp-c-divider); border-radius: 8px; color: var(--vp-c-text-1); background: var(--vp-c-bg); font-family: var(--vp-font-family-mono); font-size: inherit; }
-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; border: 1px solid var(--vp-button-alt-border); border-radius: 8px; background: var(--vp-button-alt-bg); color: var(--vp-button-alt-text); cursor: pointer; touch-action: none; user-select: none; }
+input { box-sizing: border-box; min-width: 0; width: 100%; padding: 10px 12px; border: 1px solid var(--vp-c-divider); border-radius: var(--radius-md); color: var(--vp-c-text-1); background: var(--vp-c-bg); font-family: var(--vp-font-family-mono); font-size: inherit; }
+button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; border: 1px solid var(--vp-button-alt-border); border-radius: var(--radius-md); background: var(--vp-button-alt-bg); color: var(--vp-button-alt-text); cursor: pointer; touch-action: none; user-select: none; }
 button:hover { background: var(--vp-button-alt-hover-bg); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 :is(input, button):focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 2px; }

@@ -27,9 +27,9 @@
 
   --docsearch-container-background: rgba(0, 0, 0, 0.32);
   --docsearch-modal-background: var(--vp-c-bg);
-  --docsearch-modal-radius: 18px;
+  --docsearch-modal-radius: var(--radius-xl);
   --docsearch-modal-shadow: var(--vp-shadow-4);
-  --docsearch-border-radius: 10px;
+  --docsearch-border-radius: var(--radius-md);
 
   --docsearch-searchbox-background: var(--vp-c-bg);
   --docsearch-searchbox-focus-background: var(--vp-c-bg);
@@ -81,7 +81,7 @@
 
 .DocSearch-Hit a {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 11px;
+  border-radius: var(--radius-md);
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .DocSearch-Commands-Key {
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 /* Hide the "Powered by Algolia" logo in the modal footer. */

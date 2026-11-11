@@ -950,7 +950,7 @@ onBeforeUnmount(() => {
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 18px;
+  border-radius: var(--radius-xl);
   box-shadow: var(--vp-shadow-4);
   flex-direction: column;
 }
@@ -979,7 +979,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   background: transparent;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 22px;
 }
 .assistant-actions button:hover { background: var(--vp-c-default-soft); }
@@ -1002,7 +1002,7 @@ onBeforeUnmount(() => {
 .assistant-message {
   max-width: 88%;
   padding: 10px 13px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   font-size: 14px;
   line-height: 1.55;
   overflow-wrap: anywhere;
@@ -1024,11 +1024,11 @@ onBeforeUnmount(() => {
 .assistant-message :deep(h4),
 .assistant-message :deep(h5),
 .assistant-message :deep(h6) { padding-top: 0; margin: 12px 0 6px; border-top: 0; font-size: 1.05em; line-height: 1.4; }
-.assistant-message :deep(pre) { max-width: 100%; padding: 10px; overflow-x: auto; background: var(--vp-code-block-bg); border-radius: 8px; }
+.assistant-message :deep(pre) { max-width: 100%; padding: 10px; overflow-x: auto; background: var(--vp-code-block-bg); border-radius: var(--radius-md); }
 .assistant-message :deep(pre code) { font-family: var(--vp-font-family-mono); font-size: 0.86em; white-space: pre; }
 
-.assistant-message.assistant { align-self: flex-start; background: var(--vp-c-bg-soft); border-bottom-left-radius: 4px; }
-.assistant-message.user { align-self: flex-end; color: var(--vp-button-brand-text, var(--vp-c-white)); background: var(--vp-c-brand-1); border-bottom-right-radius: 4px; }
+.assistant-message.assistant { align-self: flex-start; background: var(--vp-c-bg-soft); border-bottom-left-radius: var(--radius-sm); }
+.assistant-message.user { align-self: flex-end; color: var(--vp-button-brand-text, var(--vp-c-white)); background: var(--vp-c-brand-1); border-bottom-right-radius: var(--radius-sm); }
 .assistant-message.user :deep(*) { color: inherit; }
 .assistant-message.user :deep(a) { text-decoration-color: currentcolor; }
 .assistant-message.user :deep(code) { background: color-mix(in srgb, currentColor 10%, transparent); }
@@ -1045,14 +1045,14 @@ onBeforeUnmount(() => {
   text-decoration: none;
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 11px;
+  border-radius: var(--radius-md);
   grid-template-columns: 28px minmax(0, 1fr) 18px;
   align-items: start;
   gap: 8px;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 .assistant-result-card:hover { color: var(--vp-c-text-1); background: var(--vp-c-bg-alt); border-color: var(--vp-c-brand-1); }
-.assistant-result-icon { display: grid; width: 28px; height: 28px; color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); border-radius: 7px; place-items: center; }
+.assistant-result-icon { display: grid; width: 28px; height: 28px; color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); border-radius: var(--radius-md); place-items: center; }
 .assistant-result-body { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
 .assistant-result-body strong { overflow: hidden; font-size: 12.5px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
 .assistant-result-section { overflow: hidden; color: var(--vp-c-text-2); font-size: 11px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
@@ -1067,7 +1067,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   background: transparent;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font: inherit;
   font-size: 12px;
   line-height: 1.35;
@@ -1080,7 +1080,7 @@ onBeforeUnmount(() => {
 .assistant-suggestions button:disabled { cursor: default; opacity: 0.5; }
 
 .assistant-feedback { display: flex; margin-top: 7px; gap: 2px; }
-.assistant-feedback button { display: grid; width: 28px; height: 26px; padding: 0; color: var(--vp-c-text-3); cursor: pointer; background: transparent; border: 0; border-radius: 7px; place-items: center; }
+.assistant-feedback button { display: grid; width: 28px; height: 26px; padding: 0; color: var(--vp-c-text-3); cursor: pointer; background: transparent; border: 0; border-radius: var(--radius-md); place-items: center; }
 .assistant-feedback button:hover:not(:disabled),
 .assistant-feedback button:focus-visible,
 .assistant-feedback button.active { color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); }
@@ -1093,11 +1093,11 @@ onBeforeUnmount(() => {
 .assistant-loading i:nth-child(3) { animation-delay: 0.3s; }
 .assistant-error { margin: 0; color: var(--vp-c-danger-1); font-family: var(--vp-font-family-mono); font-size: 12px; }
 
-.assistant-form { display: flex; margin: 0 14px; padding: 6px 6px 6px 12px; background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); border-radius: 14px; align-items: flex-end; gap: 8px; }
+.assistant-form { display: flex; margin: 0 14px; padding: 6px 6px 6px 12px; background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); border-radius: var(--radius-lg); align-items: flex-end; gap: 8px; }
 .assistant-form:focus-within { border-color: var(--vp-c-brand-1); }
 .assistant-form textarea { min-height: 34px; max-height: 96px; padding: 7px 0; overflow-y: auto; color: var(--vp-c-text-1); resize: none; background: transparent; border: 0; flex: 1; font: inherit; font-size: 14px; line-height: 20px; }
 .assistant-form textarea:focus { outline: 0; }
-.assistant-form button { display: grid; width: 34px; height: 34px; padding: 0; color: var(--vp-button-brand-text, var(--vp-c-white)); cursor: pointer; background: var(--vp-c-brand-1); border: 0; border-radius: 10px; place-items: center; }
+.assistant-form button { display: grid; width: 34px; height: 34px; padding: 0; color: var(--vp-button-brand-text, var(--vp-c-white)); cursor: pointer; background: var(--vp-c-brand-1); border: 0; border-radius: var(--radius-md); place-items: center; }
 .assistant-form button:disabled { cursor: not-allowed; opacity: 0.45; }
 .assistant-form button svg { width: 18px; height: 18px; fill: currentcolor; }
 .assistant-disclaimer { margin: 6px 0 8px; color: var(--vp-c-text-3); font-size: 10px; text-align: center; }

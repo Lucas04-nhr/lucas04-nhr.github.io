@@ -480,7 +480,7 @@ onMounted(() => {
   padding: 22px;
   border: 1px solid var(--check-border);
   border-left: 5px solid var(--check-accent);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--check-accent-soft);
 }
 
@@ -576,7 +576,7 @@ onMounted(() => {
   min-height: 38px;
   padding: 8px 14px;
   border: 1px solid var(--check-accent);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: var(--check-accent);
   color: var(--check-on-accent);
   font-weight: 700;
@@ -591,7 +591,7 @@ onMounted(() => {
 
 .message {
   padding: 14px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .error-message {
@@ -619,7 +619,7 @@ onMounted(() => {
   min-height: 156px;
   padding: 18px;
   border: 1px solid var(--check-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--check-card);
 }
 

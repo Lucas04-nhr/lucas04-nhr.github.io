@@ -108,7 +108,7 @@ defineExpose({ verify });
   margin: auto;
   padding: 24px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
 }

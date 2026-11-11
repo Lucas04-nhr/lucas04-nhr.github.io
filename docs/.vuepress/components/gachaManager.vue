@@ -2097,12 +2097,12 @@ async function loadMetadata() {
   padding: 10px 12px;
   border: 1px solid var(--vp-c-divider);
   border-right: 0;
-  border-radius: 8px 0 0 8px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-2);
 }
 .worker-url-field input {
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 .connection-memory {
   margin-top: 24px;
@@ -2150,7 +2150,7 @@ textarea {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
   font: inherit;
@@ -2171,7 +2171,7 @@ textarea {
   padding: 24px 16px;
   margin-bottom: 16px;
   border: 2px dashed var(--vp-c-divider);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   text-align: center;
   background: var(--vp-c-bg-soft);
   cursor: pointer;
@@ -2251,7 +2251,7 @@ summary {
 .metrics > div {
   padding: 16px;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 .metrics span {
   display: block;

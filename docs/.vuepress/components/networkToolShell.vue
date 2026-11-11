@@ -140,7 +140,7 @@ watch(running, (isRunning) => {
   padding: 22px;
   border: 1px solid var(--tool-border);
   border-left: 5px solid var(--tool-accent);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--tool-accent-soft);
 }
 
@@ -221,7 +221,7 @@ watch(running, (isRunning) => {
   min-height: 38px;
   padding: 8px 14px;
   border: 1px solid var(--tool-accent);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
@@ -256,7 +256,7 @@ watch(running, (isRunning) => {
 .network-tool-error {
   padding: 14px 16px;
   border: 1px solid rgba(220, 38, 38, 0.35);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(220, 38, 38, 0.1);
   color: #991b1b;
 }
@@ -276,7 +276,7 @@ watch(running, (isRunning) => {
   min-width: 0;
   padding: 18px;
   border: 1px solid var(--tool-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--tool-card);
 }
 
@@ -326,7 +326,7 @@ watch(running, (isRunning) => {
   min-width: 0;
   gap: 4px;
   padding: 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: rgba(148, 163, 184, 0.12);
 }
 
@@ -388,7 +388,7 @@ watch(running, (isRunning) => {
 .network-tool-disclosure {
   padding: 18px;
   border: 1px solid var(--tool-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--tool-card);
 }
 

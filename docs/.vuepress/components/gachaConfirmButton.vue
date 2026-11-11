@@ -109,7 +109,7 @@ onBeforeUnmount(() => { mounted = false; reset(); clearTimeout(feedback); });
   align-items: center;
   padding: 0 20px;
   border: 1px solid var(--vp-button-alt-border);
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   background: var(--vp-button-alt-bg);
   color: var(--vp-button-alt-text);
   font-size: 14px;

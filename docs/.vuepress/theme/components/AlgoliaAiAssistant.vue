@@ -745,7 +745,6 @@ onBeforeUnmount(() => {
               <VPIcon name="thesvg:xiaomi-mimo" size="20" color="currentColor" />
               <strong id="algolia-ai-title">Ask Xiaomi MiMo</strong>
             </div>
-            <span>Powered by Algolia</span>
           </div>
           <div class="assistant-actions">
             <button type="button" title="Clear conversation" aria-label="Clear conversation" @click="resetConversation">↻</button>

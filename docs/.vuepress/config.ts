@@ -168,6 +168,7 @@ export default defineUserConfig({
       appId: '74YMW3SD6Z',
       apiKey: '8452a5a75f5166abe464b8fe85d3b3cc',
       indices: ['Blog Website'],
+      placeholder: 'Search the blog...',
     },
 
     /**

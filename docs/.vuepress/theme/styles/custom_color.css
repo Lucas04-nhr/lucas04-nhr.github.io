@@ -41,7 +41,7 @@
   --container-info: #f1f2f5; /* 雾灰 */
   --container-note: #e7f1f5; /* 粉蓝，呼应品牌色 */
   --container-tip: #e5f2ef; /* 薄荷青 */
-  --container-success: #e9f3e3; /* 开心果绿 */
+  --container-success: #f2f8ef; /* 开心果绿 */
   --container-important: #efebf8; /* 薰衣草紫 */
   --container-warning: #fbf1e1; /* 杏色奶油 */
   --container-danger: #f9e6e8; /* 玫瑰粉 */
@@ -86,7 +86,7 @@
   --container-success: #223024;
   --container-important: #2b2738;
   --container-warning: #342c1f;
-  --container-danger: #36242a;
+  --container-danger: #2e1f24;
   --container-code-bg: rgb(255 255 245 / 0.07);
 }
 

@@ -559,7 +559,7 @@ onBeforeUnmount(() => {
 }
 
 .cdn-radar-site.is-idle {
-  --tool-accent: #1d4ed8;
+  --tool-accent: var(--vp-c-brand-1);
 }
 
 .cdn-radar-site.is-running {
@@ -572,11 +572,6 @@ onBeforeUnmount(() => {
 
 .cdn-radar-site.is-bad {
   --tool-accent: var(--tool-bad);
-}
-
-html.dark .cdn-radar-site.is-idle,
-:root[data-theme="dark"] .cdn-radar-site.is-idle {
-  --tool-accent: #60a5fa;
 }
 
 html.dark .cdn-radar-site.is-running,

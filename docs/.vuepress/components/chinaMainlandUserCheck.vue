@@ -442,12 +442,12 @@ onMounted(() => {
 
 <style scoped>
 .china-user-check {
-  --check-accent: #1d4ed8;
-  --check-accent-soft: rgba(29, 78, 216, 0.1);
-  --check-on-accent: #ffffff;
-  --check-mainland: #b91c1c;
-  --check-suspected: #92400e;
-  --check-non-mainland: #166534;
+  --check-accent: var(--vp-c-brand-1);
+  --check-accent-soft: var(--container-note);
+  --check-on-accent: var(--vp-button-brand-text);
+  --check-mainland: var(--vp-c-red-1);
+  --check-suspected: var(--vp-c-yellow-1);
+  --check-non-mainland: var(--vp-c-green-1);
   --check-border: rgba(100, 116, 139, 0.22);
   --check-muted: #64748b;
   --check-card: rgba(255, 255, 255, 0.72);
@@ -458,22 +458,22 @@ onMounted(() => {
 
 .china-user-check.is-mainland {
   --check-accent: var(--check-mainland);
-  --check-accent-soft: color-mix(in srgb, var(--check-mainland) 12%, transparent);
+  --check-accent-soft: var(--container-danger);
 }
 
 .china-user-check.is-suspected-mainland {
   --check-accent: var(--check-suspected);
-  --check-accent-soft: color-mix(in srgb, var(--check-suspected) 12%, transparent);
+  --check-accent-soft: var(--container-warning);
 }
 
 .china-user-check.is-non-mainland {
   --check-accent: var(--check-non-mainland);
-  --check-accent-soft: color-mix(in srgb, var(--check-non-mainland) 12%, transparent);
+  --check-accent-soft: var(--container-success);
 }
 
 .china-user-check.is-checking-internal-rule {
   --check-accent: #475569;
-  --check-accent-soft: rgba(71, 85, 105, 0.12);
+  --check-accent-soft: var(--container-info);
 }
 
 .result-panel {
@@ -730,22 +730,11 @@ html.dark .china-user-check,
   --check-border: rgba(148, 163, 184, 0.32);
   --check-muted: #cbd5e1;
   --check-card: rgba(15, 23, 42, 0.45);
-  --check-on-accent: var(--vp-c-bg);
-  --check-mainland: #f87171;
-  --check-suspected: #fbbf24;
-  --check-non-mainland: #22c55e;
-}
-
-html.dark .china-user-check:not(.is-mainland, .is-suspected-mainland, .is-non-mainland, .is-checking-internal-rule),
-:root[data-theme="dark"] .china-user-check:not(.is-mainland, .is-suspected-mainland, .is-non-mainland, .is-checking-internal-rule) {
-  --check-accent: #60a5fa;
-  --check-accent-soft: rgba(96, 165, 250, 0.1);
 }
 
 html.dark .china-user-check.is-checking-internal-rule,
 :root[data-theme="dark"] .china-user-check.is-checking-internal-rule {
   --check-accent: #94a3b8;
-  --check-accent-soft: rgba(148, 163, 184, 0.12);
 }
 
 html.dark .error-message,

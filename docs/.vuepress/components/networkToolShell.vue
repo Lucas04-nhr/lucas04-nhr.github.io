@@ -101,12 +101,12 @@ watch(running, (isRunning) => {
 
 <style>
 .network-tool {
-  --tool-accent: #1d4ed8;
-  --tool-accent-soft: rgba(29, 78, 216, 0.1);
-  --tool-on-accent: #ffffff;
-  --tool-ok: #166534;
-  --tool-warn: #92400e;
-  --tool-bad: #b91c1c;
+  --tool-accent: var(--vp-c-brand-1);
+  --tool-accent-soft: var(--container-note);
+  --tool-on-accent: var(--vp-button-brand-text);
+  --tool-ok: var(--vp-c-green-1);
+  --tool-warn: var(--vp-c-yellow-1);
+  --tool-bad: var(--vp-c-red-1);
   --tool-border: rgba(100, 116, 139, 0.22);
   --tool-muted: #475569;
   --tool-card: rgba(255, 255, 255, 0.72);
@@ -118,22 +118,22 @@ watch(running, (isRunning) => {
 
 .network-tool.is-ok {
   --tool-accent: var(--tool-ok);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-ok) 12%, transparent);
+  --tool-accent-soft: var(--container-success);
 }
 
 .network-tool.is-warn {
   --tool-accent: var(--tool-warn);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-warn) 12%, transparent);
+  --tool-accent-soft: var(--container-warning);
 }
 
 .network-tool.is-bad {
   --tool-accent: var(--tool-bad);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-bad) 12%, transparent);
+  --tool-accent-soft: var(--container-danger);
 }
 
 .network-tool.is-running {
   --tool-accent: #475569;
-  --tool-accent-soft: rgba(71, 85, 105, 0.12);
+  --tool-accent-soft: var(--container-info);
 }
 
 .network-tool-panel {
@@ -464,39 +464,14 @@ watch(running, (isRunning) => {
 
 html.dark .network-tool,
 :root[data-theme="dark"] .network-tool {
-  --tool-accent: #60a5fa;
-  --tool-accent-soft: rgba(96, 165, 250, 0.1);
-  --tool-on-accent: var(--vp-c-bg);
-  --tool-ok: #22c55e;
-  --tool-warn: #fbbf24;
-  --tool-bad: #f87171;
   --tool-border: rgba(148, 163, 184, 0.32);
   --tool-muted: #cbd5e1;
   --tool-card: rgba(15, 23, 42, 0.45);
 }
 
-html.dark .network-tool.is-ok,
-:root[data-theme="dark"] .network-tool.is-ok {
-  --tool-accent: var(--tool-ok);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-ok) 12%, transparent);
-}
-
-html.dark .network-tool.is-warn,
-:root[data-theme="dark"] .network-tool.is-warn {
-  --tool-accent: var(--tool-warn);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-warn) 12%, transparent);
-}
-
-html.dark .network-tool.is-bad,
-:root[data-theme="dark"] .network-tool.is-bad {
-  --tool-accent: var(--tool-bad);
-  --tool-accent-soft: color-mix(in srgb, var(--tool-bad) 12%, transparent);
-}
-
 html.dark .network-tool.is-running,
 :root[data-theme="dark"] .network-tool.is-running {
   --tool-accent: #94a3b8;
-  --tool-accent-soft: rgba(148, 163, 184, 0.12);
 }
 
 html.dark .network-tool-error,

@@ -94,8 +94,8 @@ onBeforeUnmount(stop);
 <style scoped>
 .progress-status {
   --progress-accent: #475569;
-  --progress-soft: rgba(71, 85, 105, 0.12);
-  --progress-on-accent: #fff;
+  --progress-soft: var(--container-info);
+  --progress-on-accent: var(--vp-button-brand-text);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -110,49 +110,43 @@ onBeforeUnmount(stop);
 }
 .progress-status.is-working {
   --progress-accent: var(--vp-c-brand-1);
-  --progress-soft: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
+  --progress-soft: var(--container-note);
 }
 .progress-status.is-warning {
   --progress-accent: var(--vp-c-warning-1);
-  --progress-soft: color-mix(in srgb, var(--vp-c-warning-1) 12%, transparent);
+  --progress-soft: var(--container-warning);
 }
 .progress-icon { width: 24px; height: 24px; flex-shrink: 0; }
 .progress-spinner { transform-origin: center; animation: progress-spin 1s linear infinite; }
 @keyframes progress-spin { to { transform: rotate(360deg); } }
 .progress-status.is-success {
-  --progress-accent: #166534;
-  --progress-soft: rgba(22, 101, 52, 0.12);
+  --progress-accent: var(--vp-c-green-1);
+  --progress-soft: var(--container-success);
 }
 .progress-status.is-error {
-  --progress-accent: #b91c1c;
-  --progress-soft: rgba(185, 28, 28, 0.12);
+  --progress-accent: var(--vp-c-red-1);
+  --progress-soft: var(--container-danger);
 }
 /* Dark theme: lighter accents with dark text on filled buttons (all ≥ 4.5:1). */
 html.dark .progress-status,
 :root[data-theme="dark"] .progress-status {
   --progress-accent: #94a3b8;
-  --progress-soft: rgba(148, 163, 184, 0.12);
-  --progress-on-accent: var(--vp-c-bg);
 }
 html.dark .progress-status.is-working,
 :root[data-theme="dark"] .progress-status.is-working {
   --progress-accent: var(--vp-c-brand-1);
-  --progress-soft: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
 }
 html.dark .progress-status.is-warning,
 :root[data-theme="dark"] .progress-status.is-warning {
   --progress-accent: var(--vp-c-warning-1);
-  --progress-soft: color-mix(in srgb, var(--vp-c-warning-1) 12%, transparent);
 }
 html.dark .progress-status.is-success,
 :root[data-theme="dark"] .progress-status.is-success {
-  --progress-accent: #22c55e;
-  --progress-soft: rgba(34, 197, 94, 0.12);
+  --progress-accent: var(--vp-c-green-1);
 }
 html.dark .progress-status.is-error,
 :root[data-theme="dark"] .progress-status.is-error {
-  --progress-accent: #f87171;
-  --progress-soft: rgba(248, 113, 113, 0.12);
+  --progress-accent: var(--vp-c-red-1);
 }
 .progress-title {
   display: flex;

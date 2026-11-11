@@ -137,7 +137,7 @@ export default defineUserConfig({
       formatOptions: { dateStyle: "short", timeStyle: "short" },
     },
     contributors: false,
-    changelog: true,
+    changelog: false,
 
     /**
      * 编译缓存，加快编译速度

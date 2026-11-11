@@ -54,7 +54,7 @@ export default defineThemeConfig({
   nextPage: false, // 是否启用下一页链接
   createTime: true, // 是否显示文章创建时间
   linkPreview: true, // 是否启用鼠标悬停链接预览
-  relatedPosts: true, // 是否启用相关文章推荐
+  // relatedPosts: true, // 是否启用相关文章推荐
 
   /* 站点页脚 */
   footer: {

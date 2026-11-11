@@ -23,8 +23,8 @@
           class="who-are-you-stat-value"
           :title="blurred && item.sensitive ? undefined : item.value"
         >
-          <VPPlot v-if="blurred && item.sensitive">{{ item.value }}</VPPlot>
-          <template v-else>{{ item.value }}</template>
+          <VPPlot v-if="blurred && item.sensitive" class="who-are-you-stat-text">{{ item.value }}</VPPlot>
+          <span v-else class="who-are-you-stat-text">{{ item.value }}</span>
         </strong>
       </div>
     </div>
@@ -477,7 +477,7 @@ const start = async () => {
   finished.value = true;
 };
 
-const MIN_STAT_FONT_PX = 11;
+const MIN_STAT_FONT_PX = 9;
 const statsGrid = ref<HTMLElement | null>(null);
 const statValues = ref<HTMLElement[]>([]);
 let statsObserver: ResizeObserver | null = null;
@@ -486,9 +486,12 @@ let statsWidth = 0;
 // Shrink each overview value until it fits on one line, so cards keep a fixed height.
 const fitStats = () => {
   for (const el of statValues.value) {
+    const text = el.firstElementChild as HTMLElement | null;
     el.style.fontSize = "";
-    const available = el.clientWidth;
-    const needed = el.scrollWidth;
+    if (!text) continue;
+
+    const available = text.clientWidth;
+    const needed = text.scrollWidth;
     if (!available || needed <= available) continue;
 
     const base = parseFloat(getComputedStyle(el).fontSize);
@@ -537,10 +540,36 @@ onBeforeUnmount(() => {
 
 .network-tool-stat .who-are-you-stat-value {
   display: block;
+  min-width: 0;
+}
+
+/* The shell styles every span in a stat card as its label; keep values out of that,
+   and let the ellipsis sit inside VPPlot so it blurs with the text. */
+.network-tool-stat .who-are-you-stat-text {
+  display: block;
   overflow: hidden;
+  padding: 0;
+  color: inherit;
+  font: inherit;
   overflow-wrap: normal;
   text-overflow: ellipsis;
+  text-transform: none;
   white-space: nowrap;
+}
+
+@media (max-width: 719px) {
+  .network-tool-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .network-tool-stat {
+    padding: 8px;
+  }
+
+  .network-tool-stat > span {
+    font-size: 0.62rem;
+  }
 }
 
 .who-are-you-raw :deep(pre),

@@ -563,7 +563,7 @@ onBeforeUnmount(() => {
 }
 
 .cdn-radar-site.is-running {
-  --tool-accent: #475569;
+  --tool-accent: var(--status-neutral);
 }
 
 .cdn-radar-site.is-ok {
@@ -572,11 +572,6 @@ onBeforeUnmount(() => {
 
 .cdn-radar-site.is-bad {
   --tool-accent: var(--tool-bad);
-}
-
-html.dark .cdn-radar-site.is-running,
-:root[data-theme="dark"] .cdn-radar-site.is-running {
-  --tool-accent: #94a3b8;
 }
 
 .cdn-radar-site-form {

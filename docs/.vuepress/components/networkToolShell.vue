@@ -114,9 +114,9 @@ onMounted(() => {
   --tool-ok: var(--vp-c-green-1);
   --tool-warn: var(--vp-c-yellow-1);
   --tool-bad: var(--vp-c-red-1);
-  --tool-border: rgba(100, 116, 139, 0.22);
-  --tool-muted: #475569;
-  --tool-card: rgba(255, 255, 255, 0.72);
+  --tool-border: var(--card-border);
+  --tool-muted: var(--card-muted);
+  --tool-card: var(--card-surface);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 18px;
@@ -139,7 +139,7 @@ onMounted(() => {
 }
 
 .network-tool.is-running {
-  --tool-accent: #475569;
+  --tool-accent: var(--status-neutral);
   --tool-accent-soft: var(--container-info);
 }
 
@@ -188,7 +188,7 @@ onMounted(() => {
   min-width: 0;
   overflow: hidden;
   border-radius: var(--radius-pill);
-  background: rgba(100, 116, 139, 0.24);
+  background: var(--card-track);
 }
 
 .network-tool-progress span {
@@ -262,10 +262,10 @@ onMounted(() => {
 
 .network-tool-error {
   padding: 14px 16px;
-  border: 1px solid rgba(220, 38, 38, 0.35);
+  border: 1px solid color-mix(in srgb, var(--vp-c-red-1) 35%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(220, 38, 38, 0.1);
-  color: #991b1b;
+  background: var(--container-danger);
+  color: var(--vp-c-red-1);
 }
 
 .network-tool-error span {
@@ -334,7 +334,7 @@ onMounted(() => {
   gap: 4px;
   padding: 12px;
   border-radius: var(--radius-md);
-  background: rgba(148, 163, 184, 0.12);
+  background: var(--card-stat-surface);
 }
 
 .network-tool-stat span {
@@ -372,7 +372,7 @@ onMounted(() => {
 }
 
 .network-tool .network-tool-table th {
-  background: rgba(148, 163, 184, 0.12);
+  background: var(--card-stat-surface);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -467,23 +467,6 @@ onMounted(() => {
 
 .tool-tone-muted {
   color: var(--tool-muted);
-}
-
-html.dark .network-tool,
-:root[data-theme="dark"] .network-tool {
-  --tool-border: rgba(148, 163, 184, 0.32);
-  --tool-muted: #cbd5e1;
-  --tool-card: rgba(15, 23, 42, 0.45);
-}
-
-html.dark .network-tool.is-running,
-:root[data-theme="dark"] .network-tool.is-running {
-  --tool-accent: #94a3b8;
-}
-
-html.dark .network-tool-error,
-:root[data-theme="dark"] .network-tool-error {
-  color: #fecaca;
 }
 
 @media (max-width: 719px) {

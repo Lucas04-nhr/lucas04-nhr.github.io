@@ -93,7 +93,7 @@ onBeforeUnmount(stop);
 
 <style scoped>
 .progress-status {
-  --progress-accent: #475569;
+  --progress-accent: var(--status-neutral);
   --progress-soft: var(--container-info);
   --progress-on-accent: var(--vp-button-brand-text);
   display: flex;
@@ -102,7 +102,7 @@ onBeforeUnmount(stop);
   gap: 16px;
   margin: 16px 0;
   padding: 22px;
-  border: 1px solid rgba(100, 116, 139, 0.22);
+  border: 1px solid var(--card-border);
   border-left: 5px solid var(--progress-accent);
   border-radius: var(--radius-md);
   background: var(--progress-soft);
@@ -128,10 +128,6 @@ onBeforeUnmount(stop);
   --progress-soft: var(--container-danger);
 }
 /* Dark theme: lighter accents with dark text on filled buttons (all ≥ 4.5:1). */
-html.dark .progress-status,
-:root[data-theme="dark"] .progress-status {
-  --progress-accent: #94a3b8;
-}
 html.dark .progress-status.is-working,
 :root[data-theme="dark"] .progress-status.is-working {
   --progress-accent: var(--vp-c-brand-1);
@@ -164,7 +160,7 @@ html.dark .progress-status.is-error,
   height: 6px;
   overflow: hidden;
   border-radius: var(--radius-pill);
-  background: rgba(100, 116, 139, 0.24);
+  background: var(--card-track);
 }
 .progress-track span {
   display: block;
@@ -208,8 +204,6 @@ html.dark .progress-status.is-error,
   font-variant-numeric: tabular-nums;
 }
 .progress-status p { margin: 0; overflow-wrap: anywhere; color: var(--vp-c-text-2); }
-html.dark .progress-status,
-:root[data-theme="dark"] .progress-status { border-color: rgba(148, 163, 184, 0.32); border-left-color: var(--progress-accent); }
 @media (max-width: 719px) {
   .progress-actions { flex-direction: column; }
   .progress-actions :deep(.vp-button.medium),

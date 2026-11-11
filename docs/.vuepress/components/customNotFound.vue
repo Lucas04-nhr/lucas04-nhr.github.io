@@ -99,24 +99,13 @@ const goBack = () => {
   font-size: 18px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #3a4655;
+  color: var(--vp-c-text-1);
 }
 
 .not-found__desc {
   margin: 0 0 20px;
-  color: #5c6470;
-  line-height: 1.6;
-}
-
-/* The light-only inks above disappear on the dark background. */
-html.dark .not-found__title,
-:root[data-theme="dark"] .not-found__title {
-  color: var(--vp-c-text-1);
-}
-
-html.dark .not-found__desc,
-:root[data-theme="dark"] .not-found__desc {
   color: var(--vp-c-text-2);
+  line-height: 1.6;
 }
 
 .not-found__actions {

@@ -46,6 +46,14 @@
   --container-warning: #fbf1e1; /* 杏色奶油 */
   --container-danger: #f9e6e8; /* 玫瑰粉 */
   --container-code-bg: rgb(60 60 67 / 0.06); /* 容器内行内代码，中性叠加 */
+
+  /* 卡片与状态：工具卡片、面板、进度条等组件共用的中性色 */
+  --card-surface: rgba(255, 255, 255, 0.72); /* 工具卡片底 */
+  --card-border: rgba(100, 116, 139, 0.22); /* 卡片与面板 1px 边框、表格分隔线 */
+  --card-muted: #475569; /* 卡片内次要文字 */
+  --card-stat-surface: rgba(148, 163, 184, 0.12); /* 统计格底、表头底 */
+  --card-track: rgba(100, 116, 139, 0.24); /* 进度条空轨道 */
+  --status-neutral: #475569; /* running / checking 状态的强调色 */
 }
 
 [data-theme="dark"] {
@@ -88,6 +96,14 @@
   --container-warning: #342c1f;
   --container-danger: #2e1f24;
   --container-code-bg: rgb(255 255 245 / 0.07);
+
+  /* 卡片与状态 */
+  --card-surface: rgba(15, 23, 42, 0.45);
+  --card-border: rgba(148, 163, 184, 0.32);
+  --card-muted: #cbd5e1;
+  --card-stat-surface: rgba(148, 163, 184, 0.12);
+  --card-track: rgba(100, 116, 139, 0.24);
+  --status-neutral: #94a3b8;
 }
 
 /* 马克笔 ==text== / ==text=={.tip}：覆盖 Plume 的高饱和默认色。

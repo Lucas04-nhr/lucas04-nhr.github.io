@@ -10,10 +10,10 @@ tags:
 
 ## Where this fits {#where-this-fits}
 
-The Structural Bioinformatics course opens with two lectures titled "Overview of protein structure" and one exercise session on molecular visualization with PyMOL. Everything later in the course (structure comparison, exposure measures, structure prediction, AlphaFold) is expressed in the vocabulary introduced here, so this post is mostly a vocabulary list with the reasoning behind each term.
+This post covers two lectures titled "Overview of protein structure" and one exercise session on molecular visualization with PyMOL. Structure comparison, exposure measures, structure prediction, and AlphaFold are all expressed in the vocabulary introduced here, so this post is mostly a vocabulary list with the reasoning behind each term.
 
 ::: note Source
-These are my notes on the opening lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so where one slide deck spans several sessions the split between posts is my own. The thermodynamics of folding from the same deck is in the [post on folding and RMSD](/blog/strubi-folding-rmsd/).
+These are my notes on the "Overview of protein structure" lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so where one slide deck spans several sessions the split between posts is my own. The thermodynamics of folding from the same deck is in the [post on folding and RMSD](/blog/strubi-folding-rmsd/).
 :::
 
 ## The polypeptide chain {#polypeptide-chain}
@@ -29,7 +29,7 @@ Distances are measured in ångström ($1\,\text{Å} = 0.1\,\text{nm}$). A C–C 
 
 ## Describing a conformation with angles {#angles}
 
-Bond lengths and bond angles are close to constant, so ==a protein conformation is essentially a list of dihedral angles==. The slides give two parameterizations of the backbone, and both come back later in the course.
+Bond lengths and bond angles are close to constant, so ==a protein conformation is essentially a list of dihedral angles==. The slides give two parameterizations of the backbone.
 
 | Representation | Points per residue | Angles | Lives on | Used for |
 | --- | --- | --- | --- | --- |
@@ -57,7 +57,7 @@ Plotting $\phi$ against $\psi$ for every residue gives the Ramachandran plot. St
 
 Glycine and proline are the exceptions. Glycine has no side chain and populates regions closed to other residues; proline's ring restricts $\phi$ to a narrow band.
 
-Angles need their own statistics. The slides introduce the **von Mises distribution**, the counterpart of the Gaussian for directional data, with a concentration parameter $\kappa$ that plays the role of an inverse variance. It reappears in the [probabilistic models of local structure](/blog/strubi-solvent-exposure-local-structure/).
+Angles need their own statistics. The slides introduce the **von Mises distribution**, the counterpart of the Gaussian for directional data, with a concentration parameter $\kappa$ that plays the role of an inverse variance. It is also used in [probabilistic models of local structure](/blog/strubi-solvent-exposure-local-structure/).
 
 ## Forces behind protein structure {#forces}
 
@@ -146,5 +146,5 @@ phi_psi 1enh
 ## What to take away {#takeaways}
 
 - A conformation is a list of dihedral angles; $(\phi, \psi)$ pairs live on a torus, and the Ramachandran plot is that torus cut open.
-- The hydrophobic effect is entropic and comes from water. It is the main driving force of folding, and it is why solvent exposure becomes a central quantity later in the course.
+- The hydrophobic effect is entropic and comes from water. It is the main driving force of folding, and it is why [solvent exposure](/blog/strubi-solvent-exposure-local-structure/) is a central quantity in structural bioinformatics.
 - Structure is more conserved than sequence, so a shared fold is weak evidence for common ancestry on its own.

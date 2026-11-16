@@ -1,6 +1,6 @@
 ---
 title: "Free Energy, Linear Algebra, and the RMSD Algorithm"
-createTime: 2026/11/16 09:41:00
+createTime: 2026/11/23 09:41:00
 permalink: /blog/strubi-folding-rmsd/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article covers free energy as a restatement of probability, the linear algebra behind optimal superposition, the SVD-based RMSD algorithm, Theseus, GDT_TS, and fold classification."
 tags:
@@ -10,10 +10,10 @@ tags:
 
 ## Where this fits {#where-this-fits}
 
-This post closes the overview of protein structure with folding and stability, and then turns to the first computational problem of the course: how to compare two structures. The lecture is listed as "Structure comparison, linear algebra, RMSD algorithm", and the exercise session covers the PDB database and the PDB file format.
+This post covers the thermodynamics of folding and stability, and then a basic computational problem: how to compare two structures. The lecture is listed as "Structure comparison, linear algebra, RMSD algorithm", and the exercise session covers the PDB database and the PDB file format.
 
 ::: note Source
-These are my notes on the folding and structure comparison lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so where one slide deck spans several sessions the split between posts is my own. The folding section covers the thermodynamic definitions only. The first part of the overview is in the [post on protein structure](/blog/strubi-protein-structure/).
+These are my notes on the folding and structure comparison lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so where one slide deck spans several sessions the split between posts is my own. The folding section covers the thermodynamic definitions only. The structural vocabulary from the same deck is in the [post on protein structure](/blog/strubi-protein-structure/).
 :::
 
 ## Folding and stability {#folding-and-stability}
@@ -48,7 +48,7 @@ $$
 P(x) = \int P(x, y)\,dy \;\propto\; \exp\left(-\frac{\text{PMF}(x)}{kT}\right)
 $$
 
-The distinction looks pedantic now but carries the argument about knowledge-based potentials in the [post on potentials, Rosetta, and coevolution](/blog/strubi-potentials-rosetta-coevolution/).
+The distinction looks pedantic, but the argument about [knowledge-based potentials](/blog/strubi-potentials-rosetta-coevolution/) rests on it.
 
 ## The linear algebra that superposition needs {#linear-algebra}
 
@@ -167,7 +167,7 @@ Paired positions are available when comparing a native structure with a complex 
 
 ### GDT_TS {#gdt-ts}
 
-RMSD squares the deviations, so a single displaced loop can ruin the score of an otherwise good model. The **Global Distance Test** asks instead what percentage of $C_\alpha$ atoms can be superimposed within a distance cutoff. GDT_TS is the average of that percentage at 1, 2, 4 and 8 Å. It is the headline measure in the CASP structure prediction assessments, and it returns in the [AlphaFold post](/blog/strubi-alphafold/).
+RMSD squares the deviations, so a single displaced loop can ruin the score of an otherwise good model. The **Global Distance Test** asks instead what percentage of $C_\alpha$ atoms can be superimposed within a distance cutoff. GDT_TS is the average of that percentage at 1, 2, 4 and 8 Å. It is the headline measure in the CASP structure prediction assessments, including the CASP14 results discussed in the [AlphaFold post](/blog/strubi-alphafold/).
 
 | Measure | What it reports | Sensitive to outliers | Typical use |
 | --- | --- | --- | --- |

@@ -1,6 +1,6 @@
 ---
 title: "AlphaFold, from Distance Potentials to Attention"
-createTime: 2026/11/16 09:44:00
+createTime: 2026/12/14 09:44:00
 permalink: /blog/strubi-alphafold/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article explains what AlphaFold1 was really doing, the CASP14 results of AlphaFold2, its pipeline from alignments to coordinates, and the attention mechanism at its centre."
 tags:
@@ -10,10 +10,10 @@ tags:
 
 ## Where this fits {#where-this-fits}
 
-This post covers the last protein lecture of the course, "3D structure prediction IV + Questions", and an exercise session on Biopython and its `Bio.PDB` module. The lecture brings together the threads of the [previous post](/blog/strubi-potentials-rosetta-coevolution/) (knowledge-based potentials, coevolution, end-to-end networks) in one system.
+This post covers the lecture "3D structure prediction IV + Questions" and an exercise session on Biopython and its `Bio.PDB` module. The lecture brings together knowledge-based potentials, coevolution, and end-to-end networks (see the [post on potentials, Rosetta, and coevolution](/blog/strubi-potentials-rosetta-coevolution/)) in one system.
 
 ::: note Source
-These are my notes on the final 3D structure prediction lecture of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the machine-learning deck between this post and the previous one is my own. The notes follow the deck as far as the attention mechanism; the structure module and AlphaFold3 are covered only at the level of the overview slides.
+These are my notes on the "3D structure prediction IV + Questions" lecture of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the machine-learning deck between this post and the [post on potentials, Rosetta, and coevolution](/blog/strubi-potentials-rosetta-coevolution/) is my own. The notes follow the deck as far as the attention mechanism; the structure module and AlphaFold3 are covered only at the level of the overview slides.
 :::
 
 ## AlphaFold1 at CASP13 {#alphafold1}
@@ -32,7 +32,7 @@ Variant 3 appears to have worked best. A deep convolutional network, similar in 
 
 ### What it was really doing {#really-doing}
 
-That potential is a potential of mean force with a reference state, the construction examined in the [previous post](/blog/strubi-potentials-rosetta-coevolution/). The lecturer's reading is that ==AlphaFold1 combined a local model of backbone angles with a nonlocal model of distances through Jeffrey conditioning==: Bayesian updating presented as an energy function. The network supplied much better distance information than database statistics could, but the framework into which it was plugged dates from 1990.
+That potential is a potential of mean force with a reference state, the construction examined in the [post on knowledge-based potentials](/blog/strubi-potentials-rosetta-coevolution/). The lecturer's reading is that ==AlphaFold1 combined a local model of backbone angles with a nonlocal model of distances through Jeffrey conditioning==: Bayesian updating presented as an energy function. The network supplied much better distance information than database statistics could, but the framework into which it was plugged dates from 1990.
 
 ## AlphaFold2 at CASP14 {#alphafold2}
 
@@ -120,7 +120,7 @@ The Evoformer maintains two representations and lets them inform each other over
 - The **pair representation**, of shape $(r, r, c)$, holds what is known about each pair of residues and can be viewed as a graph with residues as nodes. It is updated by triangular multiplicative updates and triangular attention, which process three residues at a time; the usual motivation is that pairwise distances have to be mutually consistent, as in the triangle inequality.
 - The two are coupled: an outer product over the MSA representation updates the pair representation, and the pair representation biases the MSA attention.
 
-In the terms of the previous post, the Evoformer replaces both the maximum entropy model of EVfold and the convolutional contact predictors, and it does so without first reducing the alignment to pairwise statistics.
+The Evoformer replaces both the maximum entropy model of EVfold and the convolutional contact predictors (both described in the [post on coevolution](/blog/strubi-potentials-rosetta-coevolution/)), and it does so without first reducing the alignment to pairwise statistics.
 
 ### Structure module and training {#structure-module}
 
@@ -169,11 +169,11 @@ for polypeptide in PPBuilder().build_peptides(structure):
 
 `Bio.PDB` organizes a structure as a hierarchy of structure, model, chain, residue and atom. It also provides a `Superimposer` class that performs the SVD-based superposition from the [post on folding and RMSD](/blog/strubi-folding-rmsd/).
 
-## Open questions and what comes next {#open-questions}
+## Open questions and the exam {#open-questions}
 
 The slides do not present structure prediction as finished. Deep networks are black boxes, they can overfit, and their handling of uncertainty is weak. AlphaFold depends on deep alignments, and prediction from a single sequence is flagged as a current open problem. AlphaFold3 followed in 2024.
 
-After the break the course turns to RNA structure for two weeks, and ends with an invited industry talk and the presentation of the exam. The exam is a take-home assignment with a theoretical part and a practical part using `Bio.PDB` and PyMOL; proteins count for two thirds of the grade and RNA for one third. It is handed out on 22 January 2027 and due on 29 January 2027.
+The course exam is a take-home assignment with a theoretical part and a practical part using `Bio.PDB` and PyMOL; proteins count for two thirds of the grade and RNA for one third. It is handed out on 22 January 2027 and due on 29 January 2027.
 
 ## What to take away {#takeaways}
 

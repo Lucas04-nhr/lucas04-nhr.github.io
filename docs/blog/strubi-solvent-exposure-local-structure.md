@@ -1,6 +1,6 @@
 ---
 title: "Solvent Exposure, Local Structure, and Template-Based Prediction"
-createTime: 2026/11/16 09:42:00
+createTime: 2026/11/30 09:42:00
 permalink: /blog/strubi-solvent-exposure-local-structure/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article covers four ways to measure solvent exposure, three generations of secondary structure prediction, probabilistic models of local structure, and the template-based end of 3D structure prediction."
 tags:
@@ -10,10 +10,10 @@ tags:
 
 ## Where this fits {#where-this-fits}
 
-This post covers the one-dimensional descriptions of a protein, meaning properties assigned to each residue along the chain, and then opens the block on 3D structure prediction. The lectures are "Solvent exposure & local structure" and "3D structure prediction I", and the exercise session is on RMSD and superposition (the algorithm from the [post on folding and RMSD](/blog/strubi-folding-rmsd/)).
+This post covers the one-dimensional descriptions of a protein, meaning properties assigned to each residue along the chain, and then the template-based methods of 3D structure prediction. The lectures are "Solvent exposure & local structure" and "3D structure prediction I", and the exercise session is on RMSD and superposition (the algorithm from the [post on folding and RMSD](/blog/strubi-folding-rmsd/)).
 
 ::: note Source
-These are my notes on the solvent exposure, local structure, and first 3D structure prediction lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the prediction deck across its four sessions is my own: template-based methods here, potentials and de novo methods in the [next post](/blog/strubi-potentials-rosetta-coevolution/).
+These are my notes on the "Solvent exposure & local structure" and "3D structure prediction I" lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the prediction deck across its four sessions is my own: template-based methods here, potentials and de novo methods in the [post on potentials, Rosetta, and coevolution](/blog/strubi-potentials-rosetta-coevolution/).
 :::
 
 ## Solvent exposure {#solvent-exposure}
@@ -148,7 +148,7 @@ Fold recognition asks whether a sequence fits any fold in a library, even withou
 
 The limitations are stated plainly in the slides: the approach cannot produce an unobserved fold, and compatible folds often go unrecognized. Many recognizers are sequence-based underneath, comparing profiles and predicted exposure and secondary structure (HHpred is the best-known example), and recent servers such as LOMETS3 combine threading with deep learning.
 
-Scoring a sequence against a fold requires an energy function, which is where the [next post](/blog/strubi-potentials-rosetta-coevolution/) starts.
+Scoring a sequence against a fold requires an energy function, which is the subject of the [post on knowledge-based potentials](/blog/strubi-potentials-rosetta-coevolution/).
 
 ## What to take away {#takeaways}
 

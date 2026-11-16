@@ -1,6 +1,6 @@
 ---
 title: "Knowledge-Based Potentials, Rosetta, Coevolution, and Deep Learning Basics"
-createTime: 2026/11/16 09:43:00
+createTime: 2026/12/07 09:43:00
 permalink: /blog/strubi-potentials-rosetta-coevolution/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article explains what a knowledge-based potential really is, how Rosetta assembles structures from fragments, why coevolution reveals contacts, and the deep learning ideas that AlphaFold builds on."
 tags:
@@ -10,10 +10,10 @@ tags:
 
 ## Where this fits {#where-this-fits}
 
-This post covers two online lectures, "3D structure prediction II" and "III", which have no exercise session. The material moves from prediction with a template (the [previous post](/blog/strubi-solvent-exposure-local-structure/)) to prediction without one. Four ideas carry the material: energy functions learned from known structures, fragment assembly, contacts inferred from coevolution, and neural networks. Each one is an ingredient of AlphaFold, which is the subject of the [AlphaFold post](/blog/strubi-alphafold/).
+This post covers two online lectures, "3D structure prediction II" and "III", which have no exercise session. The material is 3D structure prediction without a template; template-based methods are in the [post on solvent exposure and local structure](/blog/strubi-solvent-exposure-local-structure/). Four ideas carry the material: energy functions learned from known structures, fragment assembly, contacts inferred from coevolution, and neural networks. Each one is an ingredient of AlphaFold, which is covered in the [AlphaFold post](/blog/strubi-alphafold/).
 
 ::: note Source
-These are my notes on the second and third 3D structure prediction lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the prediction and machine-learning decks across the four prediction sessions is my own.
+These are my notes on the "3D structure prediction II" and "III" lectures of the Structural Bioinformatics course (block 2, 2026–2027) at the University of Copenhagen, written from the lecture slides and the published schedule. The schedule only lists session titles, so the split of the prediction and machine-learning decks across the four prediction sessions is my own.
 :::
 
 ## Knowledge-based potentials {#knowledge-based-potentials}

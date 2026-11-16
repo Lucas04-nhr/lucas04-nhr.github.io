@@ -16,10 +16,12 @@ import NpmBadgeGroup from "vuepress-theme-plume/features/NpmBadgeGroup.vue";
 import Swiper from "vuepress-theme-plume/features/Swiper.vue";
 // import CustomComponent from './theme/components/Custom.vue'
 import "./theme/styles/fonts_body.css";
+import "./theme/styles/fonts_math.css";
 import "./theme/styles/custom_color.css";
 import "./theme/styles/content_interaction.css";
 import "./theme/styles/anti_debug.css";
 import "./theme/styles/docsearch.css";
+import "./theme/styles/print.css";
 import NavBarLocaleToggle from "./theme/components/NavBarLocaleToggle.vue";
 import UrlQueryStateDecoder from "./theme/components/UrlQueryStateDecoder.vue";
 import ContentInteractionPreferenceSync from "./theme/components/ContentInteractionPreferenceSync";
@@ -37,6 +39,7 @@ import { initializeScriptPreference } from "./theme/utils/localeScriptPreference
 import { initializeDebugPreference } from "./theme/utils/debugPreference";
 import { initializeAiAssistantPreference } from "./theme/utils/aiAssistantPreference";
 import { initializeThemeAppearancePreference } from "./theme/utils/themeAppearancePreference";
+import { initializeMathFontPreference } from "./theme/utils/mathFontPreference";
 
 // The network tools carry large probe lists, so only their own pages load them.
 // A blocked script would otherwise leave the page empty, so say why it didn't load.
@@ -145,6 +148,7 @@ export default defineClientConfig({
     installContentInteractionGuards();
     initializeDebugPreference();
     initializeAiAssistantPreference();
+    initializeMathFontPreference();
 
     // built-in components
     app.component("RepoCard", RepoCard);

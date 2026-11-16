@@ -24,6 +24,10 @@ import {
   applyAndPersistAiAssistantAllowedPreference,
   parseAiAssistantAllowedPreference,
 } from "./aiAssistantPreference";
+import {
+  applyAndPersistMathFontPreference,
+  parseMathFontPreference,
+} from "./mathFontPreference";
 
 export type UrlQueryHandlerResult = {
   handled: boolean;
@@ -112,6 +116,14 @@ export const urlQueryHandlers: Record<string, UrlQueryHandler> = {
     if (preference === null) return unhandledResult;
 
     applyAndPersistAiAssistantAllowedPreference(preference);
+    return { handled: true, removeParam: true };
+  },
+
+  mathFont(value) {
+    const preference = parseMathFontPreference(value);
+    if (preference === null) return unhandledResult;
+
+    applyAndPersistMathFontPreference(preference);
     return { handled: true, removeParam: true };
   },
 };

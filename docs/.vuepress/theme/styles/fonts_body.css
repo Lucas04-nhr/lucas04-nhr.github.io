@@ -445,7 +445,8 @@ samp {
 .katex .mord.mathrm,
 .katex .mord.mathrm.mtight {
   font-family:
-    "KaTeX_Main", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
+    var(--katex-main-font, "KaTeX_Main"), "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
 }
 
 /* KaTeX: other math font families */
@@ -454,7 +455,8 @@ samp {
 .katex .mord.mathit,
 .katex .mord.mathit.mtight {
   font-family:
-    "KaTeX_Math", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
+    var(--katex-math-font, "KaTeX_Math"), "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
 }
 
 /* Bold math (\mathbf) */
@@ -462,7 +464,8 @@ samp {
 .katex .mord.textbf,
 .katex .mord.boldsymbol {
   font-family:
-    "KaTeX_Main", "STIX Two Math", "Latin Modern Math", "Cambria Math", serif !important;
+    var(--katex-main-font, "KaTeX_Main"), "STIX Two Math", "Latin Modern Math",
+    "Cambria Math", serif !important;
 }
 
 /* Sans-serif math (\mathsf) */

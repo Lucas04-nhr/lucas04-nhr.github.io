@@ -1,0 +1,304 @@
+/* KaTeX: optional TeX Gyre math fonts.
+
+   KaTeX's own fonts are the default. A family is used only when
+   <html data-math-font="..."> is set, which mathFontPreference.ts does from
+   the `mathFont` URL parameter (termes, pagella, bonum, schola) and the
+   stored preference.
+
+   For an active family:
+   - the text faces supply letters and digits, so italic variables and bold
+     symbols use real italic/bold glyphs;
+   - the math face supplies everything else: operators, relations,
+     punctuation, and Greek. It has a single upright face, so italic Greek is
+     slanted by the browser.
+
+   Large operators, stretchy delimiters, and the \mathbb, \mathcal, \mathfrak,
+   \mathscr, \mathsf, \mathtt alphabets stay on the KaTeX fonts: KaTeX selects
+   their glyphs by font file, not by code point.
+
+   Text faces are limited to Latin letters and digits so that math symbols
+   such as + = − × always come from the math face. Browsers download a face
+   only when it is used, so inactive families cost nothing. */
+
+/* TeX Gyre Termes */
+@font-face {
+  font-family: "TeX Gyre Termes";
+  src: url("https://static.lucas04.top/TeXGyre/texgyretermes-regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Termes";
+  src: url("https://static.lucas04.top/TeXGyre/texgyretermes-italic.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Termes";
+  src: url("https://static.lucas04.top/TeXGyre/texgyretermes-bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Termes";
+  src: url("https://static.lucas04.top/TeXGyre/texgyretermes-bolditalic.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Termes Math";
+  src: url("https://static.lucas04.top/TeXGyre/texgyretermes-math.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TeX Gyre Pagella */
+@font-face {
+  font-family: "TeX Gyre Pagella";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrepagella-regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Pagella";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrepagella-italic.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Pagella";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrepagella-bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Pagella";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrepagella-bolditalic.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Pagella Math";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrepagella-math.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TeX Gyre Bonum */
+@font-face {
+  font-family: "TeX Gyre Bonum";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrebonum-regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Bonum";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrebonum-italic.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Bonum";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrebonum-bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Bonum";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrebonum-bolditalic.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Bonum Math";
+  src: url("https://static.lucas04.top/TeXGyre/texgyrebonum-math.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TeX Gyre Schola */
+@font-face {
+  font-family: "TeX Gyre Schola";
+  src: url("https://static.lucas04.top/TeXGyre/texgyreschola-regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Schola";
+  src: url("https://static.lucas04.top/TeXGyre/texgyreschola-italic.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Schola";
+  src: url("https://static.lucas04.top/TeXGyre/texgyreschola-bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Schola";
+  src: url("https://static.lucas04.top/TeXGyre/texgyreschola-bolditalic.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range:
+    U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6,
+    U+00F8-024F;
+}
+
+@font-face {
+  font-family: "TeX Gyre Schola Math";
+  src: url("https://static.lucas04.top/TeXGyre/texgyreschola-math.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --katex-main-font and --katex-math-font are also consumed by the \mathrm,
+   \mathit, and \mathbf rules in fonts_body.css. */
+:root {
+  --katex-main-font: "KaTeX_Main";
+  --katex-math-font: "KaTeX_Math";
+}
+
+:root[data-math-font="termes"] {
+  --katex-main-font:
+    "TeX Gyre Termes", "TeX Gyre Termes Math", "KaTeX_Main";
+  --katex-math-font:
+    "TeX Gyre Termes", "TeX Gyre Termes Math", "KaTeX_Math";
+}
+
+:root[data-math-font="pagella"] {
+  --katex-main-font:
+    "TeX Gyre Pagella", "TeX Gyre Pagella Math", "KaTeX_Main";
+  --katex-math-font:
+    "TeX Gyre Pagella", "TeX Gyre Pagella Math", "KaTeX_Math";
+}
+
+:root[data-math-font="bonum"] {
+  --katex-main-font:
+    "TeX Gyre Bonum", "TeX Gyre Bonum Math", "KaTeX_Main";
+  --katex-math-font:
+    "TeX Gyre Bonum", "TeX Gyre Bonum Math", "KaTeX_Math";
+}
+
+:root[data-math-font="schola"] {
+  --katex-main-font:
+    "TeX Gyre Schola", "TeX Gyre Schola Math", "KaTeX_Main";
+  --katex-math-font:
+    "TeX Gyre Schola", "TeX Gyre Schola Math", "KaTeX_Math";
+}
+
+/* Upright and bold text, digits, and ordinary symbols */
+:root[data-math-font] .katex,
+:root[data-math-font] .katex .mainrm,
+:root[data-math-font] .katex .textrm,
+:root[data-math-font] .katex .textit,
+:root[data-math-font] .katex .textbf,
+:root[data-math-font] .katex .mathbf {
+  font-family: var(--katex-main-font), "Times New Roman", serif;
+}
+
+/* Italic identifiers: default math letters and lowercase Greek */
+:root[data-math-font] .katex .mathnormal,
+:root[data-math-font] .katex .mathit {
+  font-family: var(--katex-math-font), "Times New Roman", serif;
+}

@@ -1,0 +1,32 @@
+/**
+ * Print overrides, applied on top of the Plume print baseline.
+ *
+ * Removes site chrome (navbar, footer, copyright), the page meta line under
+ * the title (reading time, tags, creation date), and adds a centred page
+ * number in the bottom page margin.
+ */
+@media print {
+  .vp-navbar,
+  .vp-nav,
+  .vp-footer,
+  /* .vp-doc-meta, */
+  .vp-doc-copyright {
+    display: none !important;
+  }
+
+  /* The hidden meta line normally provides the gap below the title. */
+  /* .vp-doc-title .page-title {
+    margin-bottom: 1.5rem !important;
+  } */
+}
+
+@page {
+  margin-bottom: 16mm;
+
+  @bottom-center {
+    content: counter(page) " / " counter(pages);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 9pt;
+    color: #666;
+  }
+}

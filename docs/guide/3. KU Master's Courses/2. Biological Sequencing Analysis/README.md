@@ -6,7 +6,6 @@ excerpt: "Oral exam preparation for Biological Sequence Analysis at KU: the exam
 tags:
   - KU
   - Biological Sequence Analysis
-  - Exam Preparation
 ---
 
 These pages prepare the oral exam for Biological Sequence Analysis (5550-B1-1E26) at the University of Copenhagen. An oral exam rewards two things at once: a clear story that can be told in about ten minutes, and enough depth to survive follow-up questions at the whiteboard. Each of the twelve exam topics therefore has its own page combining revision notes, a presentation script, key terms and likely follow-up questions. This overview collects the exam format and the material that links the topics.

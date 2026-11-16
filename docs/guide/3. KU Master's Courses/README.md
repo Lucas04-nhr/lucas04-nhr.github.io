@@ -16,3 +16,4 @@ The summarization of each course is available in the [blog](/blog/tags/?tag=KU) 
 
 - [Advanced Bioinformatics for NGS](/docs/ku/advbinf/)
 - [Biological Sequence Analysis](/docs/ku-bsa/)
+- [Vision and Image Processing](/docs/ku/vip/)

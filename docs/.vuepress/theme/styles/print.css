@@ -1,7 +1,8 @@
 /**
  * Print overrides, applied on top of the Plume print baseline.
  *
- * Removes site chrome (navbar, footer, copyright), the page meta line under
+ * Removes site chrome (navbar, footer, copyright), the series line under the
+ * title ("This post is part of ..."), the page meta line under
  * the title (reading time, tags, creation date), and adds a centred page
  * number in the bottom page margin.
  */
@@ -10,6 +11,8 @@
   .vp-nav,
   .vp-footer,
   /* .vp-doc-meta, */
+  .vp-series-meta,
+  .vp-series-next,
   .vp-doc-copyright {
     display: none !important;
   }

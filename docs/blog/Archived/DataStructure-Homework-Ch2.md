@@ -7,6 +7,7 @@ tags:
   - Data Structure
   - Homework
   - Archived
+series: hust-data-structure
 ---
 
 ::: warning

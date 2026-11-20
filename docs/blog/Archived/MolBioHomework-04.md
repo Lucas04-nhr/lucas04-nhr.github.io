@@ -7,6 +7,7 @@ tags:
   - Molecular Biology
   - Homework
   - Archived
+series: hust-molecular-biology
 ---
 
 ::: warning

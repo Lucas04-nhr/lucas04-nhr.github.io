@@ -7,6 +7,7 @@ tags:
   - Python
   - Homework
   - Archived
+series: hust-python
 ---
 
 ::: warning

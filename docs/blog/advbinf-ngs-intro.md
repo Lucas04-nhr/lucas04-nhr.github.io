@@ -6,6 +6,7 @@ tags:
   - KU
   - Advanced Bioinformatics
 excerpt: This is part of the summary of the course Advanced Bioinformatics for Next-Generation Sequencing at KU. This article reviews NGS workflows, ancient DNA, sequencing libraries, FASTA/FASTQ, alignment formats, mapping uncertainty, coverage, genotype inference, and the associated command-line workflow.
+series: ku-advanced-bioinformatics
 ---
 
 ## Overview of the NGS Workflow {#overview-of-the-ngs-workflow}

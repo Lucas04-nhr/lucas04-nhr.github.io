@@ -1,11 +1,12 @@
 ---
 title: "RNA Covariation and NGS Data Analysis"
-createTime: 2026-09-17 09:30:31
+createTime: 2026/09/17 09:30:31
 permalink: /blog/ku-bsa-rna-covariation-ngs/
 tags:
   - KU
   - Biological Sequence Analysis
 excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. This post summarizes the second week of the KU course on Biological Sequence Analysis, which covered RNA covariation and next-generation sequencing (NGS) data analysis.
+series: ku-biological-sequence-analysis
 ---
 
 ## RNA Covariation and Mutual Information {#rna-covariation}

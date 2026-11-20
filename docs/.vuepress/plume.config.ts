@@ -13,6 +13,19 @@
 import { defineThemeConfig } from "vuepress-theme-plume";
 import { enCollections } from "./collections";
 import { enNavbar } from "./navbar";
+import { series } from "./series";
+
+/**
+ * 阅读设置中某个马卡龙品牌色的令牌，取值随深浅色模式切换
+ */
+function brandTokens(name: string): Record<string, string> {
+  return {
+    "--vp-c-brand-1": `var(--palette-${name}-1)`,
+    "--vp-c-brand-2": `var(--palette-${name}-2)`,
+    "--vp-c-brand-3": `var(--palette-${name}-3)`,
+    "--vp-c-brand-soft": `var(--palette-${name}-soft)`,
+  };
+}
 
 /**
  * @see https://theme-plume.vuejs.press/config/theme/
@@ -55,6 +68,31 @@ export default defineThemeConfig({
   createTime: true, // 是否显示文章创建时间
   linkPreview: true, // 是否启用鼠标悬停链接预览
   // relatedPosts: true, // 是否启用相关文章推荐
+
+  /**
+   * 专栏：跨集合的文章分组，定义见 `./series.ts`
+   * @see https://theme-plume.vuejs.press/guide/features/
+   */
+  series,
+
+  /**
+   * 阅读设置：内容宽度、护眼背景、阅读辅助线、专注模式、继续阅读均使用默认值，
+   * 额外开放品牌色选择。品牌色令牌引用 `theme/styles/custom_color.css` 中的
+   * `--palette-*` 变量，深浅色模式各取一套；色块使用同色系的马克笔底色 `--mark-*`。
+   * @see https://theme-plume.vuejs.press/guide/features/
+   */
+  readerPreferences: {
+    brand: {
+      presets: [
+        { name: "pistachio", label: "Pistachio", color: "var(--mark-tip)", tokens: brandTokens("pistachio") },
+        { name: "butter", label: "Butter", color: "var(--mark-note)", tokens: brandTokens("butter") },
+        { name: "apricot", label: "Apricot", color: "var(--mark-warning)", tokens: brandTokens("apricot") },
+        { name: "rose", label: "Rose", color: "var(--mark-danger)", tokens: brandTokens("rose") },
+        { name: "lavender", label: "Lavender", color: "var(--mark-important)", tokens: brandTokens("lavender") },
+        { name: "mist", label: "Mist", color: "var(--mark-info)", tokens: brandTokens("mist") },
+      ],
+    },
+  },
 
   /* 站点页脚 */
   footer: {

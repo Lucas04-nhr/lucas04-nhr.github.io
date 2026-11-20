@@ -7,6 +7,7 @@ tags:
   - Data Structure
   - Review
   - Archived
+series: hust-data-structure
 ---
 
 ::: warning

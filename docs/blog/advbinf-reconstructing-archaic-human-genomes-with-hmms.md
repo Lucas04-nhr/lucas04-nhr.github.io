@@ -6,6 +6,7 @@ excerpt: This is part of the summary of the course Advanced Bioinformatics for N
 tags:
   - KU
   - Advanced Bioinformatics
+series: ku-advanced-bioinformatics
 ---
 
 Modern human genomes retain fragments inherited from archaic human populations. Each individual carries only part of this history, but different individuals preserve different fragments. Combining these fragments across a population can recover a substantial portion of the genetic material of people who disappeared long ago.

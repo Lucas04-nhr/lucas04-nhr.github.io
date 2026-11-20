@@ -6,6 +6,7 @@ excerpt: "A summary of what computer vision tries to do, how a pinhole camera fo
 tags:
   - KU
   - Vision and Image Processing
+series: ku-vision-and-image-processing
 ---
 
 Computer vision and linear algebra look like separate subjects, but the second is the toolbox for the first: almost every operation in vision, from filtering to camera models and homographies, is a matrix acting on a vector. These notes summarise the basics of image formation and the linear algebra that goes with it.

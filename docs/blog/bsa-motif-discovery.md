@@ -6,6 +6,7 @@ excerpt: This is part of the summary of the course Biological Sequence Analysis 
 tags:
   - KU
   - Biological Sequence Analysis
+series: ku-biological-sequence-analysis
 ---
 
 Genes with similar expression patterns may share regulatory signals. Searching their promoter regions for recurring sequence elements can therefore suggest common transcription factor binding sites. The difficulty is that these elements are short, variable, and surrounded by sequence that can produce similar patterns by chance.

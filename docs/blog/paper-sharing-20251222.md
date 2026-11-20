@@ -8,6 +8,7 @@ tags:
   - Paper Sharing
   - Presentation
   - BGI Nutrition
+series: paper-sharing
 ---
 
 <LinkCard 

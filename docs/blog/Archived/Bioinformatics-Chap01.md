@@ -7,6 +7,7 @@ tags:
   - Bioinformatics
   - Review
   - Archived
+series: hust-bioinformatics
 ---
 
 ::: warning

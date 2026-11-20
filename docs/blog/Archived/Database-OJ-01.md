@@ -7,6 +7,7 @@ tags:
   - Database
   - Homework
   - Archived
+series: hust-database
 ---
 
 ::: warning

@@ -7,6 +7,7 @@ tags:
   - Advanced Bioinformatics
 # password: f38907a17a67833f90d485872c4a6021
 excerpt: This is part of the summary of the course Advanced Bioinformatics for NGS in KU. The article introduces the Expectation-Maximization algorithm, including latent variables, likelihood, posterior probabilities, the E-step and M-step, Jensen's inequality, and the lower-bound interpretation of EM.
+series: ku-advanced-bioinformatics
 ---
 
 ## Basic Probability for EM {#basic-probability-for-em}

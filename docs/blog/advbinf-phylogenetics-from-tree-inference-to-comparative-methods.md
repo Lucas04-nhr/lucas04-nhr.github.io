@@ -6,6 +6,7 @@ tags:
   - KU
   - Advanced Bioinformatics
 excerpt: "This is part of the summary of the course Advanced Bioinformatics for NGS at KU. This article explains how evolutionary trees are inferred, why gene trees can disagree with species trees, and how shared ancestry changes the analysis of traits. A connected guide to substitution models, likelihood, coalescent methods, ancestral reconstruction, PIC, and PGLS."
+series: ku-advanced-bioinformatics
 ---
 
 A phylogenetic tree is a statistical hypothesis about evolutionary relationships. It can describe the history of a gene, summarize the branching history of species, or provide the framework for asking how traits evolved. These uses are connected, but they do not all involve the same tree or the same assumptions.

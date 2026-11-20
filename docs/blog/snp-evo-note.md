@@ -7,6 +7,7 @@ tags:
   - BGI Nutrition
   - Graduation Thesis
   - SNP
+series: graduation-thesis
 ---
 
 ## 具体流程 {#workflow}

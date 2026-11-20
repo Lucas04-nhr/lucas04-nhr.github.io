@@ -7,6 +7,7 @@ tags:
   - Biological Sequence Analysis
 # password: 7d36dbf1546a727aa80d6d3d20ab603b
 excerpt: This is part of the summary of the course Biological Sequence Analysis in KU, which is mainly focused on the exam curriculum. The article is mainly about pairwise alignment and database search, including Needleman-Wunsch algorithm, Smith-Waterman algorithm, scoring system, substitution matrices, and BLAST.
+series: ku-biological-sequence-analysis
 ---
 
 ## Core Mathematical Concepts {#core-mathematical-concepts}

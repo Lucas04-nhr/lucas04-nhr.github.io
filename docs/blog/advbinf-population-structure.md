@@ -6,6 +6,7 @@ tags:
   - KU
   - Advanced Bioinformatics
 excerpt: This is part of the summary of the course Advanced Bioinformatics for NGS at KU. This article introduces population structure, admixture proportions, ADMIXTURE and NGSadmix, principal component analysis, the relationship between PCA and admixture models, genotype uncertainty in low-depth sequencing, EMU and PCAngsd, and applications of PCA to selection scans.
+series: ku-advanced-bioinformatics
 ---
 
 Population-genetic data often contain structure because individuals do not all descend from one perfectly panmictic population.

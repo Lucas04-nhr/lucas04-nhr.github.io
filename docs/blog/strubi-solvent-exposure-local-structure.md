@@ -6,6 +6,7 @@ excerpt: "This is part of the summary of the course Structural Bioinformatics at
 tags:
   - KU
   - Structural Bioinformatics
+series: ku-structural-bioinformatics
 ---
 
 ## Where this fits {#where-this-fits}

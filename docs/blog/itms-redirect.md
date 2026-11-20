@@ -6,6 +6,7 @@ excerpt: 'A Tampermonkey script to redirect App Store links, avoiding being redi
 tags:
   - Network Engineering
   - Extension
+series: network-engineering
 ---
 
 This Tampermonkey script redirects `https://` App Store web links to the `itms-apps://` protocol, so clicking App Store links can open the App Store app directly, to bypass the regional restriction of accessing web App Store in China Mainland. It also provides quick shortcuts to switch App Store regions.

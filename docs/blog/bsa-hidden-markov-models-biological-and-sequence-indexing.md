@@ -6,6 +6,7 @@ excerpt: This is part of the summary of the course Biological Sequence Analysis 
 tags:
   - KU
   - Biological Sequence Analysis
+series: ku-biological-sequence-analysis
 ---
 
 The Biological Sequence Analysis lectures from 29 September to 1 October connect three themes: probabilistic sequence models, their biological applications, and efficient sequence indexing. Together, they address two complementary problems: inferring the hidden process behind a sequence, and finding a query sequence efficiently within a large reference.

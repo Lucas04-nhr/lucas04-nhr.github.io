@@ -54,6 +54,33 @@
   --card-stat-surface: rgba(148, 163, 184, 0.12); /* 统计格底、表头底 */
   --card-track: rgba(100, 116, 139, 0.24); /* 进度条空轨道 */
   --status-neutral: #475569; /* running / checking 状态的强调色 */
+
+  /* 阅读设置品牌色：马卡龙色系的加深版，供 plume.config.ts 中 readerPreferences.brand 引用。
+     与默认品牌色同一约定：-1/-2 在 #fff 与 #f6f6f7 上均 ≥ 4.5:1，白字按钮亦 ≥ 4.5:1；-3 仅装饰 */
+  --palette-pistachio-1: #4a7a3d; /* 开心果绿 */
+  --palette-pistachio-2: #3b6630;
+  --palette-pistachio-3: #9ccc8a;
+  --palette-pistachio-soft: rgba(140, 190, 120, 0.3);
+  --palette-butter-1: #806414; /* 奶油黄 */
+  --palette-butter-2: #6a520c;
+  --palette-butter-3: #e5cf7a;
+  --palette-butter-soft: rgba(230, 205, 110, 0.3);
+  --palette-apricot-1: #975a22; /* 杏橙 */
+  --palette-apricot-2: #7e4817;
+  --palette-apricot-3: #f0b884;
+  --palette-apricot-soft: rgba(240, 180, 125, 0.3);
+  --palette-rose-1: #a8495a; /* 玫瑰粉 */
+  --palette-rose-2: #8c3848;
+  --palette-rose-3: #eba7b2;
+  --palette-rose-soft: rgba(235, 160, 175, 0.3);
+  --palette-lavender-1: #6a55a8; /* 薰衣草紫 */
+  --palette-lavender-2: #57438f;
+  --palette-lavender-3: #bfb0e8;
+  --palette-lavender-soft: rgba(185, 170, 230, 0.3);
+  --palette-mist-1: #4f6382; /* 雾灰蓝 */
+  --palette-mist-2: #3e506c;
+  --palette-mist-3: #b4c0d4;
+  --palette-mist-soft: rgba(170, 185, 210, 0.3);
 }
 
 [data-theme="dark"] {
@@ -104,6 +131,33 @@
   --card-stat-surface: rgba(148, 163, 184, 0.12);
   --card-track: rgba(100, 116, 139, 0.24);
   --status-neutral: #94a3b8;
+
+  /* 阅读设置品牌色：提亮的马卡龙色，-1/-2 在 #1b1b1f 与 #161618 上 ≥ 7:1，
+     按钮文字为 --vp-c-bg 深色，同样满足 ≥ 4.5:1 */
+  --palette-pistachio-1: #8fca7c;
+  --palette-pistachio-2: #a6d895;
+  --palette-pistachio-3: #5e8a52;
+  --palette-pistachio-soft: rgba(150, 205, 130, 0.18);
+  --palette-butter-1: #d9bc5c;
+  --palette-butter-2: #e6cc78;
+  --palette-butter-3: #8a7535;
+  --palette-butter-soft: rgba(225, 200, 110, 0.16);
+  --palette-apricot-1: #eba76a;
+  --palette-apricot-2: #f2bb88;
+  --palette-apricot-3: #9a6a3e;
+  --palette-apricot-soft: rgba(240, 175, 115, 0.16);
+  --palette-rose-1: #ec9aa8;
+  --palette-rose-2: #f2b0bb;
+  --palette-rose-3: #9a5662;
+  --palette-rose-soft: rgba(236, 154, 168, 0.16);
+  --palette-lavender-1: #b3a2ec;
+  --palette-lavender-2: #c5b8f2;
+  --palette-lavender-3: #6e5fa3;
+  --palette-lavender-soft: rgba(180, 160, 235, 0.16);
+  --palette-mist-1: #9fb1cf;
+  --palette-mist-2: #b3c2dc;
+  --palette-mist-3: #5d6d88;
+  --palette-mist-soft: rgba(160, 177, 207, 0.16);
 }
 
 /* 马克笔 ==text== / ==text=={.tip}：覆盖 Plume 的高饱和默认色。

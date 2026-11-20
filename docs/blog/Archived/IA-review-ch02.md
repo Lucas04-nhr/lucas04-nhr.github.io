@@ -7,6 +7,7 @@ tags:
   - Instrumental Analysis
   - Review
   - Archived
+series: hust-instrumental-analysis
 ---
 
 ::: warning

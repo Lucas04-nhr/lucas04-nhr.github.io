@@ -8,6 +8,7 @@ tags:
   - Network Engineering
   - CERNET
   - Internet Architecture
+series: network-engineering
 ---
 
 :::note

@@ -7,6 +7,7 @@ tags:
   - Paper Sharing
   - Presentation
   - BGI Nutrition
+series: paper-sharing
 ---
 
 ## 原始文献 {#original-paper}

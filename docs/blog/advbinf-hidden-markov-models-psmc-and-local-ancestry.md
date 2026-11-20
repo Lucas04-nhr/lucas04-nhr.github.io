@@ -6,6 +6,7 @@ excerpt: "This is part of the summary of Advanced Bioinformatics for NGS at KU. 
 tags:
   - KU
   - Advanced Bioinformatics
+series: ku-advanced-bioinformatics
 ---
 
 Genomic observations reveal biological history indirectly. Heterozygous sites contain information about the age of local genealogies, while allele-frequency differences contain information about ancestry. Neither the genealogy nor the ancestry of a chromosome segment is directly observed.

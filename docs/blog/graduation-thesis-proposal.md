@@ -6,6 +6,7 @@ excerpt: "Comprehensive presentation for thesis defense on SNP-based bacterial e
 tags:
   - Graduation Thesis
   - Presentation
+series: graduation-thesis
 ---
 
 ## 讲稿 {#script}

@@ -6,6 +6,7 @@ excerpt: This is part of the summary of the course Biological Sequence Analysis 
 tags:
   - KU
   - Biological Sequence Analysis
+series: ku-biological-sequence-analysis
 ---
 
 A protein family contains more information than any one of its sequences. Some positions preserve the same residue across distant relatives, some tolerate several alternatives, and others change together to maintain a structural or functional interaction.

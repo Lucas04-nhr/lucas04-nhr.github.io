@@ -13,10 +13,20 @@ import { viteBundler } from "@vuepress/bundler-vite";
 import { defineUserConfig } from "vuepress";
 import { plumeTheme } from "vuepress-theme-plume";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { getDirname, path } from "vuepress/utils";
 const isProd = process.env.NODE_ENV === "production";
+const __dirname = getDirname(import.meta.url);
 
 export default defineUserConfig({
   base: "/",
+  /* 覆写主题组件：键为主题内的 `@theme/<组件>.vue`，值为本地替换文件 */
+  alias: {
+    // 导航栏阅读设置按钮：图标改为 iconify 的 material-symbols:chrome-reader-mode-rounded
+    "@theme/VPReaderPopover.vue": path.resolve(
+      __dirname,
+      "./theme/components/VPReaderPopover.vue",
+    ),
+  },
   plugins: [
     googleAnalyticsPlugin({
       id: "G-DWLF5JZRCX", // 选项

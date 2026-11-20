@@ -191,6 +191,9 @@ importers:
       '@vuepress/shiki-twoslash':
         specifier: 2.0.0-rc.135
         version: 2.0.0-rc.135(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@26.6.6)(@vue/compiler-sfc@3.5.45)(supports-color@7.2.0)(typescript@5.9.3))(supports-color@7.2.0)(typescript@5.9.3)(vuepress@2.0.0-rc.32(@types/markdown-it@14.2.0)(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@26.6.6)(@vue/compiler-sfc@3.5.45)(supports-color@7.2.0)(typescript@5.9.3))(rolldown@1.2.16)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@26.6.6))(vue@3.5.45(typescript@5.9.3)))
+      '@vueuse/core':
+        specifier: ^15.0.0
+        version: 15.0.0(vue@3.5.45(typescript@5.9.3))
       artplayer:
         specifier: ^5.4.0
         version: 5.4.0

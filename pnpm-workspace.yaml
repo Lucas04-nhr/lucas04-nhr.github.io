@@ -2,10 +2,10 @@ allowBuilds:
   core-js: true
   esbuild: true
 minimumReleaseAgeExclude:
-  - '@vuepress-plume/plugin-fonts@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216'
-  - '@vuepress-plume/plugin-search@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216'
-  - vuepress-plugin-md-power@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216
-  - vuepress-theme-plume@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216
+  - '@vuepress-plume/plugin-fonts@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216 || 1.0.0-rc.219'
+  - '@vuepress-plume/plugin-search@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216 || 1.0.0-rc.219'
+  - vuepress-plugin-md-power@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216 || 1.0.0-rc.219
+  - vuepress-theme-plume@1.0.0-rc.203 || 1.0.0-rc.204 || 1.0.0-rc.208 || 1.0.0-rc.209 || 1.0.0-rc.210 || 1.0.0-rc.211 || 1.0.0-rc.212 || 1.0.0-rc.213 || 1.0.0-rc.215 || 1.0.0-rc.216 || 1.0.0-rc.219
   - '@vuepress/helper@2.0.0-rc.134'
   - '@vuepress/highlighter-helper@2.0.0-rc.134'
   - '@vuepress/plugin-cache@2.0.0-rc.134'
@@ -47,3 +47,10 @@ peerDependencyRules:
     '@vuepress/plugin-markdown-math>katex': '0.19'
     # @mdit/* plugins declare markdown-it ^15, but VuePress and @mdit-vue still depend on markdown-it 14
     markdown-it: '14'
+permissions:
+  vuepress-theme-plume:
+    skills: [vuepress-plume-config, vuepress-plume-markdown]
+skills:
+  dirs:
+    - .agents/skills
+    - .claude/skills

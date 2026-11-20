@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A blog belongs to Lucas",
-  "packageManager": "pnpm@12.18.0",
+  "packageManager": "pnpm@12.21.0",
   "author": "Haoran Nie <lucas04@foxmail.com>",
   "license": "AGPL-3.0-only",
   "scripts": {
@@ -15,14 +15,14 @@
   },
   "devDependencies": {
     "@types/markdown-it": "14.2.0",
-    "@vuepress/bundler-vite": "2.0.0-rc.31",
-    "@vuepress/plugin-google-analytics": "2.0.0-rc.135",
+    "@vuepress/bundler-vite": "2.0.0-rc.32",
+    "@vuepress/plugin-google-analytics": "2.0.0-rc.138",
     "http-server": "^14.1.1",
     "typescript": "^5.9.3",
     "vue": "^3.5.45",
-    "vuepress": "2.0.0-rc.31",
-    "vuepress-plugin-md-power": "1.0.0-rc.216",
-    "vuepress-theme-plume": "1.0.0-rc.216"
+    "vuepress": "2.0.0-rc.32",
+    "vuepress-plugin-md-power": "1.0.0-rc.219",
+    "vuepress-theme-plume": "1.0.0-rc.219"
   },
   "engines": {
     "node": "^20.6.0 || >=22.0.0"
@@ -42,7 +42,7 @@
     "mermaid": "^12.3.0",
     "mpegts.js": "^1.8.2",
     "prismjs": "^1.30.0",
-    "pyodide": "^314.0.7",
+    "pyodide": "^314.0.8",
     "react": "19.3.1",
     "shiki": "^3.23.0",
     "shiki-twoslash": "3.1.2",

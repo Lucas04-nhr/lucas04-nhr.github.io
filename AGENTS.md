@@ -17,6 +17,7 @@ This is Lucas's personal blog, covering bioinformatics course notes, paper discu
 | `docs/.vuepress/config.ts` | VuePress, bundler, plugin, and theme feature configuration |
 | `docs/.vuepress/plume.config.ts` | Theme appearance, site profile, copyright, and collection/navigation integration |
 | `docs/.vuepress/collections.ts`, `docs/.vuepress/navbar.ts` | Content collections, automatic sidebars, and top navigation |
+| `docs/.vuepress/series.ts` | Series (cross-collection article groups) and their landing pages under `/series/` |
 | `docs/.vuepress/client.ts` | Client registration, layouts, and browser interactions |
 | `docs/.vuepress/components/`, `docs/.vuepress/layouts/` | Custom components and page layouts |
 | `docs/.vuepress/theme/` | Theme components, utilities, and styles |
@@ -41,6 +42,22 @@ pnpm docs:preview
 - `pnpm vp-update` updates VuePress and the theme. Use it only for upgrade tasks. Keep `package.json` and `pnpm-lock.yaml` synchronized when changing dependencies, and preserve existing `pnpm-workspace.yaml` settings.
 - There are currently no test, lint, or typecheck scripts. Do not claim to have run checks that are not configured.
 
+## Theme Agent Skills
+
+`vuepress-theme-plume` ships two agent skills. pnpm links them from the installed theme package into `.agents/skills/` and `.claude/skills/`, as allowed by `permissions` and `skills.dirs` in `pnpm-workspace.yaml`. The links are ignored by Git and follow the installed theme version.
+
+| Skill | Load it before |
+| --- | --- |
+| `vuepress-plume-config` | Editing `config.ts`, `plume.config.ts`, `collections.ts`, `navbar.ts`, or `series.ts`; enabling or tuning a theme feature (search, comments, watermark, encryption, feed, series, related posts, link preview, reader preferences, bulletin, copyright, asset replacement); or deciding which frontmatter field a feature needs |
+| `vuepress-plume-markdown` | Writing or editing any `.md` page that uses Plume syntax beyond plain Markdown: containers, inline syntax, embeds, charts, code block features, Plume Vue components, or frontmatter such as `series` |
+
+- Load the matching skill before the first edit of the task, and load both when a task touches configuration and content, such as enabling a Markdown feature and then using it in an article. Skip them for plain prose edits, typo fixes, and changes to custom components that do not touch theme options.
+- Treat the skills as references for option names, defaults, and syntax. Open only the `references/` or `resources/` files the task needs, and copy option and container names verbatim instead of guessing.
+- This file takes precedence over the skills. In particular, the config skill asks for `pnpm docs:build` before finishing; follow "Verification and Delivery" below instead and build only when verification is authorized. Its "one option, one place" and "prefer `plume.config.ts`" rules match this repository's practice.
+- Before using syntax a skill marks as off by default (for example `annotation`, `abbr`, `timeline`, `field`), check `markdown` in `config.ts`. If the feature is off, ask before enabling it rather than enabling it as a side effect of an article edit.
+- The installed theme is the source of truth, not any version number written in a skill. Read the version from `node_modules/vuepress-theme-plume/package.json` (the `vuepress-theme-plume` entry in `package.json` is the declared one). Ignore version statements inside the skills, including the rule that options a skill does not list must be treated as non-existent: an option missing from a skill may exist in the installed version. Check `node_modules/vuepress-theme-plume/dist/shared/index.d.ts` for options, defaults, and frontmatter fields; when it disagrees with a skill, follow the type definitions and mention the difference in the report. Do not write a specific theme version into this file, comments, or config.
+- Do not edit, copy, or commit the linked skill files. They are replaced on every install. Put project-specific rules in this file instead.
+
 ## Content Placement and Metadata
 
 - Place standalone articles in `docs/blog/`. Place related courses, tutorials, and project documentation in the appropriate series under `docs/guide/`. Tool documentation belongs in `docs/tools/`.
@@ -51,6 +68,7 @@ pnpm docs:preview
 - Write a concise `excerpt` describing the topic and scope in the article's language. Avoid promotional wording. Reuse existing tag names and capitalization, such as `KU`, `Advanced Bioinformatics`, and `Paper Sharing`; add tags only when the content warrants them.
 - Treat existing `permalink` values as stable public addresses, independent of titles or filenames. Historical posts use `/blog/` prefix; preserve both conventions for existing pages. Prefer `/blog/<slug>/` for new standalone posts and check for duplicate links before writing one.
 - Collection configuration requires guide links to start with `/docs/`, tool links with `/tool/`, and legal links with `/legal/`; otherwise sidebars may not match. Update `collections.ts` or `navbar.ts` when adding a collection or navigation entry. Ordinary new articles generally need no configuration changes.
+- Series group articles by course or topic without changing their permalinks. When a new post belongs to an existing series in `series.ts`, add `series: <id>` to its frontmatter. Series sort by `createTime` unless every chapter sets `seriesOrder`, so do not add `seriesOrder` to only part of a series. `autoCreate` is off: a new series id must be declared in `series.ts` with a title and description, and only when at least two related posts exist or the course is ongoing. A page belongs to at most one series. Do not add password-protected pages to a series.
 - Do not copy `password`, `copyright: false`, `comment: false`, or other special states from neighboring posts as template defaults. Preserve existing access and comment settings. Do not move protected content to public pages or copy passwords into documentation, logs, or new posts.
 - Currently, `preview: true` adds a PREVIEW watermark and disables comments when `watermark` is unspecified. This is a display setting, not an access restriction.
 
@@ -99,6 +117,7 @@ Explain the problem or goal, applicable environment, concrete steps, verificatio
 
 - Make the smallest necessary changes within existing component, layout, utility, or style directories. Follow the target file's formatting, naming, and import conventions without reformatting unrelated files.
 - Settings in `plume.config.ts` override matching settings in `config.ts`. Confirm which file owns a setting and avoid duplicating it. Maintain the existing division between feature configuration requiring a restart and theme configuration supporting hot updates.
+- Site colors live in `theme/styles/custom_color.css`, with a light and a dark value for each token and the contrast rule noted beside it. The brand colors offered in reader preferences (`readerPreferences.brand` in `plume.config.ts`) point to the `--palette-*` tokens there, and their swatches use the matching `--mark-*` macaron colors. To add or change a brand palette, define both modes in `custom_color.css`, keep `-1` and `-2` at 4.5:1 or more against the page and sidebar backgrounds, and reference the tokens through `var()` instead of hard-coded colors in the config.
 - Keep browser APIs inside client lifecycle hooks or existing environment guards. Avoid directly accessing `window`, `document`, storage, or observers during SSR. Clean up new listeners and observers on unmount and account for repeated route entry.
 - For interaction changes, check light and dark themes, mobile viewports, and route transitions. Read the corresponding logic in `theme/utils/` before changing language switching, URL parameters, or user preferences.
 - Do not commit generated directories such as `node_modules/`, `.temp/`, `.cache/`, or `dist/`, or edit build output directly.

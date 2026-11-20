@@ -55,6 +55,7 @@ https://static.lucas04.top/altstore.json
 | [Zhihu--](https://github.com/huamurui/zhihu-minus-minus) | A lightweight, ad-free third-party Zhihu client (知乎--) with multiple accounts, a guest mode and dark mode. | iOS 16.4+; the interface is in Chinese. |
 | [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |
 | [Provenance](https://github.com/Provenance-Emu/Provenance) | A multi-emulator frontend for Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony consoles. | iOS 16.0+; each download is about 1 GB. |
+| [Andarium](https://andarium.net/) | Runs a full Android system (LineageOS) in an app, built on the open-source [Kernarium](https://github.com/imxieyi/Kernarium) engine. | iOS 27.0+ on A14 / M1 or newer; needs the Increased Memory Limit and Extended Virtual Addressing entitlements; each download is about 1 GB. |
 | [JHenTai](https://github.com/jiangtian616/JHenTai) | A manga client for E-Hentai and ExHentai. | iOS 13.0+; the sites' content is mostly for adults. |
 | [Spotube](https://github.com/team-spotube/spotube) | An open-source music streaming app. | iOS 14.0+ |
 

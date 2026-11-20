@@ -190,6 +190,23 @@
       }
     },
     {
+      "github": "imxieyi/Kernarium",
+      "assetPattern": "^Andarium-.*\\.ipa$",
+      "versionFromIPA": true,
+      "maxVersions": 3,
+      "minOSVersion": "27.0",
+      "app": {
+        "name": "Andarium",
+        "bundleIdentifier": "com.imxieyi.andarium",
+        "developerName": "imxieyi",
+        "subtitle": "Run Android apps and games on your iPhone",
+        "localizedDescription": "Runs a full Android system (LineageOS) inside an iPhone or iPad app, on stock iOS without a jailbreak or cloud streaming. It is built on Kernarium, an open-source engine that runs a real Linux kernel in user space, and supports APK sideloading, Metal and Vulkan graphics, ADB and logcat, and a Linux terminal.\n\nRequires iOS / iPadOS 27 or later, an A14 Bionic or M1 chip or newer, and at least 3 GB of free space. Each download is about 1 GB.\n\nThe IPA must be signed with the Increased Memory Limit and Extended Virtual Addressing entitlements. Experimental JIT is supported through StikDebug. See https://andarium.net for details.",
+        "iconURL": "https://andarium.net/uploads/ffb8ba1d-40be-4a9f-b8f6-30b774c6324d.png",
+        "tintColor": "#2E9C94",
+        "category": "utilities"
+      }
+    },
+    {
       "github": "jiangtian616/JHenTai",
       "assetPattern": "^JHenTai_.*\\.ipa$",
       "maxVersions": 5,

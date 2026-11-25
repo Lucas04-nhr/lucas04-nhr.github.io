@@ -11,6 +11,10 @@
 //   build number are read from the IPA's Info.plist instead of the tag, for
 //   projects whose tags don't match the IPA they ship; AltStore and
 //   SideStore reject a download whose version differs from the source.
+// - An entry with `page` instead of `github` is for an app that is only
+//   published on its own website: the first link on that page matching
+//   `assetPattern` is the only version, and its version and build number
+//   are always read from the IPA.
 // - Custom apps come first and win over upstream apps with the same
 //   bundle identifier; earlier upstreams win over later ones.
 // - The file already at `output` is treated as the previous source: if a
@@ -301,6 +305,51 @@ async function buildApp(entry) {
   return { app, news }
 }
 
+// Builds an app from a download page that links to the current IPA. The
+// file's Last-Modified header, or else today, is the release date.
+async function buildPageApp(entry) {
+  const pattern = new RegExp(entry.assetPattern ?? '\\.ipa$', 'i')
+  const html = await request(entry.page, {}, response => response.text())
+  const downloadURL = [...html.matchAll(/href\s*=\s*["']([^"']+)["']/gi)]
+    .map(m => new URL(m[1].replace(/&amp;/g, '&'), entry.page).href)
+    .find(url => pattern.test(new URL(url).pathname.split('/').pop()))
+  if (!downloadURL)
+    throw new Error(`no link on ${entry.page} matches ${pattern}`)
+
+  const headers = await request(downloadURL, { Range: 'bytes=0-0' }, response => response.headers)
+  const size = Number(headers.get('content-range')?.split('/')[1] ?? headers.get('content-length'))
+  if (!size)
+    throw new Error(`${downloadURL}: unknown file size`)
+  const { version, buildVersion } = await ipaVersion(downloadURL, size)
+  const modified = headers.get('last-modified')
+  const date = (modified ? new Date(modified) : new Date()).toISOString()
+  console.log(`  ${downloadURL} is ${version} (${buildVersion ?? 'no build'})`)
+
+  const app = {
+    ...entry.app,
+    versions: [{
+      version,
+      ...(buildVersion ? { buildVersion } : {}),
+      date: date.slice(0, 10),
+      localizedDescription: `${entry.app.name} ${version} is available.`,
+      downloadURL,
+      size,
+      ...(entry.minOSVersion ? { minOSVersion: entry.minOSVersion } : {}),
+    }],
+  }
+  const news = {
+    appID: app.bundleIdentifier,
+    title: `${app.name} ${version} · ${date.slice(0, 10)}`,
+    identifier: `${app.name}-release-${version}${buildVersion ? `+${buildVersion}` : ''}`,
+    caption: `${app.name} ${version} is available.`,
+    date,
+    tintColor: app.tintColor,
+    notify: true,
+    url: entry.page,
+  }
+  return { app, news }
+}
+
 // One line per app that was added, removed or changed its latest version.
 function describeChanges(before, after) {
   const latest = source => new Map((source?.apps ?? []).map(a => [a.bundleIdentifier, a]))
@@ -341,10 +390,11 @@ function addApp(app, origin) {
 }
 
 for (const entry of config.apps ?? []) {
-  console.log(`==> ${entry.github}`)
+  const origin = entry.github ?? entry.page
+  console.log(`==> ${origin}`)
   try {
-    const built = await buildApp(entry)
-    addApp(built.app, entry.github)
+    const built = await (entry.github ? buildApp(entry) : buildPageApp(entry))
+    addApp(built.app, origin)
     news.push(built.news)
     console.log(`  ${built.app.versions.length} version(s), latest ${built.app.versions[0].version}`)
   }
@@ -352,9 +402,9 @@ for (const entry of config.apps ?? []) {
     const id = entry.app.bundleIdentifier
     const kept = previous?.apps?.find(a => a.bundleIdentifier === id)
     if (!kept)
-      throw new Error(`${entry.github} failed and has no previous entry: ${error.message}`)
-    warn(`${entry.github} failed (${error.message}); keeping its previous entry`)
-    addApp(kept, `${entry.github} (previous)`)
+      throw new Error(`${origin} failed and has no previous entry: ${error.message}`)
+    warn(`${origin} failed (${error.message}); keeping its previous entry`)
+    addApp(kept, `${origin} (previous)`)
     news.push(...(previous.news ?? []).filter(n => n.appID === id))
   }
 }

@@ -207,6 +207,21 @@
       }
     },
     {
+      "page": "https://twoyi.app/ios/",
+      "assetPattern": "^twoyi_.*\\.ipa$",
+      "minOSVersion": "15.0",
+      "app": {
+        "name": "Twoyi",
+        "bundleIdentifier": "app.twoyi",
+        "developerName": "weishu",
+        "subtitle": "Run a full Android system on your iPhone",
+        "localizedDescription": "Runs a complete, separate Android 13 system inside an iPhone or iPad app, with its own home screen, apps and data. Twoyi emulates no hardware: it provides the Linux kernel interface Android needs and translates Android code ahead of time into native ARM64 code, so it needs no jailbreak and no JIT. Android boots in about 3 seconds, with GPU acceleration and ProMotion.\n\nRequires iOS / iPadOS 15 or later. Each download is about 600 MB.\n\nMade by weishu, the author of KernelSU and VirtualXposed. See https://twoyi.app for details.",
+        "iconURL": "https://twoyi.app/assets/logo.png",
+        "tintColor": "#3A3A3C",
+        "category": "utilities"
+      }
+    },
+    {
       "github": "jiangtian616/JHenTai",
       "assetPattern": "^JHenTai_.*\\.ipa$",
       "maxVersions": 5,

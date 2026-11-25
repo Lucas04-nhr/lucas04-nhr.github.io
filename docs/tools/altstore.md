@@ -14,7 +14,7 @@ copyright: false
 This is a personal **AltStore source**: a JSON file that sideloading apps read to list apps, versions and update news. It combines two parts:
 
 - Every app from [AltGallery](https://github.com/bebound/AltGallery), a curated list of IPA projects on GitHub maintained by bebound.
-- A few apps picked by me, each built directly from its own GitHub Releases.
+- A few apps picked by me, each built directly from its own GitHub Releases, or from its website's download page if it has no releases on GitHub.
 
 The source works with [AltStore](https://altstore.io/), [SideStore](https://sidestore.io/), [LiveContainer](https://github.com/LiveContainer/LiveContainer), [Feather](https://github.com/claration/feather) and other apps that read the AltStore source format.
 
@@ -56,6 +56,7 @@ https://static.lucas04.top/altstore.json
 | [PPSSPP](https://github.com/hrydgard/ppsspp) | A PSP emulator. | iOS 11.0+ |
 | [Provenance](https://github.com/Provenance-Emu/Provenance) | A multi-emulator frontend for Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony consoles. | iOS 16.0+; each download is about 1 GB. |
 | [Andarium](https://andarium.net/) | Runs a full Android system (LineageOS) in an app, built on the open-source [Kernarium](https://github.com/imxieyi/Kernarium) engine. | iOS 27.0+ on A14 / M1 or newer; needs the Increased Memory Limit and Extended Virtual Addressing entitlements; each download is about 1 GB. |
+| [Twoyi](https://twoyi.app/) | Runs a full Android 13 system in an app, translating Android code ahead of time without JIT. By weishu, the author of KernelSU. | iOS 15.0+; each download is about 600 MB. |
 | [JHenTai](https://github.com/jiangtian616/JHenTai) | A manga client for E-Hentai and ExHentai. | iOS 13.0+; the sites' content is mostly for adults. |
 | [Spotube](https://github.com/team-spotube/spotube) | An open-source music streaming app. | iOS 14.0+ |
 
@@ -73,7 +74,7 @@ If an app in my picks has the same bundle identifier as an AltGallery app, my en
 
 ## Updates {#updates}
 
-A GitHub Actions workflow rebuilds the source once a day and whenever its configuration changes. It reads the latest AltGallery list and the GitHub Releases of each app I added, then uploads the result only if something changed. Your app refreshes the source on its own schedule, or when you pull to refresh.
+A GitHub Actions workflow rebuilds the source once a day and whenever its configuration changes. It reads the latest AltGallery list and the GitHub Releases or download page of each app I added, then uploads the result only if something changed. Your app refreshes the source on its own schedule, or when you pull to refresh.
 
 The source and its generator are open source:
 
@@ -82,7 +83,7 @@ The source and its generator are open source:
 ## Notes {#notes}
 
 ::: note
-This source only lists apps and links to their downloads. The IPA files are downloaded from each project's GitHub Releases, and icons and screenshots are loaded from GitHub and the projects' own hosts, so those services see your IP address. I do not build, review or sign these apps. Each app keeps its own license, and you install it at your own risk.
+This source only lists apps and links to their downloads. The IPA files are downloaded from each project's GitHub Releases or, for Twoyi, from its own download server, and icons and screenshots are loaded from GitHub and the projects' own hosts, so those services see your IP address. I do not build, review or sign these apps. Each app keeps its own license, and you install it at your own risk.
 
 The AltGallery list belongs to its maintainer and is released under the MIT License.
 :::

@@ -72,12 +72,14 @@ In practice this means mirroring the kernel, sliding it to $(x, y)$, multiplying
 
 Convolution follows a few rules that are used constantly:
 
+::: table title="Convolution properties" align="center"
 | Property | Form |
 | --- | --- |
 | Commutative | $f * g = g * f$ |
 | Distributive | $f * (g + h) = f * g + f * h$ |
 | Associative | $f * (g * h) = (f * g) * h$ |
 | Derivative | $D[f * g] = D[f] * g = f * D[g]$ |
+:::
 
 The last row is the important one in practice. ==To differentiate a noisy image, convolve it with the derivative of a smoothing kernel instead of smoothing first and differentiating afterwards.== This costs one pass and gives a well-defined derivative.
 

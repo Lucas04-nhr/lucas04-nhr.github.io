@@ -1,8 +1,8 @@
 ---
 title: "Image Formation and the Linear Algebra Behind Computer Vision"
 createTime: 2026/11/18 10:31:37
-permalink: /blog/image-formation-linear-algebra/
-excerpt: "A summary of what computer vision tries to do, how a pinhole camera forms an image, how convolution filters work, and the linear algebra these ideas rest on."
+permalink: /blog/ku-vip-image-formation-linear-algebra/
+excerpt: "What computer vision tries to do, how a pinhole camera forms an image, how convolution filters work, and the linear algebra these ideas rest on."
 tags:
   - KU
   - Vision and Image Processing

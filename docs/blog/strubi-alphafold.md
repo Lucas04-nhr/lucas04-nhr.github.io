@@ -1,7 +1,7 @@
 ---
 title: "AlphaFold, from Distance Potentials to Attention"
 createTime: 2026/12/14 09:44:00
-permalink: /blog/strubi-alphafold/
+permalink: /blog/ku-strubi-alphafold/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article explains what AlphaFold1 was really doing, the CASP14 results of AlphaFold2, its pipeline from alignments to coordinates, and the attention mechanism at its centre."
 tags:
   - KU

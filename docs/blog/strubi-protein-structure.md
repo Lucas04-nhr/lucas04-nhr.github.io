@@ -1,7 +1,7 @@
 ---
 title: "An Overview of Protein Structure"
 createTime: 2026/11/16 09:40:00
-permalink: /blog/strubi-protein-structure/
+permalink: /blog/ku-strubi-protein-structure/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article introduces the polypeptide backbone and its angles, the forces behind folding, the twenty amino acids, and the levels of protein structure."
 tags:
   - KU

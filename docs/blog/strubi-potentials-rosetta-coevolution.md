@@ -1,7 +1,7 @@
 ---
 title: "Knowledge-Based Potentials, Rosetta, Coevolution, and Deep Learning Basics"
 createTime: 2026/12/07 09:43:00
-permalink: /blog/strubi-potentials-rosetta-coevolution/
+permalink: /blog/ku-strubi-potentials-rosetta-coevolution/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article explains what a knowledge-based potential really is, how Rosetta assembles structures from fragments, why coevolution reveals contacts, and the deep learning ideas that AlphaFold builds on."
 tags:
   - KU

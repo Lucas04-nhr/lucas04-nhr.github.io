@@ -1,7 +1,7 @@
 ---
 title: "Solvent Exposure, Local Structure, and Template-Based Prediction"
 createTime: 2026/11/30 09:42:00
-permalink: /blog/strubi-solvent-exposure-local-structure/
+permalink: /blog/ku-strubi-solvent-exposure-local-structure/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article covers four ways to measure solvent exposure, three generations of secondary structure prediction, probabilistic models of local structure, and the template-based end of 3D structure prediction."
 tags:
   - KU

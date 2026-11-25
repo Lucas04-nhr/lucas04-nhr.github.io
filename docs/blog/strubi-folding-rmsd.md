@@ -1,7 +1,7 @@
 ---
 title: "Free Energy, Linear Algebra, and the RMSD Algorithm"
 createTime: 2026/11/23 09:41:00
-permalink: /blog/strubi-folding-rmsd/
+permalink: /blog/ku-strubi-folding-rmsd/
 excerpt: "This is part of the summary of the course Structural Bioinformatics at KU. This article covers free energy as a restatement of probability, the linear algebra behind optimal superposition, the SVD-based RMSD algorithm, Theseus, GDT_TS, and fold classification."
 tags:
   - KU
